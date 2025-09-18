@@ -16,12 +16,19 @@ allure-results/
 coverage/
 .nyc_output/
 
-# Environment files (keep patterns, ignore actual files)
+# Environment files - EXCLUDE ALL ACTUAL ENV FILES (security risk)
+.env
+.env.*
+!.env.example
+!.env.template
 .env.local
-.env.*.local
 .env.development.local
 .env.test.local
 .env.production.local
+
+# MCP and Playwright specific cache/temp files
+.playwright-mcp/
+.last-context
 
 # Logs
 logs/
@@ -31,11 +38,15 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
-# Authentication fixtures (session files)
+# Authentication fixtures (session files) - SECURITY CRITICAL
 fixtures/global-fixtures/auth-*.json
 fixtures/client-fixtures/*.json
+fixtures/global-fixtures/.last-context
 auth-state.json
 state.json
+storage-state.json
+.auth/
+*.auth.json
 
 # OS generated files
 .DS_Store
@@ -95,3 +106,52 @@ screenshots/
 
 # TypeScript
 *.tsbuildinfo
+
+# Security and sensitive files
+*.key
+*.pem
+*.crt
+*.p12
+*.pfx
+secrets.json
+config.local.json
+
+# Large files and binaries that shouldn't be in repo
+*.exe
+*.dll
+*.so
+*.dylib
+*.zip
+*.tar.gz
+*.rar
+
+# Test artifacts and temporary files
+*.har
+*.mp4
+*.webm
+*.png
+*.jpg
+*.jpeg
+*.gif
+!static_files/**/*.png
+!static_files/**/*.jpg
+!static_files/**/*.jpeg
+!static_files/**/*.gif
+!static_files/**/*.pdf
+
+# Performance and profiling
+*.cpuprofile
+*.heapprofile
+trace-*.json
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Backup files
+*.bak
+*.backup
+*.tmp
+*~
+.#*
