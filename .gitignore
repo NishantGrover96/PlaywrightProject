@@ -1,0 +1,97 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Test Results
+test-results/
+playwright-report/
+test-results.json
+junit-results.xml
+allure-report/
+allure-results/
+coverage/
+.nyc_output/
+
+# Environment files (keep patterns, ignore actual files)
+.env.local
+.env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Authentication fixtures (session files)
+fixtures/global-fixtures/auth-*.json
+fixtures/client-fixtures/*.json
+auth-state.json
+state.json
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.vscode/
+.vs/
+.idea/
+*.swp
+*.swo
+*~
+
+# Build outputs
+dist/
+build/
+out/
+.next/
+
+# Cache directories
+.cache/
+.parcel-cache/
+.eslintcache
+.stylelintcache
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Temporary folders
+tmp/
+temp/
+
+# Editor-specific files
+*.sublime-project
+*.sublime-workspace
+
+# Local development
+.vscode/settings.json
+.vscode/launch.json
+.vscode/extensions.json
+
+# Playwright specific
+playwright/.cache/
+playwright-report/
+blob-report/
+downloads/
+videos/
+screenshots/
+
+# TypeScript
+*.tsbuildinfo
