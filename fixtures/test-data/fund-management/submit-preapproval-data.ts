@@ -1,6 +1,6 @@
 /**
  * Submit PreApproval Test Data
- * 
+ *
  * Contains test data for various Submit PreApproval scenarios including campaigns,
  * standard media types, shows & events, sponsorships, and validation scenarios.
  */
@@ -39,7 +39,7 @@ export const SubmitPreapprovalTestData = {
         },
       ],
     },
-    
+
     invalidCampaign: {
       title: 'Invalid Campaign - Single Media',
       hasOffer: false,
@@ -65,7 +65,7 @@ export const SubmitPreapprovalTestData = {
           urls: [
             'https://example.com/url1',
             'https://example.com/url2',
-            'https://example.com/url3'
+            'https://example.com/url3',
           ],
           filePath: 'static_files/images/scan_20250828_125706_125.png',
         },
@@ -161,17 +161,8 @@ export const SubmitPreapprovalTestData = {
 
   // Email Notification Test Data
   emailNotifications: {
-    validEmails: [
-      'test1@channel-fusion.com',
-      'test2@channel-fusion.com',
-      'dealer@example.com',
-    ],
-    invalidEmails: [
-      'invalid-email',
-      'test@',
-      '@channel-fusion.com',
-      'test.com',
-    ],
+    validEmails: ['test1@channel-fusion.com', 'test2@channel-fusion.com', 'dealer@example.com'],
+    invalidEmails: ['invalid-email', 'test@', '@channel-fusion.com', 'test.com'],
   },
 
   // File Upload Test Data
@@ -213,11 +204,7 @@ export const SubmitPreapprovalTestData = {
       'example.com', // Missing protocol
     ],
     multipleUrls: {
-      valid: [
-        'https://example.com/url1',
-        'https://example.com/url2',
-        'https://example.com/url3',
-      ],
+      valid: ['https://example.com/url1', 'https://example.com/url2', 'https://example.com/url3'],
       tooMany: [
         'https://example.com/url1',
         'https://example.com/url2',
@@ -248,11 +235,7 @@ export const SubmitPreapprovalTestData = {
 
   // Date Test Data
   dates: {
-    validFutureDates: [
-      '12/31/2025',
-      '06/15/2025',
-      '08/20/2025',
-    ],
+    validFutureDates: ['12/31/2025', '06/15/2025', '08/20/2025'],
     invalidDates: [
       '12/31/2020', // Past date
       '13/32/2025', // Invalid date format
@@ -272,30 +255,13 @@ export const SubmitPreapprovalTestData = {
 
   // Cost Test Data
   costs: {
-    valid: [
-      '$1,000.00',
-      '$5,500.50',
-      '$15,000.00',
-      '$999,999.99',
-    ],
-    invalid: [
-      '$0.00',
-      '-$1,000.00',
-      'invalid-cost',
-      '$abc',
-    ],
+    valid: ['$1,000.00', '$5,500.50', '$15,000.00', '$999,999.99'],
+    invalid: ['$0.00', '-$1,000.00', 'invalid-cost', '$abc'],
   },
 
   // Equipment Test Data (for Shows & Events)
   equipment: {
-    valid: [
-      'Tires',
-      'Brake Pads',
-      'Oil Filters',
-      'Batteries',
-      'Spark Plugs',
-      'Air Filters',
-    ],
+    valid: ['Tires', 'Brake Pads', 'Oil Filters', 'Batteries', 'Spark Plugs', 'Air Filters'],
     duplicate: 'Tires', // To test duplicate validation
   },
 
@@ -312,13 +278,13 @@ export const SubmitPreapprovalTestData = {
       dealer: '10000',
       mediaType: 'Campaign',
     },
-    
+
     e2e: {
       dealer: '10000',
       campaignData: 'validCampaign',
       shouldSubmit: true,
     },
-    
+
     regression: {
       validationTests: [
         'requiredFields',
@@ -386,13 +352,16 @@ export class SubmitPreapprovalDataHelper {
     return date.toLocaleDateString('en-US');
   }
 
-  static getDateRange(startDaysFromNow: number = 30, durationDays: number = 3): { start: string; end: string } {
+  static getDateRange(
+    startDaysFromNow: number = 30,
+    durationDays: number = 3
+  ): { start: string; end: string } {
     const startDate = new Date();
     startDate.setDate(startDate.getDate() + startDaysFromNow);
-    
+
     const endDate = new Date(startDate);
     endDate.setDate(endDate.getDate() + durationDays);
-    
+
     return {
       start: startDate.toLocaleDateString('en-US'),
       end: endDate.toLocaleDateString('en-US'),

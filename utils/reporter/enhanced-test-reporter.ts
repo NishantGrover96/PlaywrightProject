@@ -30,14 +30,14 @@ export interface ExecutionSummary {
   passRate: number;
   performance: {
     averageTestDuration: number;
-    slowestTest: { name: string; duration: number; } | null;
-    fastestTest: { name: string; duration: number; } | null;
+    slowestTest: { name: string; duration: number } | null;
+    fastestTest: { name: string; duration: number } | null;
     totalDuration: number;
   };
   categories: {
-    smoke: { passed: number; failed: number; total: number; };
-    regression: { passed: number; failed: number; total: number; };
-    e2e: { passed: number; failed: number; total: number; };
+    smoke: { passed: number; failed: number; total: number };
+    regression: { passed: number; failed: number; total: number };
+    e2e: { passed: number; failed: number; total: number };
   };
   artifacts: {
     htmlReport?: string;
@@ -77,7 +77,7 @@ export class EnhancedTestReporter implements Reporter {
       performance: {
         duration: result.duration,
         retries: result.retry,
-        annotations: result.annotations.map(a => `${a.type}: ${a.description}`),
+        annotations: result.annotations.map((a) => `${a.type}: ${a.description}`),
       },
     };
 
@@ -115,23 +115,34 @@ export class EnhancedTestReporter implements Reporter {
     this.logArtifacts(summary);
   }
 
-  private generateExecutionSummary(endTime: Date, duration: number, result: FullResult): ExecutionSummary {
-    const passed = this.results.filter(r => r.status === 'passed').length;
-    const failed = this.results.filter(r => r.status === 'failed').length;
-    const skipped = this.results.filter(r => r.status === 'skipped').length;
-    const flaky = this.results.filter(r => r.retry > 0).length;
+  private generateExecutionSummary(
+    endTime: Date,
+    duration: number,
+    result: FullResult
+  ): ExecutionSummary {
+    const passed = this.results.filter((r) => r.status === 'passed').length;
+    const failed = this.results.filter((r) => r.status === 'failed').length;
+    const skipped = this.results.filter((r) => r.status === 'skipped').length;
+    const flaky = this.results.filter((r) => r.retry > 0).length;
     const total = this.results.length;
 
     // Performance metrics
-    const durations = this.results.map(r => r.duration);
-    const averageTestDuration = durations.length > 0 ? durations.reduce((sum, d) => sum + d, 0) / durations.length : 0;
-    const slowestTest = this.results.reduce((prev, curr) => 
-      (curr.duration > (prev?.duration || 0)) ? { name: curr.testCase.title, duration: curr.duration } : prev, 
-      null as { name: string; duration: number; } | null
+    const durations = this.results.map((r) => r.duration);
+    const averageTestDuration =
+      durations.length > 0 ? durations.reduce((sum, d) => sum + d, 0) / durations.length : 0;
+    const slowestTest = this.results.reduce(
+      (prev, curr) =>
+        curr.duration > (prev?.duration || 0)
+          ? { name: curr.testCase.title, duration: curr.duration }
+          : prev,
+      null as { name: string; duration: number } | null
     );
-    const fastestTest = this.results.reduce((prev, curr) => 
-      (curr.duration < (prev?.duration || Infinity)) ? { name: curr.testCase.title, duration: curr.duration } : prev,
-      null as { name: string; duration: number; } | null
+    const fastestTest = this.results.reduce(
+      (prev, curr) =>
+        curr.duration < (prev?.duration || Infinity)
+          ? { name: curr.testCase.title, duration: curr.duration }
+          : prev,
+      null as { name: string; duration: number } | null
     );
 
     // Categorize tests
@@ -170,14 +181,15 @@ export class EnhancedTestReporter implements Reporter {
   }
 
   private categorizeTests(category: string) {
-    const categoryTests = this.results.filter(r => 
-      r.testCase.location.file.includes(`/${category}/`) || 
-      r.testCase.location.file.includes(`\\${category}\\`)
+    const categoryTests = this.results.filter(
+      (r) =>
+        r.testCase.location.file.includes(`/${category}/`) ||
+        r.testCase.location.file.includes(`\\${category}\\`)
     );
-    
+
     return {
-      passed: categoryTests.filter(r => r.status === 'passed').length,
-      failed: categoryTests.filter(r => r.status === 'failed').length,
+      passed: categoryTests.filter((r) => r.status === 'passed').length,
+      failed: categoryTests.filter((r) => r.status === 'failed').length,
       total: categoryTests.length,
     };
   }
@@ -191,7 +203,7 @@ export class EnhancedTestReporter implements Reporter {
     // Save detailed JSON report
     const detailedReport = {
       summary,
-      results: this.results.map(r => ({
+      results: this.results.map((r) => ({
         title: r.testCase.title,
         file: r.testCase.location.file,
         line: r.testCase.location.line,
@@ -240,7 +252,7 @@ export class EnhancedTestReporter implements Reporter {
     console.log(`🌐 Browser: ${summary.browser}`);
     console.log(`⏱️  Duration: ${Math.round(summary.duration / 1000)}s`);
     console.log('');
-    
+
     console.log('📈 TEST RESULTS');
     console.log('────────────────────────────────────────────');
     console.log(`✅ Passed: ${summary.passed}/${summary.totalTests} (${summary.passRate}%)`);
@@ -251,8 +263,12 @@ export class EnhancedTestReporter implements Reporter {
 
     console.log('🏷️  CATEGORIES');
     console.log('────────────────────────────────────────────');
-    console.log(`💨 Smoke: ${summary.categories.smoke.passed}/${summary.categories.smoke.total} passed`);
-    console.log(`🔄 Regression: ${summary.categories.regression.passed}/${summary.categories.regression.total} passed`);
+    console.log(
+      `💨 Smoke: ${summary.categories.smoke.passed}/${summary.categories.smoke.total} passed`
+    );
+    console.log(
+      `🔄 Regression: ${summary.categories.regression.passed}/${summary.categories.regression.total} passed`
+    );
     console.log(`🎯 E2E: ${summary.categories.e2e.passed}/${summary.categories.e2e.total} passed`);
     console.log('');
 
@@ -260,10 +276,14 @@ export class EnhancedTestReporter implements Reporter {
     console.log('────────────────────────────────────────────');
     console.log(`📊 Average Test: ${summary.performance.averageTestDuration}ms`);
     if (summary.performance.slowestTest) {
-      console.log(`🐌 Slowest: ${summary.performance.slowestTest.name} (${summary.performance.slowestTest.duration}ms)`);
+      console.log(
+        `🐌 Slowest: ${summary.performance.slowestTest.name} (${summary.performance.slowestTest.duration}ms)`
+      );
     }
     if (summary.performance.fastestTest) {
-      console.log(`⚡ Fastest: ${summary.performance.fastestTest.name} (${summary.performance.fastestTest.duration}ms)`);
+      console.log(
+        `⚡ Fastest: ${summary.performance.fastestTest.name} (${summary.performance.fastestTest.duration}ms)`
+      );
     }
     console.log('');
   }

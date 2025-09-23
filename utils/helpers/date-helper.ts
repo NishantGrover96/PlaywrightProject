@@ -4,7 +4,7 @@ export class DateHelper {
    */
   static getCurrentDate(format: 'ISO' | 'US' | 'UK' | 'DB' = 'ISO'): string {
     const now = new Date();
-    
+
     switch (format) {
       case 'ISO':
         return now.toISOString().split('T')[0]; // YYYY-MM-DD
@@ -31,7 +31,8 @@ export class DateHelper {
    */
   static getTimestampForFilename(): string {
     const now = new Date();
-    return now.toISOString()
+    return now
+      .toISOString()
       .replace(/:/g, '-')
       .replace(/\./g, '-')
       .replace('T', '_')
@@ -44,7 +45,7 @@ export class DateHelper {
   static addDays(days: number, format: 'ISO' | 'US' | 'UK' | 'DB' = 'ISO'): string {
     const date = new Date();
     date.setDate(date.getDate() + days);
-    
+
     switch (format) {
       case 'ISO':
         return date.toISOString().split('T')[0];
@@ -72,7 +73,7 @@ export class DateHelper {
   static addMonths(months: number, format: 'ISO' | 'US' | 'UK' | 'DB' = 'ISO'): string {
     const date = new Date();
     date.setMonth(date.getMonth() + months);
-    
+
     switch (format) {
       case 'ISO':
         return date.toISOString().split('T')[0];
@@ -93,7 +94,7 @@ export class DateHelper {
   static addYears(years: number, format: 'ISO' | 'US' | 'UK' | 'DB' = 'ISO'): string {
     const date = new Date();
     date.setFullYear(date.getFullYear() + years);
-    
+
     switch (format) {
       case 'ISO':
         return date.toISOString().split('T')[0];
@@ -114,7 +115,7 @@ export class DateHelper {
   static getFirstDayOfMonth(format: 'ISO' | 'US' | 'UK' | 'DB' = 'ISO'): string {
     const date = new Date();
     date.setDate(1);
-    
+
     switch (format) {
       case 'ISO':
         return date.toISOString().split('T')[0];
@@ -135,7 +136,7 @@ export class DateHelper {
   static getLastDayOfMonth(format: 'ISO' | 'US' | 'UK' | 'DB' = 'ISO'): string {
     const date = new Date();
     date.setMonth(date.getMonth() + 1, 0);
-    
+
     switch (format) {
       case 'ISO':
         return date.toISOString().split('T')[0];
@@ -181,7 +182,7 @@ export class DateHelper {
   static isToday(dateString: string): boolean {
     const inputDate = new Date(dateString);
     const today = new Date();
-    
+
     return inputDate.toDateString() === today.toDateString();
   }
 
@@ -192,7 +193,7 @@ export class DateHelper {
     const inputDate = new Date(dateString);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    
+
     return inputDate < today;
   }
 
@@ -203,7 +204,7 @@ export class DateHelper {
     const inputDate = new Date(dateString);
     const today = new Date();
     today.setHours(23, 59, 59, 999);
-    
+
     return inputDate > today;
   }
 
@@ -225,23 +226,27 @@ export class DateHelper {
     const today = new Date();
     let age = today.getFullYear() - birth.getFullYear();
     const monthDiff = today.getMonth() - birth.getMonth();
-    
+
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
       age--;
     }
-    
+
     return age;
   }
 
   /**
    * Get random date within range
    */
-  static getRandomDate(startDate: string, endDate: string, format: 'ISO' | 'US' | 'UK' | 'DB' = 'ISO'): string {
+  static getRandomDate(
+    startDate: string,
+    endDate: string,
+    format: 'ISO' | 'US' | 'UK' | 'DB' = 'ISO'
+  ): string {
     const start = new Date(startDate);
     const end = new Date(endDate);
     const randomTime = start.getTime() + Math.random() * (end.getTime() - start.getTime());
     const randomDate = new Date(randomTime);
-    
+
     return this.formatDate(randomDate, format);
   }
 
@@ -253,7 +258,7 @@ export class DateHelper {
     const day = today.getDay();
     const diff = today.getDate() - day + (day === 0 ? -6 : 1); // Adjust when day is Sunday
     const monday = new Date(today.setDate(diff));
-    
+
     return this.formatDate(monday, format);
   }
 
@@ -265,7 +270,7 @@ export class DateHelper {
     const day = today.getDay();
     const diff = today.getDate() - day + 7; // Sunday
     const sunday = new Date(today.setDate(diff));
-    
+
     return this.formatDate(sunday, format);
   }
 
@@ -284,7 +289,7 @@ export class DateHelper {
     const today = new Date();
     const quarter = Math.floor(today.getMonth() / 3);
     const quarterStart = new Date(today.getFullYear(), quarter * 3, 1);
-    
+
     return this.formatDate(quarterStart, format);
   }
 
@@ -295,7 +300,7 @@ export class DateHelper {
     const today = new Date();
     const quarter = Math.floor(today.getMonth() / 3);
     const quarterEnd = new Date(today.getFullYear(), (quarter + 1) * 3, 0);
-    
+
     return this.formatDate(quarterEnd, format);
   }
 }

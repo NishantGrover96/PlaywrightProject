@@ -24,6 +24,7 @@ npm run setup
 ```
 
 The `npm run setup` command will:
+
 - Install all npm dependencies
 - Install Playwright browsers automatically
 
@@ -39,6 +40,7 @@ If everything is set up correctly, you should see tests running and a report gen
 ## 🔧 Environment Configuration
 
 ### Default Environment
+
 The framework comes with default configurations for the **demo** client on **dev** environment. You can start testing immediately without additional configuration.
 
 ### Custom Environment Setup (Optional)
@@ -46,6 +48,7 @@ The framework comes with default configurations for the **demo** client on **dev
 For advanced usage or different environments:
 
 1. **Create Environment Files**:
+
    ```powershell
    # Copy example environment files
    cp .env.example .env.dev
@@ -137,21 +140,25 @@ Automation/
 ## ✨ Key Features
 
 ### 🔐 Global Authentication
+
 - Automatic login handling across all tests
 - Session management and reuse
 - Role-based authentication (admin, user, etc.)
 
 ### 🌍 Multi-Environment Support
+
 - **dev** - Development environment
-- **test** - Testing environment  
+- **test** - Testing environment
 - **uat** - User Acceptance Testing
 - **prod** - Production environment
 
 ### 👥 Multi-Client Support
+
 - **demo** - Demo client configuration
 - **hankook** - Hankook client configuration
 
 ### 📊 Test Organization
+
 - **Smoke Tests** - Quick validation of core functionality
 - **E2E Tests** - Complete user workflows
 - **Regression Tests** - Comprehensive feature testing
@@ -167,10 +174,11 @@ Automation/
    - Regression tests → `tests/regression/`
 
 2. **Create your test file** (use PascalCase):
+
    ```typescript
    // Example: tests/e2e/CreateUser.spec.ts
    import { test, expect } from '../base-test';
-   
+
    test.describe('Create User', () => {
      test('should create a new user successfully', async ({ page }) => {
        // Your test logic here
@@ -231,18 +239,21 @@ npm run format    # Format code
 ### Common Issues
 
 1. **Tests failing to start**:
+
    ```powershell
    # Reinstall browsers
    npm run setup:browsers
    ```
 
 2. **Authentication issues**:
+
    ```powershell
    # Check if auth setup is working
    npm run test:setup
    ```
 
 3. **Environment configuration issues**:
+
    ```powershell
    # Validate environment config
    npm run config:validate:dev

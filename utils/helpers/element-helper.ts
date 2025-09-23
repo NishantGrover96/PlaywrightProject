@@ -50,13 +50,16 @@ export class ElementHelper {
   /**
    * Safe click with wait and retry
    */
-  async safeClick(locator: Locator, options?: {
-    timeout?: number;
-    retries?: number;
-    force?: boolean;
-  }): Promise<void> {
+  async safeClick(
+    locator: Locator,
+    options?: {
+      timeout?: number;
+      retries?: number;
+      force?: boolean;
+    }
+  ): Promise<void> {
     const { timeout = 90000, retries = 3, force = false } = options || {};
-    
+
     for (let i = 0; i < retries; i++) {
       try {
         await this.waitForElementVisible(locator, timeout);
@@ -72,12 +75,16 @@ export class ElementHelper {
   /**
    * Safe fill with clear first
    */
-  async safeFill(locator: Locator, value: string, options?: {
-    timeout?: number;
-    clear?: boolean;
-  }): Promise<void> {
+  async safeFill(
+    locator: Locator,
+    value: string,
+    options?: {
+      timeout?: number;
+      clear?: boolean;
+    }
+  ): Promise<void> {
     const { timeout = 90000, clear = true } = options || {};
-    
+
     await this.waitForElementVisible(locator, timeout);
     if (clear) {
       await locator.clear();
@@ -88,39 +95,49 @@ export class ElementHelper {
   /**
    * Get text content safely
    */
-  async getTextContent(locator: Locator, options?: {
-    timeout?: number;
-    trim?: boolean;
-  }): Promise<string> {
+  async getTextContent(
+    locator: Locator,
+    options?: {
+      timeout?: number;
+      trim?: boolean;
+    }
+  ): Promise<string> {
     const { timeout = 90000, trim = true } = options || {};
-    
+
     await this.waitForElementVisible(locator, timeout);
-    const text = await locator.textContent() || '';
+    const text = (await locator.textContent()) || '';
     return trim ? text.trim() : text;
   }
 
   /**
    * Get all text contents from multiple elements
    */
-  async getAllTextContents(locator: Locator, options?: {
-    timeout?: number;
-    trim?: boolean;
-  }): Promise<string[]> {
+  async getAllTextContents(
+    locator: Locator,
+    options?: {
+      timeout?: number;
+      trim?: boolean;
+    }
+  ): Promise<string[]> {
     const { timeout = 90000, trim = true } = options || {};
-    
+
     await locator.first().waitFor({ state: 'visible', timeout });
     const texts = await locator.allTextContents();
-    return trim ? texts.map(text => text.trim()) : texts;
+    return trim ? texts.map((text) => text.trim()) : texts;
   }
 
   /**
    * Get attribute value
    */
-  async getAttribute(locator: Locator, attribute: string, options?: {
-    timeout?: number;
-  }): Promise<string | null> {
+  async getAttribute(
+    locator: Locator,
+    attribute: string,
+    options?: {
+      timeout?: number;
+    }
+  ): Promise<string | null> {
     const { timeout = 90000 } = options || {};
-    
+
     await this.waitForElementVisible(locator, timeout);
     return await locator.getAttribute(attribute);
   }
@@ -161,20 +178,27 @@ export class ElementHelper {
   /**
    * Wait for element to contain specific text
    */
-  async waitForText(locator: Locator, text: string | RegExp, options?: {
-    timeout?: number;
-  }): Promise<void> {
+  async waitForText(
+    locator: Locator,
+    text: string | RegExp,
+    options?: {
+      timeout?: number;
+    }
+  ): Promise<void> {
     const { timeout = 90000 } = options || {};
-    
+
     await expect(locator).toContainText(text, { timeout });
   }
 
   /**
    * Select dropdown option by text
    */
-  async selectOption(locator: Locator, option: string | { label?: string; value?: string; index?: number }): Promise<void> {
+  async selectOption(
+    locator: Locator,
+    option: string | { label?: string; value?: string; index?: number }
+  ): Promise<void> {
     await this.waitForElementVisible(locator);
-    
+
     if (typeof option === 'string') {
       await locator.selectOption({ label: option });
     } else {
@@ -201,7 +225,7 @@ export class ElementHelper {
    */
   async hover(locator: Locator, options?: { timeout?: number }): Promise<void> {
     const { timeout = 90000 } = options || {};
-    
+
     await this.waitForElementVisible(locator, timeout);
     await locator.hover();
   }
@@ -211,7 +235,7 @@ export class ElementHelper {
    */
   async rightClick(locator: Locator, options?: { timeout?: number }): Promise<void> {
     const { timeout = 90000 } = options || {};
-    
+
     await this.waitForElementVisible(locator, timeout);
     await locator.click({ button: 'right' });
   }
@@ -221,7 +245,7 @@ export class ElementHelper {
    */
   async doubleClick(locator: Locator, options?: { timeout?: number }): Promise<void> {
     const { timeout = 90000 } = options || {};
-    
+
     await this.waitForElementVisible(locator, timeout);
     await locator.dblclick();
   }
@@ -229,7 +253,9 @@ export class ElementHelper {
   /**
    * Get element bounding box
    */
-  async getBoundingBox(locator: Locator): Promise<{ x: number; y: number; width: number; height: number } | null> {
+  async getBoundingBox(
+    locator: Locator
+  ): Promise<{ x: number; y: number; width: number; height: number } | null> {
     await this.waitForElementVisible(locator);
     return await locator.boundingBox();
   }
@@ -239,7 +265,7 @@ export class ElementHelper {
    */
   async focus(locator: Locator, options?: { timeout?: number }): Promise<void> {
     const { timeout = 90000 } = options || {};
-    
+
     await this.waitForElementVisible(locator, timeout);
     await locator.focus();
   }
@@ -249,7 +275,7 @@ export class ElementHelper {
    */
   async pressKey(locator: Locator, key: string, options?: { timeout?: number }): Promise<void> {
     const { timeout = 90000 } = options || {};
-    
+
     await this.waitForElementVisible(locator, timeout);
     await locator.press(key);
   }
@@ -265,11 +291,15 @@ export class ElementHelper {
   /**
    * Wait for element count to match expected
    */
-  async waitForElementCount(locator: Locator, expectedCount: number, options?: {
-    timeout?: number;
-  }): Promise<void> {
+  async waitForElementCount(
+    locator: Locator,
+    expectedCount: number,
+    options?: {
+      timeout?: number;
+    }
+  ): Promise<void> {
     const { timeout = 90000 } = options || {};
-    
+
     await expect(locator).toHaveCount(expectedCount, { timeout });
   }
 
@@ -278,8 +308,9 @@ export class ElementHelper {
    */
   async getCSSProperty(locator: Locator, property: string): Promise<string> {
     await this.waitForElementVisible(locator);
-    return await locator.evaluate((el, prop) => 
-      window.getComputedStyle(el).getPropertyValue(prop), property
+    return await locator.evaluate(
+      (el, prop) => window.getComputedStyle(el).getPropertyValue(prop),
+      property
     );
   }
 }

@@ -16,11 +16,12 @@ ci/
 ## 🚀 **How It Works**
 
 ### **1. Auto-Detection (Default)**
+
 The pipeline automatically detects what to run based on:
 
 - **Branch Type**:
   - `main` → Regression tests
-  - `develop` → Full tests  
+  - `develop` → Full tests
   - `feature/*` → Smoke tests
   - `release/*` → Regression tests
   - `PR` → Smoke tests
@@ -31,6 +32,7 @@ The pipeline automatically detects what to run based on:
   - `Develop` → Demo + Hankook, Dev + UAT
 
 ### **2. Manual Control (Parameters)**
+
 Override auto-detection with parameters:
 
 ```yaml
@@ -46,16 +48,18 @@ Override auto-detection with parameters:
 ## 📋 **Usage Examples**
 
 ### **Automatic Usage (Most Common)**
+
 ```yaml
 # Just trigger the pipeline - it auto-detects everything
 trigger: push to any branch
 # Pipeline automatically:
 # - Detects execution mode based on branch
-# - Selects appropriate clients and environments  
+# - Selects appropriate clients and environments
 # - Runs the right tests with proper scripts
 ```
 
 ### **Manual Usage (Advanced)**
+
 ```yaml
 # Queue manually with parameters:
 executionMode: 'module'
@@ -68,13 +72,13 @@ targetBrowsers: 'chromium'
 
 ## 🎯 **Execution Modes**
 
-| Mode | Description | When Auto-Selected |
-|------|-------------|---------------------|
-| **smoke** | Quick validation tests | Feature branches, PRs |
-| **full** | Complete test suite | Develop branch |
-| **regression** | Comprehensive testing | Main branch, Release branches |
-| **module** | Specific module testing | Manual only |
-| **custom** | Advanced scenarios | Manual only |
+| Mode           | Description             | When Auto-Selected            |
+| -------------- | ----------------------- | ----------------------------- |
+| **smoke**      | Quick validation tests  | Feature branches, PRs         |
+| **full**       | Complete test suite     | Develop branch                |
+| **regression** | Comprehensive testing   | Main branch, Release branches |
+| **module**     | Specific module testing | Manual only                   |
+| **custom**     | Advanced scenarios      | Manual only                   |
 
 ## 🔧 **Auto-Detection Logic**
 
@@ -83,7 +87,7 @@ targetBrowsers: 'chromium'
 
 if (PR) {
     mode = "smoke"
-    clients = "demo" 
+    clients = "demo"
     environments = "dev"
 }
 elseif (main branch) {
@@ -113,7 +117,7 @@ ci:smoke:demo:admin:dev           # If exists
 quick-test                        # Fallback
 
 # For full mode:
-ci:demo:admin:dev                 # If exists  
+ci:demo:admin:dev                 # If exists
 test:demo:admin:dev              # Fallback
 
 # For regression mode:
@@ -129,21 +133,25 @@ lms:demo:admin:dev               # Direct module script
 ## ✅ **Benefits of Single Pipeline**
 
 ### **🎯 Simplicity**
+
 - **1 file to maintain** instead of 10+
 - **No more file proliferation** as modules grow
 - **Single source of truth** for all execution logic
 
-### **🔧 Flexibility**  
+### **🔧 Flexibility**
+
 - **Auto-detects** appropriate tests for each branch
 - **Manual override** for any scenario
 - **Scales automatically** with new clients/modules
 
 ### **🚀 Performance**
+
 - **Smart execution** - only runs what's needed
 - **Parallel execution** across client-role-environment combinations
 - **Caching** and optimizations built-in
 
 ### **🛡️ Maintenance**
+
 - **Add new modules** → Just add scripts to package.json (no new YAML files)
 - **Add new clients** → Just add to parameters list
 - **Add new environments** → Just add to parameters list
@@ -153,6 +161,7 @@ lms:demo:admin:dev               # Direct module script
 When you add a new module (e.g., "inventory"):
 
 1. **Add scripts to package.json**:
+
    ```json
    "inventory:demo:admin:dev": "cross-env CLIENT=demo ROLE=admin ENV=dev npx playwright test tests/e2e/inventory --config=configs/environments/playwright.config.dev.ts"
    ```

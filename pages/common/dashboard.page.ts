@@ -5,7 +5,8 @@ export class DashboardPage extends BasePage {
   // Dashboard selectors based on MCP exploration
   private readonly sidebarMenu = 'nav, [class*="sidebar"], [class*="menu"], list';
   private readonly menuItems = 'a[href], [class*="menu-item"], [class*="nav-item"], listitem';
-  private readonly userProfile = 'button:has-text("David Lenzen Corporate Admin"), [class*="user"], [class*="profile"]';
+  private readonly userProfile =
+    'button:has-text("David Lenzen Corporate Admin"), [class*="user"], [class*="profile"]';
   private readonly logoutButton = 'text=/logout/i, [class*="logout"]';
   private readonly mainContent = 'div.customScroll.scroll-content';
   private readonly breadcrumbs = '[class*="breadcrumb"], nav[aria-label="breadcrumb"]';
@@ -53,7 +54,9 @@ export class DashboardPage extends BasePage {
 
   async getModuleCards(): Promise<string[]> {
     // Get main dashboard module cards
-    const moduleCards = await this.page.locator(`${this.moduleGrid} ${this.moduleCards} link`).all();
+    const moduleCards = await this.page
+      .locator(`${this.moduleGrid} ${this.moduleCards} link`)
+      .all();
     const moduleTexts: string[] = [];
 
     for (const card of moduleCards) {
@@ -81,7 +84,7 @@ export class DashboardPage extends BasePage {
       .filter({ hasText: moduleName })
       .locator('link')
       .first();
-    
+
     await moduleCard.click();
     await this.waitForPageLoad();
   }
@@ -94,7 +97,7 @@ export class DashboardPage extends BasePage {
     // Check for user profile or any authenticated elements
     const userProfileCount = await this.page.locator(this.userProfile).count();
     const corporateAdminText = await this.page.locator('text="Corporate Admin"').count();
-    
+
     return userProfileCount > 0 || corporateAdminText > 0;
   }
 
@@ -150,7 +153,7 @@ export class DashboardPage extends BasePage {
   async verifyDashboardElements(): Promise<void> {
     // Verify key dashboard elements are present
     await this.verifyElementVisible(this.mainContent);
-    
+
     // Verify user is logged in
     const isLoggedIn = await this.verifyUserLoggedIn();
     if (!isLoggedIn) {

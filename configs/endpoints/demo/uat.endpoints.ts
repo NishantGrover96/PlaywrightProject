@@ -3,7 +3,7 @@ const demoDevConfig = require('./dev.endpoints');
 
 /**
  * Demo Client - UAT Environment Endpoints
- * 
+ *
  * Inherits from dev endpoints but with UAT environment URL
  * UAT typically has most functionality available for testing
  */
@@ -17,10 +17,13 @@ const demoUatConfig: ClientEndpointConfig = {
       endpoints: demoDevConfig.environments.dev.endpoints.map((endpoint: any) => ({
         ...endpoint,
         // UAT usually has similar functionality to dev
-        verified: endpoint.priority === 'critical' || endpoint.priority === 'high' ? endpoint.verified : false
-      }))
-    }
-  }
+        verified:
+          endpoint.priority === 'critical' || endpoint.priority === 'high'
+            ? endpoint.verified
+            : false,
+      })),
+    },
+  },
 };
 
 module.exports = demoUatConfig;

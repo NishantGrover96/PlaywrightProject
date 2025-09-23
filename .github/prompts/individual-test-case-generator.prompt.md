@@ -228,11 +228,13 @@ Verify before generating files:
 **CRITICAL**: Analyze and follow the implementation pattern from `reports-dashboard.spec.ts`:
 
 #### **1. Import Requirements**
+
 - Import `test` and `expect` from `../base-test` (NOT from @playwright/test)
 - Import your page object from the appropriate modules folder
 - Import test data from fixtures if needed
 
 #### **2. Authentication Methods in beforeEach**
+
 - Use `{ page, auth }` fixtures in beforeEach
 - Initialize page object with the page fixture
 - Call `auth.isAuthenticated()` method to check session validity
@@ -240,12 +242,14 @@ Verify before generating files:
 - Add console logging for authentication flow visibility
 
 #### **3. Role-Based Testing Implementation**
+
 - Set role context using `process.env.ROLE` assignment
 - Support multiple roles: 'admin', 'dealer', 'distributor'
 - Create separate tests for different role permissions
 - Use descriptive console logging for role context
 
 #### **4. Key Auth Framework Features**
+
 - **Auto Session Management**: 20-minute session expiry with automatic refresh
 - **Role Support**: Dynamic role switching via environment variables
 - **Environment Support**: Uses CLIENT, ROLE, ENV environment variables
@@ -253,6 +257,7 @@ Verify before generating files:
 - **No Manual Login**: Authentication handled automatically by framework
 
 #### **5. Environment Variable Pattern**
+
 - Tests respond to CLIENT, ROLE, ENV environment variables
 - Default values: CLIENT=demo, ROLE=admin, ENV=dev
 - Can be overridden at runtime or in test execution commands
@@ -267,7 +272,7 @@ Verify before generating files:
 
 - [ ] **Global Auth Integration**: Use `{ page, auth }` fixtures from `../base-test`
 - [ ] **Authentication Flow**: `auth.isAuthenticated()` check and `auth.ensureAuthenticated()` fallback
-- [ ] **Role-Based Testing**: Set `process.env.ROLE` for different user types  
+- [ ] **Role-Based Testing**: Set `process.env.ROLE` for different user types
 - [ ] **Console Logging**: Descriptive logging for authentication and test flow
 - [ ] **Page Object Model**: Proper implementation with page fixture initialization
 - [ ] **Selectors**: Externalized to utils/selectors/modules/ (no hardcoded values)

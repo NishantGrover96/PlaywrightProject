@@ -52,7 +52,9 @@ export class PerformanceMonitor {
 
     console.log('⚡ Performance Monitor initialized');
     console.log(`   System: ${this.systemMetrics.platform} (${this.systemMetrics.cpuCount} cores)`);
-    console.log(`   Memory: ${Math.round(this.systemMetrics.totalMemory / 1024 / 1024 / 1024)}GB total`);
+    console.log(
+      `   Memory: ${Math.round(this.systemMetrics.totalMemory / 1024 / 1024 / 1024)}GB total`
+    );
     console.log(`   Node.js: ${this.systemMetrics.nodeVersion}`);
     console.log('');
   }
@@ -84,8 +86,10 @@ export class PerformanceMonitor {
         // Get navigation timing
         const performanceMetrics = await page.evaluate(() => {
           const timing = performance.timing;
-          const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-          
+          const navigation = performance.getEntriesByType(
+            'navigation'
+          )[0] as PerformanceNavigationTiming;
+
           return {
             pageLoadTime: timing.loadEventEnd - timing.navigationStart,
             domContentLoaded: timing.domContentLoadedEventEnd - timing.navigationStart,
@@ -100,8 +104,8 @@ export class PerformanceMonitor {
         largestContentfulPaint = performanceMetrics.largestContentfulPaint;
 
         // Count network requests (approximate)
-        const resourceEntries = await page.evaluate(() => 
-          performance.getEntriesByType('resource').length
+        const resourceEntries = await page.evaluate(
+          () => performance.getEntriesByType('resource').length
         );
         networkRequests = resourceEntries;
       } catch (error) {
@@ -154,8 +158,8 @@ export class PerformanceMonitor {
       totalTests: number;
       totalDuration: number;
       averageDuration: number;
-      slowestTest: { name: string; duration: number; } | null;
-      fastestTest: { name: string; duration: number; } | null;
+      slowestTest: { name: string; duration: number } | null;
+      fastestTest: { name: string; duration: number } | null;
       totalMemoryUsed: number;
       averageMemoryUsed: number;
       peakMemoryUsed: number;
@@ -167,17 +171,23 @@ export class PerformanceMonitor {
     const totalDuration = this.metrics.reduce((sum, m) => sum + m.duration, 0);
     const averageDuration = totalTests > 0 ? totalDuration / totalTests : 0;
 
-    const slowestTest = this.metrics.reduce((prev, curr) => 
-      (curr.duration > (prev?.duration || 0)) ? { name: curr.testName, duration: curr.duration } : prev,
-      null as { name: string; duration: number; } | null
+    const slowestTest = this.metrics.reduce(
+      (prev, curr) =>
+        curr.duration > (prev?.duration || 0)
+          ? { name: curr.testName, duration: curr.duration }
+          : prev,
+      null as { name: string; duration: number } | null
     );
 
-    const fastestTest = this.metrics.reduce((prev, curr) => 
-      (curr.duration < (prev?.duration || Infinity)) ? { name: curr.testName, duration: curr.duration } : prev,
-      null as { name: string; duration: number; } | null
+    const fastestTest = this.metrics.reduce(
+      (prev, curr) =>
+        curr.duration < (prev?.duration || Infinity)
+          ? { name: curr.testName, duration: curr.duration }
+          : prev,
+      null as { name: string; duration: number } | null
     );
 
-    const memoryUsages = this.metrics.map(m => m.memoryUsage.heapUsed);
+    const memoryUsages = this.metrics.map((m) => m.memoryUsage.heapUsed);
     const totalMemoryUsed = memoryUsages.reduce((sum, mem) => sum + mem, 0);
     const averageMemoryUsed = memoryUsages.length > 0 ? totalMemoryUsed / memoryUsages.length : 0;
     const peakMemoryUsed = Math.max(...memoryUsages, 0);
@@ -224,13 +234,17 @@ export class PerformanceMonitor {
     console.log(`📊 Total Tests: ${summary.totalTests}`);
     console.log(`⏱️  Total Duration: ${Math.round(summary.totalDuration / 1000)}s`);
     console.log(`📈 Average Duration: ${summary.averageDuration}ms`);
-    
+
     if (summary.slowestTest) {
-      console.log(`🐌 Slowest Test: ${summary.slowestTest.name} (${summary.slowestTest.duration}ms)`);
+      console.log(
+        `🐌 Slowest Test: ${summary.slowestTest.name} (${summary.slowestTest.duration}ms)`
+      );
     }
-    
+
     if (summary.fastestTest) {
-      console.log(`⚡ Fastest Test: ${summary.fastestTest.name} (${summary.fastestTest.duration}ms)`);
+      console.log(
+        `⚡ Fastest Test: ${summary.fastestTest.name} (${summary.fastestTest.duration}ms)`
+      );
     }
 
     console.log(`💾 Average Memory: ${Math.round(summary.averageMemoryUsed / 1024 / 1024)}MB`);
@@ -247,7 +261,7 @@ export class PerformanceMonitor {
 export class ResourceOptimizer {
   static async optimizeBrowserContext(context: BrowserContext): Promise<void> {
     // Disable images and CSS for faster loading in headless mode
-    await context.route('**/*.{png,jpg,jpeg,gif,svg,css}', route => {
+    await context.route('**/*.{png,jpg,jpeg,gif,svg,css}', (route) => {
       if (process.env.HEADLESS === 'true' && process.env.OPTIMIZE_RESOURCES === 'true') {
         route.abort();
       } else {
@@ -256,7 +270,7 @@ export class ResourceOptimizer {
     });
 
     // Block unnecessary requests
-    await context.route('**/*.{woff,woff2,ttf,eot}', route => {
+    await context.route('**/*.{woff,woff2,ttf,eot}', (route) => {
       if (process.env.OPTIMIZE_RESOURCES === 'true') {
         route.abort();
       } else {
@@ -265,10 +279,10 @@ export class ResourceOptimizer {
     });
 
     // Block analytics and tracking
-    await context.route('**/analytics/**', route => route.abort());
-    await context.route('**/gtag/**', route => route.abort());
-    await context.route('**/googletagmanager.com/**', route => route.abort());
-    await context.route('**/google-analytics.com/**', route => route.abort());
+    await context.route('**/analytics/**', (route) => route.abort());
+    await context.route('**/gtag/**', (route) => route.abort());
+    await context.route('**/googletagmanager.com/**', (route) => route.abort());
+    await context.route('**/google-analytics.com/**', (route) => route.abort());
 
     console.log('🚀 Browser context optimized for performance');
   }
@@ -314,8 +328,10 @@ export class ParallelExecutionOptimizer {
     );
 
     console.log(`🧮 Calculated optimal workers: ${optimalWorkers}`);
-    console.log(`   Based on: ${cpuCount} CPUs, ${Math.round(totalMemory / 1024 / 1024 / 1024)}GB total memory`);
-    
+    console.log(
+      `   Based on: ${cpuCount} CPUs, ${Math.round(totalMemory / 1024 / 1024 / 1024)}GB total memory`
+    );
+
     return Math.max(1, optimalWorkers);
   }
 
@@ -326,7 +342,7 @@ export class ParallelExecutionOptimizer {
     fullyParallel: boolean;
   } {
     const workers = this.calculateOptimalWorkers();
-    
+
     return {
       workers,
       retries: workers > 1 ? 1 : 2, // Fewer retries with more workers
