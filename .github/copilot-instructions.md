@@ -3,6 +3,7 @@
 ## General Rules
 
 - Follow user instructions **exactly**.
+- Avoid unnecessary **verbosity and test cases**.
 - Keep solutions **clean, modern, and concise**.
 - Preserve project structure and avoid redundancy.
 - No unnecessary files, comments only when needed.
@@ -26,7 +27,7 @@
   - Mimic the inspection process again.
   - Retry writing or fixing the test with updated findings.
 - Run tests with **90s timeout** (unless specified).
-- Default environment: **dev env** (`https://demoportaldev.channel-fusion.com`).
+- Default environment: **Uat env** (`https://demoportaluat.channel-fusion.com`).
 
 ## Field Interaction Patterns for Test Cases
 
@@ -50,6 +51,7 @@ When creating test cases for different field types, use these interaction patter
 
 ## Selectors & URLs (Most Important)
 
+- Always prioritise ID selectors (e.g., `#elementID`). And then class selectors (e.g., `.className`).
 - Do **NOT** hardcode selectors (e.g., `text=/product|item|shop|order/i`).
 - Always use selectors from the **Utils/selectors.ts** file.
 - Do **NOT** hardcode URLs in tests.
@@ -59,7 +61,7 @@ When creating test cases for different field types, use these interaction patter
 
 - Always use **global-auth setup** for login/authentication.
 - Login URL: `https://demoportaluat.channel-fusion.com/account/login`.
-- Post-login URL: `https://demoportaldev.channel-fusion.com/index`.
+- Post-login URL: `https://demoportaluat.channel-fusion.com/index`.
 
 ## Code Organization
 
