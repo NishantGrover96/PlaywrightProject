@@ -69,6 +69,7 @@ Identify and categorize:
 - **Display Elements**: Tables, lists, cards, data displays
 - **Navigation Elements**: Breadcrumbs, tabs, sidebar items
 - **Validation Elements**: Error messages, success notifications
+- **Do not overcomplicate or add unnecessary verbosity and test cases.**
 
 ### **2.3 JavaScript Inspection & Validation Rules**
 
