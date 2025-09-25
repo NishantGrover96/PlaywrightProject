@@ -110,7 +110,7 @@ export default defineConfig({
             baseURL: clientConfig.baseUrl,
             storageState: getAuthStoragePath(targetClient),
           },
-          testDir: './tests',
+          testDir: '../../tests',
           testMatch: ['**/*.spec.ts'],
           dependencies: ['setup'],
           metadata: {
@@ -161,7 +161,7 @@ export default defineConfig({
             baseURL: client.baseUrl,
             storageState: getAuthStoragePath(client.clientId),
           },
-          testDir: './tests',
+          testDir: '../../tests',
           testMatch: ['**/*.spec.ts'],
           dependencies: ['setup'],
           metadata: {

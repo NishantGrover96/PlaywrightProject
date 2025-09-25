@@ -8,105 +8,117 @@ description: You are an expert QA automation engineer specializing in generating
 
 # Individual Test Case Generation Process
 
-## 🔍 **STEP 1: Requirements Gathering (MANDATORY)**
+## 🔍 **STEP 1: Quick Requirements (5 Questions Only)**
 
-Before generating any test cases, ask the user these specific questions:
-
-### **1.1 Basic Information**
+Ask user these **5 essential questions only**:
 
 ```
-1. What module are you testing? (e.g., LMS, Brand Shop, Reports)
-2. What specific feature within that module? (e.g., Course Listing, Product Search, Report Generation)
-3. What is the direct URL to this feature?
-4. Which client should this test target? (demo, hankook, etc.)
-5. Which environment? (dev, test, uat, prod)
-6. What type of test? (smoke, regression, e2e)
+1. What feature URL should I test? (provide full URL)
+2. Which client/role? (demo-admin, demo-dealer, etc.)
+3. Which environment? (dev, test, uat, prod)
+4. What main actions to test? (create, update, search, etc.)
+5. What should I verify at the end? (success message, data created, etc.)
 ```
 
-### **1.2 Authentication Requirements**
+**⚠️ DO NOT ask 20 questions. Keep it simple but maintain proper SaaS architecture!**
 
-```
-7. Which user role should be used for testing this feature? (admin, dealer, distributor, etc.)
-8. Are there any specific permissions required for this feature?
-9. Does this feature require any prerequisite data or setup?
-```
+## 🎯 **STEP 2: Smart MCP with Codegen-Quality Selectors**
 
-### **1.3 Test Scope**
+### **2.1 Enhanced MCP Discovery Strategy**
 
-```
-10. What are the main actions to test in this feature? (create, read, update, delete, search, filter, etc.)
-11. Are there any specific business rules or validations to verify?
-12. What should be the expected outcomes/assertions?
-```
-
-## 🔬 **STEP 2: MCP Feature Discovery (MANDATORY)**
-
-After collecting requirements, use **Playwright MCP** to:
-
-### **2.1 Navigate and Inspect**
+**Use MCP automation with Codegen selector principles:**
 
 ```javascript
-// Navigate to the provided feature URL
-//While first login using the credentials for the specified role from page client-modules-access.ts
-await mcp.browser_navigate(providedFeatureUrl);
-await mcp.browser_snapshot(); // Capture page structure
-// Login using creadentials for the specified role from page client-modules-access.ts
-// Analyze the page for:
-// For basic testing elements and capture its relevent selectors using ID and class names and than relate to user requirements
+// 1. Navigate and authenticate using MCP
+await mcp.browser_navigate(featureUrl);
+await mcp.browser_snapshot(); // Capture initial page
+
+// 2. Smart selector extraction with Codegen priorities
+// Priority Order: ID > getByRole > getByText > Class > Complex CSS
+// Focus on these selector types from MCP inspection:
+
+CODEGEN_STYLE_SELECTORS = {
+  // Priority 1: getByRole (Codegen's top choice)
+  roles: {
+    buttons: "getByRole('button', { name: 'Submit' })",
+    links: "getByRole('link', { name: 'Continue' })", 
+    textboxes: "getByRole('textbox', { name: 'Title' })",
+    comboboxes: "getByRole('combobox', { name: 'Category' })"
+  },
+  
+  // Priority 2: getByText (Codegen uses frequently)
+  texts: {
+    buttons: "getByText('Submit')",
+    links: "getByText('Continue')",
+    headings: "getByText('Success!')"
+  },
+  
+  // Priority 3: getByLabel (Form elements)
+  labels: {
+    inputs: "getByLabel('Email Address')",
+    checkboxes: "getByLabel('I agree to terms')"
+  },
+  
+  // Priority 4: locator (When semantic selectors unavailable)
+  locators: {
+    ids: "locator('#elementId')",
+    classes: "locator('.submit-button')",
+    css: "locator('input[type=\"file\"]')"
+  },
+  
+  // Priority 5: getByTestId (Best practice)
+  testIds: "getByTestId('submit-form')"
+}
+
+// 3. MCP tests these exact Codegen selector patterns
+// Perform actual user flow using modern Playwright selectors
 ```
 
-### **2.2 Extract Page Elements only relevant to test cases**
+### **2.2 MCP Validation with Codegen Principles**
 
-Identify and categorize:
+**During MCP inspection, use exact Codegen selector patterns:**
 
-- **Input Elements**: Text fields, dropdowns, checkboxes, radio buttons, select2, datepickers
-- **Action Elements**: Buttons, links, submit controls
-- **Navigation Elements**: Breadcrumbs, tabs, sidebar items
-- **Validation Elements**: Error messages, success notifications
-- **Do not overcomplicate or add unnecessary verbosity and test cases.**
+1. **getByRole()**: Look for semantic roles - `getByRole('button', { name: 'Submit' })`
+2. **getByText()**: Use text content - `getByText('Continue')`  
+3. **getByLabel()**: Form labels - `getByLabel('Email Address')`
+4. **locator()**: When semantic unavailable - `locator('#elementId')`
+5. **getByTestId()**: Modern best practice - `getByTestId('submit-form')`
 
-### **2.3 JavaScript Inspection & Validation Rules**
+### **2.3 MCP Smart Interaction Testing**
 
-**MANDATORY**: If feature has complex interactions or validation logic:
+```javascript
+// MCP tests using exact Codegen selector patterns
+await mcp.browser_click("button", { name: "Submit" }); // getByRole equivalent
+await mcp.browser_type("textbox", { name: "Title" }, "test"); // getByRole textbox
+await mcp.browser_wait_for("Success!"); // getByText equivalent
 
-- Use `fetch` to retrieve JavaScript files that control the feature behavior
-- Look for validation rules, form submission logic, and business rules
-- **If unsure which JS files to inspect, ASK USER for guidance**
-- Extract any client-side validation patterns or dynamic behavior rules
-
-### **2.4 Error Handling During Test Creation**
-
-**CRITICAL**: If elements are not found or tests fail during creation:
-
-- **Use MCP again** to re-inspect the page for updated selectors use ID and class names 
-- Check if elements are dynamically loaded or in iframes
-- Verify if authentication or permissions affect element visibility
-- **Ask user for clarification** if element behavior is unclear
-
-### **2.5 Confirm Discovery Results**
-
-Present findings to user:
-
-```
-Based on MCP inspection of [Feature Name], I found:
-- X input fields: [list]
-- Y action buttons: [list]
-- JavaScript validation rules: [if any found]
-- Navigation patterns: [description]
-
-Does this match your expectations for testing this feature?
-Any corrections or additional elements to consider?
+// MCP Codegen-style fallback strategy:
+// Try getByRole first → getByText → getByLabel → locator → getByTestId
+try {
+  await mcp.browser_click("button", { name: "Submit" }); // getByRole
+} catch {
+  await mcp.browser_click("Submit"); // getByText
+} catch {
+  await mcp.browser_click("#submitButton"); // locator fallback
+}
 ```
 
-**⚠️ DO NOT PROCEED until user confirms discovery accuracy**
+### **2.4 Best of Both Worlds Benefits**
+
+**MCP Automation + Codegen Selector Quality:**
+- ✅ **No Manual Steps**: MCP handles all browser automation
+- ✅ **Reliable Selectors**: Uses Codegen's proven selector priorities
+- ✅ **Live Validation**: MCP tests selectors immediately
+- ✅ **Smart Fallbacks**: If ID fails, tries role, then text, then class
+- ✅ **Faster Development**: No manual recording needed
 
 ---
 
-## 🏗️ **STEP 3: Test Case Generation**
+## 🏗️ **STEP 3: SaaS Architecture with Simple Implementation**
 
-### **3.1 File Structure Generation**
+### **3.1 Required File Structure (SaaS Standard)**
 
-Based on confirmed requirements, create files in this exact structure:
+**Always create these files for maintainability:**
 
 ```
 tests/
@@ -136,35 +148,115 @@ fixtures/
         └── {feature-name}-data.ts     # Test data
 ```
 
-### **3.2 Implementation Pattern (SYNTAX TEMPLATES)**
+### **3.2 Smart MCP Implementation Templates**
 
-#### **3.2.1 File Generation Patterns**
+#### **3.2.1 Selectors File with MCP-Discovered Elements**
 
-**Create these files using framework patterns:**
+```typescript
+// utils/selectors/modules/{module}/{feature}-selectors.ts
+export const {FeatureName}Selectors = {
+  // MCP discovers these using Codegen-style patterns
+  
+  // Priority 1: getByRole selectors (most reliable)
+  roles: {
+    submitButton: { role: 'button', name: 'Submit' },
+    continueButton: { role: 'button', name: 'Continue' },
+    titleInput: { role: 'textbox', name: 'Title' },
+    categorySelect: { role: 'combobox', name: 'Category' }
+  },
+  
+  // Priority 2: getByText selectors (dynamic content)
+  texts: {
+    submitButton: 'Submit',
+    successMessage: 'Form submitted successfully',
+    errorMessage: 'Please fix the errors below'
+  },
+  
+  // Priority 3: getByLabel selectors (form elements)
+  labels: {
+    emailInput: 'Email Address',
+    passwordInput: 'Password',
+    agreeCheckbox: 'I agree to the terms'
+  },
+  
+  // Priority 4: locator selectors (fallback)
+  locators: {
+    container: '#form-container',
+    fileUpload: 'input[type="file"]',
+    loadingSpinner: '.loading-spinner'
+  },
+  
+  // Priority 5: getByTestId (modern best practice)
+  testIds: {
+    submitForm: 'submit-form',
+    userProfile: 'user-profile'
+  }
+};
+```
 
-- Selector File: `utils/selectors/modules/{module}/{feature}-selectors.ts`
-- Page Object: `pages/modules/{module}/{feature}.page.ts`
-- Test Data: `fixtures/test-data/{module}/{feature}-data.ts`
-- Test Spec: `tests/e2e/{module}/{feature}.spec.ts`
+#### **3.2.2 MCP-Validated Page Object**
+
+```typescript
+// pages/modules/{module}/{feature}.page.ts  
+import { Page } from '@playwright/test';
+import { {FeatureName}Selectors } from '../../../utils/selectors/modules/{module}/{feature}-selectors';
+
+export class {FeatureName}Page {
+  constructor(private page: Page) {}
+
+  // Use exact Codegen-style selectors discovered by MCP
+  async fillForm(data: any) {
+    // getByRole (Codegen's favorite)
+    await this.page.getByRole('textbox', { name: 'Title' }).fill(data.title);
+    
+    // getByLabel for form elements
+    await this.page.getByLabel('Email Address').fill(data.email);
+    
+    // locator for file uploads
+    await this.page.locator('input[type="file"]').setInputFiles(data.filePath);
+  }
+
+  async submit() {
+    // getByRole for buttons (most reliable)
+    await this.page.getByRole('button', { name: 'Submit' }).click();
+  }
+
+  async verifySuccess() {
+    // getByText for dynamic content
+    return this.page.getByText('Form submitted successfully').isVisible();
+  }
+  
+  // Alternative methods using selector object
+  async submitAlternative() {
+    const selector = {FeatureName}Selectors.roles.submitButton;
+    await this.page.getByRole(selector.role, { name: selector.name }).click();
+  }
+}
+```
 
 **CRITICAL Requirements:**
 
-- Use `baseTest` with `auth.ensureValidSessionBeforeTest(role)` before each test
-- Import selectors from utils folder (no hardcoded selectors)
-- Use `CustomAssertions` and `DataGenerator` from utils
+- Use `baseTest` with `{ page, auth }` fixtures (follow existing patterns)
+- **Use MCP-discovered selectors** in priority order (ID > Role > Text > Class)
+- **Keep implementations simple** - don't over-engineer
+- **Focus on main workflow** - avoid unnecessary validation steps  
+- **MCP validates selectors work** before code generation
 - Follow existing framework patterns from other test files
 
 ---
 
 ## 📋 **STEP 4: Framework Integration Requirements**
 
-### **4.1 Mandatory Framework Usage**
+### **4.1 SaaS Framework Integration (Simple but Complete)**
 
-- [ ] **Authentication**: Check smoke test how we have handlled authentication
-- [ ] **Selectors**: Use selectors from `utils/selectors/modules/`
-- [ ] **Assertions**: Use `CustomAssertions` from `utils/assertions/`
-- [ ] **Data Generation**: Use `DataGenerator` from `utils/data-generators/`
-- [ ] **Environment URLs**: Use `envHelper.getModuleUrl()` for navigation
+**MUST include in ALL files:**
+- [ ] **Selectors File**: Externalized selectors with exact Codegen selectors
+- [ ] **Page Object**: Clean methods for each user action (no over-engineering)
+- [ ] **Test Data**: Simple externalized data for flexibility
+- [ ] **Test File**: Uses page objects, not direct selectors
+- [ ] **Global Auth**: Use `{ page, auth }` fixtures properly
+- [ ] **Framework Imports**: Import from `../base-test` (not @playwright/test)
+- [ ] **Simple Assertions**: Focus on main success criteria only
 
 ### **4.2 Naming Conventions**
 
@@ -194,15 +286,34 @@ Verify before generating files:
 - [ ] Required role and permissions are identified
 - [ ] Framework integration points are planned
 
-### **5.2 Continuous MCP Validation**
+### **5.2 MCP Smart Validation Process**
 
-**During test creation, if encountering issues:**
+**During MCP discovery and test creation:**
 
-- [ ] **Re-run MCP inspection** if elements not found
-- [ ] **Use fetch** to inspect JavaScript files for validation rules
-- [ ] **Ask user for JS file guidance** if multiple files exist
-- [ ] **Verify authentication** affects element visibility
-- [ ] **Check for dynamic loading** or iframe content
+- [ ] **MCP Live Testing**: Test each selector during discovery phase
+- [ ] **Priority Fallbacks**: If ID fails, MCP tries role, then text, then class
+- [ ] **Automatic Validation**: MCP performs click/type/wait to verify selectors work
+- [ ] **Keep wait strategies simple** (`waitForLoadState('load')` only)
+- [ ] **Focus on main workflow** (avoid over-testing edge cases)
+- [ ] **Smart Error Handling**: If MCP selector fails, automatically find alternatives
+
+**MCP Codegen-Style Selector Testing:**
+```javascript
+// MCP tests selectors using exact Codegen patterns
+try {
+  await mcp.browser_click("button", { name: "Submit" }); // getByRole (best)
+} catch {
+  await mcp.browser_click("Submit"); // getByText (fallback)
+} catch {
+  await mcp.browser_click("#submitButton"); // locator (last resort)
+}
+
+// MCP validates these work before generating code:
+await page.getByRole('button', { name: 'Submit' }).click();
+await page.getByText('Success!').waitFor();
+await page.getByLabel('Email').fill('test@example.com');
+await page.locator('#fileInput').setInputFiles('file.pdf');
+```
 
 ---
 
@@ -264,16 +375,15 @@ Verify before generating files:
 
 ### **Generated Test Case Must Include**
 
+- [ ] **Proper SaaS Architecture**: All 4 files (selectors, page object, test data, test spec)
 - [ ] **Global Auth Integration**: Use `{ page, auth }` fixtures from `../base-test`
-- [ ] **Authentication Flow**: `auth.isAuthenticated()` check and `auth.ensureAuthenticated()` fallback
-- [ ] **Role-Based Testing**: Set `process.env.ROLE` for different user types
-- [ ] **Console Logging**: Descriptive logging for authentication and test flow
-- [ ] **Page Object Model**: Proper implementation with page fixture initialization
-- [ ] **Selectors**: Externalized to utils/selectors/modules/ (no hardcoded values)
-- [ ] **Test Data**: Externalized to fixtures/test-data/
-- [ ] **Framework Integration**: Use CustomAssertions, DataGenerator, envHelper
-- [ ] **Folder Structure**: Follow framework conventions
-- [ ] **No Manual Login**: Use auth fixture only - never implement manual login
+- [ ] **Authentication Flow**: `auth.isAuthenticated()` and `auth.ensureAuthenticated()`
+- [ ] **Exact Codegen Selectors**: Don't modify working selectors from recording
+- [ ] **Page Object Model**: Clean methods, no business logic
+- [ ] **Simple Assertions**: Focus on main success criteria only
+- [ ] **Reliable Wait Strategy**: Avoid `networkidle` and timeout-prone patterns
+- [ ] **Folder Structure**: Follow framework conventions exactly
+- [ ] **Working Implementation**: Test runs successfully on first try
 
 ### **Final Validation**
 
@@ -287,10 +397,12 @@ Verify before generating files:
 
 Upon completion, you should have generated:
 
-1. **Test Specification File**: In proper e2e/smoke/regression folder
-2. **Page Object File**: In pages/modules/{module}/ folder
-3. **Selector Definition File**: In utils/selectors/modules/{module}/ folder
-4. **Test Data File**: In fixtures/test-data/{module}/ folder
-5. **Integration Verification**: All files properly integrated with existing framework utilities
-6. **Add script in package.json for test execution module wise**: Add scripts to run the new test case easily module wise
-7. **Run & Fix**: Execute the tests and fix any issues that arise
+1. **Selectors File**: `utils/selectors/modules/{module}/{feature}-selectors.ts` (with exact Codegen selectors)
+2. **Page Object File**: `pages/modules/{module}/{feature}.page.ts` (simple, clean methods)
+3. **Test Data File**: `fixtures/test-data/{module}/{feature}-data.ts` (minimal required data)
+4. **Test Specification File**: `tests/e2e/{module}/{feature}.spec.ts` (working test)
+5. **Package Script**: Module-specific npm script for easy execution
+6. **Architecture Validation**: Confirm all files follow SaaS patterns
+7. **Execution Proof**: Run the test once to confirm it works
+
+**Success = Proper SaaS architecture + Working test that runs reliably! 🎉**
