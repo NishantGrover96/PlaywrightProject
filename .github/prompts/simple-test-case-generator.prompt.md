@@ -170,12 +170,14 @@ import { UserTestData } from '../../../fixtures/test-data/user/user-data';
 
 ### **5.1 Selector Rules**
 
-- **USE**: Exact selectors from Playwright Codegen
+- **USE**: Exact selectors from Playwright Codegen (NEVER modify them)
 - **USE**: ID selectors when available (#elementId)  
 - **USE**: getByRole() from codegen output
 - **AVOID**: Complex CSS selectors
 - **AVOID**: XPath selectors
 - **NEVER**: Modify working codegen selectors
+- **FILE UPLOADS**: Always use `input[type="file"]` for setInputFiles(), not body or other elements
+- **SUCCESS VERIFICATION**: Use `text=Congratulations` or similar text-based selectors for robust verification
 
 ### **5.2 Wait Strategy (Simple)**
 
@@ -197,6 +199,8 @@ await page.waitForLoadState('networkidle');
 - **Use simple Playwright assertions**: `toBeVisible()`, `toHaveText()`, `toHaveValue()`
 - **Verify main success criteria only**
 - **Don't over-assert** every tiny detail
+- **SUCCESS MESSAGES**: Use text-based selectors like `text=Success` or `text=Congratulations` instead of exact role/name matches
+- **FILE UPLOADS**: After clicking dropzone, always target `input[type="file"]` for setInputFiles()
 
 ---
 
@@ -276,6 +280,22 @@ Upon completion, you should deliver:
 - **Simple Implementation** = Clean code within proper architecture
 
 **Success = Working tests + Proper SaaS architecture for long-term maintainability! 🎉**
+
+---
+
+## 🔧 **Common Issues & Solutions**
+
+### **File Upload Issues**
+- ❌ **Wrong**: `await page.locator('body').setInputFiles(fileName)`
+- ✅ **Correct**: `await page.locator('input[type="file"]').setInputFiles(fileName)`
+
+### **Success Message Verification**
+- ❌ **Wrong**: `getByRole('heading', { name: ' Congratulations! You\'ve' })`
+- ✅ **Correct**: `locator('text=Congratulations')` or `locator('text=Success')`
+
+### **Static Files**
+- ✅ **Always use**: `static_files/` folder for all test files
+- ✅ **Example**: `static_files/excel/testfile.xlsx`
 
 ---
 

@@ -6,7 +6,8 @@
 - Avoid unnecessary **verbosity and test cases**.  
 - Keep solutions **clean, modern, and concise**.  
 - Preserve project structure and avoid redundancy.  
-- No unnecessary files, comments only when needed.  
+- No unnecessary files, comments only when needed. 
+- **please use static_files folder for all static files** 
 - While running tests, use script which takes minimum time.  
 - If encountered multiple errors while testing, fix all errors in one go.  
 - ✅ Use **PascalCase** for **test/spec file names** (e.g., `CreateList.spec.ts`, `UpdateUser.spec.ts`).  
