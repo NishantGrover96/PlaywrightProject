@@ -56,6 +56,8 @@ This gives us 100% working selectors without guessing!
 ```
 
 **Do not move forward until user provides codegen output.**
+**Don't create selectors manually. Always use Playwright Codegen.**
+**Don't create selectors files, use directly in test file.**
 
 ### **2.2 Convert Codegen to Framework Pattern**
 
@@ -65,7 +67,9 @@ When user provides codegen output:
 - **Add framework imports** (base-test, not @playwright/test)
 - **Add simple assertions** at the end
 - **Use existing folder structure**
-
+- **Keep it minimal** - no extra validation or complexity
+- **Use async/await properly**
+- 
 ---
 
 ## 🏗️ **STEP 3: Proper SaaS Architecture**
@@ -85,13 +89,7 @@ tests/
 pages/
 └── modules/
     └── {module-name}/
-        └── {feature-name}.page.ts   # Page Object Model
-
-utils/
-└── selectors/
-    └── modules/
-        └── {module-name}/
-            └── {feature-name}-selectors.ts    # Element selectors
+        └── {feature-name}.page.ts   # Page Object Model if not already existing
 
 fixtures/
 └── test-data/
@@ -107,27 +105,6 @@ fixtures/
 
 ### **3.2 SaaS Architecture Templates**
 
-#### **3.2.1 Selectors File Template**
-```typescript
-// utils/selectors/modules/{module}/{feature}-selectors.ts
-export const {FeatureName}Selectors = {
-  // Use exact selectors from Playwright Codegen
-  mainContainer: '#main-container',
-  submitButton: 'button[type="submit"]',
-  successMessage: '.success-message',
-  // Group related selectors logically
-  form: {
-    titleInput: '#title',
-    descriptionField: '#description',
-    fileUpload: 'input[type="file"]'
-  },
-  navigation: {
-    nextButton: 'button:has-text("Next")',
-    backButton: 'button:has-text("Back")'
-  }
-};
-```
-
 #### **3.2.2 Page Object Template**
 ```typescript
 // pages/modules/{module}/{feature}.page.ts
@@ -138,71 +115,13 @@ import { {FeatureName}TestData } from '../../../fixtures/test-data/{module}/{fea
 export class {FeatureName}Page {
   constructor(private page: Page) {}
 
-  async navigateTo() {
-    await this.page.goto('{feature-url}');
-    await this.page.waitForLoadState('load');
-  }
-
-  async fillForm(data: typeof {FeatureName}TestData.validData) {
-    await this.page.locator({FeatureName}Selectors.form.titleInput).fill(data.title);
-    await this.page.locator({FeatureName}Selectors.form.descriptionField).fill(data.description);
-  }
-
-  async submitForm() {
-    await this.page.locator({FeatureName}Selectors.submitButton).click();
-  }
-
-  async verifySuccess() {
-    return this.page.locator({FeatureName}Selectors.successMessage).isVisible();
-  }
 }
-```
-
-#### **3.2.3 Test Data Template**
-```typescript
-// fixtures/test-data/{module}/{feature}-data.ts
-export const {FeatureName}TestData = {
-  validData: {
-    title: 'Test Title',
-    description: 'Test Description'
-  },
-  invalidData: {
-    title: '',
-    description: 'Missing title'
-  }
-};
 ```
 
 #### **3.2.4 Test File Template**
 ```typescript
 // tests/e2e/{module}/{feature}.spec.ts
-import { test, expect } from '../../base-test';
-import { {FeatureName}Page } from '../../../pages/modules/{module}/{feature}.page';
-import { {FeatureName}TestData } from '../../../fixtures/test-data/{module}/{feature}-data';
 
-test.describe('{Module} - {Feature} Tests', () => {
-  let {featureName}Page: {FeatureName}Page;
-
-  test.beforeEach(async ({ page, auth }) => {
-    // Initialize page object
-    {featureName}Page = new {FeatureName}Page(page);
-    
-    // Handle authentication
-    const isAuthenticated = await auth.isAuthenticated();
-    if (!isAuthenticated) {
-      await auth.ensureAuthenticated();
-    }
-  });
-
-  test('should successfully complete {action}', async ({ page }) => {
-    await {featureName}Page.navigateTo();
-    await {featureName}Page.fillForm({FeatureName}TestData.validData);
-    await {featureName}Page.submitForm();
-    
-    const isSuccess = await {featureName}Page.verifySuccess();
-    expect(isSuccess).toBeTruthy();
-  });
-});
 ```
 
 ---
@@ -212,11 +131,10 @@ test.describe('{Module} - {Feature} Tests', () => {
 ### **4.1 SaaS Framework Integration**
 
 **MUST include in ALL files:**
-- [ ] **Selectors File**: Externalized selectors with logical grouping
 - [ ] **Page Object**: Clean methods for each user action
 - [ ] **Test Data**: Externalized data for flexibility
 - [ ] **Test File**: Uses page objects, not direct selectors
-- [ ] **Global Auth**: Use `{ page, auth }` fixtures properly
+- [ ] **Global Auth**: Use `{ page, auth }` fixtures properly **important**
 - [ ] **Framework Imports**: Import from `../base-test` (not @playwright/test)
 
 **Page Object Benefits for SaaS:**
@@ -228,7 +146,6 @@ test.describe('{Module} - {Feature} Tests', () => {
 ### **4.2 SaaS-Grade Architecture Rules**
 
 #### **4.2.1 Separation of Concerns**
-- **Selectors**: Only contain element locators
 - **Page Objects**: Only contain user actions/interactions
 - **Test Data**: Only contain test values
 - **Test Files**: Only contain test logic and assertions
@@ -268,7 +185,7 @@ await page.goto(url);
 await page.waitForLoadState('load');
 
 // ✅ Wait for specific element if needed
-await page.waitForSelector('#elementId', { timeout: 15000 });
+await page.waitForSelector('#elementId', { timeout: 90000 });
 
 // ❌ AVOID - causes timeouts
 await page.waitForLoadState('networkidle');
@@ -287,7 +204,6 @@ await page.waitForLoadState('networkidle');
 
 ### **6.1 File Generation Checklist (All Required)**
 
-- [ ] **Selectors File**: Created with Playwright Codegen selectors, logically grouped
 - [ ] **Page Object**: Clean methods for each user action, no business logic
 - [ ] **Test Data**: Externalized with valid/invalid data sets
 - [ ] **Test File**: Uses page objects, proper auth, clear test names
@@ -298,7 +214,6 @@ await page.waitForLoadState('networkidle');
 ### **6.2 Architecture Quality Gates**
 
 #### **6.2.1 Maintainability Check**
-- [ ] If UI changes, only selectors file needs updates
 - [ ] If test data changes, only data file needs updates  
 - [ ] If user workflow changes, only page object needs updates
 - [ ] Test file remains clean and readable
@@ -327,11 +242,9 @@ npm run e2e:{client}:{role}:{env} -- tests/e2e/{module}/ --grep "{test-name}"
 ## 🎯 **Success Criteria: SaaS Architecture + Working Tests**
 
 ### **What Matters for SaaS Projects:**
-- ✅ **Proper Architecture**: Page Objects, Selectors, Test Data separation
 - ✅ **Team Scalability**: New developers can contribute immediately
 - ✅ **Maintainability**: Changes isolated to appropriate files
 - ✅ **Reusability**: Page objects shared across multiple tests
-- ✅ **Reliability**: Tests run consistently with Codegen selectors
 - ✅ **Standards**: Follows enterprise naming and structure conventions
 
 ### **What's Balanced (Not Eliminated):**
@@ -345,11 +258,10 @@ npm run e2e:{client}:{role}:{env} -- tests/e2e/{module}/ --grep "{test-name}"
 
 Upon completion, you should deliver:
 
-1. **Selectors File**: `utils/selectors/modules/{module}/{feature}-selectors.ts`
 2. **Page Object**: `pages/modules/{module}/{feature}.page.ts`
 3. **Test Data**: `fixtures/test-data/{module}/{feature}-data.ts`
 4. **Test File**: `tests/e2e/{module}/{feature}.spec.ts`
-5. **Package Script**: Module-specific npm script for execution
+5. **Package Script**: Module-specific npm script for execution client, env and role wise
 6. **Architecture Validation**: Confirm all files follow SaaS patterns
 
 **Complete architecture for long-term maintainability + working tests.**
@@ -358,7 +270,6 @@ Upon completion, you should deliver:
 
 ## 🏆 **Remember: SaaS Architecture + Simplicity**
 
-- **Playwright Codegen** = 100% accurate selectors (no MCP guessing)
 - **Page Object Model** = Maintainable, reusable, team-friendly architecture
 - **Global Auth** = No manual login complexity
 - **Proper Structure** = Easy maintenance and scaling for SaaS projects
@@ -373,4 +284,3 @@ Upon completion, you should deliver:
 **From Original Prompt**: ❌ "Simple over everything, skip architecture"  
 **To New Approach**: ✅ "Simple implementation within proper SaaS architecture"
 
-This maintains enterprise-grade structure while keeping the selector discovery and implementation straightforward!
