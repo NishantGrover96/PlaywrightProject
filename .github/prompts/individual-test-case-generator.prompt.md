@@ -52,21 +52,15 @@ await mcp.browser_navigate(providedFeatureUrl);
 await mcp.browser_snapshot(); // Capture page structure
 // Login using creadentials for the specified role from page client-modules-access.ts
 // Analyze the page for:
-// - Form elements (inputs, dropdowns, buttons)
-// - Data tables/grids and their columns
-// - Navigation elements and links
-// - Interactive components (modals, tabs, accordions)
-// - Search/filter controls
-// - Action buttons (Add, Edit, Delete, Save, etc.)
+// For basic testing elements and capture its relevent selectors using ID and class names and than relate to user requirements
 ```
 
-### **2.2 Extract Page Elements**
+### **2.2 Extract Page Elements only relevant to test cases**
 
 Identify and categorize:
 
 - **Input Elements**: Text fields, dropdowns, checkboxes, radio buttons, select2, datepickers
 - **Action Elements**: Buttons, links, submit controls
-- **Display Elements**: Tables, lists, cards, data displays
 - **Navigation Elements**: Breadcrumbs, tabs, sidebar items
 - **Validation Elements**: Error messages, success notifications
 - **Do not overcomplicate or add unnecessary verbosity and test cases.**
@@ -84,7 +78,7 @@ Identify and categorize:
 
 **CRITICAL**: If elements are not found or tests fail during creation:
 
-- **Use MCP again** to re-inspect the page for updated selectors
+- **Use MCP again** to re-inspect the page for updated selectors use ID and class names 
 - Check if elements are dynamically loaded or in iframes
 - Verify if authentication or permissions affect element visibility
 - **Ask user for clarification** if element behavior is unclear
@@ -97,7 +91,6 @@ Present findings to user:
 Based on MCP inspection of [Feature Name], I found:
 - X input fields: [list]
 - Y action buttons: [list]
-- Z data display elements: [list]
 - JavaScript validation rules: [if any found]
 - Navigation patterns: [description]
 
