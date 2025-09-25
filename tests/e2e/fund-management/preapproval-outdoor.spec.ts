@@ -1,11 +1,7 @@
 // tests/e2e/fund-management/preapproval-outdoor.spec.ts
 import { test, expect } from '../../base-test';
-<<<<<<< HEAD
-import { PreapprovalPaidSearchPage } from '../../../pages/modules/fund-management/preapproval.page';
-=======
 import { PreapprovalPaidSearchPage } from '../../../pages/modules/fund-management/preapproval-paidsearch.page';
->>>>>>> 719a87f48eb437ce241bae199b21c2a5ba3ddf24
-import { PreapprovalOutdoorTestData, PreapprovalOutdoorSelectors } from '../../../fixtures/test-data/fund-management/preapproval-outdoor-data';
+import { PreapprovalOutdoorTestData } from '../../../fixtures/test-data/fund-management/preapproval-outdoor-data';
 
 test.describe('Fund Management - Preapproval Outdoor', () => {
   let preapprovalPage: PreapprovalPaidSearchPage;

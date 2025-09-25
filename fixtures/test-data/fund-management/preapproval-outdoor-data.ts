@@ -16,11 +16,7 @@ export const PreapprovalOutdoorTestData = {
     invalidTitles: ['', 'a'.repeat(256)]
   },
   uploadFiles: {
-<<<<<<< HEAD
-    validFile: 'static_files/images/test.png',
-=======
-    validFile: 'static_files/images/continue.png',
->>>>>>> 719a87f48eb437ce241bae199b21c2a5ba3ddf24
+  validFile: 'static_files/images/test.png',
     testFiles: [
       'static_files/images/test.png'
     ]
