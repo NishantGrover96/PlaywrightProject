@@ -2,12 +2,7 @@ import { test, expect } from '../base-test';
 import { FundMgmtPreapprovalPage } from '../../pages/modules/fund-management/fund-mgmt-preapproval.page';
 import { FUND_MGMT_PREAPPROVAL_TEST_DATA } from '../../fixtures/test-data/fund-management/fund-mgmt-preapproval-data';
 
-/**
- * Fund Management Module - Preapproval Smoke Tests
- * Simplified version with minimal validation checks
- */
-
-test.describe('Fund Management - Preapproval Request for Outdoor Media Type', () => {
+test.describe('Fund Management - Preapproval Request', () => {
   let fundMgmtPreapprovalPage: FundMgmtPreapprovalPage;
 
   test.beforeEach(async ({ page, auth }) => {
@@ -15,74 +10,34 @@ test.describe('Fund Management - Preapproval Request for Outdoor Media Type', ()
     fundMgmtPreapprovalPage = new FundMgmtPreapprovalPage(page);
   });
 
-  test('should submit preapproval request for outdoor media type - demo admin', async ({ page }) => {
-    console.log('🎯 Testing Fund Management Preapproval submission for Admin role');
-    console.log('📋 Test Scenario: Submit preapproval for outdoor media with dealer 10000');
-
-    // Execute the complete preapproval submission workflow
-    const confirmationNumber = await fundMgmtPreapprovalPage.completePreapprovalSubmission();
-
-    // Simple verification - just check that we got a confirmation message
-    expect(confirmationNumber).toContain('CONFIRMATION');
-
-    console.log(`🎉 Preapproval submitted successfully with ${confirmationNumber}`);
-  });
-
-  test.describe('Individual Step Verification', () => {
+  test('should submit preapproval request for outdoor media type', async ({ page }) => {
+    test.setTimeout(90000); // Follow copilot instructions - use 90s timeout
     
-    test('should successfully navigate through dealer selection step', async ({ page }) => {
-      console.log('🎯 Testing Dealer Selection Step');
-      
-      await fundMgmtPreapprovalPage.navigateToPreapprovalSubmission();
-      await fundMgmtPreapprovalPage.waitForPageLoad();
-      await fundMgmtPreapprovalPage.enterDealerNumberAndContinue(
-        FUND_MGMT_PREAPPROVAL_TEST_DATA.testData.dealerNumber
-      );
-      
-      console.log('✅ Dealer selection step completed successfully');
+    // Use Page Object Model - navigate using proper method
+    await fundMgmtPreapprovalPage.navigateToPreapprovalSubmission();
+    await fundMgmtPreapprovalPage.waitForPageLoad();
+    
+    // Step 1: Enter Dealer Number using proper selectors and POM
+    await fundMgmtPreapprovalPage.enterDealerNumberAndContinue(
+      FUND_MGMT_PREAPPROVAL_TEST_DATA.testData.dealerNumber
+    );
+    
+    // Step 2: Select Media Type using POM
+    await fundMgmtPreapprovalPage.selectMediaTypeAndContinue(
+      FUND_MGMT_PREAPPROVAL_TEST_DATA.testData.mediaType
+    );
+    
+    // Step 3: Fill form data using POM (ignore "This Ad Includes an Offer" checkbox as requested)
+    await fundMgmtPreapprovalPage.fillPreapprovalForm({
+      adTitle: FUND_MGMT_PREAPPROVAL_TEST_DATA.testData.adTitle,
+      uploadFilePath: FUND_MGMT_PREAPPROVAL_TEST_DATA.filePaths.uploadFile,
+      submissionComment: FUND_MGMT_PREAPPROVAL_TEST_DATA.testData.submissionComment,
     });
-
-    test('should successfully select outdoor media type', async ({ page }) => {
-      console.log('🎯 Testing Media Type Selection Step');
-      
-      await fundMgmtPreapprovalPage.navigateToPreapprovalSubmission();
-      await fundMgmtPreapprovalPage.waitForPageLoad();
-      await fundMgmtPreapprovalPage.enterDealerNumberAndContinue(
-        FUND_MGMT_PREAPPROVAL_TEST_DATA.testData.dealerNumber
-      );
-      await fundMgmtPreapprovalPage.selectMediaTypeAndContinue(
-        FUND_MGMT_PREAPPROVAL_TEST_DATA.testData.mediaType
-      );
-      
-      console.log('✅ Media type selection step completed successfully');
-    });
-
-    test('should successfully fill and submit preapproval form', async ({ page }) => {
-      console.log('🎯 Testing Form Submission Step');
-      
-      // Navigate through first two steps
-      await fundMgmtPreapprovalPage.navigateToPreapprovalSubmission();
-      await fundMgmtPreapprovalPage.waitForPageLoad();
-      await fundMgmtPreapprovalPage.enterDealerNumberAndContinue(
-        FUND_MGMT_PREAPPROVAL_TEST_DATA.testData.dealerNumber
-      );
-      await fundMgmtPreapprovalPage.selectMediaTypeAndContinue(
-        FUND_MGMT_PREAPPROVAL_TEST_DATA.testData.mediaType
-      );
-      
-      // Fill and submit form
-      await fundMgmtPreapprovalPage.fillPreapprovalForm({
-        adTitle: FUND_MGMT_PREAPPROVAL_TEST_DATA.testData.adTitle,
-        uploadFilePath: FUND_MGMT_PREAPPROVAL_TEST_DATA.filePaths.uploadFile,
-        submissionComment: FUND_MGMT_PREAPPROVAL_TEST_DATA.testData.submissionComment,
-      });
-      
-      const confirmationNumber = await fundMgmtPreapprovalPage.submitPreapprovalForm();
-      
-      // Simple verification
-    //   expect(confirmationNumber).toContain('CONFIRMATION');
-      
-      console.log('✅ Form submission step completed successfully');
-    });
+    
+    // Step 4: Submit form using POM
+    const confirmationNumber = await fundMgmtPreapprovalPage.submitPreapprovalForm();
+    
+    // Step 5: Verify success using confirmation number (as per your requirement)
+    expect(confirmationNumber).toContain('CONFIRMATION');
   });
 });
