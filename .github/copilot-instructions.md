@@ -6,7 +6,8 @@
 - Avoid unnecessary **verbosity and test cases**.  
 - Keep solutions **clean, modern, and concise**.  
 - Preserve project structure and avoid redundancy.  
-- No unnecessary files, comments only when needed.  
+- No unnecessary files, comments only when needed. 
+- **please use static_files folder for all static files** 
 - While running tests, use script which takes minimum time.  
 - If encountered multiple errors while testing, fix all errors in one go.  
 - ✅ Use **PascalCase** for **test/spec file names** (e.g., `CreateList.spec.ts`, `UpdateUser.spec.ts`).  
@@ -17,21 +18,14 @@
 
 ## Playwright Usage
 
-- Always use **Playwright MCP** to:
-  - Open the target URL.
-  - Inspect the page.
-  - Identify all form fields, buttons, links, navigation before writing test cases.
-  - Use **fetch to load related JS files** when creating test cases to understand overall logic.
-- If a test case fails:
-  - Use **MCP again** to open the URL.
-  - Mimic the inspection process again.
-  - Retry writing or fixing the test with updated findings.
+- Use **TypeScript**.
+- Use npm playwright codegen for selectors.
 - Run tests with **90s timeout** (unless specified).
 - Default environment: **Uat env** (`https://demoportaluat.channel-fusion.com`).
 
 ### Load State Guidance
 
-- For **.NET Core Razor Pages**, do **not default to `networkidle`**.  
+- Do **not default to `networkidle`**.  
 - Prefer `await page.waitForLoadState('load')` to ensure the page is ready.  
 - When possible, wait for a **specific locator** to be visible or attached instead of only relying on load states:  
   ```ts
