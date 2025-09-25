@@ -1,6 +1,10 @@
 // tests/e2e/fund-management/preapproval-direct.spec.ts
 import { test, expect } from '../../base-test';
+<<<<<<< HEAD
 import { PreapprovalPaidSearchPage } from '../../../pages/modules/fund-management/preapproval.page';
+=======
+import { PreapprovalPaidSearchPage } from '../../../pages/modules/fund-management/preapproval-paidsearch.page';
+>>>>>>> 719a87f48eb437ce241bae199b21c2a5ba3ddf24
 import { PreapprovalDirectTestData } from '../../../fixtures/test-data/fund-management/preapproval-direct-data';
 
 test.describe('Fund Management - Preapproval Direct', () => {
