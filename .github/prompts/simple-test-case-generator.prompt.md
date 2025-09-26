@@ -16,9 +16,9 @@ description: You are an expert QA automation engineer specializing in generating
 
 ---
 
-## 🔍 **STEP 1: Quick Requirements (5 Questions Only)**
+## 🔍 **STEP 1: Quick Requirements (7 Questions Only)**
 
-Ask user these **5 essential questions only**:
+Ask user these **7 essential questions only**:
 
 ```
 1. What feature URL should I test? (provide full URL)
@@ -26,6 +26,8 @@ Ask user these **5 essential questions only**:
 3. Which environment? (dev, test, uat, prod)
 4. What main actions to test? (create, update, search, etc.)
 5. What should I verify at the end? (success message, data created, etc.)
+6. Are there multiple similar features on the same page? (e.g., Direct/Outdoor/Paid Search)
+7. What test category? (e2e, smoke, regression)
 ```
 
 **⚠️ DO NOT ask 20 questions. Keep it simple!**
@@ -62,13 +64,28 @@ This gives us 100% working selectors without guessing!
 ### **2.2 Convert Codegen to Framework Pattern**
 
 When user provides codegen output:
-- **Keep exact selectors** from codegen (don't change them)
-- **Remove login steps** (use global auth instead)
-- **Add framework imports** (base-test, not @playwright/test)
-- **Add simple assertions** at the end
+- **PRESERVE SELECTORS**: Copy exact selectors from codegen (ANY change breaks tests)
+- **SMART GROUPING**: Group related selectors into logical page object methods
+- **REFERENCE DATA**: Use shared test data files (e.g., PreapprovalTestData pattern)
+- **Remove ALL login/auth steps** (use global auth fixture instead)
+- **Remove navigation steps** (if not core to feature being tested)
+- **Add framework imports** (`base-test`, not `@playwright/test`)
+- **Use auth fixture**: `{ page, auth }` from base-test
+- **Add authentication check**: `isAuthenticated()` and `ensureAuthenticated()`
 - **Use existing folder structure**
 - **Keep it minimal** - no extra validation or complexity
 - **Use async/await properly**
+
+**Example Smart Grouping**: 
+```typescript
+// Group: Fill dealer number and continue
+async fillDealerNumber(dealerNumber: string = PreapprovalTestData.dealer.number) {
+  // Exact selectors from codegen - NO changes
+  await this.page.locator('#txtdealernumber').click();
+  await this.page.locator('#txtdealernumber').fill(dealerNumber);
+  await this.page.getByRole('button', { name: 'Continue' }).click();
+}
+```
 - 
 ---
 
@@ -82,46 +99,54 @@ When user provides codegen output:
 tests/
 ├── smoke/                           # For smoke tests
 ├── regression/                      # For regression tests  
-└── e2e/
-    └── {module-name}/
-        └── {feature-name}.spec.ts   # Main test file
+└── e2e/{module}/
+    ├── {feature-type-1}.spec.ts     # e.g., preapproval-direct.spec.ts
+    ├── {feature-type-2}.spec.ts     # e.g., preapproval-outdoor.spec.ts
+    └── {feature-type-3}.spec.ts     # e.g., preapproval-paidsearch.spec.ts
 
 pages/
-└── modules/
-    └── {module-name}/
-        └── {feature-name}.page.ts   # Page Object Model if not already existing
+└── modules/{module}/
+    └── {feature}.page.ts            # Shared page object for all types
 
 fixtures/
-└── test-data/
-    └── {module-name}/
-        └── {feature-name}-data.ts   # Test data
+└── test-data/{module}/
+    └── {feature}-data.ts            # Shared test data for all types
 ```
 
 **Why This Structure Matters for SaaS:**
 - ✅ **Scalability**: Easy to add new modules/features
-- ✅ **Maintainability**: Changes isolated to specific files
+- ✅ **Maintainability**: Changes isolated to specific files  
 - ✅ **Team Collaboration**: Clear ownership and responsibility
-- ✅ **Reusability**: Page objects can be shared across tests
+- ✅ **Reusability**: Single page object shared across multiple feature types
+- ✅ **Consistency**: Same patterns for multiple similar features
 
 ### **3.2 SaaS Architecture Templates**
 
-#### **3.2.2 Page Object Template**
+#### **3.2.2 Shared Page Object Template**
 ```typescript
-// pages/modules/{module}/{feature}.page.ts
-import { Page } from '@playwright/test';
-import { {FeatureName}Selectors } from '../../../utils/selectors/modules/{module}/{feature}-selectors';
-import { {FeatureName}TestData } from '../../../fixtures/test-data/{module}/{feature}-data';
-
-export class {FeatureName}Page {
-  constructor(private page: Page) {}
-
-}
+// Reference: preapproval.page.ts pattern
+// Shared page object that handles multiple feature types on same page
+// Contains methods for common actions and type-specific variations
 ```
 
-#### **3.2.4 Test File Template**
+#### **3.2.3 Shared Test Data Template** 
 ```typescript
-// tests/e2e/{module}/{feature}.spec.ts
+// Reference: preapproval-data.ts pattern
+// Smart data structure with DataGenerator integration
+// Example structure:
+// export const {FeatureName}TestData = {
+//   dealer: { number: '10000', validNumbers: [...], invalidNumbers: [...] },
+//   adContent: { title: DataGenerator.randomString(10), validTitles: [...] },
+//   uploadFiles: { Excel: 'static_files/excel/...', Img: 'static_files/images/...' }
+// };
+```
 
+#### **3.2.4 Feature Test File Template**
+```typescript
+// Reference: preapproval-direct.spec.ts pattern
+// Individual test files for each feature type
+// Uses shared page object and test data
+// Includes proper authentication setup
 ```
 
 ---
@@ -131,11 +156,12 @@ export class {FeatureName}Page {
 ### **4.1 SaaS Framework Integration**
 
 **MUST include in ALL files:**
-- [ ] **Page Object**: Clean methods for each user action
-- [ ] **Test Data**: Externalized data for flexibility
-- [ ] **Test File**: Uses page objects, not direct selectors
-- [ ] **Global Auth**: Use `{ page, auth }` fixtures properly **important**
-- [ ] **Framework Imports**: Import from `../base-test` (not @playwright/test)
+- [ ] **Shared Page Object**: Handles multiple feature types on same page
+- [ ] **Shared Test Data**: Reusable data structure for all feature types  
+- [ ] **Individual Test Files**: One per feature type, uses shared components
+- [ ] **Global Auth**: Use `{ page, auth }` fixtures from base-test **MANDATORY**
+- [ ] **Authentication Check**: `isAuthenticated()` and `ensureAuthenticated()`
+- [ ] **Framework Imports**: Import from `../../base-test` (NOT @playwright/test)
 
 **Page Object Benefits for SaaS:**
 - ✅ **Reusability**: Multiple tests can use same page methods
@@ -168,16 +194,18 @@ import { UserTestData } from '../../../fixtures/test-data/user/user-data';
 
 ## 🎯 **STEP 5: Generation Rules**
 
-### **5.1 Selector Rules**
+### **5.1 Selector Rules (CRITICAL for Test Success)**
 
-- **USE**: Exact selectors from Playwright Codegen (NEVER modify them)
-- **USE**: ID selectors when available (#elementId)  
-- **USE**: getByRole() from codegen output
-- **AVOID**: Complex CSS selectors
-- **AVOID**: XPath selectors
-- **NEVER**: Modify working codegen selectors
-- **FILE UPLOADS**: Always use `input[type="file"]` for setInputFiles(), not body or other elements
-- **SUCCESS VERIFICATION**: Use `text=Congratulations` or similar text-based selectors for robust verification
+- **NEVER ALTER SELECTORS**: Copy exact selectors from codegen - ANY modification causes test failures
+- **ONLY GROUP**: Take codegen selectors and group them into logical page object methods
+- **PRESERVE EXACTLY**: Keep getByRole(), locator(), and all selector syntax unchanged
+- **SMART GROUPING**: Group related actions into meaningful methods (e.g., fillDealerNumber, selectType)
+- **USE DATA FILES**: Reference test data from shared data files (e.g., PreapprovalTestData pattern)
+- **REMOVE**: All login/authentication steps from codegen (use global auth)
+- **FILE UPLOADS**: Always use `input[type="file"]` for setInputFiles(), not dropzone elements
+- **SUCCESS VERIFICATION**: Use `text=Congratulations` for success message verification
+
+**⚠️ CRITICAL**: Selector modification = Test failure. Only organize, never change!
 
 ### **5.2 Wait Strategy (Simple)**
 
@@ -199,8 +227,8 @@ await page.waitForLoadState('networkidle');
 - **Use simple Playwright assertions**: `toBeVisible()`, `toHaveText()`, `toHaveValue()`
 - **Verify main success criteria only**
 - **Don't over-assert** every tiny detail
-- **SUCCESS MESSAGES**: Use text-based selectors like `text=Success` or `text=Congratulations` instead of exact role/name matches
-- **FILE UPLOADS**: After clicking dropzone, always target `input[type="file"]` for setInputFiles()
+- **SUCCESS MESSAGES**: Use `expect(page.locator('text=Congratulations')).toBeVisible({ timeout: 90000 })`
+- **AUTHENTICATION**: Always check `isAuthenticated()` before test actions
 
 ---
 
@@ -208,9 +236,10 @@ await page.waitForLoadState('networkidle');
 
 ### **6.1 File Generation Checklist (All Required)**
 
-- [ ] **Page Object**: Clean methods for each user action, no business logic
-- [ ] **Test Data**: Externalized with valid/invalid data sets
-- [ ] **Test File**: Uses page objects, proper auth, clear test names
+- [ ] **Shared Page Object**: Handles multiple feature types, clean methods
+- [ ] **Shared Test Data**: Reusable data structure for all feature variations
+- [ ] **Individual Test Files**: One per feature type, proper auth, clear naming
+- [ ] **Global Authentication**: Uses `{ page, auth }` fixtures correctly
 - [ ] **Folder Structure**: Follows framework conventions exactly
 - [ ] **Imports**: Relative imports, proper base-test usage
 - [ ] **Naming**: Consistent kebab-case, PascalCase, camelCase conventions

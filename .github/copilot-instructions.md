@@ -3,6 +3,7 @@
 ## General Rules
 
 - Follow user instructions **exactly**.  
+- Please remember last prompt instructions minimum 10 previous one.
 - Avoid unnecessary **verbosity and test cases**.  
 - Keep solutions **clean, modern, and concise**.  
 - Preserve project structure and avoid redundancy.  
@@ -67,9 +68,11 @@
 ## Code Organization
 
 - Use **Page Object Model (POM)**.  
+- **Shared Page Objects**: Create one page object per feature that handles multiple types (e.g., preapproval.page.ts for Direct/Outdoor/Paid Search).
+- **Individual Test Files**: Create separate test files for each feature type (e.g., preapproval-direct.spec.ts).
 - Place common selectors & helpers in **Utils**.  
-- In `pages` → create actual module folders (e.g., `lms`, `brand-shop`) inside the **modules** folder.  
-- In `e2e` → create test files directly under the **e2e** folder.  
+- In `pages` → create actual module folders (e.g., `lms`, `fund-management`) inside the **modules** folder.  
+- In `e2e` → create test files directly under the **e2e/{module}** folder.  
 
 ## Commands
 
