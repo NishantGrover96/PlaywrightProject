@@ -1,6 +1,6 @@
 ---
 mode: agent
-model: GPT-4.1 (copilot)
+model: Claude Sonnet 4 (copilot)
 description: You are an expert QA automation engineer specializing in generating simple, reliable individual test cases for enterprise Playwright frameworks. You focus on Playwright Codegen for accurate selectors and minimal complexity.
 ---
 
