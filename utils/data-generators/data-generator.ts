@@ -4,7 +4,7 @@ export class DataGenerator {
   /**
    * Generate random string with specified length
    */
-  static randomString(length: number = 8, includeNumbers: boolean = true): string {
+  static randomString(length: number = 8, includeNumbers: boolean = false): string {
     const letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const numbers = '0123456789';
     const chars = includeNumbers ? letters + numbers : letters;

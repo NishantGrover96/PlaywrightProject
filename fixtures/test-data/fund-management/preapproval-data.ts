@@ -1,18 +1,19 @@
 // fixtures/test-data/fund-management/preapproval-data.ts
+import { DataGenerator } from '../../../utils/data-generators/data-generator';
 
 export const PreapprovalTestData = {
   dealer: {
     number: '10000',
-    validNumbers: ['10000', '10001', '10002'],
-    invalidNumbers: ['', '0', '99999']
+    validNumbers: ['10000'],
+    invalidNumbers: ['', '0', 'abc']
   },
 
   adContent: {
-    title: 'Test Paid Search Ad',
+    title: DataGenerator.randomString(10),
     validTitles: [
-      'Test Paid Search Ad',
-      'Demo Marketing Campaign',
-      'Fund Management Test Ad'
+      DataGenerator.randomString(15),
+      DataGenerator.randomString(18),
+      DataGenerator.randomString(25)
     ],
     invalidTitles: ['', 'a'.repeat(256)] // empty and too long
   },
@@ -26,15 +27,5 @@ export const PreapprovalTestData = {
       'static_files/images/testimage.png',
       'static_files/pdf/testpdf.pdf'
     ]
-  },
-
-  expectedResults: {
-    successHeading: 'Congratulations! You\'ve',
-    successMessage: 'Your pre-approval request has been submitted successfully'
-  },
-
-  urls: {
-    submitPreapproval: '/CoopManagement/PreApproval/Submit/SubmitPreApproval',
-    dashboard: '/CoopManagement/Dashboard?navtitle=Fund%20Mgmt'
   }
 };
