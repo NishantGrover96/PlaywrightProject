@@ -20,8 +20,8 @@ test.describe('Fund Management - Preapproval Outdoor', () => {
       // Fill dealer number and continue
       await preapprovalPage.fillDealerNumber(PreapprovalTestData.dealer.number);
 
-      // Select Direct option and continue
-      await preapprovalPage.selectType('Direct');
+      // Select Outdoor option and continue
+      await preapprovalPage.selectType('Outdoor');
   
       // Fill ad title and perform extra key actions
       await preapprovalPage.fillAdTitle(PreapprovalTestData.adContent.title);

@@ -21,14 +21,14 @@ test.describe('Fund Management - Preapproval Paid Search', () => {
       // Fill dealer number and continue
       await preapprovalPage.fillDealerNumber(PreapprovalTestData.dealer.number);
 
-      // Select Direct option and continue
-      await preapprovalPage.selectType('Direct');
+      // Select Paid Search option and continue
+      await preapprovalPage.selectType('Paid Search');
   
       // Fill ad title and perform extra key actions
       await preapprovalPage.fillAdTitle(PreapprovalTestData.adContent.title);
   
       // Upload file
-      await preapprovalPage.uploadFile(PreapprovalTestData.uploadFiles.Img);
+      await preapprovalPage.uploadFile(PreapprovalTestData.uploadFiles.Excel);
 
       // Submit request
       await preapprovalPage.submitRequest();
