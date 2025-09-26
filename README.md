@@ -5,10 +5,12 @@ A comprehensive Playwright automation framework with multi-environment support, 
 ## 🚀 Quick Setup
 
 ### Prerequisites
+
 - Node.js (v18 or higher)
 - Git
 
 ### Installation
+
 ```bash
 # Clone the repository
 git clone <repository-url>
@@ -24,6 +26,7 @@ npx playwright install
 ### Environment Configuration
 
 1. **Create Environment Files**: Copy `.env.example` to create environment-specific files:
+
    ```bash
    cp .env.example .env.dev
    cp .env.example .env.test
@@ -42,6 +45,7 @@ npx playwright install
 ## 🏗️ Architecture
 
 ### Project Structure
+
 ```
 ├── configs/           # Environment and client configurations
 ├── fixtures/          # Test data and global fixtures
@@ -52,6 +56,7 @@ npx playwright install
 ```
 
 ### Test Organization
+
 - **`tests/smoke/`** - Critical path tests
 - **`tests/regression/`** - Full regression test suite
 - **`tests/e2e/`** - End-to-end user workflows
@@ -60,6 +65,7 @@ npx playwright install
 ## 🎯 Running Tests
 
 ### Environment-Specific Tests
+
 ```bash
 # Development environment
 npm run test:dev
@@ -75,6 +81,7 @@ npm run test:prod
 ```
 
 ### Test Types
+
 ```bash
 # Smoke tests (fast, critical paths)
 npm run test:smoke
@@ -102,12 +109,14 @@ npm run test:reports
 ## 🛠️ Development
 
 ### Adding New Tests
+
 1. Create test files in appropriate `tests/` subdirectory
 2. Use PascalCase for test file names (e.g., `CreateUser.spec.ts`)
 3. Follow Page Object Model pattern
 4. Use common selectors from `utils/selectors/`
 
 ### Adding New Page Objects
+
 1. Create page classes in `pages/modules/[module-name]/`
 2. Extend `ModuleBasePage` for common functionality
 3. Use utility functions from `utils/helpers/`

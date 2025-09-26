@@ -35,7 +35,7 @@ export class ModuleBasePage extends BasePage {
 
   async waitForModuleLoad(): Promise<void> {
     await this.waitForPageLoad();
-    
+
     // Wait for module header or main content
     try {
       await this.waitForElement(this.moduleHeader, 10000);
@@ -70,7 +70,7 @@ export class ModuleBasePage extends BasePage {
 
   async searchFor(searchTerm: string): Promise<void> {
     const searchField = this.page.locator(this.searchInput);
-    if (await searchField.count() > 0) {
+    if ((await searchField.count()) > 0) {
       await this.fillInput(this.searchInput, searchTerm);
       await this.page.keyboard.press('Enter');
       await this.page.waitForTimeout(1000); // Wait for search results
@@ -99,7 +99,9 @@ export class ModuleBasePage extends BasePage {
   }
 
   async getTableHeaders(): Promise<string[]> {
-    const headers = await this.page.locator(`${this.dataTable} thead th, ${this.dataTable} th`).all();
+    const headers = await this.page
+      .locator(`${this.dataTable} thead th, ${this.dataTable} th`)
+      .all();
     const headerTexts: string[] = [];
 
     for (const header of headers) {
@@ -131,10 +133,10 @@ export class ModuleBasePage extends BasePage {
   // Check for module-specific errors
   async checkForModuleErrors(): Promise<boolean> {
     const hasErrors = await this.checkForErrors();
-    
+
     // Also check for module-specific error messages
     const moduleErrorCount = await this.page.locator(this.errorMessage).count();
-    
+
     return hasErrors || moduleErrorCount > 0;
   }
 
@@ -151,9 +153,11 @@ export class ModuleBasePage extends BasePage {
   // Get current page breadcrumbs for navigation verification
   async getCurrentBreadcrumbs(): Promise<string[]> {
     const breadcrumbs = await this.page
-      .locator('[class*="breadcrumb"] a, [class*="breadcrumb"] span, nav[aria-label="breadcrumb"] a')
+      .locator(
+        '[class*="breadcrumb"] a, [class*="breadcrumb"] span, nav[aria-label="breadcrumb"] a'
+      )
       .all();
-    
+
     const breadcrumbTexts: string[] = [];
     for (const crumb of breadcrumbs) {
       const text = await crumb.textContent();
@@ -168,14 +172,14 @@ export class ModuleBasePage extends BasePage {
   // Verify module access (no permission errors)
   async verifyModuleAccess(): Promise<boolean> {
     await this.waitForModuleLoad();
-    
+
     // Check for access denied or permission error messages
     const accessDeniedSelectors = [
       'text=/access denied/i',
       'text=/unauthorized/i',
       'text=/permission/i',
       'text=/403/i',
-      'text=/not authorized/i'
+      'text=/not authorized/i',
     ];
 
     for (const selector of accessDeniedSelectors) {

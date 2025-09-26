@@ -3,7 +3,8 @@ import { AuthManager } from './auth-manager';
 
 export class GlobalAuth {
   private static authInstances: Map<string, AuthManager> = new Map();
-  private static globalSessionCache: Map<string, {isValid: boolean, timestamp: number}> = new Map();
+  private static globalSessionCache: Map<string, { isValid: boolean; timestamp: number }> =
+    new Map();
   private static readonly CACHE_DURATION = 90000; // 30 seconds
 
   static async getAuthManager(
@@ -14,7 +15,7 @@ export class GlobalAuth {
   ): Promise<AuthManager> {
     const actualClientId = clientId || process.env.CLIENT || 'demo';
     const actualEnvironment = process.env.ENV || 'dev';
-    
+
     // Include environment in the cache key to prevent conflicts between environments
     const key = `${actualClientId}-${role}-${actualEnvironment}`;
 
@@ -33,10 +34,10 @@ export class GlobalAuth {
     role: string = 'admin'
   ): Promise<AuthManager> {
     const authManager = await this.getAuthManager(page, context, clientId, role);
-    
+
     // Update page reference in case it changed
     authManager.updatePage(page);
-    
+
     await authManager.ensureAuthenticated(role);
     return authManager;
   }
@@ -58,11 +59,13 @@ export class GlobalAuth {
   ): Promise<boolean> {
     const sessionKey = `${clientId}-${role}-${environment}`;
     const cacheKey = `global_session_${sessionKey}`;
-    
+
     // Check cache first (prevents multiple file reads)
     const cached = this.globalSessionCache.get(cacheKey);
-    if (cached && (Date.now() - cached.timestamp) < this.CACHE_DURATION) {
-      console.log(`📋 Using cached session status for ${sessionKey}: ${cached.isValid ? 'Valid' : 'Invalid'}`);
+    if (cached && Date.now() - cached.timestamp < this.CACHE_DURATION) {
+      console.log(
+        `📋 Using cached session status for ${sessionKey}: ${cached.isValid ? 'Valid' : 'Invalid'}`
+      );
       return cached.isValid;
     }
 
@@ -84,7 +87,9 @@ export class GlobalAuth {
       const twentyMinutes = 20 * 60 * 1000; // 20 minutes in milliseconds
 
       if (sessionAge > twentyMinutes) {
-        console.log(`⏰ Global session expired for ${sessionKey} (${Math.round(sessionAge / 1000 / 60)} minutes old)`);
+        console.log(
+          `⏰ Global session expired for ${sessionKey} (${Math.round(sessionAge / 1000 / 60)} minutes old)`
+        );
         this.globalSessionCache.set(cacheKey, { isValid: false, timestamp: Date.now() });
         return false;
       }
@@ -101,25 +106,27 @@ export class GlobalAuth {
       }
 
       // More robust validation - cookies are required, localStorage is optional
-      const hasValidCookies = sessionData.cookies && Array.isArray(sessionData.cookies) && sessionData.cookies.length > 0;
+      const hasValidCookies =
+        sessionData.cookies && Array.isArray(sessionData.cookies) && sessionData.cookies.length > 0;
       const isValid = hasValidCookies; // Only require cookies, localStorage is optional
 
       if (isValid) {
-        console.log(`✅ Global session valid for ${sessionKey} (${Math.round(sessionAge / 1000 / 60)} minutes old)`);
+        console.log(
+          `✅ Global session valid for ${sessionKey} (${Math.round(sessionAge / 1000 / 60)} minutes old)`
+        );
       } else {
-        console.log(`❌ Invalid global session data for ${sessionKey} - cookies: ${hasValidCookies}`);
+        console.log(
+          `❌ Invalid global session data for ${sessionKey} - cookies: ${hasValidCookies}`
+        );
       }
 
       // Cache the result
       this.globalSessionCache.set(cacheKey, { isValid, timestamp: Date.now() });
       return isValid;
-
     } catch (error) {
       console.error(`Error checking global session for ${sessionKey}:`, error);
       this.globalSessionCache.set(cacheKey, { isValid: false, timestamp: Date.now() });
       return false;
     }
   }
-
-
 }

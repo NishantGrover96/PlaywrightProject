@@ -5,32 +5,32 @@
 trigger:
   branches:
     include:
-    - main
-    - develop
-    - feature/*
-    - release/*
+      - main
+      - develop
+      - feature/*
+      - release/*
   paths:
     include:
-    - tests/**
-    - pages/**
-    - configs/**
-    - fixtures/**
-    - utils/**
-    - package.json
-    - playwright.config.ts
+      - tests/**
+      - pages/**
+      - configs/**
+      - fixtures/**
+      - utils/**
+      - package.json
+      - playwright.config.ts
 
 pr:
   branches:
     include:
-    - main
-    - develop
+      - main
+      - develop
   paths:
     include:
-    - tests/**
-    - pages/**
-    - configs/**
-    - fixtures/**
-    - utils/**
+      - tests/**
+      - pages/**
+      - configs/**
+      - fixtures/**
+      - utils/**
 
 parameters:
   # Execution Mode Parameters
@@ -39,53 +39,53 @@ parameters:
     type: string
     default: 'auto'
     values:
-    - auto          # Auto-detect based on branch and changes
-    - smoke         # Quick smoke tests
-    - full          # Full test suite
-    - regression    # Comprehensive regression
-    - module        # Specific module testing
-    - custom        # Custom configuration
-    
+      - auto # Auto-detect based on branch and changes
+      - smoke # Quick smoke tests
+      - full # Full test suite
+      - regression # Comprehensive regression
+      - module # Specific module testing
+      - custom # Custom configuration
+
   # Client Selection
   - name: targetClients
     displayName: 'Target Clients (comma-separated or "all")'
     type: string
-    default: 'auto'  # auto, all, demo, hankook, demo,hankook
-    
-  # Environment Selection  
+    default: 'auto' # auto, all, demo, hankook, demo,hankook
+
+  # Environment Selection
   - name: targetEnvironments
     displayName: 'Target Environments (comma-separated or "all")'
     type: string
-    default: 'auto'  # auto, all, dev, test, uat, dev,uat
-    
+    default: 'auto' # auto, all, dev, test, uat, dev,uat
+
   # Role Selection
   - name: targetRoles
     displayName: 'Target Roles (comma-separated or "all")'
     type: string
-    default: 'admin'  # admin, dealer, admin,dealer, all
-    
+    default: 'admin' # admin, dealer, admin,dealer, all
+
   # Module Selection (for module mode)
   - name: targetModules
     displayName: 'Target Modules (comma-separated or "all")'
     type: string
-    default: 'all'  # all, fund-mgmt, lms, brand-shop, reports, fund-mgmt,lms
-    
+    default: 'all' # all, fund-mgmt, lms, brand-shop, reports, fund-mgmt,lms
+
   # Browser Selection
   - name: targetBrowsers
     displayName: 'Target Browsers'
     type: string
     default: 'chromium'
     values:
-    - chromium      # Fastest option
-    - all           # All browsers (chromium, firefox, webkit)
-    - chromium,firefox  # Custom combination
-    
+      - chromium # Fastest option
+      - all # All browsers (chromium, firefox, webkit)
+      - chromium,firefox # Custom combination
+
   # Performance Parameters
   - name: parallelWorkers
     displayName: 'Parallel Workers'
     type: number
     default: 2
-    
+
   - name: timeoutMinutes
     displayName: 'Timeout Minutes'
     type: number
@@ -107,289 +107,289 @@ variables:
     value: $[eq(variables['Build.Reason'], 'PullRequest')]
 
 stages:
-- stage: DynamicExecution
-  displayName: 'Dynamic Test Execution'
-  jobs:
-  - job: ConfigureExecution
-    displayName: 'Configure Execution Parameters'
-    pool:
-      vmImage: 'ubuntu-latest'
-    steps:
-    - checkout: none
-    
-    - powershell: |
-        # Auto-detect execution parameters based on branch and mode
-        $executionMode = "${{ parameters.executionMode }}"
-        $targetClients = "${{ parameters.targetClients }}"
-        $targetEnvironments = "${{ parameters.targetEnvironments }}"
-        $targetRoles = "${{ parameters.targetRoles }}"
-        $targetModules = "${{ parameters.targetModules }}"
-        
-        # Auto-detection logic
-        if ($executionMode -eq "auto") {
-            if ("$(isPR)" -eq "True") {
-                $executionMode = "smoke"
-                Write-Host "Auto-detected: PR - using smoke tests"
-            }
-            elseif ("$(isMainBranch)" -eq "True") {
-                $executionMode = "regression"
-                Write-Host "Auto-detected: Main branch - using regression tests"
-            }
-            elseif ("$(isDevelopBranch)" -eq "True") {
-                $executionMode = "full"
-                Write-Host "Auto-detected: Develop branch - using full tests"
-            }
-            elseif ("$(isFeatureBranch)" -eq "True") {
-                $executionMode = "smoke"
-                Write-Host "Auto-detected: Feature branch - using smoke tests"
-            }
-            else {
-                $executionMode = "smoke"
-                Write-Host "Auto-detected: Default - using smoke tests"
-            }
-        }
-        
-        # Auto-detect clients
-        if ($targetClients -eq "auto") {
-            $targetClients = "demo"  # Default to demo for speed
-            if ("$(isMainBranch)" -eq "True" -or "$(isReleaseBranch)" -eq "True") {
-                $targetClients = "all"  # Test all clients on main/release
-            }
-        }
-        
-        # Auto-detect environments
-        if ($targetEnvironments -eq "auto") {
-            if ("$(isPR)" -eq "True" -or "$(isFeatureBranch)" -eq "True") {
-                $targetEnvironments = "dev"
-            }
-            elseif ("$(isMainBranch)" -eq "True" -or "$(isReleaseBranch)" -eq "True") {
-                $targetEnvironments = "uat"
-            }
-            else {
-                $targetEnvironments = "dev,uat"
-            }
-        }
-        
-        # Expand "all" values
-        if ($targetClients -eq "all") { $targetClients = "demo,hankook" }
-        if ($targetEnvironments -eq "all") { $targetEnvironments = "dev,test,uat" }
-        if ($targetRoles -eq "all") { $targetRoles = "admin,dealer" }
-        if ($targetModules -eq "all") { $targetModules = "fund-mgmt,lms,brand-shop,reports" }
-        
-        # Output final configuration
-        Write-Host "Final Configuration:"
-        Write-Host "==================="
-        Write-Host "Execution Mode: $executionMode"
-        Write-Host "Target Clients: $targetClients"
-        Write-Host "Target Environments: $targetEnvironments"
-        Write-Host "Target Roles: $targetRoles"
-        Write-Host "Target Modules: $targetModules"
-        Write-Host "Target Browsers: ${{ parameters.targetBrowsers }}"
-        Write-Host "Parallel Workers: ${{ parameters.parallelWorkers }}"
-        Write-Host "Timeout Minutes: ${{ parameters.timeoutMinutes }}"
-        Write-Host "==================="
-        
-        # Set pipeline variables for use in subsequent jobs
-        Write-Host "##vso[task.setvariable variable=finalExecutionMode;isOutput=true]$executionMode"
-        Write-Host "##vso[task.setvariable variable=finalTargetClients;isOutput=true]$targetClients"
-        Write-Host "##vso[task.setvariable variable=finalTargetEnvironments;isOutput=true]$targetEnvironments"
-        Write-Host "##vso[task.setvariable variable=finalTargetRoles;isOutput=true]$targetRoles"
-        Write-Host "##vso[task.setvariable variable=finalTargetModules;isOutput=true]$targetModules"
-      displayName: 'Configure Execution Parameters'
-      name: 'configure'
+  - stage: DynamicExecution
+    displayName: 'Dynamic Test Execution'
+    jobs:
+      - job: ConfigureExecution
+        displayName: 'Configure Execution Parameters'
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - checkout: none
 
-  - job: ExecuteTests
-    displayName: 'Execute Tests'
-    dependsOn: ConfigureExecution
-    strategy:
-      matrix:
-        ${{ if ne(parameters.executionMode, 'custom') }}:
-          TestExecution:
-            executionMode: $[ dependencies.ConfigureExecution.outputs['configure.finalExecutionMode'] ]
-            targetClients: $[ dependencies.ConfigureExecution.outputs['configure.finalTargetClients'] ]
-            targetEnvironments: $[ dependencies.ConfigureExecution.outputs['configure.finalTargetEnvironments'] ]
-            targetRoles: $[ dependencies.ConfigureExecution.outputs['configure.finalTargetRoles'] ]
-            targetModules: $[ dependencies.ConfigureExecution.outputs['configure.finalTargetModules'] ]
-    pool:
-      vmImage: 'ubuntu-latest'
-    timeoutInMinutes: ${{ parameters.timeoutMinutes }}
-    
-    steps:
-    - checkout: self
-      displayName: 'Checkout Repository'
-      
-    - task: NodeTool@0
-      inputs:
-        versionSpec: '$(nodeVersion)'
-      displayName: 'Install Node.js'
-      
-    - task: Cache@2
-      inputs:
-        key: 'npm | "$(Agent.OS)" | package-lock.json'
-        restoreKeys: |
-          npm | "$(Agent.OS)"
-          npm
-        path: '$(npm_config_cache)'
-      displayName: 'Cache NPM packages'
-      
-    - script: npm ci
-      displayName: 'Install Dependencies'
-      
-    - script: |
-        if [ "${{ parameters.targetBrowsers }}" = "all" ]; then
-          npx playwright install --with-deps
-        elif [ "${{ parameters.targetBrowsers }}" = "chromium" ]; then
-          npx playwright install --with-deps chromium
-        else
-          npx playwright install --with-deps ${{ parameters.targetBrowsers }}
-        fi
-      displayName: 'Install Playwright Browsers'
-      
-    - script: npm run validate
-      displayName: 'Validate Configuration'
-      
-    - powershell: |
-        # Parse configuration and execute appropriate tests
-        $executionMode = "$(executionMode)"
-        $clients = "$(targetClients)" -split ","
-        $environments = "$(targetEnvironments)" -split ","
-        $roles = "$(targetRoles)" -split ","
-        $modules = "$(targetModules)" -split ","
-        
-        Write-Host "Executing tests with configuration:"
-        Write-Host "Mode: $executionMode"
-        Write-Host "Clients: $($clients -join ', ')"
-        Write-Host "Environments: $($environments -join ', ')"
-        Write-Host "Roles: $($roles -join ', ')"
-        
-        $testResults = @()
-        $hasFailures = $false
-        
-        foreach ($client in $clients) {
-          foreach ($environment in $environments) {
-            foreach ($role in $roles) {
-              $client = $client.Trim()
-              $environment = $environment.Trim()
-              $role = $role.Trim()
-              
-              Write-Host "========================================"
-              Write-Host "Testing: $client $role $environment"
-              Write-Host "========================================"
-              
-              try {
-                switch ($executionMode) {
-                  "smoke" {
-                    $script = "ci:smoke:${client}:${role}:${environment}"
-                    if (npm run --silent | Select-String $script) {
-                      npm run $script
-                    } else {
-                      Write-Host "Smoke script not found, using quick-test fallback"
-                      $env:CLIENT = $client
-                      $env:ROLE = $role
-                      $env:ENV = $environment
-                      $env:CI = "true"
-                      npm run quick-test
-                    }
+          - powershell: |
+              # Auto-detect execution parameters based on branch and mode
+              $executionMode = "${{ parameters.executionMode }}"
+              $targetClients = "${{ parameters.targetClients }}"
+              $targetEnvironments = "${{ parameters.targetEnvironments }}"
+              $targetRoles = "${{ parameters.targetRoles }}"
+              $targetModules = "${{ parameters.targetModules }}"
+
+              # Auto-detection logic
+              if ($executionMode -eq "auto") {
+                  if ("$(isPR)" -eq "True") {
+                      $executionMode = "smoke"
+                      Write-Host "Auto-detected: PR - using smoke tests"
                   }
-                  "full" {
-                    $script = "ci:${client}:${role}:${environment}"
-                    if (npm run --silent | Select-String $script) {
-                      npm run $script
-                    } else {
-                      $script = "test:${client}:${role}:${environment}"
-                      npm run $script
-                    }
+                  elseif ("$(isMainBranch)" -eq "True") {
+                      $executionMode = "regression"
+                      Write-Host "Auto-detected: Main branch - using regression tests"
                   }
-                  "regression" {
-                    $script = "ci:regression:${client}:${role}:${environment}"
-                    if (npm run --silent | Select-String $script) {
-                      npm run $script
-                    } else {
-                      $script = "regression:${client}:${role}:${environment}"
-                      if (npm run --silent | Select-String $script) {
-                        npm run $script
-                      } else {
-                        Write-Host "Regression script not found, using full test suite"
-                        npm run "test:${client}:${role}:${environment}"
+                  elseif ("$(isDevelopBranch)" -eq "True") {
+                      $executionMode = "full"
+                      Write-Host "Auto-detected: Develop branch - using full tests"
+                  }
+                  elseif ("$(isFeatureBranch)" -eq "True") {
+                      $executionMode = "smoke"
+                      Write-Host "Auto-detected: Feature branch - using smoke tests"
+                  }
+                  else {
+                      $executionMode = "smoke"
+                      Write-Host "Auto-detected: Default - using smoke tests"
+                  }
+              }
+
+              # Auto-detect clients
+              if ($targetClients -eq "auto") {
+                  $targetClients = "demo"  # Default to demo for speed
+                  if ("$(isMainBranch)" -eq "True" -or "$(isReleaseBranch)" -eq "True") {
+                      $targetClients = "all"  # Test all clients on main/release
+                  }
+              }
+
+              # Auto-detect environments
+              if ($targetEnvironments -eq "auto") {
+                  if ("$(isPR)" -eq "True" -or "$(isFeatureBranch)" -eq "True") {
+                      $targetEnvironments = "dev"
+                  }
+                  elseif ("$(isMainBranch)" -eq "True" -or "$(isReleaseBranch)" -eq "True") {
+                      $targetEnvironments = "uat"
+                  }
+                  else {
+                      $targetEnvironments = "dev,uat"
+                  }
+              }
+
+              # Expand "all" values
+              if ($targetClients -eq "all") { $targetClients = "demo,hankook" }
+              if ($targetEnvironments -eq "all") { $targetEnvironments = "dev,test,uat" }
+              if ($targetRoles -eq "all") { $targetRoles = "admin,dealer" }
+              if ($targetModules -eq "all") { $targetModules = "fund-mgmt,lms,brand-shop,reports" }
+
+              # Output final configuration
+              Write-Host "Final Configuration:"
+              Write-Host "==================="
+              Write-Host "Execution Mode: $executionMode"
+              Write-Host "Target Clients: $targetClients"
+              Write-Host "Target Environments: $targetEnvironments"
+              Write-Host "Target Roles: $targetRoles"
+              Write-Host "Target Modules: $targetModules"
+              Write-Host "Target Browsers: ${{ parameters.targetBrowsers }}"
+              Write-Host "Parallel Workers: ${{ parameters.parallelWorkers }}"
+              Write-Host "Timeout Minutes: ${{ parameters.timeoutMinutes }}"
+              Write-Host "==================="
+
+              # Set pipeline variables for use in subsequent jobs
+              Write-Host "##vso[task.setvariable variable=finalExecutionMode;isOutput=true]$executionMode"
+              Write-Host "##vso[task.setvariable variable=finalTargetClients;isOutput=true]$targetClients"
+              Write-Host "##vso[task.setvariable variable=finalTargetEnvironments;isOutput=true]$targetEnvironments"
+              Write-Host "##vso[task.setvariable variable=finalTargetRoles;isOutput=true]$targetRoles"
+              Write-Host "##vso[task.setvariable variable=finalTargetModules;isOutput=true]$targetModules"
+            displayName: 'Configure Execution Parameters'
+            name: 'configure'
+
+      - job: ExecuteTests
+        displayName: 'Execute Tests'
+        dependsOn: ConfigureExecution
+        strategy:
+          matrix:
+            ${{ if ne(parameters.executionMode, 'custom') }}:
+              TestExecution:
+                executionMode: $[ dependencies.ConfigureExecution.outputs['configure.finalExecutionMode'] ]
+                targetClients: $[ dependencies.ConfigureExecution.outputs['configure.finalTargetClients'] ]
+                targetEnvironments: $[ dependencies.ConfigureExecution.outputs['configure.finalTargetEnvironments'] ]
+                targetRoles: $[ dependencies.ConfigureExecution.outputs['configure.finalTargetRoles'] ]
+                targetModules: $[ dependencies.ConfigureExecution.outputs['configure.finalTargetModules'] ]
+        pool:
+          vmImage: 'ubuntu-latest'
+        timeoutInMinutes: ${{ parameters.timeoutMinutes }}
+
+        steps:
+          - checkout: self
+            displayName: 'Checkout Repository'
+
+          - task: NodeTool@0
+            inputs:
+              versionSpec: '$(nodeVersion)'
+            displayName: 'Install Node.js'
+
+          - task: Cache@2
+            inputs:
+              key: 'npm | "$(Agent.OS)" | package-lock.json'
+              restoreKeys: |
+                npm | "$(Agent.OS)"
+                npm
+              path: '$(npm_config_cache)'
+            displayName: 'Cache NPM packages'
+
+          - script: npm ci
+            displayName: 'Install Dependencies'
+
+          - script: |
+              if [ "${{ parameters.targetBrowsers }}" = "all" ]; then
+                npx playwright install --with-deps
+              elif [ "${{ parameters.targetBrowsers }}" = "chromium" ]; then
+                npx playwright install --with-deps chromium
+              else
+                npx playwright install --with-deps ${{ parameters.targetBrowsers }}
+              fi
+            displayName: 'Install Playwright Browsers'
+
+          - script: npm run validate
+            displayName: 'Validate Configuration'
+
+          - powershell: |
+              # Parse configuration and execute appropriate tests
+              $executionMode = "$(executionMode)"
+              $clients = "$(targetClients)" -split ","
+              $environments = "$(targetEnvironments)" -split ","
+              $roles = "$(targetRoles)" -split ","
+              $modules = "$(targetModules)" -split ","
+
+              Write-Host "Executing tests with configuration:"
+              Write-Host "Mode: $executionMode"
+              Write-Host "Clients: $($clients -join ', ')"
+              Write-Host "Environments: $($environments -join ', ')"
+              Write-Host "Roles: $($roles -join ', ')"
+
+              $testResults = @()
+              $hasFailures = $false
+
+              foreach ($client in $clients) {
+                foreach ($environment in $environments) {
+                  foreach ($role in $roles) {
+                    $client = $client.Trim()
+                    $environment = $environment.Trim()
+                    $role = $role.Trim()
+                    
+                    Write-Host "========================================"
+                    Write-Host "Testing: $client $role $environment"
+                    Write-Host "========================================"
+                    
+                    try {
+                      switch ($executionMode) {
+                        "smoke" {
+                          $script = "ci:smoke:${client}:${role}:${environment}"
+                          if (npm run --silent | Select-String $script) {
+                            npm run $script
+                          } else {
+                            Write-Host "Smoke script not found, using quick-test fallback"
+                            $env:CLIENT = $client
+                            $env:ROLE = $role
+                            $env:ENV = $environment
+                            $env:CI = "true"
+                            npm run quick-test
+                          }
+                        }
+                        "full" {
+                          $script = "ci:${client}:${role}:${environment}"
+                          if (npm run --silent | Select-String $script) {
+                            npm run $script
+                          } else {
+                            $script = "test:${client}:${role}:${environment}"
+                            npm run $script
+                          }
+                        }
+                        "regression" {
+                          $script = "ci:regression:${client}:${role}:${environment}"
+                          if (npm run --silent | Select-String $script) {
+                            npm run $script
+                          } else {
+                            $script = "regression:${client}:${role}:${environment}"
+                            if (npm run --silent | Select-String $script) {
+                              npm run $script
+                            } else {
+                              Write-Host "Regression script not found, using full test suite"
+                              npm run "test:${client}:${role}:${environment}"
+                            }
+                          }
+                        }
+                        "module" {
+                          foreach ($module in $modules) {
+                            $module = $module.Trim()
+                            $script = "${module}:${client}:${role}:${environment}"
+                            Write-Host "Running module: $script"
+                            if (npm run --silent | Select-String $script) {
+                              npm run $script
+                            } else {
+                              Write-Host "Warning: Module script $script not found"
+                            }
+                          }
+                        }
+                        default {
+                          Write-Host "Unknown execution mode: $executionMode"
+                          npm run "test:${client}:${role}:${environment}"
+                        }
                       }
+                      
+                      $testResults += "✅ $client $role $environment - PASSED"
+                      Write-Host "✅ Test completed successfully"
+                      
+                    } catch {
+                      $hasFailures = $true
+                      $testResults += "❌ $client $role $environment - FAILED: $($_.Exception.Message)"
+                      Write-Host "❌ Test failed: $($_.Exception.Message)"
                     }
-                  }
-                  "module" {
-                    foreach ($module in $modules) {
-                      $module = $module.Trim()
-                      $script = "${module}:${client}:${role}:${environment}"
-                      Write-Host "Running module: $script"
-                      if (npm run --silent | Select-String $script) {
-                        npm run $script
-                      } else {
-                        Write-Host "Warning: Module script $script not found"
-                      }
-                    }
-                  }
-                  default {
-                    Write-Host "Unknown execution mode: $executionMode"
-                    npm run "test:${client}:${role}:${environment}"
                   }
                 }
-                
-                $testResults += "✅ $client $role $environment - PASSED"
-                Write-Host "✅ Test completed successfully"
-                
-              } catch {
-                $hasFailures = $true
-                $testResults += "❌ $client $role $environment - FAILED: $($_.Exception.Message)"
-                Write-Host "❌ Test failed: $($_.Exception.Message)"
               }
-            }
-          }
-        }
-        
-        Write-Host ""
-        Write-Host "========================================"
-        Write-Host "TEST EXECUTION SUMMARY"
-        Write-Host "========================================"
-        foreach ($result in $testResults) {
-          Write-Host $result
-        }
-        Write-Host "========================================"
-        
-        if ($hasFailures) {
-          Write-Host "##vso[task.logissue type=error]Some tests failed"
-          exit 1
-        } else {
-          Write-Host "All tests passed successfully!"
-        }
-      displayName: 'Execute Dynamic Tests'
-      env:
-        CI: true
-        WORKERS: ${{ parameters.parallelWorkers }}
-        
-    - task: PublishTestResults@2
-      condition: always()
-      inputs:
-        testResultsFormat: 'JUnit'
-        testResultsFiles: 'junit-results.xml'
-        testRunTitle: 'Playwright Tests - $(executionMode)'
-        mergeTestResults: true
-        failTaskOnFailedTests: true
-      displayName: 'Publish Test Results'
-      
-    - task: PublishHtmlReport@1
-      condition: always()
-      inputs:
-        reportDir: 'playwright-report'
-        tabName: 'Playwright Report'
-      displayName: 'Publish HTML Report'
-      
-    - task: PublishBuildArtifacts@1
-      condition: failure()
-      inputs:
-        pathToPublish: 'test-results'
-        artifactName: 'test-failures'
-        publishLocation: 'Container'
-      displayName: 'Publish Failure Artifacts'
-      
-    - script: npm run clean:reports
-      condition: always()
-      displayName: 'Cleanup Test Reports'
-      continueOnError: true
+
+              Write-Host ""
+              Write-Host "========================================"
+              Write-Host "TEST EXECUTION SUMMARY"
+              Write-Host "========================================"
+              foreach ($result in $testResults) {
+                Write-Host $result
+              }
+              Write-Host "========================================"
+
+              if ($hasFailures) {
+                Write-Host "##vso[task.logissue type=error]Some tests failed"
+                exit 1
+              } else {
+                Write-Host "All tests passed successfully!"
+              }
+            displayName: 'Execute Dynamic Tests'
+            env:
+              CI: true
+              WORKERS: ${{ parameters.parallelWorkers }}
+
+          - task: PublishTestResults@2
+            condition: always()
+            inputs:
+              testResultsFormat: 'JUnit'
+              testResultsFiles: 'junit-results.xml'
+              testRunTitle: 'Playwright Tests - $(executionMode)'
+              mergeTestResults: true
+              failTaskOnFailedTests: true
+            displayName: 'Publish Test Results'
+
+          - task: PublishHtmlReport@1
+            condition: always()
+            inputs:
+              reportDir: 'playwright-report'
+              tabName: 'Playwright Report'
+            displayName: 'Publish HTML Report'
+
+          - task: PublishBuildArtifacts@1
+            condition: failure()
+            inputs:
+              pathToPublish: 'test-results'
+              artifactName: 'test-failures'
+              publishLocation: 'Container'
+            displayName: 'Publish Failure Artifacts'
+
+          - script: npm run clean:reports
+            condition: always()
+            displayName: 'Cleanup Test Reports'
+            continueOnError: true

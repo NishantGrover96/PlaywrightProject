@@ -1,0 +1,38 @@
+// tests/e2e/fund-management/preapproval-direct.spec.ts
+import { test, expect } from '../../base-test';
+import { PreapprovalPage } from '../../../pages/modules/fund-management/preapproval.page';
+import { PreapprovalTestData } from '../../../fixtures/test-data/fund-management/preapproval-data';
+
+test.describe('Fund Management - Preapproval Direct', () => {
+  let preapprovalPage: PreapprovalPage;
+  
+  test.beforeEach(async ({ page, auth }) => {
+    preapprovalPage = new PreapprovalPage(page);
+    const isAuthenticated = await auth.isAuthenticated();
+    if (!isAuthenticated) {
+      await auth.ensureAuthenticated();
+    }
+  });
+
+  test('should successfully submit direct pre-approval request', async ({ page }) => {
+    await preapprovalPage.navigateToFundManagement();
+
+    // Fill dealer number and continue
+    await preapprovalPage.fillDealerNumber(PreapprovalTestData.dealer.number);
+
+    // Select Direct option and continue
+    await preapprovalPage.selectType('Direct');
+
+    // Fill ad title and perform extra key actions
+    await preapprovalPage.fillAdTitle(PreapprovalTestData.adContent.title);
+
+    // Upload file
+    await preapprovalPage.uploadFile(PreapprovalTestData.uploadFiles.Excel);
+
+    // Submit request
+    await preapprovalPage.submitRequest();
+
+    // Assert success message
+    await preapprovalPage.verifySuccessMessage();
+  });
+});

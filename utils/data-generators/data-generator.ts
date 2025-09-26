@@ -4,11 +4,11 @@ export class DataGenerator {
   /**
    * Generate random string with specified length
    */
-  static randomString(length: number = 8, includeNumbers: boolean = true): string {
+  static randomString(length: number = 8, includeNumbers: boolean = false): string {
     const letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const numbers = '0123456789';
     const chars = includeNumbers ? letters + numbers : letters;
-    
+
     let result = '';
     for (let i = 0; i < length; i++) {
       result += chars.charAt(Math.floor(Math.random() * chars.length));
@@ -52,17 +52,73 @@ export class DataGenerator {
    */
   static randomName(type: 'first' | 'last' | 'full' = 'full'): string {
     const firstNames = [
-      'James', 'Mary', 'John', 'Patricia', 'Robert', 'Jennifer', 'Michael', 'Linda',
-      'William', 'Elizabeth', 'David', 'Barbara', 'Richard', 'Susan', 'Joseph', 'Jessica',
-      'Thomas', 'Sarah', 'Christopher', 'Karen', 'Charles', 'Nancy', 'Daniel', 'Lisa',
-      'Matthew', 'Betty', 'Anthony', 'Helen', 'Mark', 'Sandra', 'Donald', 'Donna'
+      'James',
+      'Mary',
+      'John',
+      'Patricia',
+      'Robert',
+      'Jennifer',
+      'Michael',
+      'Linda',
+      'William',
+      'Elizabeth',
+      'David',
+      'Barbara',
+      'Richard',
+      'Susan',
+      'Joseph',
+      'Jessica',
+      'Thomas',
+      'Sarah',
+      'Christopher',
+      'Karen',
+      'Charles',
+      'Nancy',
+      'Daniel',
+      'Lisa',
+      'Matthew',
+      'Betty',
+      'Anthony',
+      'Helen',
+      'Mark',
+      'Sandra',
+      'Donald',
+      'Donna',
     ];
-    
+
     const lastNames = [
-      'Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis',
-      'Rodriguez', 'Martinez', 'Hernandez', 'Lopez', 'Gonzalez', 'Wilson', 'Anderson', 'Thomas',
-      'Taylor', 'Moore', 'Jackson', 'Martin', 'Lee', 'Perez', 'Thompson', 'White',
-      'Harris', 'Sanchez', 'Clark', 'Ramirez', 'Lewis', 'Robinson', 'Walker', 'Young'
+      'Smith',
+      'Johnson',
+      'Williams',
+      'Brown',
+      'Jones',
+      'Garcia',
+      'Miller',
+      'Davis',
+      'Rodriguez',
+      'Martinez',
+      'Hernandez',
+      'Lopez',
+      'Gonzalez',
+      'Wilson',
+      'Anderson',
+      'Thomas',
+      'Taylor',
+      'Moore',
+      'Jackson',
+      'Martin',
+      'Lee',
+      'Perez',
+      'Thompson',
+      'White',
+      'Harris',
+      'Sanchez',
+      'Clark',
+      'Ramirez',
+      'Lewis',
+      'Robinson',
+      'Walker',
+      'Young',
     ];
 
     const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
@@ -84,12 +140,30 @@ export class DataGenerator {
    * Generate random company name
    */
   static randomCompany(): string {
-    const prefixes = ['Global', 'Dynamic', 'Smart', 'Advanced', 'Premier', 'Elite', 'Prime', 'Ultimate'];
-    const types = ['Solutions', 'Systems', 'Tech', 'Industries', 'Corp', 'Group', 'Enterprises', 'Services'];
-    
+    const prefixes = [
+      'Global',
+      'Dynamic',
+      'Smart',
+      'Advanced',
+      'Premier',
+      'Elite',
+      'Prime',
+      'Ultimate',
+    ];
+    const types = [
+      'Solutions',
+      'Systems',
+      'Tech',
+      'Industries',
+      'Corp',
+      'Group',
+      'Enterprises',
+      'Services',
+    ];
+
     const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
     const type = types[Math.floor(Math.random() * types.length)];
-    
+
     return `${prefix} ${type}`;
   }
 
@@ -104,25 +178,43 @@ export class DataGenerator {
     country: string;
   } {
     const streets = [
-      'Main St', 'First Ave', 'Second St', 'Park Ave', 'Oak St', 'Elm St', 'Maple Ave',
-      'Washington St', 'Lincoln Ave', 'Jefferson St', 'Madison Ave', 'Jackson St'
+      'Main St',
+      'First Ave',
+      'Second St',
+      'Park Ave',
+      'Oak St',
+      'Elm St',
+      'Maple Ave',
+      'Washington St',
+      'Lincoln Ave',
+      'Jefferson St',
+      'Madison Ave',
+      'Jackson St',
     ];
-    
+
     const cities = [
-      'New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix', 'Philadelphia',
-      'San Antonio', 'San Diego', 'Dallas', 'San Jose', 'Austin', 'Jacksonville'
+      'New York',
+      'Los Angeles',
+      'Chicago',
+      'Houston',
+      'Phoenix',
+      'Philadelphia',
+      'San Antonio',
+      'San Diego',
+      'Dallas',
+      'San Jose',
+      'Austin',
+      'Jacksonville',
     ];
-    
-    const states = [
-      'NY', 'CA', 'IL', 'TX', 'AZ', 'PA', 'FL', 'OH', 'NC', 'MI', 'GA', 'WA'
-    ];
+
+    const states = ['NY', 'CA', 'IL', 'TX', 'AZ', 'PA', 'FL', 'OH', 'NC', 'MI', 'GA', 'WA'];
 
     return {
       street: `${this.randomNumber(100, 9999)} ${streets[Math.floor(Math.random() * streets.length)]}`,
       city: cities[Math.floor(Math.random() * cities.length)],
       state: states[Math.floor(Math.random() * states.length)],
       zipCode: this.randomNumber(10000, 99999).toString(),
-      country: 'USA'
+      country: 'USA',
     };
   }
 
@@ -133,7 +225,7 @@ export class DataGenerator {
     const domains = ['example.com', 'test.com', 'demo.org', 'sample.net', 'mock.io'];
     const domain = domains[Math.floor(Math.random() * domains.length)];
     const path = this.randomString(6, false).toLowerCase();
-    
+
     return `${protocol}://${domain}/${path}`;
   }
 
@@ -148,10 +240,14 @@ export class DataGenerator {
   /**
    * Generate random date within range
    */
-  static randomDate(startDate?: string, endDate?: string, format: 'ISO' | 'US' | 'UK' | 'DB' = 'ISO'): string {
+  static randomDate(
+    startDate?: string,
+    endDate?: string,
+    format: 'ISO' | 'US' | 'UK' | 'DB' = 'ISO'
+  ): string {
     const start = startDate ? startDate : DateHelper.subtractDays(365);
     const end = endDate ? endDate : DateHelper.addDays(365);
-    
+
     return DateHelper.getRandomDate(start, end, format);
   }
 
@@ -173,9 +269,9 @@ export class DataGenerator {
    * Generate random UUID
    */
   static randomUUID(): string {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      const r = Math.random() * 16 | 0;
-      const v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      const r = (Math.random() * 16) | 0;
+      const v = c === 'x' ? r : (r & 0x3) | 0x8;
       return v.toString(16);
     });
   }
@@ -204,29 +300,32 @@ export class DataGenerator {
     const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const numbers = '0123456789';
     const special = '!@#$%^&*()_+-=[]{}|;:,.<>?';
-    
+
     let chars = lowercase + uppercase + numbers;
     if (includeSpecialChars) {
       chars += special;
     }
-    
+
     let password = '';
     // Ensure at least one character from each type
     password += lowercase[Math.floor(Math.random() * lowercase.length)];
     password += uppercase[Math.floor(Math.random() * uppercase.length)];
     password += numbers[Math.floor(Math.random() * numbers.length)];
-    
+
     if (includeSpecialChars) {
       password += special[Math.floor(Math.random() * special.length)];
     }
-    
+
     // Fill the rest randomly
     for (let i = password.length; i < length; i++) {
       password += chars[Math.floor(Math.random() * chars.length)];
     }
-    
+
     // Shuffle the password
-    return password.split('').sort(() => Math.random() - 0.5).join('');
+    return password
+      .split('')
+      .sort(() => Math.random() - 0.5)
+      .join('');
   }
 
   /**
@@ -245,7 +344,7 @@ export class DataGenerator {
   } {
     const firstName = this.randomName('first');
     const lastName = this.randomName('last');
-    
+
     return {
       firstName,
       lastName,
@@ -255,7 +354,7 @@ export class DataGenerator {
       company: this.randomCompany(),
       address: this.randomAddress(),
       username: `${firstName.toLowerCase()}.${lastName.toLowerCase()}${this.randomNumber(10, 99)}`,
-      password: this.randomPassword()
+      password: this.randomPassword(),
     };
   }
 
@@ -271,13 +370,29 @@ export class DataGenerator {
     inStock: boolean;
     rating: number;
   } {
-    const categories = ['Electronics', 'Clothing', 'Books', 'Home & Garden', 'Sports', 'Beauty', 'Automotive'];
-    const adjectives = ['Premium', 'Deluxe', 'Professional', 'Standard', 'Basic', 'Advanced', 'Classic'];
+    const categories = [
+      'Electronics',
+      'Clothing',
+      'Books',
+      'Home & Garden',
+      'Sports',
+      'Beauty',
+      'Automotive',
+    ];
+    const adjectives = [
+      'Premium',
+      'Deluxe',
+      'Professional',
+      'Standard',
+      'Basic',
+      'Advanced',
+      'Classic',
+    ];
     const products = ['Widget', 'Device', 'Tool', 'Kit', 'Set', 'System', 'Solution'];
-    
+
     const adjective = this.randomFromArray(adjectives);
     const product = this.randomFromArray(products);
-    
+
     return {
       name: `${adjective} ${product}`,
       description: `High-quality ${product.toLowerCase()} for professional use`,
@@ -285,7 +400,7 @@ export class DataGenerator {
       sku: `SKU-${this.randomString(8, true).toUpperCase()}`,
       category: this.randomFromArray(categories),
       inStock: this.randomBoolean(),
-      rating: Math.round((Math.random() * 4 + 1) * 10) / 10 // 1.0 to 5.0
+      rating: Math.round((Math.random() * 4 + 1) * 10) / 10, // 1.0 to 5.0
     };
   }
 
@@ -296,7 +411,7 @@ export class DataGenerator {
     const timestamp = DateHelper.getTimestampForFilename();
     const randomPart = this.randomString(6, false).toLowerCase();
     const prefixPart = prefix ? `${prefix}_` : '';
-    
+
     return `${prefixPart}${randomPart}_${timestamp}.${extension}`;
   }
 
@@ -304,7 +419,12 @@ export class DataGenerator {
    * Generate random color hex code
    */
   static randomColor(): string {
-    return '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+    return (
+      '#' +
+      Math.floor(Math.random() * 16777215)
+        .toString(16)
+        .padStart(6, '0')
+    );
   }
 
   /**
@@ -312,8 +432,8 @@ export class DataGenerator {
    */
   static randomCoordinates(): { lat: number; lng: number } {
     return {
-      lat: Math.random() * 180 - 90,   // -90 to 90
-      lng: Math.random() * 360 - 180   // -180 to 180
+      lat: Math.random() * 180 - 90, // -90 to 90
+      lng: Math.random() * 360 - 180, // -180 to 180
     };
   }
 }

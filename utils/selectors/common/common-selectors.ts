@@ -15,7 +15,8 @@ export const CommonSelectors = {
     sidebar: 'nav, [class*="sidebar"], [class*="menu"], list',
     menuItem: 'a[href], [class*="menu-item"], [class*="nav-item"], listitem',
     breadcrumbs: '[class*="breadcrumb"], nav[aria-label="breadcrumb"]',
-    userProfile: 'button:has-text("David Lenzen Corporate Admin"), [class*="user"], [class*="profile"]',
+    userProfile:
+      'button:has-text("David Lenzen Corporate Admin"), [class*="user"], [class*="profile"]',
     logoutButton: 'text=/logout/i, [class*="logout"]',
     moduleGrid: 'list', // Main dashboard module grid
     moduleCard: 'listitem',

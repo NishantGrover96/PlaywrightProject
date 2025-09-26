@@ -1,6 +1,10 @@
 import * as dotenv from 'dotenv';
 import * as path from 'path';
-import { ClientConfig, clientModulesConfig, ModuleConfig } from '../../configs/clients/client-modules-access';
+import {
+  ClientConfig,
+  clientModulesConfig,
+  ModuleConfig,
+} from '../../configs/clients/client-modules-access';
 
 export class EnvironmentHelper {
   private static instance: EnvironmentHelper;
@@ -42,7 +46,7 @@ export class EnvironmentHelper {
         baseUrl = baseUrl || clientConfig.baseUrl;
         loginUrl = loginUrl || clientConfig.loginUrl;
       }
-      
+
       // Use client credentials if not provided in env file
       username = username || clientConfig.credentials.username;
       password = password || clientConfig.credentials.password;

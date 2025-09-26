@@ -42,17 +42,17 @@ export class AuthManager {
     if (this._isAuthenticated) {
       return true;
     }
-    
+
     const environment = process.env.ENV || 'dev';
     const role = process.env.ROLE || 'admin';
-    
+
     // Only validate if not already marked as authenticated
     const hasValidSession = await this.hasValidSession(role);
     if (hasValidSession) {
       this._isAuthenticated = true;
       return true;
     }
-    
+
     this._isAuthenticated = false;
     return false;
   }
@@ -85,7 +85,11 @@ export class AuthManager {
       // Load and validate session
       const sessionData = JSON.parse(fs.readFileSync(sessionPath, 'utf8'));
 
-      if (!sessionData.cookies || !Array.isArray(sessionData.cookies) || sessionData.cookies.length === 0) {
+      if (
+        !sessionData.cookies ||
+        !Array.isArray(sessionData.cookies) ||
+        sessionData.cookies.length === 0
+      ) {
         console.log(`❌ Invalid session data for ${sessionKey}`);
         return false;
       }
@@ -164,7 +168,7 @@ export class AuthManager {
       // Click Sign In button and wait for navigation
       await Promise.all([
         this.page.waitForURL('**/Index', { timeout: 90000 }),
-        this.page.getByRole('button', { name: 'Sign In' }).click()
+        this.page.getByRole('button', { name: 'Sign In' }).click(),
       ]);
 
       // Verify we can see authenticated elements (user info or navigation)
@@ -268,7 +272,9 @@ export class AuthManager {
         this.page = await this.context.newPage();
       }
     } catch (error) {
-      throw new Error(`Context has been closed or is invalid. Cannot ensure authentication for ${contextKey}: ${error instanceof Error ? error.message : String(error)}`);
+      throw new Error(
+        `Context has been closed or is invalid. Cannot ensure authentication for ${contextKey}: ${error instanceof Error ? error.message : String(error)}`
+      );
     }
 
     // Check if page is still valid
@@ -313,7 +319,9 @@ export class AuthManager {
 
       // Check if we're still logged in by looking for login form elements
       // If we find the "Sign Into Your Account" heading, we're not logged in
-      const loginHeading = await this.page.locator('heading:has-text("Sign Into Your Account")').count();
+      const loginHeading = await this.page
+        .locator('heading:has-text("Sign Into Your Account")')
+        .count();
       const usernameField = await this.page.locator('input[name="Username"]').count();
 
       if (loginHeading > 0 || usernameField > 0) {
@@ -340,7 +348,7 @@ export class AuthManager {
 
     const env = process.env.ENV || 'dev';
     const urls = this.envHelper.getUrlsForClient(this.clientConfig.clientId, env);
-    
+
     // Handle external modules with full URLs
     let moduleUrl: string;
     if (module.isExternal && module.path.startsWith('http')) {
@@ -352,12 +360,14 @@ export class AuthManager {
     console.log(`🎯 Navigating to ${moduleName}: ${moduleUrl}`);
 
     try {
-      await this.page.goto(moduleUrl, { 
-        waitUntil: 'domcontentloaded', 
-        timeout: 90000 
+      await this.page.goto(moduleUrl, {
+        waitUntil: 'domcontentloaded',
+        timeout: 90000,
       });
     } catch (error) {
-      console.log(`⚠️ Navigation timeout or error for ${moduleName}: ${error instanceof Error ? error.message : String(error)}`);
+      console.log(
+        `⚠️ Navigation timeout or error for ${moduleName}: ${error instanceof Error ? error.message : String(error)}`
+      );
       throw error;
     }
   }

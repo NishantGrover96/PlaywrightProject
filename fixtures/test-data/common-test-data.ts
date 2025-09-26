@@ -83,16 +83,8 @@ export const CommonTestData = {
   },
 
   urls: {
-    validUrls: [
-      'https://example.com',
-      'https://test.org',
-      'https://demo.net',
-    ],
-    invalidUrls: [
-      'invalid-url',
-      'ftp://example.com',
-      'http://localhost:3000',
-    ],
+    validUrls: ['https://example.com', 'https://test.org', 'https://demo.net'],
+    invalidUrls: ['invalid-url', 'ftp://example.com', 'http://localhost:3000'],
   },
 
   files: {
