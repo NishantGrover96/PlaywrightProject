@@ -7,7 +7,6 @@
 - Keep solutions **clean, modern, and concise**.  
 - Preserve project structure and avoid redundancy.  
 - No unnecessary files, comments only when needed. 
-- **please use static_files folder for all static files** 
 - While running tests, use script which takes minimum time.  
 - If encountered multiple errors while testing, fix all errors in one go.  
 - ✅ Use **PascalCase** for **test/spec file names** (e.g., `CreateList.spec.ts`, `UpdateUser.spec.ts`).  
@@ -15,6 +14,9 @@
 - ❌ Do **NOT** create unnecessary files (e.g., if `CreateList.spec.ts` exists, do not create `CreateList.new.spec.js` or `.update.spec.ts` duplicates).  
 - For credentials use `client-modules-access.ts` file.  
 - Use static_files from `fixtures/test-data/static_files/` folder for file upload tests.  
+
+## **Mandatory Rules**
+- Always use authentication setup from `global-auth` file.
 
 ## Playwright Usage
 
@@ -49,13 +51,10 @@
 ### File Upload/Dropzone Fields
 
 - Click dropzone area → Handle `filechooser` event → Set files using absolute paths  
-- Use files from `fixtures/test-data/static_files/` folder  
+- Use files from `/static_files/` folder  
 
-## Selectors & URLs (Most Important)
-
-- Always prioritise ID selectors (e.g., `#elementID`). And then class selectors (e.g., `.className`).  
-- Do **NOT** hardcode selectors (e.g., `text=/product|item|shop|order/i`).  
-- Always use selectors from the **Utils/selectors.ts** file.  
+## URLs (Most Important)
+ 
 - Do **NOT** hardcode URLs in tests.  
 - Always fetch URLs from a dedicated **Utils/urls.ts** file.  
 

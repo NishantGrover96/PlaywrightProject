@@ -1,6 +1,5 @@
-import { test, expect } from '../base-test';
+import { test } from '../base-test';
 import { ReportsDashboardPage } from '../../pages/modules/reports/reports-dashboard.page';
-import { REPORTS_TEST_DATA } from '../../fixtures/test-data/reports/reports-data';
 
 /**
  * Reports Module - Smoke Tests
@@ -13,17 +12,10 @@ test.describe('Reports Module - URL Accessibility Smoke Tests', () => {
   let reportsDashboardPage: ReportsDashboardPage;
 
   test.beforeEach(async ({ page, auth }) => {
-    // Initialize page object
     reportsDashboardPage = new ReportsDashboardPage(page);
-
-    // Ensure authentication is valid
-    console.log('🔍 Verifying authentication before test...');
     const isAuthenticated = await auth.isAuthenticated();
     if (!isAuthenticated) {
-      console.log('🔐 Performing authentication...');
       await auth.ensureAuthenticated();
-    } else {
-      console.log('✅ Using existing authentication session');
     }
   });
 

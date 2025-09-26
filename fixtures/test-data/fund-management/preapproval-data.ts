@@ -1,6 +1,6 @@
-// fixtures/test-data/fund-management/preapproval-paidsearch-data.ts
+// fixtures/test-data/fund-management/preapproval-data.ts
 
-export const PreapprovalPaidSearchTestData = {
+export const PreapprovalTestData = {
   dealer: {
     number: '10000',
     validNumbers: ['10000', '10001', '10002'],
@@ -18,9 +18,13 @@ export const PreapprovalPaidSearchTestData = {
   },
 
   uploadFiles: {
-    validFile: 'static_files/excel/testcsv.xlsx',
+    Excel: 'static_files/excel/testcsv.xlsx',
+    Img: 'static_files/images/test.png',
+    Pdf: 'static_files/pdf/testpdf.pdf',
     testFiles: [
-      'static_files/excel/testcsv.xlsx'
+      'static_files/excel/testcsv.xlsx',
+      'static_files/images/testimage.png',
+      'static_files/pdf/testpdf.pdf'
     ]
   },
 
@@ -33,14 +37,4 @@ export const PreapprovalPaidSearchTestData = {
     submitPreapproval: '/CoopManagement/PreApproval/Submit/SubmitPreApproval',
     dashboard: '/CoopManagement/Dashboard?navtitle=Fund%20Mgmt'
   }
-};
-
-export const PreapprovalPaidSearchSelectors = {
-  dealerNumber: '#txtdealernumber',
-  continueButton: 'button[name="Continue"]',
-  paidSearchLink: 'link[name="Paid Search"]',
-  adTitle: '#txtAdTitle',
-  fileDropzone: '#dropzone_fuBGImage div',
-  submitButton: 'button[name="Submit"]',
-  successHeading: 'heading[name=" Congratulations! You\'ve"]'
 };
