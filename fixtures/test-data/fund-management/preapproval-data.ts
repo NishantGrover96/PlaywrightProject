@@ -24,8 +24,27 @@ export const PreapprovalTestData = {
     Pdf: 'static_files/pdf/testpdf.pdf',
     testFiles: [
       'static_files/excel/testcsv.xlsx',
-      'static_files/images/testimage.png',
+      'static_files/images/test.png',
       'static_files/pdf/testpdf.pdf'
+    ]
+  },
+
+  digitalDisplay: {
+    landingURL: 'https://www.google.com',
+    validLandingURLs: [
+      'https://www.google.com',
+      'https://www.example.com',
+      'https://www.test.com'
+    ],
+    invalidLandingURLs: ['', 'invalid-url']
+  },
+
+  flyersInserts: {
+    title: DataGenerator.randomString(12) + ' Flyers',
+    validTitles: [
+      'Promotional Flyers',
+      'Sales Insert Campaign',
+      'Special Offer Flyers'
     ]
   }
 };

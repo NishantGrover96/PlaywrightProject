@@ -77,6 +77,46 @@ export class PreapprovalPage {
    * Complete full paid search pre-approval workflow
    */
   /**
+   * Fill ad landing URL for Digital Display
+   */
+  async fillAdLandingURL(landingURL: string = PreapprovalTestData.digitalDisplay.landingURL): Promise<void> {
+    await this.page.locator('#txtAdLandingURL').click();
+    await this.page.locator('#txtAdLandingURL').fill(landingURL);
+  }
+
+  /**
+   * Complete Digital Display pre-approval workflow
+   */
+  async completeDigitalDisplayPreapproval(
+    dealerNumber?: string,
+    landingURL?: string,
+    adTitle?: string,
+    fileName?: string
+  ): Promise<void> {
+    await this.fillDealerNumber(dealerNumber);
+    await this.selectType('Display Advertising (Digital');
+    await this.fillAdLandingURL(landingURL);
+    await this.fillAdTitle(adTitle);
+    await this.uploadFile(fileName);
+    await this.submitRequest();
+  }
+
+  /**
+   * Complete Flyers & Inserts pre-approval workflow
+   */
+  async completeFlyersInsertsPreapproval(
+    dealerNumber?: string,
+    adTitle?: string,
+    fileName?: string
+  ): Promise<void> {
+    await this.fillDealerNumber(dealerNumber);
+    await this.selectType('FLYERS / INSERTS');
+    await this.fillAdTitle(adTitle);
+    await this.uploadFile(fileName);
+    await this.submitRequest();
+  }
+
+  /**
    * Complete paid search pre-approval workflow, assuming already at feature page
    */
   async completePaidSearchPreapprovalFromFeaturePage(
