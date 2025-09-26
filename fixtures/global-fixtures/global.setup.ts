@@ -45,31 +45,39 @@ async function globalSetup(config: FullConfig) {
 
   // PERFORM GLOBAL AUTHENTICATION HERE - This is critical!
   console.log(`🔐 Performing global authentication for ${currentContext}...`);
-  
+
   try {
     const currentEnvironment = process.env.ENV || 'dev';
-    
+
     // Check if we already have a valid session
-    const hasValidSession = await GlobalAuth.hasValidGlobalSession(currentClient, currentRole, currentEnvironment);
-    
+    const hasValidSession = await GlobalAuth.hasValidGlobalSession(
+      currentClient,
+      currentRole,
+      currentEnvironment
+    );
+
     if (hasValidSession) {
       console.log(`✅ Valid global session found - skipping authentication for ${currentContext}`);
     } else {
       console.log(`🔐 No valid session found - performing authentication for ${currentContext}`);
-      
+
       // Launch browser for authentication
       const browser = await chromium.launch();
       const context = await browser.newContext();
       const page = await context.newPage();
-      
+
       // Use GlobalAuth to ensure authentication (this caches the auth manager)
-      const authManager = await GlobalAuth.ensureAuthenticated(page, context, currentClient, currentRole);
+      const authManager = await GlobalAuth.ensureAuthenticated(
+        page,
+        context,
+        currentClient,
+        currentRole
+      );
       console.log(`✅ Global authentication successful for ${currentContext}`);
-      
+
       // Close browser - session is now cached in GlobalAuth
       await browser.close();
     }
-    
   } catch (error) {
     console.error(`❌ Global authentication failed for ${currentContext}:`, error);
     throw error; // Fail the test run if global auth fails

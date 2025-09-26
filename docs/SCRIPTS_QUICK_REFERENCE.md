@@ -3,6 +3,7 @@
 ## 🎯 **Most Common Scripts**
 
 ### **Daily Development**
+
 ```bash
 # Quick smoke test validation
 npm run quick-test
@@ -18,6 +19,7 @@ npm run test:demo:admin:uat
 ```
 
 ### **Module Testing**
+
 ```bash
 # Test specific modules
 npm run fund-mgmt:demo:admin:dev
@@ -27,6 +29,7 @@ npm run reports:demo:admin:uat
 ```
 
 ### **Test Types**
+
 ```bash
 # Smoke tests (quick validation)
 npm run smoke:demo:admin:dev
@@ -46,15 +49,17 @@ npm run e2e:demo:admin:uat
 ## 🚨 **What NOT to Use**
 
 ### **❌ These Scripts Will Fail (Intentionally)**
+
 ```bash
 # These throw errors to force explicit targeting:
 npm run test                    # ❌ Error: Use specific client-env script
-npm run test:dev               # ❌ Error: Specify client and role  
+npm run test:dev               # ❌ Error: Specify client and role
 npm run test:debug             # ❌ Error: Use specific client-env script
 npm run test:headed            # ❌ Error: Use specific client-env script
 ```
 
 ### **✅ Use These Instead**
+
 ```bash
 npm run test:demo:admin:dev            # ✅ Explicit targeting
 npm run test:demo:admin:dev -- --debug # ✅ Debug mode
@@ -71,7 +76,7 @@ npm run test:demo:admin:dev -- --headed # ✅ Headed mode
 | **admin** | `test:demo:admin:dev` | `test:demo:admin:test` | `test:demo:admin:uat` |
 | **dealer** | `test:demo:dealer:dev` | `test:demo:dealer:test` | `test:demo:dealer:uat` |
 
-### **Hankook Client**  
+### **Hankook Client**
 | Role | Dev | Test | UAT |
 |------|-----|------|-----|
 | **admin** | `test:hankook:admin:dev` | `test:hankook:admin:test` | `test:hankook:admin:uat` |
@@ -105,16 +110,18 @@ npm run test:demo:admin:dev -- --headed # ✅ Headed mode
 ## 🚀 **CI/CD Scripts for Azure**
 
 ### **Environment CI Scripts**
+
 ```bash
 # CI scripts with proper reporting for Azure DevOps
 npm run ci:demo:admin:dev
-npm run ci:demo:admin:test  
+npm run ci:demo:admin:test
 npm run ci:demo:admin:uat
 npm run ci:hankook:admin:dev
 npm run ci:hankook:admin:uat
 ```
 
 ### **Test Type CI Scripts**
+
 ```bash
 # Specific test types for CI
 npm run ci:smoke:demo:admin:dev
@@ -127,6 +134,7 @@ npm run ci:regression:demo:admin:uat
 ## 🛠️ **Setup & Maintenance**
 
 ### **Initial Setup**
+
 ```bash
 # Complete project setup
 npm run setup
@@ -137,6 +145,7 @@ npm run setup:browsers   # Playwright browsers
 ```
 
 ### **Cleanup**
+
 ```bash
 # Clean test artifacts
 npm run clean:reports
@@ -146,6 +155,7 @@ npm run clean:all
 ```
 
 ### **Code Quality**
+
 ```bash
 # Quick validation
 npm run validate
@@ -162,6 +172,7 @@ npm run type-check
 ## 🎯 **Common Usage Patterns**
 
 ### **Development Workflow**
+
 ```bash
 # 1. Quick validation
 npm run quick-test
@@ -177,11 +188,12 @@ npm run clean:reports
 ```
 
 ### **Pre-Release Testing**
+
 ```bash
 # 1. Smoke tests on UAT
 npm run smoke:demo:admin:uat
 
-# 2. Full regression on UAT  
+# 2. Full regression on UAT
 npm run regression:demo:admin:uat
 
 # 3. Test critical modules
@@ -190,6 +202,7 @@ npm run lms:demo:admin:uat
 ```
 
 ### **Debug Session**
+
 ```bash
 # Run with debug mode
 npm run test:demo:admin:dev -- --debug
@@ -199,6 +212,8 @@ npm run test:demo:admin:dev -- --headed
 
 # Run specific test file
 npm run fund-mgmt:demo:admin:dev -- tests/e2e/fund-management/submit-preapproval.spec.ts
+
+
 
 # Run with custom workers
 npm run test:demo:admin:dev -- --workers=1
@@ -218,9 +233,10 @@ npm run test:demo:admin:dev -- --workers=1
 | **Environment** | `dev`, `test`, `uat` |
 
 ### **Examples**
+
 ```bash
 test:demo:admin:dev           # Full test suite
-smoke:hankook:dealer:uat      # Smoke tests  
+smoke:hankook:dealer:uat      # Smoke tests
 fund-mgmt:demo:admin:dev      # Fund management module
 ci:demo:admin:uat             # CI execution
 ```
@@ -230,6 +246,7 @@ ci:demo:admin:uat             # CI execution
 ## 🎛️ **Advanced Options**
 
 ### **Playwright CLI Options**
+
 Add these after `--` in any script:
 
 | Option | Purpose | Example |
@@ -241,6 +258,7 @@ Add these after `--` in any script:
 | `--timeout=N` | Set timeout | `npm run test:demo:admin:dev -- --timeout=60000` |
 
 ### **Environment Variable Overrides**
+
 ```bash
 # Override environment variables (advanced usage)
 CLIENT=demo ROLE=admin ENV=dev npm run test:demo:admin:dev
@@ -267,6 +285,7 @@ HEADLESS=false npm run test:demo:admin:dev
 | Wrong environment data | Verify environment (dev/test/uat) in script name |
 
 ### **Quick Diagnostics**
+
 ```bash
 # Validate configuration
 npm run validate
@@ -283,6 +302,7 @@ npm run test:demo:admin:dev -- tests/smoke/reports-dashboard.spec.ts
 ## 📊 **Performance Tips**
 
 ### **Faster Test Execution**
+
 ```bash
 # Use fewer workers for debugging
 npm run test:demo:admin:dev -- --workers=1
@@ -295,6 +315,7 @@ npm run test:demo:admin:dev -- --headed=false
 ```
 
 ### **Targeted Testing**
+
 ```bash
 # Test specific file
 npm run fund-mgmt:demo:admin:dev -- tests/e2e/fund-management/submit-preapproval.spec.ts
@@ -311,13 +332,15 @@ npm run test:demo:admin:dev -- --grep="@slow" --invert
 ## 🏆 **Best Practices Summary**
 
 ### **✅ Always Do**
+
 1. Use explicit client-role-environment scripts
 2. Clean up reports after testing sessions
 3. Use smoke tests for quick validation
 4. Use CI scripts for Azure DevOps
 5. Test on UAT before production releases
 
-### **❌ Never Do**  
+### **❌ Never Do**
+
 1. Use base scripts (`test`, `test:dev`, etc.)
 2. Mix client data (don't run hankook tests with demo scripts)
 3. Skip environment specification
@@ -325,6 +348,7 @@ npm run test:demo:admin:dev -- --grep="@slow" --invert
 5. Run tests without knowing which client/role context
 
 ### **🎯 Pro Tips**
+
 - Use `quick-test` for fastest validation
 - Use module-specific scripts when working on specific features
 - Use regression scripts before major releases

@@ -16,7 +16,9 @@ export const ProductTestData = {
     description: `Description ${DataGenerator.randomString(12)}`,
     price: DataGenerator.randomPrice(5, 1000),
     sku: `SKU-${DataGenerator.randomString(8, true).toUpperCase()}`,
-    category: ['Electronics', 'Clothing', 'Books', 'Home & Garden'][DataGenerator.randomNumber(0, 3)],
+    category: ['Electronics', 'Clothing', 'Books', 'Home & Garden'][
+      DataGenerator.randomNumber(0, 3)
+    ],
     inStock: DataGenerator.randomBoolean(),
     quantity: DataGenerator.randomNumber(0, 50),
   })),

@@ -32,7 +32,7 @@ export default class TestExecutionReporter implements Reporter {
     // Determine test category based on file path
     const category = this.getTestCategory(test.location.file);
     this.currentSuite = test.parent.title;
-    
+
     console.log(`▶️  Starting [${category}]: ${test.title}`);
   }
 
@@ -59,9 +59,9 @@ export default class TestExecutionReporter implements Reporter {
 
     const statusIcon = this.getStatusIcon(status);
     const durationColor = duration > 10000 ? '🐌' : duration > 5000 ? '⚡' : '🚀';
-    
+
     console.log(`${statusIcon} [${category}] ${test.title} - ${duration}ms ${durationColor}`);
-    
+
     if (result.error) {
       console.log(`   ❌ Error: ${result.error.message}`);
     }
@@ -70,21 +70,21 @@ export default class TestExecutionReporter implements Reporter {
   onEnd(result: FullResult) {
     const endTime = new Date();
     const totalDuration = endTime.getTime() - this.suiteStartTime.getTime();
-    
+
     console.log('─'.repeat(80));
     console.log('📊 TEST EXECUTION SUMMARY');
     console.log('─'.repeat(80));
-    
+
     this.printOverallStats(totalDuration);
     this.printCategoryBreakdown();
     this.printPerformanceMetrics();
     this.printSlowTests();
     this.printFailedTests();
-    
+
     console.log('─'.repeat(80));
     console.log(`🏁 Execution completed at: ${endTime.toLocaleString()}`);
     console.log(`⏱️  Total execution time: ${this.formatDuration(totalDuration)}`);
-    
+
     // Generate detailed report file
     this.generateDetailedReport();
   }
@@ -99,19 +99,24 @@ export default class TestExecutionReporter implements Reporter {
 
   private getStatusIcon(status: string): string {
     switch (status) {
-      case 'passed': return '✅';
-      case 'failed': return '❌';
-      case 'skipped': return '⚠️';
-      case 'timedOut': return '⏰';
-      default: return '❓';
+      case 'passed':
+        return '✅';
+      case 'failed':
+        return '❌';
+      case 'skipped':
+        return '⚠️';
+      case 'timedOut':
+        return '⏰';
+      default:
+        return '❓';
     }
   }
 
   private printOverallStats(totalDuration: number) {
     const total = this.testResults.length;
-    const passed = this.testResults.filter(t => t.status === 'passed').length;
-    const failed = this.testResults.filter(t => t.status === 'failed').length;
-    const skipped = this.testResults.filter(t => t.status === 'skipped').length;
+    const passed = this.testResults.filter((t) => t.status === 'passed').length;
+    const failed = this.testResults.filter((t) => t.status === 'failed').length;
+    const skipped = this.testResults.filter((t) => t.status === 'skipped').length;
     const successRate = total > 0 ? ((passed / total) * 100).toFixed(2) : '0.00';
 
     console.log(`📈 Overall Results:`);
@@ -125,17 +130,20 @@ export default class TestExecutionReporter implements Reporter {
 
   private printCategoryBreakdown() {
     const categories = ['SMOKE', 'REGRESSION', 'E2E', 'PATTERNS', 'OTHER'];
-    
+
     console.log(`\n📂 Category Breakdown:`);
-    
-    categories.forEach(category => {
-      const categoryTests = this.testResults.filter(t => t.category === category);
+
+    categories.forEach((category) => {
+      const categoryTests = this.testResults.filter((t) => t.category === category);
       if (categoryTests.length > 0) {
-        const passed = categoryTests.filter(t => t.status === 'passed').length;
-        const failed = categoryTests.filter(t => t.status === 'failed').length;
-        const avgDuration = categoryTests.reduce((sum, t) => sum + t.duration, 0) / categoryTests.length;
-        
-        console.log(`   ${category}: ${passed}/${categoryTests.length} passed (avg: ${avgDuration.toFixed(0)}ms)`);
+        const passed = categoryTests.filter((t) => t.status === 'passed').length;
+        const failed = categoryTests.filter((t) => t.status === 'failed').length;
+        const avgDuration =
+          categoryTests.reduce((sum, t) => sum + t.duration, 0) / categoryTests.length;
+
+        console.log(
+          `   ${category}: ${passed}/${categoryTests.length} passed (avg: ${avgDuration.toFixed(0)}ms)`
+        );
       }
     });
   }
@@ -143,7 +151,7 @@ export default class TestExecutionReporter implements Reporter {
   private printPerformanceMetrics() {
     if (this.testResults.length === 0) return;
 
-    const durations = this.testResults.map(t => t.duration);
+    const durations = this.testResults.map((t) => t.duration);
     const avgDuration = durations.reduce((sum, d) => sum + d, 0) / durations.length;
     const maxDuration = Math.max(...durations);
     const minDuration = Math.min(...durations);
@@ -156,24 +164,24 @@ export default class TestExecutionReporter implements Reporter {
 
   private printSlowTests() {
     const slowTests = this.testResults
-      .filter(t => t.duration > 10000) // Tests taking more than 10 seconds
+      .filter((t) => t.duration > 10000) // Tests taking more than 10 seconds
       .sort((a, b) => b.duration - a.duration)
       .slice(0, 5);
 
     if (slowTests.length > 0) {
       console.log(`\n🐌 Slowest Tests:`);
-      slowTests.forEach(test => {
+      slowTests.forEach((test) => {
         console.log(`   ${test.title} (${test.category}) - ${test.duration}ms`);
       });
     }
   }
 
   private printFailedTests() {
-    const failedTests = this.testResults.filter(t => t.status === 'failed');
+    const failedTests = this.testResults.filter((t) => t.status === 'failed');
 
     if (failedTests.length > 0) {
       console.log(`\n❌ Failed Tests:`);
-      failedTests.forEach(test => {
+      failedTests.forEach((test) => {
         console.log(`   ${test.title} (${test.category})`);
         if (test.error) {
           console.log(`      Error: ${test.error}`);
@@ -206,9 +214,9 @@ export default class TestExecutionReporter implements Reporter {
         environment: process.env.ENV || 'dev',
         client: process.env.CLIENT || 'demo',
         totalTests: this.testResults.length,
-        passed: this.testResults.filter(t => t.status === 'passed').length,
-        failed: this.testResults.filter(t => t.status === 'failed').length,
-        skipped: this.testResults.filter(t => t.status === 'skipped').length,
+        passed: this.testResults.filter((t) => t.status === 'passed').length,
+        failed: this.testResults.filter((t) => t.status === 'failed').length,
+        skipped: this.testResults.filter((t) => t.status === 'skipped').length,
       },
       categoryBreakdown: this.getCategoryStats(),
       testResults: this.testResults,
@@ -218,7 +226,7 @@ export default class TestExecutionReporter implements Reporter {
     try {
       const fs = require('fs');
       const path = require('path');
-      
+
       const reportsDir = path.join(process.cwd(), 'test-results', 'reports');
       if (!fs.existsSync(reportsDir)) {
         fs.mkdirSync(reportsDir, { recursive: true });
@@ -226,7 +234,7 @@ export default class TestExecutionReporter implements Reporter {
 
       const reportPath = path.join(reportsDir, `test-execution-${timestamp}.json`);
       fs.writeFileSync(reportPath, JSON.stringify(reportData, null, 2));
-      
+
       console.log(`📄 Detailed report saved: ${reportPath}`);
     } catch (error) {
       console.error('Failed to generate detailed report:', error);
@@ -237,16 +245,17 @@ export default class TestExecutionReporter implements Reporter {
     const categories = ['SMOKE', 'REGRESSION', 'E2E', 'PATTERNS', 'OTHER'];
     const stats: any = {};
 
-    categories.forEach(category => {
-      const categoryTests = this.testResults.filter(t => t.category === category);
+    categories.forEach((category) => {
+      const categoryTests = this.testResults.filter((t) => t.category === category);
       stats[category] = {
         total: categoryTests.length,
-        passed: categoryTests.filter(t => t.status === 'passed').length,
-        failed: categoryTests.filter(t => t.status === 'failed').length,
-        skipped: categoryTests.filter(t => t.status === 'skipped').length,
-        avgDuration: categoryTests.length > 0 
-          ? categoryTests.reduce((sum, t) => sum + t.duration, 0) / categoryTests.length 
-          : 0,
+        passed: categoryTests.filter((t) => t.status === 'passed').length,
+        failed: categoryTests.filter((t) => t.status === 'failed').length,
+        skipped: categoryTests.filter((t) => t.status === 'skipped').length,
+        avgDuration:
+          categoryTests.length > 0
+            ? categoryTests.reduce((sum, t) => sum + t.duration, 0) / categoryTests.length
+            : 0,
       };
     });
 
@@ -258,7 +267,7 @@ export default class TestExecutionReporter implements Reporter {
       return { avgDuration: 0, maxDuration: 0, minDuration: 0 };
     }
 
-    const durations = this.testResults.map(t => t.duration);
+    const durations = this.testResults.map((t) => t.duration);
     return {
       avgDuration: durations.reduce((sum, d) => sum + d, 0) / durations.length,
       maxDuration: Math.max(...durations),

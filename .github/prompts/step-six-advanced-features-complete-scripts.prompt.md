@@ -919,7 +919,6 @@ Edit \`configs/clients/client-modules-access.ts\` to add new clients or modify m
 
 The framework includes Azure DevOps pipeline configuration in \`ci/azure-pipelines/\`.
 
-
 ## AuthManager Class
 
 ### Methods
@@ -1165,4 +1164,3 @@ npm run test:ci:smoke
 8. **Enterprise Reporting** - Advanced analytics and CI/CD integration
 9. **Performance Monitoring** - Load time tracking and optimization
 10. **Production Ready** - CI/CD, validation, and deployment configurations
-

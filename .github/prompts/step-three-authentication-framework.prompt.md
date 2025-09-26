@@ -26,6 +26,7 @@ The authentication system uses a **3-layer architecture**:
 3. **Base Test Integration** (`tests/base-test.ts`) - Seamless test integration with auth fixtures
 
 ### **Session Management Strategy**
+
 - **File Naming**: `auth-{CLIENT}-{ROLE}-{ENV}.json` (e.g., `auth-demo-admin-dev.json`)
 - **20-Minute Expiry**: Automatic session validation and refresh
 - **Global Caching**: Prevents duplicate AuthManager instances
@@ -33,7 +34,7 @@ The authentication system uses a **3-layer architecture**:
 
 ## 🚀 **IMPLEMENTATION STEPS**
 
-### **3.1 AuthManager Implementation** 
+### **3.1 AuthManager Implementation**
 
 Create **`tests/auth-manager.ts`**:
 
@@ -80,16 +81,16 @@ export class AuthManager {
     if (this._isAuthenticated) {
       return true;
     }
-    
+
     const environment = process.env.ENV || 'dev';
     const role = process.env.ROLE || 'admin';
-    
+
     const hasValidSession = await this.hasValidSession(role);
     if (hasValidSession) {
       this._isAuthenticated = true;
       return true;
     }
-    
+
     this._isAuthenticated = false;
     return false;
   }
@@ -113,7 +114,9 @@ export class AuthManager {
       const twentyMinutes = 20 * 60 * 1000;
 
       if (sessionAge > twentyMinutes) {
-        console.log(`⏰ Session expired for ${sessionKey} (${Math.round(sessionAge / 1000 / 60)} minutes old)`);
+        console.log(
+          `⏰ Session expired for ${sessionKey} (${Math.round(sessionAge / 1000 / 60)} minutes old)`
+        );
         return false;
       }
 
@@ -127,11 +130,14 @@ export class AuthManager {
         return false;
       }
 
-      const hasValidCookies = sessionData.cookies && Array.isArray(sessionData.cookies) && sessionData.cookies.length > 0;
+      const hasValidCookies =
+        sessionData.cookies && Array.isArray(sessionData.cookies) && sessionData.cookies.length > 0;
       const isValid = hasValidCookies; // Only require cookies
 
       if (isValid) {
-        console.log(`✅ Valid session found for ${sessionKey} (${Math.round(sessionAge / 1000 / 60)} minutes old)`);
+        console.log(
+          `✅ Valid session found for ${sessionKey} (${Math.round(sessionAge / 1000 / 60)} minutes old)`
+        );
       } else {
         console.log(`❌ Invalid session data for ${sessionKey} - missing cookies`);
       }
@@ -335,112 +341,118 @@ export class AuthManager {
 ```
 
 **Key AuthManager Features:**
+
 - **Dynamic Session Naming**: Uses CLIENT+ROLE+ENV pattern
-- **20-Minute Expiry**: Automatic validation with file timestamps  
+- **20-Minute Expiry**: Automatic validation with file timestamps
 - **Session Loading**: Restores cookies and localStorage
 - **Page Management**: Handles page reference updates
 - **Error Handling**: Graceful failure with detailed logging
 
   // Verify current session is still active
   private async verifySessionIsActive(): Promise<boolean> {
-    try {
-      const env = process.env.ENV || 'dev';
-      const urls = this.envHelper.getUrlsForClient(this.clientConfig.clientId, env);
+  try {
+  const env = process.env.ENV || 'dev';
+  const urls = this.envHelper.getUrlsForClient(this.clientConfig.clientId, env);
 
-      // Try to access a protected page (dashboard/main page)
-      await this.page.goto(urls.baseUrl);
-      await this.page.waitForLoadState('networkidle');
+        // Try to access a protected page (dashboard/main page)
+        await this.page.goto(urls.baseUrl);
+        await this.page.waitForLoadState('networkidle');
 
-      // Check if we're still logged in (customize based on your app)
-      // Look for login form (indicates we're not logged in) or dashboard elements
-      const loginForm = await this.page
-        .locator('input[name="email"], input[name="username"], input[type="email"]')
-        .count();
+        // Check if we're still logged in (customize based on your app)
+        // Look for login form (indicates we're not logged in) or dashboard elements
+        const loginForm = await this.page
+          .locator('input[name="email"], input[name="username"], input[type="email"]')
+          .count();
 
-      if (loginForm > 0) {
-        console.log(`❌ Session invalid - redirected to login page`);
+        if (loginForm > 0) {
+          console.log(`❌ Session invalid - redirected to login page`);
+          return false;
+        }
+
+        // Additional checks for dashboard/authenticated elements
+        await this.page.waitForSelector('body', { timeout: 5000 });
+
+        return true;
+      } catch (error) {
+        console.log(`❌ Session verification failed:`, error);
         return false;
       }
 
-      // Additional checks for dashboard/authenticated elements
-      await this.page.waitForSelector('body', { timeout: 5000 });
-
-      return true;
-    } catch (error) {
-      console.log(`❌ Session verification failed:`, error);
-      return false;
-    }
   }
 
   // Navigate to specific module (with authentication check)
   async navigateToModule(moduleName: string): Promise<void> {
-    const module = this.clientConfig.modules.find((m) =>
-      m.name.toLowerCase().includes(moduleName.toLowerCase())
-    );
+  const module = this.clientConfig.modules.find((m) =>
+  m.name.toLowerCase().includes(moduleName.toLowerCase())
+  );
 
-    if (!module) {
-      throw new Error(`Module "${moduleName}" not found for client ${this.clientConfig.clientId}`);
-    }
+      if (!module) {
+        throw new Error(`Module "${moduleName}" not found for client ${this.clientConfig.clientId}`);
+      }
 
-    const env = process.env.ENV || 'dev';
-    const urls = this.envHelper.getUrlsForClient(this.clientConfig.clientId, env);
-    const moduleUrl = `${urls.baseUrl}${module.path}`;
+      const env = process.env.ENV || 'dev';
+      const urls = this.envHelper.getUrlsForClient(this.clientConfig.clientId, env);
+      const moduleUrl = `${urls.baseUrl}${module.path}`;
 
-    console.log(`🎯 Navigating to ${moduleName}: ${moduleUrl}`);
+      console.log(`🎯 Navigating to ${moduleName}: ${moduleUrl}`);
 
-    await this.page.goto(moduleUrl);
-    await this.page.waitForLoadState('networkidle');
+      await this.page.goto(moduleUrl);
+      await this.page.waitForLoadState('networkidle');
+
   }
 
   // Verify module access
   async verifyModuleAccess(moduleName: string): Promise<boolean> {
-    try {
-      await this.navigateToModule(moduleName);
+  try {
+  await this.navigateToModule(moduleName);
 
-      // Check for access denied or error messages
-      const errorElements = await this.page
-        .locator('text=/access denied|unauthorized|403|404|error/i')
-        .count();
+        // Check for access denied or error messages
+        const errorElements = await this.page
+          .locator('text=/access denied|unauthorized|403|404|error/i')
+          .count();
 
-      if (errorElements > 0) {
-        console.log(`❌ Access denied to module: ${moduleName}`);
+        if (errorElements > 0) {
+          console.log(`❌ Access denied to module: ${moduleName}`);
+          return false;
+        }
+
+        console.log(`✅ Access verified for module: ${moduleName}`);
+        return true;
+      } catch (error) {
+        console.error(`Error verifying access to ${moduleName}:`, error);
         return false;
       }
 
-      console.log(`✅ Access verified for module: ${moduleName}`);
-      return true;
-    } catch (error) {
-      console.error(`Error verifying access to ${moduleName}:`, error);
-      return false;
-    }
   }
 
   // Get current user role
   getCurrentUser(): string | null {
-    return this.currentUser;
+  return this.currentUser;
   }
 
   // Logout (cleanup)
   async logout(): Promise<void> {
-    try {
-      // Clear context
-      await this.context.clearCookies();
+  try {
+  // Clear context
+  await this.context.clearCookies();
 
-      // Navigate to logout or clear session
-      // Customize based on your application
-      const env = process.env.ENV || 'dev';
-      const urls = this.envHelper.getUrlsForClient(this.clientConfig.clientId, env);
+        // Navigate to logout or clear session
+        // Customize based on your application
+        const env = process.env.ENV || 'dev';
+        const urls = this.envHelper.getUrlsForClient(this.clientConfig.clientId, env);
 
-      await this.page.goto(`${urls.baseUrl}/logout`);
+        await this.page.goto(`${urls.baseUrl}/logout`);
 
-      this.currentUser = null;
-      console.log(`👋 Logged out from ${this.clientConfig.clientId}`);
-    } catch (error) {
-      console.log(`Logout error (may be expected):`, error);
-    }
+        this.currentUser = null;
+        console.log(`👋 Logged out from ${this.clientConfig.clientId}`);
+      } catch (error) {
+        console.log(`Logout error (may be expected):`, error);
+      }
+
   }
-}
-```
+  }
+
+````
 
 ### **3.2 Global Auth Orchestration**
 
@@ -464,7 +476,7 @@ export class GlobalAuth {
   ): Promise<AuthManager> {
     const actualClientId = clientId || process.env.CLIENT || 'demo';
     const actualEnvironment = process.env.ENV || 'dev';
-    
+
     // Include environment in cache key to prevent conflicts
     const key = `${actualClientId}-${role}-${actualEnvironment}`;
 
@@ -484,10 +496,10 @@ export class GlobalAuth {
     role: string = 'admin'
   ): Promise<AuthManager> {
     const authManager = await this.getAuthManager(page, context, clientId, role);
-    
+
     // Update page reference in case it changed
     authManager.updatePage(page);
-    
+
     await authManager.ensureAuthenticated(role);
     return authManager;
   }
@@ -500,7 +512,7 @@ export class GlobalAuth {
   ): Promise<boolean> {
     const sessionKey = `${clientId}-${role}-${environment}`;
     const cacheKey = `global_session_${sessionKey}`;
-    
+
     // Check cache first
     const cached = this.globalSessionCache.get(cacheKey);
     if (cached && (Date.now() - cached.timestamp) < this.CACHE_DURATION) {
@@ -529,7 +541,7 @@ export class GlobalAuth {
 
       const sessionData = JSON.parse(fs.readFileSync(sessionPath, 'utf8'));
       const hasValidCookies = sessionData.cookies && Array.isArray(sessionData.cookies) && sessionData.cookies.length > 0;
-      
+
       this.globalSessionCache.set(cacheKey, { isValid: hasValidCookies, timestamp: Date.now() });
       return hasValidCookies;
 
@@ -546,9 +558,10 @@ export class GlobalAuth {
     console.log('🧹 Auth cache cleared');
   }
 }
-```
+````
 
 **Key GlobalAuth Features:**
+
 - **Environment-Aware Caching**: Prevents CLIENT+ROLE+ENV conflicts
 - **Global Session Validation**: Checks sessions without creating AuthManager instances
 - **Performance Optimization**: 30-second cache for session validation
@@ -570,29 +583,33 @@ export const test = baseTest.extend<{
 }>({
   auth: async ({ page, context }, use, testInfo) => {
     // Use CLIENT environment variable, fallback to project metadata or default
-    const clientId = process.env.CLIENT || testInfo.project.metadata?.clientId || testInfo.project.name || 'demo';
+    const clientId =
+      process.env.CLIENT || testInfo.project.metadata?.clientId || testInfo.project.name || 'demo';
     const role = process.env.ROLE || 'admin';
 
     try {
       const environment = process.env.ENV || 'dev';
-      
+
       // Get or create the auth manager (cached globally)
       const authManager = await GlobalAuth.getAuthManager(page, context, clientId, role);
-      
+
       // Load existing session (skip validation since global setup already checked)
       console.log(`♻️ Using session for ${clientId}-${role} (trusting global setup validation)`);
       await authManager.loadSession(role, true);
-      
+
       // Update page reference for cached auth manager
       authManager.updatePage(page);
-      
+
       // Mark as authenticated since we trust global setup
       authManager.setAuthenticationState(true);
-      
+
       await use(authManager);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
-      if (errorMessage.includes('Page has been closed') || errorMessage.includes('Browser context has been closed')) {
+      if (
+        errorMessage.includes('Page has been closed') ||
+        errorMessage.includes('Browser context has been closed')
+      ) {
         console.log('⚠️ Page/context closed, creating new page for authentication...');
         const newPage = await context.newPage();
         const authManager = await GlobalAuth.ensureAuthenticated(newPage, context, clientId, role);
@@ -613,6 +630,7 @@ export { expect } from '@playwright/test';
 ```
 
 **Key Base Test Features:**
+
 - **Dynamic Client Resolution**: Uses environment variables with fallbacks
 - **Session Reuse**: Trusts global setup validation for performance
 - **Error Handling**: Graceful recovery from page/context closure
@@ -628,11 +646,11 @@ import { GlobalAuth } from '../../tests/global-auth';
 
 /**
  * Dynamic Authentication Setup
- * 
+ *
  * Only authenticates for the specific CLIENT + ROLE + ENV combination
  * specified via environment variables. This prevents:
  * - Over-authentication for unused clients/roles
- * - Data leakage between different test contexts  
+ * - Data leakage between different test contexts
  * - Unnecessary session creation
  */
 
@@ -644,27 +662,38 @@ const targetEnv = process.env.ENV || 'dev';
 // Only setup authentication for the specific target combination
 setup(`authenticate ${targetClient}-${targetRole}-${targetEnv}`, async ({ page, context }) => {
   try {
-    console.log(`🔐 Setting up authentication for ${targetClient}-${targetRole} in ${targetEnv} environment`);
-    
+    console.log(
+      `🔐 Setting up authentication for ${targetClient}-${targetRole} in ${targetEnv} environment`
+    );
+
     // The environment is automatically detected from process.env.ENV by AuthManager
-    const authManager = await GlobalAuth.ensureAuthenticated(page, context, targetClient, targetRole);
-    
+    const authManager = await GlobalAuth.ensureAuthenticated(
+      page,
+      context,
+      targetClient,
+      targetRole
+    );
+
     // Save authentication state with environment-specific naming
     const authFileName = `auth-${targetClient}-${targetRole}-${targetEnv}.json`;
-    await page.context().storageState({ 
-      path: `fixtures/global-fixtures/${authFileName}` 
+    await page.context().storageState({
+      path: `fixtures/global-fixtures/${authFileName}`,
     });
-    
+
     console.log(`✅ Authentication setup complete for ${targetClient}-${targetRole}-${targetEnv}`);
     console.log(`📁 Auth state saved to: ${authFileName}`);
   } catch (error) {
-    console.error(`❌ Authentication setup failed for ${targetClient}-${targetRole}-${targetEnv}:`, error);
+    console.error(
+      `❌ Authentication setup failed for ${targetClient}-${targetRole}-${targetEnv}:`,
+      error
+    );
     throw error;
   }
 });
 ```
 
 **Key Setup Features:**
+
 - **Dynamic Authentication**: Only creates sessions for specified CLIENT+ROLE+ENV
 - **Environment Aware**: Uses ENV variable for environment-specific authentication
 - **Storage State**: Saves session with proper naming convention
@@ -680,24 +709,25 @@ projects: [
   {
     name: 'setup',
     testDir: './fixtures/global-fixtures',
-    testMatch: 'auth.setup.ts'
+    testMatch: 'auth.setup.ts',
   },
 
   // Your test projects with setup dependency
   {
     name: 'demo-chrome',
-    use: { 
+    use: {
       ...devices['Desktop Chrome'],
       baseURL: 'https://demoportaldev.channel-fusion.com',
-      storageState: 'fixtures/global-fixtures/auth-demo-admin-dev.json' // Dynamic naming
+      storageState: 'fixtures/global-fixtures/auth-demo-admin-dev.json', // Dynamic naming
     },
     dependencies: ['setup'], // Run after setup completes
     // ... other config
-  }
-]
+  },
+];
 ```
 
 **Configuration Notes:**
+
 - **Setup Dependency**: All test projects depend on 'setup' project
 - **Dynamic Storage State**: Uses CLIENT+ROLE+ENV naming pattern
 - **Environment Specific**: baseURL can be environment-aware
@@ -745,7 +775,7 @@ test.describe('Global Authentication System Validation', () => {
     const currentUrl = page.url();
     expect(currentUrl).not.toContain('/login');
     expect(currentUrl).not.toContain('/account/login');
-    
+
     console.log('✅ Page access validated:', currentUrl);
   });
 
@@ -753,14 +783,14 @@ test.describe('Global Authentication System Validation', () => {
     // Navigate to multiple pages
     await page.goto('/');
     await page.waitForLoadState('networkidle');
-    
+
     await page.goto('/index');
     await page.waitForLoadState('networkidle');
 
     // Verify still authenticated
     const isAuthenticated = await auth.isAuthenticated();
     expect(isAuthenticated).toBe(true);
-    
+
     console.log('✅ Session persistence validated');
   });
 
@@ -768,20 +798,21 @@ test.describe('Global Authentication System Validation', () => {
     // This test uses the role set via environment variables
     const role = process.env.ROLE || 'admin';
     console.log(`🎯 Testing with role: ${role}`);
-    
+
     // Verify page access based on role
     await page.goto('/');
     await page.waitForLoadState('networkidle');
-    
+
     const currentUrl = page.url();
     expect(currentUrl).not.toContain('/login');
-    
+
     console.log(`✅ Role-based access validated for: ${role}`);
   });
 });
 ```
 
 **Test Execution Commands:**
+
 ```bash
 # Test with default settings (demo-admin-dev)
 npm run test tests/smoke/auth-validation.spec.ts
@@ -833,7 +864,7 @@ test.describe('My Module Tests', () => {
 ## 📋 **NEXT STEPS**
 
 - **Step 4**: Page Object Model & Selectors Organization
-- **Step 5**: Test Data Management & Utilities  
+- **Step 5**: Test Data Management & Utilities
 - **Step 6**: Complete Framework Integration & Scripts
 
 **Note**: This authentication system is the foundation for all subsequent steps. Ensure all validation tests pass before proceeding to Step 4.

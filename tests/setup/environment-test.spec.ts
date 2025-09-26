@@ -52,11 +52,11 @@ test('Client configuration is available', async () => {
 test('Environment helper handles different environments', async () => {
   const envHelper = EnvironmentHelper.getInstance();
   const clientId = 'demo';
-  
+
   // Test different environment URLs
   const devUrls = envHelper.getUrlsForClient(clientId, 'dev');
   const uatUrls = envHelper.getUrlsForClient(clientId, 'uat');
-  
+
   expect(devUrls).toBeDefined();
   expect(uatUrls).toBeDefined();
   expect(devUrls.baseUrl).not.toBe(uatUrls.baseUrl);
@@ -67,7 +67,7 @@ test('Environment helper handles different environments', async () => {
 
 test('Invalid client throws error', async () => {
   const envHelper = EnvironmentHelper.getInstance();
-  
+
   expect(() => {
     envHelper.getUrlsForClient('nonexistent-client');
   }).toThrow('Client nonexistent-client not found in configuration');

@@ -19,39 +19,39 @@ parameters:
     default: 90
 
 jobs:
-- job: CustomTest
-  displayName: '${{ parameters.displayName }}'
-  pool:
-    vmImage: 'ubuntu-latest'
-  timeoutInMinutes: ${{ parameters.timeoutMinutes }}
-  
-  steps:
-  - checkout: self
-    displayName: 'Checkout Repository'
-    
-  - task: NodeTool@0
-    inputs:
-      versionSpec: '18.x'
-    displayName: 'Install Node.js'
-    
-  - script: npm ci
-    displayName: 'Install Dependencies'
-    
-  - script: npx playwright install --with-deps chromium
-    displayName: 'Install Chromium'
-    
-  - script: npm run ${{ parameters.testCommand }}
-    displayName: 'Execute: ${{ parameters.testCommand }}'
-    env:
-      CLIENT: ${{ parameters.client }}
-      ROLE: ${{ parameters.role }}
-      ENV: ${{ parameters.environment }}
-      CI: true
-      
-  - task: PublishTestResults@2
-    condition: always()
-    inputs:
-      testResultsFormat: 'JUnit'
-      testResultsFiles: 'junit-results.xml'
-      testRunTitle: '${{ parameters.displayName }}'
-    displayName: 'Publish Test Results'
+  - job: CustomTest
+    displayName: '${{ parameters.displayName }}'
+    pool:
+      vmImage: 'ubuntu-latest'
+    timeoutInMinutes: ${{ parameters.timeoutMinutes }}
+
+    steps:
+      - checkout: self
+        displayName: 'Checkout Repository'
+
+      - task: NodeTool@0
+        inputs:
+          versionSpec: '18.x'
+        displayName: 'Install Node.js'
+
+      - script: npm ci
+        displayName: 'Install Dependencies'
+
+      - script: npx playwright install --with-deps chromium
+        displayName: 'Install Chromium'
+
+      - script: npm run ${{ parameters.testCommand }}
+        displayName: 'Execute: ${{ parameters.testCommand }}'
+        env:
+          CLIENT: ${{ parameters.client }}
+          ROLE: ${{ parameters.role }}
+          ENV: ${{ parameters.environment }}
+          CI: true
+
+      - task: PublishTestResults@2
+        condition: always()
+        inputs:
+          testResultsFormat: 'JUnit'
+          testResultsFiles: 'junit-results.xml'
+          testRunTitle: '${{ parameters.displayName }}'
+        displayName: 'Publish Test Results'

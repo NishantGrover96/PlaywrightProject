@@ -1,6 +1,6 @@
 /**
  * Demo Client - Development Environment Endpoints
- * 
+ *
  * Based on MCP verification and testing - only verified working endpoints included
  * These endpoints have been tested and confirmed to work reliably
  */
@@ -42,7 +42,7 @@ const demoDevEndpoints: EndpointConfig[] = [
     roles: ['admin', 'dealer', 'distributor'],
     environments: ['dev', 'test', 'uat', 'prod'],
     verified: true,
-    priority: 'critical'
+    priority: 'critical',
   },
   {
     name: 'Ads & Assets',
@@ -53,7 +53,7 @@ const demoDevEndpoints: EndpointConfig[] = [
     roles: ['admin'],
     environments: ['dev', 'test', 'uat', 'prod'],
     verified: true,
-    priority: 'high'
+    priority: 'high',
   },
   {
     name: 'Brand Shop',
@@ -64,7 +64,7 @@ const demoDevEndpoints: EndpointConfig[] = [
     roles: ['admin'],
     environments: ['dev', 'test', 'uat', 'prod'],
     verified: true,
-    priority: 'high'
+    priority: 'high',
   },
   {
     name: 'EngageHQ',
@@ -75,7 +75,7 @@ const demoDevEndpoints: EndpointConfig[] = [
     roles: ['admin'],
     environments: ['dev', 'test', 'uat'],
     verified: true,
-    priority: 'medium'
+    priority: 'medium',
   },
   {
     name: 'Fund Management',
@@ -86,7 +86,7 @@ const demoDevEndpoints: EndpointConfig[] = [
     roles: ['admin'],
     environments: ['dev', 'test', 'uat'],
     verified: true,
-    priority: 'medium'
+    priority: 'medium',
   },
   {
     name: 'Incentives',
@@ -97,9 +97,9 @@ const demoDevEndpoints: EndpointConfig[] = [
     roles: ['admin'],
     environments: ['dev', 'test', 'uat'],
     verified: true,
-    priority: 'medium'
+    priority: 'medium',
   },
-  
+
   // Additional endpoints that exist but may not be fully verified
   {
     name: 'LMS',
@@ -110,7 +110,7 @@ const demoDevEndpoints: EndpointConfig[] = [
     roles: ['admin'],
     environments: ['dev', 'test', 'uat'],
     verified: false, // Not verified yet
-    priority: 'low'
+    priority: 'low',
   },
   {
     name: 'Rebates',
@@ -123,7 +123,7 @@ const demoDevEndpoints: EndpointConfig[] = [
     roles: ['admin'],
     environments: ['dev', 'test', 'uat'],
     verified: false, // External URL - requires special handling
-    priority: 'low'
+    priority: 'low',
   },
   {
     name: 'Rewards',
@@ -134,7 +134,7 @@ const demoDevEndpoints: EndpointConfig[] = [
     roles: ['admin'],
     environments: ['dev', 'test', 'uat'],
     verified: false, // Not verified yet
-    priority: 'low'
+    priority: 'low',
   },
   {
     name: 'SPIFF',
@@ -145,7 +145,7 @@ const demoDevEndpoints: EndpointConfig[] = [
     roles: ['admin'],
     environments: ['dev', 'test', 'uat'],
     verified: false, // Not verified yet
-    priority: 'low'
+    priority: 'low',
   },
   {
     name: 'Resources',
@@ -156,8 +156,8 @@ const demoDevEndpoints: EndpointConfig[] = [
     roles: ['admin', 'dealer', 'distributor'],
     environments: ['dev', 'test', 'uat', 'prod'],
     verified: false, // Not verified yet
-    priority: 'low'
-  }
+    priority: 'low',
+  },
 ];
 
 const demoDevConfig: ClientEndpointConfig = {
@@ -166,9 +166,9 @@ const demoDevConfig: ClientEndpointConfig = {
   environments: {
     dev: {
       baseUrl: 'https://demoportaldev.channel-fusion.com',
-      endpoints: demoDevEndpoints
-    }
-  }
+      endpoints: demoDevEndpoints,
+    },
+  },
 };
 
 module.exports = demoDevConfig;

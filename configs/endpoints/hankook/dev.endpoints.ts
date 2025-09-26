@@ -2,7 +2,7 @@ import { ClientEndpointConfig, EndpointConfig } from '../endpoint-manager';
 
 /**
  * Hankook Client - Development Environment Endpoints
- * 
+ *
  * Placeholder configuration - endpoints need to be verified for Hankook client
  */
 
@@ -17,7 +17,7 @@ const hankookDevEndpoints: EndpointConfig[] = [
     roles: ['admin', 'dealer', 'distributor'],
     environments: ['dev', 'test', 'uat', 'prod'],
     verified: false, // Needs verification for Hankook
-    priority: 'critical'
+    priority: 'critical',
   },
   // Add more endpoints as they are verified for Hankook client
 ];
@@ -28,9 +28,9 @@ const hankookDevConfig: ClientEndpointConfig = {
   environments: {
     dev: {
       baseUrl: 'https://hankookdev.channel-fusion.com', // Placeholder URL
-      endpoints: hankookDevEndpoints
-    }
-  }
+      endpoints: hankookDevEndpoints,
+    },
+  },
 };
 
 export default hankookDevConfig;
