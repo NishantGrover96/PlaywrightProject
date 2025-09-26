@@ -112,7 +112,7 @@ export class ExecutionConfigManager {
 
   static getReporterConfig(config: ExecutionConfig): string[] {
     const reporters: string[] = [];
-    
+
     if (process.env.CI === 'true') {
       reporters.push('json', 'junit');
     } else {
@@ -161,7 +161,7 @@ export class PerformanceMonitor {
 
     this.executions.set(id, execution);
     ExecutionConfigManager.logExecutionStart(config);
-    
+
     return id;
   }
 
@@ -198,7 +198,7 @@ export class PerformanceMonitor {
   }
 
   private static logExecutionSummary(execution: TestExecution): void {
-    const duration = execution.endTime 
+    const duration = execution.endTime
       ? execution.endTime.getTime() - execution.startTime.getTime()
       : 0;
 
@@ -206,13 +206,17 @@ export class PerformanceMonitor {
     console.log(`   ID: ${execution.id}`);
     console.log(`   Duration: ${Math.round(duration / 1000)}s`);
     console.log(`   Status: ${execution.status}`);
-    
+
     if (execution.results) {
-      console.log(`   Results: ${execution.results.passed} passed, ${execution.results.failed} failed, ${execution.results.skipped} skipped`);
+      console.log(
+        `   Results: ${execution.results.passed} passed, ${execution.results.failed} failed, ${execution.results.skipped} skipped`
+      );
     }
 
     if (execution.performance) {
-      console.log(`   Performance: Avg ${Math.round(execution.performance.averageTestTime)}ms per test`);
+      console.log(
+        `   Performance: Avg ${Math.round(execution.performance.averageTestTime)}ms per test`
+      );
     }
 
     if (execution.artifacts) {

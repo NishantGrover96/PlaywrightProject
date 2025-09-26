@@ -68,7 +68,9 @@ export class LoginPage extends BasePage {
 
     // Look for /Index path (demo portal post-login)
     const isAtDashboard = currentUrl.includes('/Index');
-    const isAtCorrectDomain = currentUrl.includes(urls.baseUrl.replace('https://', '').replace('http://', ''));
+    const isAtCorrectDomain = currentUrl.includes(
+      urls.baseUrl.replace('https://', '').replace('http://', '')
+    );
 
     return isAtDashboard && isAtCorrectDomain;
   }

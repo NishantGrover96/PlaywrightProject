@@ -1,6 +1,6 @@
 /**
  * Global Endpoint Configuration Interface
- * 
+ *
  * This defines the structure for all endpoint configurations across clients and environments
  */
 
@@ -34,7 +34,6 @@ export interface ClientEndpointConfig {
  * Endpoint Manager - Dynamic endpoint resolution
  */
 export class EndpointManager {
-  
   /**
    * Get endpoints for a specific client and environment
    */
@@ -47,33 +46,32 @@ export class EndpointManager {
     try {
       // Dynamic require based on client
       const config: ClientEndpointConfig = require(`./${clientId}/${environment}.endpoints`);
-      
+
       if (!config.environments[environment]) {
         throw new Error(`Environment ${environment} not found for client ${clientId}`);
       }
-      
+
       let endpoints = config.environments[environment].endpoints;
-      
+
       // Filter by role if specified
       if (role) {
-        endpoints = endpoints.filter(endpoint => 
-          !endpoint.roles || endpoint.roles.includes(role)
+        endpoints = endpoints.filter(
+          (endpoint) => !endpoint.roles || endpoint.roles.includes(role)
         );
       }
-      
+
       // Filter to only verified endpoints if requested
       if (onlyVerified) {
-        endpoints = endpoints.filter(endpoint => endpoint.verified === true);
+        endpoints = endpoints.filter((endpoint) => endpoint.verified === true);
       }
-      
+
       return endpoints;
-      
     } catch (error) {
       console.error(`Failed to load endpoints for ${clientId}-${environment}:`, error);
       return [];
     }
   }
-  
+
   /**
    * Get verified working endpoints for smoke tests
    */
@@ -84,7 +82,7 @@ export class EndpointManager {
   ): EndpointConfig[] {
     return this.getEndpoints(clientId, environment, role, true);
   }
-  
+
   /**
    * Get critical endpoints that must work
    */
@@ -94,18 +92,17 @@ export class EndpointManager {
     role?: string
   ): EndpointConfig[] {
     const endpoints = this.getEndpoints(clientId, environment, role);
-    return endpoints.filter(endpoint => endpoint.priority === 'critical');
+    return endpoints.filter((endpoint) => endpoint.priority === 'critical');
   }
-  
+
   /**
    * Get base URL for client and environment
    */
   static getBaseUrl(clientId: string, environment: string): string {
     try {
       const config: ClientEndpointConfig = require(`./${clientId}/${environment}.endpoints`);
-      
+
       return config.environments[environment]?.baseUrl || '';
-      
     } catch (error) {
       console.error(`Failed to get base URL for ${clientId}-${environment}:`, error);
       return '';

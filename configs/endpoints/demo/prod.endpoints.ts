@@ -3,7 +3,7 @@ const demoDevConfig = require('./dev.endpoints');
 
 /**
  * Demo Client - Production Environment Endpoints
- * 
+ *
  * Production environment - only critical and high priority endpoints
  * More restrictive than other environments
  */
@@ -19,10 +19,10 @@ const demoProdConfig: ClientEndpointConfig = {
         .map((endpoint: any) => ({
           ...endpoint,
           // Only verified critical/high priority endpoints in prod
-          verified: endpoint.priority === 'critical' ? true : false
-        }))
-    }
-  }
+          verified: endpoint.priority === 'critical' ? true : false,
+        })),
+    },
+  },
 };
 
 module.exports = demoProdConfig;

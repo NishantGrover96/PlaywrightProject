@@ -61,7 +61,9 @@ export class ModuleTestHelper {
     return allElementsFound;
   }
 
-  static async checkResponsiveness(page: Page): Promise<{ mobile: boolean; tablet: boolean; desktop: boolean }> {
+  static async checkResponsiveness(
+    page: Page
+  ): Promise<{ mobile: boolean; tablet: boolean; desktop: boolean }> {
     const results = { mobile: true, tablet: true, desktop: true };
 
     try {
@@ -91,12 +93,18 @@ export class ModuleTestHelper {
     return results;
   }
 
-  static async validateAccessibility(page: Page): Promise<{ violations: number; warnings: number }> {
+  static async validateAccessibility(
+    page: Page
+  ): Promise<{ violations: number; warnings: number }> {
     try {
       // Basic accessibility checks
       const missingAlt = await page.locator('img:not([alt])').count();
-      const missingLabels = await page.locator('input:not([aria-label]):not([aria-labelledby])').count();
-      const lowContrast = await page.locator('[style*="color: #ccc"], [style*="color: #ddd"]').count();
+      const missingLabels = await page
+        .locator('input:not([aria-label]):not([aria-labelledby])')
+        .count();
+      const lowContrast = await page
+        .locator('[style*="color: #ccc"], [style*="color: #ddd"]')
+        .count();
 
       const violations = missingAlt + missingLabels;
       const warnings = lowContrast;
@@ -124,7 +132,7 @@ export class ModuleTestHelper {
       let searchInput = null;
       for (const selector of searchSelectors) {
         const input = page.locator(selector);
-        if (await input.count() > 0) {
+        if ((await input.count()) > 0) {
           searchInput = input.first();
           break;
         }
@@ -147,24 +155,29 @@ export class ModuleTestHelper {
     }
   }
 
-  static async validateTableFunctionality(page: Page): Promise<{ 
-    hasTable: boolean; 
-    rowCount: number; 
-    hasSorting: boolean; 
-    hasPagination: boolean 
+  static async validateTableFunctionality(page: Page): Promise<{
+    hasTable: boolean;
+    rowCount: number;
+    hasSorting: boolean;
+    hasPagination: boolean;
   }> {
     try {
-      const tableExists = await page.locator('table, [class*="table"]').count() > 0;
-      
+      const tableExists = (await page.locator('table, [class*="table"]').count()) > 0;
+
       if (!tableExists) {
         return { hasTable: false, rowCount: 0, hasSorting: false, hasPagination: false };
       }
 
-      const rowCount = await page.locator('tbody tr, [class*="row"]:not([class*="header"])').count();
-      const hasSorting = await page.locator('th[class*="sort"], [class*="sortable"]').count() > 0;
-      const hasPagination = await page.locator('[class*="pagination"], [class*="pager"]').count() > 0;
+      const rowCount = await page
+        .locator('tbody tr, [class*="row"]:not([class*="header"])')
+        .count();
+      const hasSorting = (await page.locator('th[class*="sort"], [class*="sortable"]').count()) > 0;
+      const hasPagination =
+        (await page.locator('[class*="pagination"], [class*="pager"]').count()) > 0;
 
-      console.log(`Table validation - Rows: ${rowCount}, Sorting: ${hasSorting}, Pagination: ${hasPagination}`);
+      console.log(
+        `Table validation - Rows: ${rowCount}, Sorting: ${hasSorting}, Pagination: ${hasPagination}`
+      );
 
       return { hasTable: true, rowCount, hasSorting, hasPagination };
     } catch (error) {
@@ -180,17 +193,20 @@ export class ModuleTestHelper {
     hasSubmit: boolean;
   }> {
     try {
-      const formExists = await page.locator('form, [class*="form"]').count() > 0;
-      
+      const formExists = (await page.locator('form, [class*="form"]').count()) > 0;
+
       if (!formExists) {
         return { hasForm: false, inputCount: 0, hasValidation: false, hasSubmit: false };
       }
 
       const inputCount = await page.locator('input, textarea, select').count();
-      const hasValidation = await page.locator('[class*="required"], [required]').count() > 0;
-      const hasSubmit = await page.locator('button[type="submit"], input[type="submit"]').count() > 0;
+      const hasValidation = (await page.locator('[class*="required"], [required]').count()) > 0;
+      const hasSubmit =
+        (await page.locator('button[type="submit"], input[type="submit"]').count()) > 0;
 
-      console.log(`Form validation - Inputs: ${inputCount}, Validation: ${hasValidation}, Submit: ${hasSubmit}`);
+      console.log(
+        `Form validation - Inputs: ${inputCount}, Validation: ${hasValidation}, Submit: ${hasSubmit}`
+      );
 
       return { hasForm: true, inputCount, hasValidation, hasSubmit };
     } catch (error) {
@@ -207,9 +223,11 @@ export class ModuleTestHelper {
   }> {
     try {
       const performanceMetrics = await page.evaluate(() => {
-        const perfData = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+        const perfData = performance.getEntriesByType(
+          'navigation'
+        )[0] as PerformanceNavigationTiming;
         const paintEntries = performance.getEntriesByType('paint');
-        const fcp = paintEntries.find(entry => entry.name === 'first-contentful-paint');
+        const fcp = paintEntries.find((entry) => entry.name === 'first-contentful-paint');
 
         return {
           loadTime: perfData.loadEventEnd - perfData.loadEventStart,
