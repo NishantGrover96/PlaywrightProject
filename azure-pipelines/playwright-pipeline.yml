@@ -1,0 +1,243 @@
+# Manual trigger only - no automatic triggers
+trigger: none
+
+# Disable PR triggers to avoid duplicate runs
+pr: none
+
+parameters:
+- name: client
+  displayName: 'Select Client'
+  type: string
+  default: 'demo'
+  values:
+    - demo
+    - hankook
+
+- name: environment
+  displayName: 'Select Environment'
+  type: string
+  default: 'uat'
+  values:
+    - dev
+    - uat
+    - test
+    - prod
+    - verified
+
+- name: testSuite
+  displayName: 'Test Suite'
+  type: string
+  default: 'smoke'
+  values:
+    - all
+    - smoke
+    - regression
+    - e2e
+
+- name: browser
+  displayName: 'Browser'
+  type: string
+  default: 'chrome'
+  values:
+    - chrome
+    - firefox
+    - webkit
+    - all
+
+- name: workers
+  displayName: 'Parallel Workers'
+  type: number
+  default: 2
+  values:
+    - 1
+    - 2
+    - 4
+
+variables:
+  client: ${{ parameters.client }}
+  environment: ${{ parameters.environment }}
+  testSuite: ${{ parameters.testSuite }}
+  browser: ${{ parameters.browser }}
+  workers: ${{ parameters.workers }}
+  # Build versioning
+  buildVersion: '$(Build.BuildNumber)'
+  artifactName: 'playwright-results-$(client)-$(environment)-$(buildVersion)'
+
+jobs:
+- job: ValidateEnvironment
+  displayName: 'Validate Environment & Prerequisites'
+  pool:
+    vmImage: 'ubuntu-latest'
+  
+  steps:
+  - script: |
+      echo "🔍 Validating Configuration"
+      echo "Client: $(client)"
+      echo "Environment: $(environment)"
+      echo "Test Suite: $(testSuite)"
+      echo "Browser: $(browser)"
+      echo "Workers: $(workers)"
+      
+      # Validate config file exists
+      CONFIG_FILE="configs/environments/playwright.config.$(environment).ts"
+      if [ ! -f "$CONFIG_FILE" ]; then
+        echo "❌ Error: Config file $CONFIG_FILE not found!"
+        exit 1
+      fi
+      echo "✅ Config file found: $CONFIG_FILE"
+      
+      # Validate client in config
+      if ! grep -q "$(client)" configs/clients/client-modules-access.ts; then
+        echo "❌ Error: Client '$(client)' not found in client-modules-access.ts"
+        exit 1
+      fi
+      echo "✅ Client '$(client)' validated"
+    displayName: 'Validate Configuration'
+
+- job: RunPlaywrightTests
+  displayName: 'Playwright Tests - $(client) - $(environment)'
+  dependsOn: ValidateEnvironment
+  pool:
+    vmImage: 'ubuntu-latest'
+  timeoutInMinutes: 60
+  
+  steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '18.x'
+    displayName: 'Install Node.js'
+
+  - task: Cache@2
+    inputs:
+      key: 'npm | "$(Agent.OS)" | package-lock.json'
+      restoreKeys: |
+        npm | "$(Agent.OS)"
+      path: ~/.npm
+    displayName: 'Cache npm dependencies'
+
+  - script: |
+      npm ci --prefer-offline --no-audit
+    displayName: 'Install Dependencies'
+
+  - script: |
+      npx playwright install --with-deps
+    displayName: 'Install Playwright Browsers'
+
+  - script: |
+      echo "🚀 Running Playwright Tests"
+      echo "Client: $(client)"
+      echo "Environment: $(environment)" 
+      echo "Test Suite: $(testSuite)"
+      echo "Browser: $(browser)"
+      echo "Workers: $(workers)"
+      
+      # Set environment variables for Playwright
+      export CLIENT=$(client)
+      export ENV=$(environment)
+      export CI=true
+      
+      # Use the appropriate environment config
+      CONFIG_FILE="configs/environments/playwright.config.$(environment).ts"
+      
+      # Build test command based on test suite
+      case "$(testSuite)" in
+        "smoke")
+          TEST_PATH="tests/smoke/"
+          ;;
+        "regression") 
+          TEST_PATH="tests/regression/"
+          ;;
+        "e2e")
+          TEST_PATH="tests/e2e/"
+          ;;
+        "all")
+          TEST_PATH=""
+          ;;
+        *)
+          TEST_PATH="tests/$(testSuite)/"
+          ;;
+      esac
+      
+      # Build project filter based on browser and client
+      if [ "$(browser)" = "all" ]; then
+        if [ "$(testSuite)" = "smoke" ]; then
+          # For smoke tests, run on all browsers
+          PROJECT_FILTER="--project=$(client)-chrome --project=$(client)-firefox --project=$(client)-webkit"
+        else
+          # For full tests, run on chrome only
+          PROJECT_FILTER="--project=$(client)-chrome"
+        fi
+      else
+        PROJECT_FILTER="--project=$(client)-$(browser)"
+      fi
+      
+      # Run Playwright tests with the environment-specific config
+      npx playwright test $TEST_PATH \
+        --config=$CONFIG_FILE \
+        $PROJECT_FILTER \
+        --workers=$(workers) \
+        --reporter=html,junit,json \
+        --timeout=90000 \
+        --max-failures=10
+    displayName: 'Execute Playwright Tests'
+    env:
+      CLIENT: $(client)
+      ENV: $(environment)
+      CI: true
+    continueOnError: true
+
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: '**/junit-results.xml'
+      testRunTitle: 'Playwright Tests - $(client) - $(environment) - $(testSuite) - $(buildVersion)'
+      mergeTestResults: true
+      failTaskOnFailedTests: false
+    condition: always()
+    displayName: 'Publish Test Results'
+
+  - task: PublishHtmlReport@1
+    inputs:
+      reportDir: 'playwright-report'
+      tabName: 'Playwright Report - $(client) - $(environment)'
+    condition: always()
+    displayName: 'Publish HTML Report'
+
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: 'test-results'
+      artifact: '$(artifactName)'
+      publishLocation: 'pipeline'
+    condition: always()
+    displayName: 'Upload Test Artifacts'
+
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: 'playwright-report'
+      artifact: 'html-report-$(client)-$(environment)-$(buildVersion)'
+      publishLocation: 'pipeline'
+    condition: always()
+    displayName: 'Upload HTML Report'
+
+  - script: |
+      echo "📊 Test Execution Summary"
+      echo "Client: $(client)"
+      echo "Environment: $(environment)"
+      echo "Test Suite: $(testSuite)"
+      echo "Browser: $(browser)"
+      echo "Workers: $(workers)"
+      echo "Config Used: configs/environments/playwright.config.$(environment).ts"
+      echo "Build Version: $(buildVersion)"
+      
+      # Check if tests failed
+      if [ -f "test-results.json" ]; then
+        FAILED_TESTS=$(cat test-results.json | grep -o '"errors":[0-9]*' | cut -d':' -f2 || echo "0")
+        if [ "$FAILED_TESTS" -gt "0" ]; then
+          echo "❌ $FAILED_TESTS test(s) failed"
+          exit 1
+        else
+          echo "✅ All tests passed"
+        fi
+      fi
+    displayName: 'Test Summary & Validation'
+    condition: always()
