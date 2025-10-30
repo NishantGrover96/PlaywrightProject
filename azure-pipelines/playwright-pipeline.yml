@@ -196,12 +196,13 @@ jobs:
     condition: always()
     displayName: 'Publish Test Results'
 
-  - task: PublishHtmlReport@1
+  - task: PublishPipelineArtifact@1
     inputs:
-      reportDir: 'playwright-report'
-      tabName: 'Playwright Report - $(client) - $(environment)'
+      targetPath: 'playwright-report'
+      artifact: 'html-report-$(client)-$(environment)-$(buildVersion)'
+      publishLocation: 'pipeline'
     condition: always()
-    displayName: 'Publish HTML Report'
+    displayName: 'Publish HTML Report as Artifact'
 
   - task: PublishPipelineArtifact@1
     inputs:
@@ -210,14 +211,6 @@ jobs:
       publishLocation: 'pipeline'
     condition: always()
     displayName: 'Upload Test Artifacts'
-
-  - task: PublishPipelineArtifact@1
-    inputs:
-      targetPath: 'playwright-report'
-      artifact: 'html-report-$(client)-$(environment)-$(buildVersion)'
-      publishLocation: 'pipeline'
-    condition: always()
-    displayName: 'Upload HTML Report'
 
   - script: |
       echo "📊 Test Execution Summary"
