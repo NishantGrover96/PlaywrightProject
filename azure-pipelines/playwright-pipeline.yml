@@ -199,9 +199,28 @@ jobs:
         --config=$CONFIG_FILE \
         $PROJECT_FILTER \
         --workers=$(workers) \
-        --reporter=html:playwright-report,junit:test-results/junit-results.xml,json:test-results/results.json \
+        --reporter=html,junit,json \
         --timeout=90000 \
         --max-failures=10
+      
+      # Move reports to expected locations
+      if [ -d "playwright-report" ] && [ ! -d "playwright-report/index.html" ]; then
+        echo "✅ HTML report already in correct location"
+      fi
+      
+      # Ensure junit results are in test-results directory
+      if [ -f "results.xml" ]; then
+        mkdir -p test-results
+        mv results.xml test-results/junit-results.xml
+        echo "✅ Moved JUnit results to test-results/"
+      fi
+      
+      # Ensure json results are in test-results directory  
+      if [ -f "results.json" ]; then
+        mkdir -p test-results
+        mv results.json test-results/results.json
+        echo "✅ Moved JSON results to test-results/"
+      fi
     displayName: 'Execute Playwright Tests'
     env:
       CLIENT: $(client)
