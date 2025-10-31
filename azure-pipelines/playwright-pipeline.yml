@@ -203,24 +203,57 @@ jobs:
         --timeout=90000 \
         --max-failures=10
       
+      echo "📁 Checking Playwright output after test execution..."
+      ls -la || true
+      
       # Move reports to expected locations
-      if [ -d "playwright-report" ] && [ ! -d "playwright-report/index.html" ]; then
-        echo "✅ HTML report already in correct location"
+      if [ -d "playwright-report" ]; then
+        echo "✅ HTML report found in playwright-report/"
+        ls -la playwright-report/ | head -10
+      else
+        echo "❌ No playwright-report directory found"
       fi
       
-      # Ensure junit results are in test-results directory
+      # Handle JUnit results
+      mkdir -p test-results
       if [ -f "results.xml" ]; then
-        mkdir -p test-results
         mv results.xml test-results/junit-results.xml
-        echo "✅ Moved JUnit results to test-results/"
+        echo "✅ Moved JUnit results: results.xml → test-results/junit-results.xml"
+      elif [ -f "test-results.xml" ]; then
+        mv test-results.xml test-results/junit-results.xml
+        echo "✅ Moved JUnit results: test-results.xml → test-results/junit-results.xml"
+      else
+        echo "⚠️ No JUnit results file found (results.xml or test-results.xml)"
+        # Create placeholder
+        echo '<?xml version="1.0" encoding="UTF-8"?><testsuites><testsuite name="Playwright" tests="0" failures="0" time="0"></testsuite></testsuites>' > test-results/junit-results.xml
       fi
       
-      # Ensure json results are in test-results directory  
+      # Handle JSON results
       if [ -f "results.json" ]; then
-        mkdir -p test-results
         mv results.json test-results/results.json
-        echo "✅ Moved JSON results to test-results/"
+        echo "✅ Moved JSON results: results.json → test-results/results.json"
+      elif [ -f "test-results.json" ]; then
+        mv test-results.json test-results/results.json
+        echo "✅ Moved JSON results: test-results.json → test-results/results.json"
+      else
+        echo "⚠️ No JSON results file found (results.json or test-results.json)"
+        # Create placeholder
+        echo '{"suites": [], "errors": [], "stats": {"startTime": "'$(date -Iseconds)'", "duration": 0}}' > test-results/results.json
       fi
+      
+      # Also copy any screenshots, videos, traces to test-results
+      if [ -d "test-results" ] && [ "$(find . -name '*.png' -o -name '*.webm' -o -name '*.zip' | wc -l)" -gt 0 ]; then
+        echo "📸 Copying test artifacts (screenshots, videos, traces)..."
+        find . -maxdepth 2 -name '*.png' -exec cp {} test-results/ \; 2>/dev/null || true
+        find . -maxdepth 2 -name '*.webm' -exec cp {} test-results/ \; 2>/dev/null || true
+        find . -maxdepth 2 -name '*.zip' -exec cp {} test-results/ \; 2>/dev/null || true
+      fi
+      
+      echo "📊 Final directory contents:"
+      echo "test-results/:"
+      ls -la test-results/ || echo "test-results directory empty or missing"
+      echo "playwright-report/:"
+      ls -la playwright-report/ || echo "playwright-report directory empty or missing"
     displayName: 'Execute Playwright Tests'
     env:
       CLIENT: $(client)
@@ -230,24 +263,41 @@ jobs:
 
   - script: |
       echo "📁 Checking output directories..."
+      echo "Current directory contents:"
       ls -la || true
-      echo "Test results directory:"
-      ls -la test-results/ || echo "test-results directory not found"
-      echo "Playwright report directory:"
-      ls -la playwright-report/ || echo "playwright-report directory not found"
+      echo ""
+      echo "test-results directory:"
+      if [ -d "test-results" ]; then
+        ls -la test-results/ 
+        echo "test-results size: $(du -sh test-results/ 2>/dev/null || echo 'unknown')"
+      else
+        echo "test-results directory not found"
+      fi
+      echo ""
+      echo "playwright-report directory:"
+      if [ -d "playwright-report" ]; then
+        ls -la playwright-report/ | head -10
+        echo "playwright-report size: $(du -sh playwright-report/ 2>/dev/null || echo 'unknown')"
+      else
+        echo "playwright-report directory not found"
+      fi
       
-      # Create missing directories if tests ran but directories don't exist
+      # Create missing directories with meaningful content if needed
       if [ ! -d "playwright-report" ]; then
         echo "🔧 Creating placeholder playwright-report directory..."
         mkdir -p playwright-report
-        echo "<html><body><h1>No HTML report generated</h1><p>Tests may not have run or failed to generate report.</p></body></html>" > playwright-report/index.html
+        echo "<html><body><h1>No HTML report generated</h1><p>Tests may not have run or failed to generate report.</p><p>Check pipeline logs for details.</p></body></html>" > playwright-report/index.html
       fi
       
       if [ ! -d "test-results" ]; then
         echo "🔧 Creating placeholder test-results directory..."
         mkdir -p test-results
-        echo "{\"suites\": [], \"errors\": []}" > test-results/results.json
+        echo '{"suites": [], "errors": [], "stats": {"startTime": "'$(date -Iseconds)'", "duration": 0}}' > test-results/results.json
+        echo '<?xml version="1.0" encoding="UTF-8"?><testsuites><testsuite name="Playwright" tests="0" failures="0" time="0"></testsuite></testsuites>' > test-results/junit-results.xml
       fi
+      
+      echo ""
+      echo "📊 Final artifact preparation complete"
     displayName: 'Debug: Check Output Directories'
     condition: always()
 
