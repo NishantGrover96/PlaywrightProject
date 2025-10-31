@@ -109,14 +109,30 @@ jobs:
 
   - task: Cache@2
     inputs:
-      key: 'npm | "$(Agent.OS)" | package-lock.json'
+      key: 'npm | "$(Agent.OS)" | package.json'
       restoreKeys: |
         npm | "$(Agent.OS)"
+        npm
       path: ~/.npm
     displayName: 'Cache npm dependencies'
+    continueOnError: true
 
   - script: |
-      npm ci --prefer-offline --no-audit
+      # Check what package manager files exist
+      echo "📦 Checking package manager files..."
+      ls -la package*.json || echo "No package files found"
+      
+      # Install dependencies with appropriate command
+      if [ -f "package-lock.json" ]; then
+        echo "Using npm ci (package-lock.json found)"
+        npm ci --prefer-offline --no-audit
+      elif [ -f "yarn.lock" ]; then
+        echo "Using yarn install (yarn.lock found)"
+        yarn install --frozen-lockfile
+      else
+        echo "Using npm install (no lock file found)"
+        npm install --prefer-offline --no-audit
+      fi
     displayName: 'Install Dependencies'
 
   - script: |
