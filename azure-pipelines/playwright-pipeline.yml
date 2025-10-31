@@ -140,6 +140,13 @@ jobs:
     displayName: 'Install Playwright Browsers'
 
   - script: |
+      echo "📁 Creating output directories..."
+      mkdir -p test-results
+      mkdir -p playwright-report
+      echo "✅ Directories created"
+    displayName: 'Prepare Output Directories'
+
+  - script: |
       echo "🚀 Running Playwright Tests"
       echo "Client: $(client)"
       echo "Environment: $(environment)" 
@@ -194,8 +201,7 @@ jobs:
         --workers=$(workers) \
         --reporter=html:playwright-report,junit:test-results/junit-results.xml,json:test-results/results.json \
         --timeout=90000 \
-        --max-failures=10 \
-        --output-dir=test-results
+        --max-failures=10
     displayName: 'Execute Playwright Tests'
     env:
       CLIENT: $(client)
