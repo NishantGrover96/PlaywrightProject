@@ -95,7 +95,7 @@ jobs:
     displayName: 'Validate Configuration'
 
 - job: RunPlaywrightTests
-  displayName: 'Playwright Tests - $(client) - $(environment)'
+  displayName: 'Playwright Tests - ${{ parameters.client }} - ${{ parameters.environment }}'
   dependsOn: ValidateEnvironment
   pool:
     vmImage: 'ubuntu-latest'
