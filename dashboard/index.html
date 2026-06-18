@@ -695,6 +695,7 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
         <option value="all" selected>All Modules</option>
         <option value="coop">Coop</option>
         <option value="popshop">PopShop</option>
+        <option value="engage-ads">EngageAds</option>
       </select>
     </div>
 
@@ -728,7 +729,7 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
         <label class="checkbox-item" data-value="popshop-new-order" data-module="popshop" style="border-top:1px solid var(--border);margin-top:6px;padding-top:6px;">
           <input type="checkbox" value="popshop-new-order" /> <span class="cb-label">New Order</span> <span class="cb-tag">dealer</span>
         </label>
-        <label class="checkbox-item" data-value="engage-ads-view-package" style="border-top:1px solid var(--border);margin-top:6px;padding-top:6px;">
+        <label class="checkbox-item" data-value="engage-ads-view-package" data-module="engage-ads" style="border-top:1px solid var(--border);margin-top:6px;padding-top:6px;">
           <input type="checkbox" value="engage-ads-view-package" /> <span class="cb-label">EngageAds — View Package</span> <span class="cb-tag">engage-ads</span>
         </label>
       </div>
@@ -1529,6 +1530,8 @@ const FEATURE_FOLDERS = {
   "coop-admin-reports":           "tests/playwright/specs/coop/feature-admin-reports",
   "coop-api-submit-claim":        "tests/api/coop/feature-submit-claim",
   "coop-api-submit-preapproval":  "tests/api/coop/feature-submit-preapproval",
+  "popshop-new-order":            "tests/playwright/specs/popshop/feature-new-order",
+  "engage-ads-view-package":      "tests/playwright/specs/engage-ads/feature-view-package",
 };
 const TIER_TAGS = { smoke: "@smoke", regression: "@regression", e2e: "@e2e" };
 
@@ -1746,6 +1749,9 @@ const SUITE_LABELS = {
   "COOP-DD-CA":      "Coop Activity Tab",
   "COOP-DD-RP":      "Reports Tab",
   "COOP-ADMIN":      "Admin Reports",
+  // EngageAds
+  "ENGAGEADS-TC":    "EngageAds — View Package",
+  "ENGAGEADS":       "EngageAds",
 };
 
 function extractSuite(name) {
