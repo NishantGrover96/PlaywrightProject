@@ -82,7 +82,9 @@ function broadcast(type, payload) {
       if (typeof res.flush === "function") res.flush();
       if (res.socket && typeof res.socket.flush === "function") res.socket.flush();
       return true;
-    } catch { return false; }
+    } catch (e) {
+      return false;
+    }
   });
 }
 
@@ -91,9 +93,11 @@ function parseLine(raw) {
   const line = raw.replace(/\x1B\[[0-9;]*m/g, "").replace(/\r/g, "").trim();
   if (!line) return { kind: "line", text: raw };
 
-  const passRx = /^\s*ok\s+(\d+)\s+\[.*?\]\s+[›>]\s+.*[›>]\s+(.*?)\s+\((\S+)\)\s*$/;
-  const failRx = /^\s*x\s+(\d+)\s+\[.*?\]\s+[›>]\s+.*[›>]\s+(.*?)\s+\((\S+)\)\s*$/;
-  const skipRx = /^\s*[-]\s+(\d+)\s+\[.*?\]\s+[›>]\s+.*[›>]\s+(.*?)(\s+\(\S+\))?\s*$/;
+  // Playwright uses ✔/✓/ok for pass, ✘/✗/x for fail, - for skip
+  // Also handle Unicode arrows › and ASCII >
+  const passRx = /^\s*[✔✓ok]+\s+(\d+)\s+\[.*?\]\s+[›>]\s+.*[›>]\s+(.*?)\s+\((\S+)\)\s*$/;
+  const failRx = /^\s*[✘✗x×]+\s+(\d+)\s+\[.*?\]\s+[›>]\s+.*[›>]\s+(.*?)\s+\((\S+)\)\s*$/;
+  const skipRx = /^\s*[-–]\s+(\d+)\s+\[.*?\]\s+[›>]\s+.*[›>]\s+(.*?)(\s+\(\S+\))?\s*$/;
   const summaryPassRx = /(\d+)\s+passed\s+\(([^)]+)\)/;
   const summaryFailRx = /(\d+)\s+failed/;
   const summarySkipRx = /(\d+)\s+skipped/;
@@ -169,10 +173,20 @@ function runTests(config) {
 
   broadcast("start", { config, args: ["npx playwright"].concat(args).join(" "), startedAt });
   console.log(`[dashboard] Run: npx playwright ${args.join(" ")}`);
+  console.log(`[dashboard] Features: ${JSON.stringify(config.features || [])}`);
+  console.log(`[dashboard] Tiers: ${JSON.stringify(config.tiers || [])}`);
 
   // Use node.exe + playwright cli.js directly with shell:false
   // This bypasses CMD.EXE for reliable stdout/stderr capture on Windows
   const playwrightCli = path.join(ROOT_DIR, "node_modules", "@playwright", "test", "cli.js");
+  
+  // Check if playwright CLI exists
+  if (!fs.existsSync(playwrightCli)) {
+    const error = `Playwright CLI not found at: ${playwrightCli}. Run: npm install`;
+    console.error(`[dashboard] ERROR: ${error}`);
+    broadcast("error", { message: error });
+    return { ok: false, error };
+  }
 
   const proc = spawn(process.execPath, [playwrightCli, ...args], {
     cwd: ROOT_DIR,

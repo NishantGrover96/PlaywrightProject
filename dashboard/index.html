@@ -687,35 +687,46 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
       </div>
     </div>
 
+    <!-- Module & Features -->
+    <div>
+      <div class="section-title">Module</div>
+      <label class="field-label" for="sel-module">Select Module</label>
+      <select id="sel-module" onchange="onModuleChange()">
+        <option value="all" selected>All Modules</option>
+        <option value="coop">Coop</option>
+        <option value="popshop">PopShop</option>
+      </select>
+    </div>
+
     <!-- Features -->
     <div>
       <div class="section-title">Features</div>
       <div class="checkbox-group" id="feature-group">
-        <label class="checkbox-item checked" data-value="all">
+        <label class="checkbox-item checked" data-value="all" data-module="all">
           <input type="checkbox" value="all" checked /> <span class="cb-label">All Features</span>
         </label>
         <!-- Co-op → Dealer -->
-        <label class="checkbox-item" data-value="coop-submit-claim" style="border-top:1px solid var(--border);margin-top:6px;padding-top:6px;">
-          <input type="checkbox" value="coop-submit-claim" /> <span class="cb-label">Coop — Submit Claim</span> <span class="cb-tag">coop</span>
+        <label class="checkbox-item" data-value="coop-submit-claim" data-module="coop" style="border-top:1px solid var(--border);margin-top:6px;padding-top:6px;">
+          <input type="checkbox" value="coop-submit-claim" /> <span class="cb-label">Submit Claim</span> <span class="cb-tag">dealer</span>
         </label>
-        <label class="checkbox-item" data-value="coop-submit-preapproval">
-          <input type="checkbox" value="coop-submit-preapproval" /> <span class="cb-label">Coop — Submit Preapproval</span> <span class="cb-tag">coop</span>
+        <label class="checkbox-item" data-value="coop-submit-preapproval" data-module="coop">
+          <input type="checkbox" value="coop-submit-preapproval" /> <span class="cb-label">Submit Preapproval</span> <span class="cb-tag">dealer</span>
         </label>
-        <label class="checkbox-item" data-value="coop-dealer-dashboard">
-          <input type="checkbox" value="coop-dealer-dashboard" /> <span class="cb-label">Coop — Dealer Dashboard</span> <span class="cb-tag">coop</span>
+        <label class="checkbox-item" data-value="coop-dealer-dashboard" data-module="coop">
+          <input type="checkbox" value="coop-dealer-dashboard" /> <span class="cb-label">Dealer Dashboard</span> <span class="cb-tag">dealer</span>
         </label>
-        <label class="checkbox-item" data-value="coop-admin-reports">
-          <input type="checkbox" value="coop-admin-reports" /> <span class="cb-label">Coop — Admin Reports</span> <span class="cb-tag" style="background:#7c3aed;color:#fff;">admin</span>
+        <label class="checkbox-item" data-value="coop-admin-reports" data-module="coop">
+          <input type="checkbox" value="coop-admin-reports" /> <span class="cb-label">Admin Reports</span> <span class="cb-tag" style="background:#7c3aed;color:#fff;">admin</span>
         </label>
         <!-- Co-op → API -->
-        <label class="checkbox-item" data-value="coop-api-submit-claim" style="border-top:1px solid var(--border);margin-top:6px;padding-top:6px;">
-          <input type="checkbox" value="coop-api-submit-claim" /> <span class="cb-label">Coop API — Submit Claim</span> <span class="cb-tag" style="background:#0891b2;color:#fff;">api</span>
+        <label class="checkbox-item" data-value="coop-api-submit-claim" data-module="coop" style="border-top:1px solid var(--border);margin-top:6px;padding-top:6px;">
+          <input type="checkbox" value="coop-api-submit-claim" /> <span class="cb-label">API — Submit Claim</span> <span class="cb-tag" style="background:#0891b2;color:#fff;">api</span>
         </label>
-        <label class="checkbox-item" data-value="coop-api-submit-preapproval">
-          <input type="checkbox" value="coop-api-submit-preapproval" /> <span class="cb-label">Coop API — Submit Preapproval</span> <span class="cb-tag" style="background:#0891b2;color:#fff;">api</span>
+        <label class="checkbox-item" data-value="coop-api-submit-preapproval" data-module="coop">
+          <input type="checkbox" value="coop-api-submit-preapproval" /> <span class="cb-label">API — Submit Preapproval</span> <span class="cb-tag" style="background:#0891b2;color:#fff;">api</span>
         </label>
-        <label class="checkbox-item" data-value="popshop-new-order" style="border-top:1px solid var(--border);margin-top:6px;padding-top:6px;">
-          <input type="checkbox" value="popshop-new-order" /> <span class="cb-label">PopShop — New Order</span> <span class="cb-tag">popshop</span>
+        <label class="checkbox-item" data-value="popshop-new-order" data-module="popshop" style="border-top:1px solid var(--border);margin-top:6px;padding-top:6px;">
+          <input type="checkbox" value="popshop-new-order" /> <span class="cb-label">New Order</span> <span class="cb-tag">dealer</span>
         </label>
       </div>
     </div>
@@ -1570,6 +1581,39 @@ function getRole() {
   return document.querySelector('input[name="role"]:checked')?.value || "dealer";
 }
 
+function onModuleChange() {
+  const selectedModule = document.getElementById("sel-module").value;
+  const featureGroup = document.getElementById("feature-group");
+  const allFeatures = featureGroup.querySelectorAll('.checkbox-item');
+  
+  // Show/hide features based on selected module
+  allFeatures.forEach(item => {
+    const module = item.getAttribute('data-module');
+    const value = item.getAttribute('data-value');
+    
+    // Always show "All Features" option
+    if (value === 'all') {
+      item.style.display = 'flex';
+      return;
+    }
+    
+    // Filter by module
+    if (selectedModule === 'all' || module === selectedModule) {
+      item.style.display = 'flex';
+    } else {
+      item.style.display = 'none';
+      // Uncheck hidden items
+      const checkbox = item.querySelector('input[type="checkbox"]');
+      if (checkbox && checkbox.checked && value !== 'all') {
+        checkbox.checked = false;
+        item.classList.remove('checked');
+      }
+    }
+  });
+  
+  updateCommandPreview();
+}
+
 function onRoleChange() {
   const role = getRole();
   // Sync checked CSS on radio labels
@@ -1584,7 +1628,11 @@ function onRoleChange() {
 
 // ── Run / Stop ─────────────────────────────────────────────────────────────
 async function runTests() {
-  if (running) return;
+  if (running) {
+    logLine("⚠ Test run already in progress", "log-err");
+    return;
+  }
+  
   const testEnv  = document.getElementById("sel-test-env").value;
   const role     = getRole();
   const username = document.getElementById("inp-user").value.trim();
@@ -1592,21 +1640,43 @@ async function runTests() {
   const features = getSelectedValues("feature-group");
   const tiers    = getSelectedValues("tier-group");
 
+  // Validation
+  if (features.length === 0 || tiers.length === 0) {
+    logLine("⚠ Please select at least one feature and one test tier", "log-err");
+    return;
+  }
+
   switchTab("console");
+  logLine(`→ Starting test run...`, "log-info");
+  logLine(`  Features: ${features.join(", ")}`, "log-dim");
+  logLine(`  Tiers: ${tiers.join(", ")}`, "log-dim");
 
   const baseUrl  = document.getElementById("inp-base-url")?.value?.trim() || "";
   const payload  = { testEnv, baseUrl: baseUrl || undefined, role, features, tiers };
   if (username) payload.username = username;
   if (password) payload.password = password;
 
-  const res = await fetch("/api/run", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
-  const data = await res.json();
-  if (!data.ok) {
-    logLine(`⚠ ${data.error}`, "log-err");
+  try {
+    const res = await fetch("/api/run", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    
+    if (!res.ok) {
+      logLine(`⚠ Server returned error ${res.status}: ${res.statusText}`, "log-err");
+      return;
+    }
+    
+    const data = await res.json();
+    if (!data.ok) {
+      logLine(`⚠ ${data.error}`, "log-err");
+    } else {
+      logLine(`✓ Test execution started (PID: ${data.pid || 'unknown'})`, "log-pass");
+    }
+  } catch (err) {
+    logLine(`⚠ Failed to start tests: ${err.message}`, "log-err");
+    console.error("Dashboard error:", err);
   }
 }
 
@@ -2190,16 +2260,18 @@ function renderCompareDiff(diff) {
 }
 
 // ── Patch the SSE message handler to also dispatch compare events ─────────────
-const _origHandleMessage = handleMessage;
-function handleMessage(msg) {
-  if (msg.type.startsWith("compare-")) {
-    handleCompareMessage(msg);
-    // compare-result/line also goes to console
-    if (msg.type === "compare-result" || msg.type === "line") _origHandleMessage(msg);
-    return;
-  }
-  _origHandleMessage(msg);
-}
+// Use IIFE to properly capture the original function before reassignment
+handleMessage = (function(_origHandleMessage) {
+  return function handleMessage(msg) {
+    if (msg.type.startsWith("compare-")) {
+      handleCompareMessage(msg);
+      // compare-result/line also goes to console
+      if (msg.type === "compare-result" || msg.type === "line") _origHandleMessage(msg);
+      return;
+    }
+    _origHandleMessage(msg);
+  };
+})(handleMessage);
 
 // ── Patch switchTab to handle compare ────────────────────────────────────────
 const _origSwitchTab = switchTab;
