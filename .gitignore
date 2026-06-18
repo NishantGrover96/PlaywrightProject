@@ -1,12 +1,6 @@
 node_modules/
 dist/
-.env.legacy
-.env.modern
-.env.local
-.env.production
-.env.uat
-.env.testing
-.env.dev
+
 *.local.json
 tests/playwright/fixtures/.auth/
 reports/*/
@@ -17,3 +11,4 @@ blob-report/
 *.log
 .DS_Store
 Thumbs.db
+/.vs/PlayWright
