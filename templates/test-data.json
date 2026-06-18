@@ -1,0 +1,28 @@
+{
+  "users": {
+    "dealer": {
+      "email": "dealer@test.local",
+      "password": "Test@1234",
+      "dealerId": "DEALER-001"
+    },
+    "dealerB": {
+      "dealerId": "DEALER-002"
+    },
+    "admin": {
+      "email": "admin@test.local",
+      "password": "Test@1234"
+    }
+  },
+  "valid": {
+    "comment": "Replace with feature-specific valid input data"
+  },
+  "invalid": {
+    "comment": "Replace with feature-specific invalid/boundary input data"
+  },
+  "expectedStatuses": {
+    "comment": "Replace with expected status values for this feature"
+  },
+  "expectedErrors": {
+    "comment": "Replace with expected error messages for this feature"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "_readme": "Copy this file to repos.local.json and fill in YOUR local paths. repos.local.json is gitignored.",
+
+  "legacy": {
+    "root":      "{{LEGACY_WORKSPACE}}",
+    "webFolder": "{{LEGACY_WEB_FOLDER}}",
+    "_comment":  "Feature path = root\\webFolder\\Pages\\modules.{module}.moduleFolder\\modules.{module}.featureFolder",
+    "modules": {
+      "coop": {
+        "moduleFolder": "{{COOP_MODULE_FOLDER}}",
+        "featurePath":  "{{LEGACY_WORKSPACE}}\\{{LEGACY_WEB_FOLDER}}\\Pages\\{{COOP_MODULE_FOLDER}}\\{{COOP_FEATURE_FOLDER}}",
+        "services":     "{{LEGACY_WORKSPACE}}\\Libraries\\BusinessLogic\\Services",
+        "entities":     "{{LEGACY_WORKSPACE}}\\Libraries\\CommonEntity",
+        "resources":    "{{LEGACY_WORKSPACE}}\\RAL\\Resources\\Coop",
+        "scripts":      "{{LEGACY_WORKSPACE}}\\{{LEGACY_WEB_FOLDER}}\\wwwroot\\WebScripts\\{{COOP_MODULE_FOLDER}}",
+        "tests":        "{{LEGACY_WORKSPACE}}\\tests\\playwright\\coop"
+      }
+    }
+  },
+
+  "modern": {
+    "root":      "{{MODERN_WORKSPACE}}",
+    "webFolder": "{{MODERN_WEB_FOLDER}}",
+    "_comment":  "Feature path = root\\webFolder\\Controllers\\modules.{module}.moduleFolder",
+    "modules": {
+      "coop": {
+        "moduleFolder": "{{COOP_MODERN_FOLDER}}",
+        "featurePath":  "{{MODERN_WORKSPACE}}\\{{MODERN_WEB_FOLDER}}\\Controllers\\{{COOP_MODERN_FOLDER}}",
+        "services":     "{{MODERN_WORKSPACE}}\\src\\Services\\Coop",
+        "validators":   "{{MODERN_WORKSPACE}}\\src\\Validators\\Coop",
+        "entities":     "{{MODERN_WORKSPACE}}\\src\\Models\\Coop",
+        "database":     "{{MODERN_WORKSPACE}}\\src\\Data\\Repositories\\Coop"
+      }
+    }
+  }
+}

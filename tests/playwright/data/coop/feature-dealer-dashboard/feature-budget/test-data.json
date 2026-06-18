@@ -1,0 +1,99 @@
+{
+  "users": {
+    "dealer": {
+      "username": "dealer_test@example.com",
+      "password": "Test123!@#",
+      "dealerNumber": "12345",
+      "dealerSeq": 1001,
+      "encryptedDealerSeq": "ENCRYPTED_SEQ_1001",
+      "role": "Dealer"
+    },
+    "dealerB": {
+      "username": "dealer_b@example.com",
+      "password": "Test456!@#",
+      "dealerNumber": "67890",
+      "dealerSeq": 1002,
+      "encryptedDealerSeq": "ENCRYPTED_SEQ_1002",
+      "role": "Dealer"
+    },
+    "admin": {
+      "username": "admin_test@example.com",
+      "password": "Admin123!@#",
+      "role": "Admin"
+    },
+    "viewOnly": {
+      "username": "viewonly_test@example.com",
+      "password": "ViewOnly123!@#",
+      "dealerNumber": "12345",
+      "dealerSeq": 1001,
+      "encryptedDealerSeq": "ENCRYPTED_SEQ_1001",
+      "role": "ViewOnly"
+    }
+  },
+  "dealers": {
+    "valid": {
+      "dealerNumber": "12345",
+      "dealerSeq": 1001,
+      "encryptedDealerSeq": "ENCRYPTED_SEQ_1001",
+      "dealerName": "Test Dealer Inc"
+    },
+    "crossDealer": {
+      "dealerNumber": "67890",
+      "dealerSeq": 1002,
+      "encryptedDealerSeq": "ENCRYPTED_SEQ_1002"
+    }
+  },
+  "fiscalYears": {
+    "current": "2026",
+    "prior": "2025",
+    "earliest": "2024",
+    "all": ["2024", "2025", "2026"]
+  },
+  "budget": {
+    "programTypes": {
+      "standard": { "name": "Standard Co-op", "seq": 1 },
+      "premium": { "name": "Premium Co-op", "seq": 2 }
+    },
+    "expectedKpis": {
+      "totalBudgetPattern": "^\\$[\\d,]+\\.\\d{2}$",
+      "zeroValue": "$0.00"
+    },
+    "excludedCategories": [
+      "AdZone Orders",
+      "Group Shows/Sponsorships",
+      "VYC Media Plan",
+      "Digital Health Check"
+    ]
+  },
+  "urls": {
+    "budgetList": "/CoopManagement/Dealer/Budget/List",
+    "adminIndex": "/CoopManagement/dealer/AdminIndex",
+    "spentBreakdownReport": "/Reports/Coop/Budget/BudgetUtilizationReport",
+    "mediaTypeReport": "/Reports/Coop/Budget/BudgetByMediaTypeReport",
+    "productGroupReport": "/Reports/Coop/Budget/BudgetByProductGroupReport"
+  },
+  "apiEndpoints": {
+    "programType": "/CoopManagement/Dealer/budget/List/ProgramType",
+    "budgetData": "/CoopManagement/Dealer/budget/List/BudgetData",
+    "budgetUtilization": "/CoopManagement/Dealer/budget/List/BudgetUtilization",
+    "budgetUtilizationByMedia": "/CoopManagement/Dealer/budget/List/BudgetUtilizationByMedia",
+    "budgetSpentByCategory": "/CoopManagement/Dealer/budget/List/BudgetSpentByCategory"
+  },
+  "backendGatewayApi": {
+    "baseUrl": "coop/api",
+    "endpoints": {
+      "budgetRecapByProgramSaas": "coop/api/Budget/budget-recap-by-program-saas",
+      "dealerUtilizationByMedia": "coop/api/Budget/dealer-utilization-by-media",
+      "dealerUtilizationByProductGroup": "coop/api/Budget/dealer-utilization-by-product-group",
+      "dealerSpendingByCategory": "coop/api/Budget/dealer-spending-by-category",
+      "fiscalYearsByProgramSeq": "coop/api/FiscalYear/GetFiscalYearsByProgramSeq",
+      "getDealerByDealerNumberSeq": "coop/api/Dealer/GetDealerByDealerNumberSeq"
+    },
+    "notes": {
+      "httpMethod": "POST (all endpoints)",
+      "programSeqResolution": "Resolved from JWT claims on backend — not sent in request body",
+      "divisionSeqForFiscalYears": "Always 0 in modern; LINQ filters by activeDivisionSeq with no fallback (GAP-BDG-002)",
+      "mediaSpentShape": "TotalMediaSpent is shared across all items in response (GAP-BDG-001)"
+    }
+  }
+}

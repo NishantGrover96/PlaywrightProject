@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coop Dealer Dashboard — Functional Units Catalog</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+            flex-wrap: wrap;
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 15px;
+            min-width: 150px;
+        }
+        
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        .controls {
+            padding: 20px;
+            background: #ffffff;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .control-group label {
+            font-size: 0.85em;
+            color: #495057;
+            font-weight: 600;
+        }
+        
+        input[type="text"], select {
+            padding: 10px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: all 0.3s;
+            min-width: 200px;
+        }
+        
+        input[type="text"]:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            align-self: flex-end;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            padding: 20px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        
+        thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }
+        
+        th:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        th.sortable::after {
+            content: ' ⇅';
+            opacity: 0.5;
+            font-size: 0.8em;
+        }
+        
+        th.sorted-asc::after {
+            content: ' ▲';
+            opacity: 1;
+        }
+        
+        th.sorted-desc::after {
+            content: ' ▼';
+            opacity: 1;
+        }
+        
+        tbody tr {
+            border-bottom: 1px solid #e9ecef;
+            transition: all 0.2s;
+        }
+        
+        tbody tr:hover {
+            background: #f8f9fa;
+            transform: scale(1.01);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        td {
+            padding: 15px;
+            vertical-align: top;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .badge-ui { background: #e3f2fd; color: #1976d2; }
+        .badge-dataentry { background: #f3e5f5; color: #7b1fa2; }
+        .badge-businesslogic { background: #fff3e0; color: #f57c00; }
+        .badge-workflow { background: #e8f5e9; color: #388e3c; }
+        .badge-datapersistence { background: #fce4ec; color: #c2185b; }
+        .badge-security { background: #ffebee; color: #c62828; }
+        
+        .badge-critical { background: #b71c1c; color: white; }
+        .badge-high { background: #d84315; color: white; }
+        .badge-medium { background: #f57c00; color: white; }
+        .badge-low { background: #388e3c; color: white; }
+        
+        .badge-implemented { background: #4caf50; color: white; }
+        .badge-partial { background: #ff9800; color: white; }
+        .badge-missing { background: #f44336; color: white; }
+        
+        .fu-id {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .description {
+            line-height: 1.6;
+            color: #495057;
+        }
+        
+        .location {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #6c757d;
+            background: #f8f9fa;
+            padding: 3px 6px;
+            border-radius: 3px;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 50px;
+            color: #6c757d;
+            font-size: 1.2em;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 Coop Dealer Dashboard</h1>
+            <p>Functional Units Catalog — Migration Analysis</p>
+        </header>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalCount">46</div>
+                <div class="stat-label">Total Functional Units</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="criticalCount">6</div>
+                <div class="stat-label">Critical Risk</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="highCount">10</div>
+                <div class="stat-label">High Risk</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="implementedCount">0</div>
+                <div class="stat-label">Verified Implemented</div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label for="searchInput">🔍 Search</label>
+                <input type="text" id="searchInput" placeholder="Search by ID, title, or description...">
+            </div>
+            <div class="control-group">
+                <label for="categoryFilter">Category</label>
+                <select id="categoryFilter">
+                    <option value="">All Categories</option>
+                    <option value="UI">UI</option>
+                    <option value="DataEntry">Data Entry</option>
+                    <option value="BusinessLogic">Business Logic</option>
+                    <option value="Workflow">Workflow</option>
+                    <option value="DataPersistence">Data Persistence</option>
+                    <option value="Security">Security</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="riskFilter">Risk Level</label>
+                <select id="riskFilter">
+                    <option value="">All Risk Levels</option>
+                    <option value="Critical">Critical</option>
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="statusFilter">Status</label>
+                <select id="statusFilter">
+                    <option value="">All Statuses</option>
+                    <option value="Implemented">Implemented</option>
+                    <option value="Partial">Partial</option>
+                    <option value="Missing">Missing</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" onclick="resetFilters()">Reset Filters</button>
+        </div>
+        
+        <div class="table-container">
+            <table id="fuTable">
+                <thead>
+                    <tr>
+                        <th class="sortable" data-column="id">FU ID</th>
+                        <th class="sortable" data-column="title">Title</th>
+                        <th class="sortable" data-column="category">Category</th>
+                        <th class="sortable" data-column="risk">Risk</th>
+                        <th class="sortable" data-column="location">Legacy Location</th>
+                        <th class="sortable" data-column="status">Modern Status</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Data will be inserted by JavaScript -->
+                </tbody>
+            </table>
+            <div id="noResults" class="no-results" style="display: none;">
+                No functional units match your filter criteria.
+            </div>
+        </div>
+        
+        <footer>
+            <p>Generated on 2026-06-18 | Coop Dealer Dashboard Feature | DealerPlatform.QA</p>
+        </footer>
+    </div>
+    
+    <script>
+        const functionalUnits = [
+            { id: 'COOP-FU-DD-001', title: 'Role-Based Page Redirect on Load', category: 'UI', risk: 'Critical', location: 'Index.cshtml.cs:OnGet()', status: 'Missing', description: 'On page load, check user roles and redirect admin users to AdminIndex while allowing dealer/agency users to remain on Index page.' },
+            { id: 'COOP-FU-DD-002', title: 'Fiscal Year Dropdown Population', category: 'UI', risk: 'Low', location: 'Index.cshtml:LoadFiscalYears()', status: 'Partial', description: 'Populate fiscal year dropdown with available years using helper method, defaulting to current fiscal year.' },
+            { id: 'COOP-FU-DD-003', title: 'Dealer Search Form Rendering (Index)', category: 'UI', risk: 'Low', location: 'Index.cshtml', status: 'Partial', description: 'Render simple search form with fiscal year dropdown and dealer number input field for dealer/agency users.' },
+            { id: 'COOP-FU-DD-004', title: 'Admin Multi-Field Search Form Rendering', category: 'UI', risk: 'Low', location: 'AdminIndex.cshtml', status: 'Partial', description: 'Render advanced search form with multiple filter fields: dealer number, name, city, state, country, and page size.' },
+            { id: 'COOP-FU-DD-005', title: 'Agency Dealer List Table Rendering', category: 'UI', risk: 'Medium', location: 'Index.cshtml:AgencyDealerTable', status: 'Missing', description: 'For agency users, render DataTable with all dealers associated with the logged-in agency, including dealer number, name, and action links.' },
+            { id: 'COOP-FU-DD-006', title: 'Country Dropdown Population', category: 'UI', risk: 'Low', location: 'AdminIndex.cshtml.cs:LoadCountries()', status: 'Partial', description: 'Populate country dropdown using IAddressService.GetCountryByProgramSeq for program-specific country list.' },
+            { id: 'COOP-FU-DD-007', title: 'State Dropdown Cascading Population', category: 'UI', risk: 'Medium', location: 'AdminIndex.cshtml:OnCountryChange()', status: 'Missing', description: 'When country is selected, make AJAX call to populate state dropdown with states belonging to selected country using IReportService.GetStates.' },
+            { id: 'COOP-FU-DD-008', title: 'Search Results Table Rendering', category: 'UI', risk: 'Medium', location: 'AdminIndex.cshtml:ResultsTable', status: 'Partial', description: 'Render paginated search results table with columns for dealer number, name, city, state, country, and action link to detail page.' },
+            { id: 'COOP-FU-DD-009', title: 'DataTable Initialization for Agency List', category: 'UI', risk: 'Low', location: 'Index.cshtml:DataTableInit()', status: 'Missing', description: 'Initialize jQuery DataTable plugin on agency dealer list with sorting, filtering, and pagination features.' },
+            { id: 'COOP-FU-DD-010', title: 'Pagination Controls Rendering', category: 'UI', risk: 'Low', location: 'AdminIndex.cshtml:PaginationControls', status: 'Partial', description: 'Render pagination controls with first, previous, next, last buttons and page number links based on total results and page size.' },
+            
+            { id: 'COOP-FU-DD-011', title: 'Dealer Number Input Validation', category: 'DataEntry', risk: 'High', location: 'Index.cshtml.cs:ValidateDealerNumber()', status: 'Partial', description: 'Validate dealer number input: required field, maximum 15 characters, alphanumeric format. Display validation error if invalid.' },
+            { id: 'COOP-FU-DD-012', title: 'Fiscal Year Selection', category: 'DataEntry', risk: 'Low', location: 'Index.cshtml:FiscalYearDropdown', status: 'Partial', description: 'Allow user to select fiscal year from dropdown. Default to current fiscal year if not explicitly selected.' },
+            { id: 'COOP-FU-DD-013', title: 'Dealer Name Input (Admin)', category: 'DataEntry', risk: 'Low', location: 'AdminIndex.cshtml:DealerNameInput', status: 'Partial', description: 'Optional text input for dealer name in admin search. Supports partial matching.' },
+            { id: 'COOP-FU-DD-014', title: 'City Input (Admin)', category: 'DataEntry', risk: 'Low', location: 'AdminIndex.cshtml:CityInput', status: 'Partial', description: 'Optional text input for city in admin search. Supports partial matching.' },
+            { id: 'COOP-FU-DD-015', title: 'State Selection (Admin)', category: 'DataEntry', risk: 'Low', location: 'AdminIndex.cshtml:StateDropdown', status: 'Partial', description: 'Cascading dropdown for state selection. Populated based on selected country. Optional filter.' },
+            { id: 'COOP-FU-DD-016', title: 'Country Selection (Admin)', category: 'DataEntry', risk: 'Low', location: 'AdminIndex.cshtml:CountryDropdown', status: 'Partial', description: 'Dropdown for country selection. Triggers state dropdown refresh. Optional filter.' },
+            { id: 'COOP-FU-DD-017', title: 'Page Size Selection', category: 'DataEntry', risk: 'Low', location: 'AdminIndex.cshtml:PageSizeDropdown', status: 'Partial', description: 'Dropdown allowing user to select number of results per page (e.g., 10, 25, 50, 100).' },
+            { id: 'COOP-FU-DD-018', title: 'Search Button Click Handler', category: 'DataEntry', risk: 'Medium', location: 'Index.cshtml.cs:OnPostSearch()', status: 'Partial', description: 'Handle search button click: validate form inputs, construct search criteria, call appropriate service method (SearchDealers or SearchDealerswithPaging).' },
+            
+            { id: 'COOP-FU-DD-019', title: 'Dealer Lookup by Number', category: 'BusinessLogic', risk: 'High', location: 'Index.cshtml.cs:OnPostSearch()', status: 'Partial', description: 'Perform exact-match dealer lookup using IDealerService.SearchDealers with dealer number and fiscal year as criteria.' },
+            { id: 'COOP-FU-DD-020', title: 'Dealer Authorization Check (Own Dealer Only)', category: 'BusinessLogic', risk: 'Critical', location: 'Index.cshtml.cs:ValidateDealerAccess()', status: 'Missing', description: 'For dealer role users, verify that the searched dealer number matches the logged-in user\'s dealer number. Reject search if attempting to access other dealers.' },
+            { id: 'COOP-FU-DD-021', title: 'Agency-Dealer Relationship Check', category: 'BusinessLogic', risk: 'Critical', location: 'Index.cshtml.cs:ValidateAgencyAccess()', status: 'Missing', description: 'For agency role users, verify that the searched dealer is in the list of dealers associated with the agency using IMediaOnlineService.CheckDealerMediaAgency.' },
+            { id: 'COOP-FU-DD-022', title: 'Admin Unrestricted Search', category: 'BusinessLogic', risk: 'High', location: 'AdminIndex.cshtml.cs:OnPostSearch()', status: 'Partial', description: 'For admin role users, allow unrestricted search across all dealers without authorization checks. Support multi-field search criteria.' },
+            { id: 'COOP-FU-DD-023', title: 'Single-Result Auto-Redirect Logic', category: 'BusinessLogic', risk: 'High', location: 'Index.cshtml.cs:ProcessSearchResults()', status: 'Missing', description: 'If search returns exactly one dealer, automatically redirect to dealer detail page with encrypted dealer_number_seq parameter instead of showing list.' },
+            { id: 'COOP-FU-DD-024', title: 'Corporate Dealer Context Determination', category: 'BusinessLogic', risk: 'High', location: 'Index.cshtml.cs:SetCorporateContext()', status: 'Missing', description: 'Determine if dealer is corporate dealer and set CorporateDealer and IsCorporate session flags for wallet access control.' },
+            { id: 'COOP-FU-DD-025', title: 'Search Results Pagination Logic', category: 'BusinessLogic', risk: 'Medium', location: 'AdminIndex.cshtml.cs:CalculatePagination()', status: 'Partial', description: 'Calculate total pages, current page, and result ranges for paginated search results. Handle page navigation (next, previous, specific page).' },
+            { id: 'COOP-FU-DD-026', title: 'Agency Dealer List Retrieval', category: 'BusinessLogic', risk: 'Medium', location: 'Index.cshtml.cs:LoadAgencyDealers()', status: 'Missing', description: 'On page load for agency users, retrieve complete list of associated dealers using IMediaOnlineService.GetUserAgencyDealers.' },
+            { id: 'COOP-FU-DD-027', title: 'Country-State Relationship Lookup', category: 'BusinessLogic', risk: 'Low', location: 'AdminIndex.cshtml.cs:OnGetStates()', status: 'Partial', description: 'When country is selected, retrieve associated states using IReportService.GetStates filtered by country code.' },
+            { id: 'COOP-FU-DD-028', title: 'Export to Excel Generation', category: 'BusinessLogic', risk: 'Medium', location: 'AdminIndex.cshtml.cs:OnPostExportExcel()', status: 'Missing', description: 'Generate Excel file from search results with all dealer information columns. Trigger browser download of generated file.' },
+            
+            { id: 'COOP-FU-DD-029', title: 'Search Submission Flow', category: 'Workflow', risk: 'High', location: 'Index.cshtml.cs:OnPostSearch()', status: 'Partial', description: 'End-to-end search submission: validate inputs → perform authorization check → execute search → process results (redirect or display list).' },
+            { id: 'COOP-FU-DD-030', title: 'Validation Before Search', category: 'Workflow', risk: 'Medium', location: 'Index.cshtml.cs:OnPostSearch()', status: 'Partial', description: 'Before executing search, validate that all required fields are populated and meet format requirements. Return to form with error messages if validation fails.' },
+            { id: 'COOP-FU-DD-031', title: 'Redirect to Detail on Single Result', category: 'Workflow', risk: 'High', location: 'Index.cshtml.cs:ProcessSearchResults()', status: 'Missing', description: 'When search returns exactly one dealer, immediately redirect to dealer detail page (/CoopManagement/Dealer/Detail) with encrypted dealer_number_seq parameter.' },
+            { id: 'COOP-FU-DD-032', title: 'Show List on Multiple Results', category: 'Workflow', risk: 'Medium', location: 'AdminIndex.cshtml.cs:OnPostSearch()', status: 'Partial', description: 'When search returns multiple dealers, display paginated results table with links to individual dealer detail pages.' },
+            { id: 'COOP-FU-DD-033', title: 'Initial Role-Based Routing', category: 'Workflow', risk: 'Critical', location: 'Index.cshtml.cs:OnGet()', status: 'Missing', description: 'On initial page load, check user roles. If admin role detected, redirect to /CoopManagement/Dealer/AdminIndex. Otherwise, remain on Index page.' },
+            { id: 'COOP-FU-DD-034', title: 'Session Population on Dealer Selection', category: 'Workflow', risk: 'High', location: 'Index.cshtml.cs:SetDealerContext()', status: 'Missing', description: 'When dealer is selected (search or agency list click), populate 14+ session variables: DealerNumberSeq, DealerNumber, DealerType, Division, FiscalYear, MediaAgency, DealerName, City, State, Country, CorporateDealer, IsCorporate, AgencyNumber, etc.' },
+            { id: 'COOP-FU-DD-035', title: 'Encrypted Parameter Passing', category: 'Workflow', risk: 'Critical', location: 'Index.cshtml.cs:BuildDetailUrl()', status: 'Missing', description: 'When redirecting to dealer detail page, encrypt dealer_number_seq and dealer_type parameters using IEncryptDecrypt service before adding to query string.' },
+            { id: 'COOP-FU-DD-036', title: 'Breadcrumb Navigation Setup', category: 'Workflow', risk: 'Low', location: 'Index.cshtml.cs:OnGet()', status: 'Partial', description: 'Store current page URL in session as ReturnUrl to support breadcrumb navigation from detail pages back to dashboard.' },
+            
+            { id: 'COOP-FU-DD-037', title: 'Session Storage: Dealer Context (14+ Keys)', category: 'DataPersistence', risk: 'High', location: 'Index.cshtml.cs:SetDealerContext()', status: 'Missing', description: 'Store comprehensive dealer context in session: DealerNumberSeq, DealerNumber, DealerType, Division, FiscalYear, MediaAgency, DealerName, City, State, Country, CorporateDealer, IsCorporate, AgencyNumber, and other context keys.' },
+            { id: 'COOP-FU-DD-038', title: 'Session Storage: Fiscal Year', category: 'DataPersistence', risk: 'Medium', location: 'Index.cshtml.cs:OnPostSearch()', status: 'Partial', description: 'Store selected fiscal year in session to maintain context across subsequent pages in coop workflow.' },
+            { id: 'COOP-FU-DD-039', title: 'Session Storage: Return URL', category: 'DataPersistence', risk: 'Low', location: 'Index.cshtml.cs:OnGet()', status: 'Partial', description: 'Store current page URL in session ReturnUrl key to support back navigation from detail pages.' },
+            { id: 'COOP-FU-DD-040', title: 'Session Clear on Context Switch', category: 'DataPersistence', risk: 'Medium', location: 'Index.cshtml.cs:ClearDealerContext()', status: 'Missing', description: 'When switching to a different dealer or leaving coop workflow, clear all dealer-related session keys to prevent stale data.' },
+            
+            { id: 'COOP-FU-DD-041', title: 'Role-Based Access Control', category: 'Security', risk: 'Critical', location: 'Index.cshtml.cs:OnGet()', status: 'Missing', description: 'Enforce role-based access: redirect admin users to AdminIndex, allow dealer/agency users on Index. Verify user has appropriate role claims before allowing access.' },
+            { id: 'COOP-FU-DD-042', title: 'Dealer Number Authorization', category: 'Security', risk: 'Critical', location: 'Index.cshtml.cs:ValidateDealerAccess()', status: 'Missing', description: 'For dealer users, verify that logged-in dealer number matches the search target. Prevent dealers from accessing other dealers\' information.' },
+            { id: 'COOP-FU-DD-043', title: 'Agency-Dealer Relationship Verification', category: 'Security', risk: 'Critical', location: 'Index.cshtml.cs:ValidateAgencyAccess()', status: 'Missing', description: 'For agency users, verify the dealer being accessed is in the agency\'s authorized dealer list using IMediaOnlineService.CheckDealerMediaAgency. Reject unauthorized access attempts.' },
+            { id: 'COOP-FU-DD-044', title: 'Parameter Encryption', category: 'Security', risk: 'Critical', location: 'Index.cshtml.cs:BuildDetailUrl()', status: 'Missing', description: 'Encrypt sensitive parameters (dealer_number_seq, dealer_type) before passing in URL query string using IEncryptDecrypt service to prevent parameter tampering.' },
+            { id: 'COOP-FU-DD-045', title: 'Anti-Forgery Token Validation', category: 'Security', risk: 'High', location: 'Index.cshtml:FormTag', status: 'Partial', description: 'Include anti-forgery token in all POST forms and validate on server side to prevent CSRF attacks.' },
+            { id: 'COOP-FU-DD-046', title: 'User Identity Verification', category: 'Security', risk: 'Critical', location: 'Index.cshtml.cs:OnGet()', status: 'Missing', description: 'Verify authenticated user identity using IUserService.GetCrcUserByExternalUserName before allowing any dealer search or access. Ensure user exists in CRC system.' }
+        ];
+        
+        let currentSort = { column: null, direction: 'asc' };
+        let filteredData = [...functionalUnits];
+        
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            const noResults = document.getElementById('noResults');
+            
+            if (filteredData.length === 0) {
+                tbody.innerHTML = '';
+                noResults.style.display = 'block';
+                return;
+            }
+            
+            noResults.style.display = 'none';
+            
+            tbody.innerHTML = filteredData.map(fu => `
+                <tr>
+                    <td><span class="fu-id">${fu.id}</span></td>
+                    <td><strong>${fu.title}</strong></td>
+                    <td><span class="badge badge-${fu.category.toLowerCase().replace(/\s+/g, '')}">${fu.category}</span></td>
+                    <td><span class="badge badge-${fu.risk.toLowerCase()}">${fu.risk}</span></td>
+                    <td><span class="location">${fu.location}</span></td>
+                    <td><span class="badge badge-${fu.status.toLowerCase()}">${fu.status}</span></td>
+                    <td><span class="description">${fu.description}</span></td>
+                </tr>
+            `).join('');
+            
+            updateStats();
+        }
+        
+        function updateStats() {
+            document.getElementById('totalCount').textContent = filteredData.length;
+            document.getElementById('criticalCount').textContent = filteredData.filter(fu => fu.risk === 'Critical').length;
+            document.getElementById('highCount').textContent = filteredData.filter(fu => fu.risk === 'High').length;
+            document.getElementById('implementedCount').textContent = filteredData.filter(fu => fu.status === 'Implemented').length;
+        }
+        
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const riskFilter = document.getElementById('riskFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+            
+            filteredData = functionalUnits.filter(fu => {
+                const matchesSearch = !searchTerm || 
+                    fu.id.toLowerCase().includes(searchTerm) ||
+                    fu.title.toLowerCase().includes(searchTerm) ||
+                    fu.description.toLowerCase().includes(searchTerm);
+                    
+                const matchesCategory = !categoryFilter || fu.category === categoryFilter;
+                const matchesRisk = !riskFilter || fu.risk === riskFilter;
+                const matchesStatus = !statusFilter || fu.status === statusFilter;
+                
+                return matchesSearch && matchesCategory && matchesRisk && matchesStatus;
+            });
+            
+            renderTable();
+        }
+        
+        function sortTable(column) {
+            const headers = document.querySelectorAll('th.sortable');
+            
+            if (currentSort.column === column) {
+                currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSort.column = column;
+                currentSort.direction = 'asc';
+            }
+            
+            headers.forEach(header => {
+                header.classList.remove('sorted-asc', 'sorted-desc');
+                if (header.dataset.column === column) {
+                    header.classList.add(currentSort.direction === 'asc' ? 'sorted-asc' : 'sorted-desc');
+                }
+            });
+            
+            filteredData.sort((a, b) => {
+                let aVal = a[column];
+                let bVal = b[column];
+                
+                if (typeof aVal === 'string') {
+                    aVal = aVal.toLowerCase();
+                    bVal = bVal.toLowerCase();
+                }
+                
+                if (aVal < bVal) return currentSort.direction === 'asc' ? -1 : 1;
+                if (aVal > bVal) return currentSort.direction === 'asc' ? 1 : -1;
+                return 0;
+            });
+            
+            renderTable();
+        }
+        
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('categoryFilter').value = '';
+            document.getElementById('riskFilter').value = '';
+            document.getElementById('statusFilter').value = '';
+            applyFilters();
+        }
+        
+        // Event Listeners
+        document.getElementById('searchInput').addEventListener('input', applyFilters);
+        document.getElementById('categoryFilter').addEventListener('change', applyFilters);
+        document.getElementById('riskFilter').addEventListener('change', applyFilters);
+        document.getElementById('statusFilter').addEventListener('change', applyFilters);
+        
+        document.querySelectorAll('th.sortable').forEach(header => {
+            header.addEventListener('click', () => sortTable(header.dataset.column));
+        });
+        
+        // Initial render
+        renderTable();
+    </script>
+</body>
+</html>

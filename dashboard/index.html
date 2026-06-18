@@ -1,0 +1,2231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DealerPlatform QA Dashboard</title>
+<style>
+/* ── Reset & Base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:        #0f1117;
+  --bg2:       #1a1d27;
+  --bg3:       #23273a;
+  --border:    #2e3347;
+  --text:      #e2e8f0;
+  --text-dim:  #8892a4;
+  --green:     #22c55e;
+  --red:       #ef4444;
+  --yellow:    #f59e0b;
+  --blue:      #3b82f6;
+  --purple:    #a855f7;
+  --cyan:      #06b6d4;
+  --accent:    #4f87ff;
+  --radius:    8px;
+}
+
+/* ── Light Theme (v2.1.0) ────────────────────────────────────────────────── */
+[data-theme="light"] {
+  --bg:        #f8fafc;
+  --bg2:       #ffffff;
+  --bg3:       #f1f5f9;
+  --border:    #e2e8f0;
+  --text:      #0f172a;
+  --text-dim:  #64748b;
+  --green:     #16a34a;
+  --red:       #dc2626;
+  --yellow:    #d97706;
+  --blue:      #2563eb;
+  --purple:    #9333ea;
+  --cyan:      #0891b2;
+  --accent:    #2563eb;
+}
+[data-theme="light"] #console { background: #1e1e2e; }
+[data-theme="light"] .log-dim { color: #6b7280; }
+[data-theme="light"] select option { background: var(--bg2); color: var(--text); }
+[data-theme="light"] ::-webkit-scrollbar-thumb { background: #cbd5e1; }
+[data-theme="light"] ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────────── */
+header {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+header .logo { font-size: 22px; }
+header h1 { font-size: 16px; font-weight: 600; letter-spacing: 0.3px; }
+header .subtitle { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+header .status-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-size: 12px;
+  font-weight: 500;
+}
+header .status-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--text-dim);
+  transition: background 0.3s;
+}
+header .status-dot.running { background: var(--green); animation: pulse 1.2s infinite; }
+header .status-dot.pass    { background: var(--green); }
+header .status-dot.fail    { background: var(--red); }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+/* ── Environment badge ───────────────────────────────────────────────────── */
+.env-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+.env-prod    { background: rgba(239,68,68,0.18);   color: #f87171; border: 1px solid rgba(239,68,68,0.4); }
+.env-uat     { background: rgba(245,158,11,0.18);  color: #fbbf24; border: 1px solid rgba(245,158,11,0.4); }
+.env-testing { background: rgba(59,130,246,0.18);  color: #60a5fa; border: 1px solid rgba(59,130,246,0.4); }
+.env-dev     { background: rgba(34,197,94,0.18);   color: #4ade80; border: 1px solid rgba(34,197,94,0.4); }
+
+/* ── Main layout ─────────────────────────────────────────────────────────── */
+.main {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ── Left panel — config ─────────────────────────────────────────────────── */
+.panel-config {
+  width: 280px;
+  flex-shrink: 0;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.section-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+/* Form controls */
+label.field-label {
+  display: block;
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+select, input[type=text], input[type=password] {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  padding: 7px 10px;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+select:focus, input:focus { border-color: var(--accent); }
+select option { background: var(--bg3); }
+
+/* Checkbox groups */
+.checkbox-group { display: flex; flex-direction: column; gap: 6px; }
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  transition: background 0.15s, border-color 0.15s;
+}
+.checkbox-item:hover { background: var(--bg3); }
+.checkbox-item input[type=checkbox] {
+  width: 15px; height: 15px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+.checkbox-item .cb-label { font-size: 13px; flex: 1; }
+.checkbox-item .cb-tag {
+  font-size: 10px;
+  font-weight: 500;
+  padding: 2px 6px;
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--text-dim);
+}
+.checkbox-item.checked { border-color: var(--accent); background: rgba(79,135,255,0.08); }
+.checkbox-item.checked .cb-tag { background: var(--accent); color: #fff; }
+
+/* Tier badges */
+.tier-smoke      .cb-tag { background: #1a3a1a; color: var(--green); }
+.tier-regression .cb-tag { background: #2a1a3a; color: var(--purple); }
+.tier-e2e        .cb-tag { background: #1a2a3a; color: var(--cyan); }
+.tier-smoke.checked      { border-color: var(--green);  background: rgba(34,197,94,0.08); }
+.tier-regression.checked { border-color: var(--purple); background: rgba(168,85,247,0.08); }
+.tier-e2e.checked        { border-color: var(--cyan);   background: rgba(6,182,212,0.08); }
+
+/* Credential section */
+#cred-section { display: none; }
+
+/* Run / Stop buttons */
+.btn-row { display: flex; gap: 8px; }
+.btn {
+  flex: 1;
+  padding: 9px 12px;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.btn:active { transform: scale(0.97); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-run  { background: var(--green);  color: #0a1a0a; }
+.btn-stop { background: var(--red);    color: #fff; }
+.btn-clear { background: var(--bg3); color: var(--text-dim); border: 1px solid var(--border); flex: 0; padding: 9px 14px; }
+
+/* ── Catalog Info Panel ───────────────────────────────────────────────────── */
+#catalog-panel {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 11.5px;
+  display: none;
+}
+#catalog-panel.visible { display: block; }
+.cat-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 6px; }
+.cat-title { font-weight: 600; color: var(--text); font-size: 12px; }
+.cat-version { background: var(--accent); color: #fff; border-radius: 4px; padding: 1px 7px; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; }
+.cat-meta { color: var(--text-dim); line-height: 1.6; }
+.cat-meta span { margin-right: 14px; }
+.cat-progress { margin-top: 6px; }
+.cat-progress-bar { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; margin-top: 4px; }
+.cat-progress-fill { height: 100%; border-radius: 3px; transition: width 0.3s; }
+.cat-stats { display: flex; gap: 12px; margin-top: 4px; font-size: 11px; }
+.cat-stat-impl  { color: var(--green); }
+.cat-stat-fixme { color: var(--yellow); }
+.cat-stat-total { color: var(--text-dim); }
+.cat-link { color: var(--accent); text-decoration: none; font-size: 10px; }
+.cat-link:hover { text-decoration: underline; }
+/* ── Last Run tier results ───────────────────────────────────────────────── */
+.cat-tiers { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+.cat-tier-pill {
+  display: flex; align-items: center; gap: 5px;
+  border: 1px solid var(--border); border-radius: 5px;
+  padding: 3px 8px; font-size: 10px; background: var(--bg3);
+}
+.cat-tier-label { font-weight: 700; color: var(--text-dim); letter-spacing: .5px; text-transform: uppercase; }
+.cat-tier-pass  { color: var(--green); font-weight: 700; }
+.cat-tier-skip  { color: var(--yellow); }
+.cat-tier-fail  { color: var(--red); font-weight: 700; }
+.cat-tier-smoke      .cat-tier-label { color: var(--green); }
+.cat-tier-regression .cat-tier-label { color: var(--purple); }
+.cat-tier-e2e        .cat-tier-label { color: var(--cyan); }
+.cat-run-date { font-size: 9px; color: var(--text-dim); margin-top: 3px; }
+
+/* ── Right panel ─────────────────────────────────────────────────────────── */
+.panel-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Stats bar */
+.stats-bar {
+  display: flex;
+  gap: 1px;
+  background: var(--border);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.stat-card {
+  flex: 1;
+  background: var(--bg2);
+  padding: 10px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.stat-value {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+}
+.stat-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+.stat-total   .stat-value { color: var(--text); }
+.stat-pass    .stat-value { color: var(--green); }
+.stat-fail    .stat-value { color: var(--red); }
+.stat-skip    .stat-value { color: var(--yellow); }
+.stat-dur     .stat-value { color: var(--blue); font-size: 16px; }
+
+/* ── Tab bar ─────────────────────────────────────────────────────────────── */
+.tab-bar {
+  display: flex;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.tab {
+  padding: 10px 18px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-dim);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* ── Tab content ─────────────────────────────────────────────────────────── */
+.tab-content { flex: 1; overflow: hidden; display: none; }
+.tab-content.active { display: flex; flex-direction: column; overflow: hidden; }
+
+/* Results table */
+.results-table-wrap { flex: 1; overflow-y: auto; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+thead tr { position: sticky; top: 0; background: var(--bg3); z-index: 1; }
+thead th {
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  border-bottom: 1px solid var(--border);
+}
+tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+tbody tr:hover { background: var(--bg2); }
+tbody td { padding: 8px 12px; vertical-align: middle; }
+td.td-idx { color: var(--text-dim); width: 40px; font-size: 12px; }
+td.td-status { width: 90px; }
+td.td-name { max-width: 420px; }
+.test-name-suite { font-size: 11px; color: var(--text-dim); display: block; }
+td.td-dur  { width: 80px; color: var(--text-dim); font-size: 12px; text-align: right; padding-right: 16px; }
+
+/* ── Expandable detail rows ───────────────────────────────────────────────── */
+tr.result-row          { cursor: pointer; }
+tr.result-row:hover td { background: var(--bg3); }
+
+/* Per-status accent when expanded */
+tr.status-pass.expanded td { background: rgba(34,197,94,.04); }
+tr.status-fail.expanded td { background: rgba(239,68,68,.05); }
+tr.status-skip.expanded td { background: rgba(245,158,11,.04); }
+
+.expand-chevron {
+  display: inline;
+  font-size: 9px;
+  color: var(--text-dim);
+  margin-left: 7px;
+  transition: transform .15s;
+  vertical-align: middle;
+  user-select: none;
+  opacity: .55;
+}
+tr.status-pass .expand-chevron { color: var(--green); }
+tr.status-fail .expand-chevron { color: var(--red);   }
+tr.status-skip .expand-chevron { color: var(--yellow);}
+tr.result-row.expanded .expand-chevron { transform: rotate(90deg); opacity: 1; }
+
+tr.detail-row      { display: none; }
+tr.detail-row.open { display: table-row; }
+tr.detail-row td   { padding: 0 !important; border-bottom: 2px solid var(--border) !important; }
+
+.detail-content {
+  background: #070a0f;
+  padding: 12px 18px 14px;
+  font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, monospace;
+  font-size: 11px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 240px;
+  overflow-y: auto;
+  border-left: 3px solid var(--border);
+}
+/* Border colour by status */
+tr.status-pass + tr.detail-row .detail-content { border-left-color: var(--green);  }
+tr.status-fail + tr.detail-row .detail-content { border-left-color: var(--red);    }
+tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow); }
+
+/* Status badge */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.badge-pass  { background: rgba(34,197,94,0.15);  color: var(--green);  }
+.badge-fail  { background: rgba(239,68,68,0.15);  color: var(--red);    }
+.badge-skip  { background: rgba(245,158,11,0.15); color: var(--yellow); }
+.badge-run   { background: rgba(79,135,255,0.15); color: var(--accent); animation: pulse 1s infinite; }
+
+/* ── Console panel ───────────────────────────────────────────────────────── */
+.console-wrap { flex: 1; overflow: hidden; position: relative; }
+#console {
+  height: 100%;
+  overflow-y: auto;
+  background: #0a0c12;
+  padding: 12px 16px;
+  font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+.log-pass    { color: var(--green); }
+.log-fail    { color: var(--red); }
+.log-skip    { color: var(--yellow); }
+.log-info    { color: var(--text-dim); }
+.log-dim     { color: #4a5568; }
+.log-err     { color: #ff6b6b; }
+.log-start   { color: var(--accent); font-weight: bold; }
+.log-summary { color: var(--cyan); font-weight: bold; }
+.console-autoscroll {
+  position: absolute;
+  bottom: 10px; right: 12px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-size: 11px;
+  color: var(--text-dim);
+  cursor: pointer;
+  user-select: none;
+}
+
+/* ── History panel ───────────────────────────────────────────────────────── */
+.history-wrap { flex: 1; overflow-y: auto; padding: 12px; }
+.history-item {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 12px;
+}
+.history-item .hi-time { color: var(--text-dim); min-width: 145px; }
+.history-item .hi-config { flex: 1; color: var(--text-dim); font-family: monospace; }
+.history-item .hi-stats { display: flex; gap: 10px; }
+.hi-pass { color: var(--green); } .hi-fail { color: var(--red); } .hi-skip { color: var(--yellow); }
+.history-empty { text-align: center; color: var(--text-dim); padding: 40px 0; font-size: 13px; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #3e4560; }
+
+/* ── Test Result Analytics Tab ───────────────────────────────────────────── */
+#tab-report { display:flex; flex-direction:column; overflow-y:auto; padding:16px; gap:14px; }
+.rpt-hero { display:flex; gap:10px; flex-wrap:wrap; }
+.rpt-metric {
+  background:var(--bg3); border:1px solid var(--border); border-radius:8px;
+  padding:12px 18px; min-width:90px; flex:1; text-align:center;
+  transition:border-color .2s;
+}
+.rpt-metric:hover { border-color:var(--accent); }
+.rpt-metric-value { font-size:32px; font-weight:800; line-height:1.1; }
+.rpt-metric-label { font-size:10px; color:var(--text-dim); margin-top:3px; font-weight:600; text-transform:uppercase; letter-spacing:.05em; }
+.rpt-metric.pass  .rpt-metric-value { color:var(--green); }
+.rpt-metric.fail  .rpt-metric-value { color:var(--red); }
+.rpt-metric.total .rpt-metric-value { color:var(--blue); }
+
+.rpt-donut-card {
+  background:var(--bg3); border:1px solid var(--border); border-radius:8px;
+  padding:14px 20px; display:flex; align-items:center; gap:18px; flex:1;
+}
+.rpt-donut-svg { flex-shrink:0; }
+.rpt-legend { display:flex; flex-direction:column; gap:5px; }
+.rpt-legend-item { display:flex; align-items:center; gap:6px; font-size:12px; }
+.rpt-legend-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+.rpt-legend-dot.pass  { background:var(--green); }
+.rpt-legend-dot.fail  { background:var(--red); }
+.rpt-legend-dot.skip  { background:var(--text-dim); }
+.rpt-legend-count { font-weight:700; color:var(--text); margin-left:2px; }
+
+.rpt-section-title {
+  font-size:12px; font-weight:700; color:var(--text-dim); text-transform:uppercase;
+  letter-spacing:.06em; margin-bottom:6px;
+}
+.rpt-trend-card {
+  background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:14px 20px;
+}
+.rpt-trend-chart { width:100%; height:90px; }
+
+.rpt-fail-card {
+  background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:14px 20px; flex:1;
+}
+.rpt-fail-header { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+.rpt-fail-count {
+  background:var(--red); color:#fff; border-radius:999px;
+  padding:2px 9px; font-size:11px; font-weight:700;
+}
+.rpt-fail-table { width:100%; border-collapse:collapse; font-size:12px; }
+.rpt-fail-table th {
+  background:var(--bg2); text-align:left; padding:6px 10px;
+  border-bottom:2px solid var(--border); font-size:11px; color:var(--text-dim);
+  text-transform:uppercase; letter-spacing:.04em; white-space:nowrap;
+}
+.rpt-fail-table td { padding:6px 10px; border-bottom:1px solid var(--border); vertical-align:top; }
+.rpt-fail-table tr:last-child td { border-bottom:none; }
+.rpt-fail-table tr:hover td { background:var(--bg2); }
+.rpt-fail-name { color:var(--text); word-break:break-word; }
+.rpt-fail-name em { display:block; font-style:normal; font-size:10px; color:var(--text-dim); margin-top:2px; }
+.rpt-rate-bar { display:flex; align-items:center; gap:6px; }
+.rpt-rate-bg { flex:1; height:5px; background:var(--border); border-radius:3px; min-width:40px; }
+.rpt-rate-fill { height:5px; border-radius:3px; background:var(--green); }
+.rpt-empty { text-align:center; color:var(--text-dim); padding:28px; font-size:13px; }
+
+/* ── Analytics bottom panel ──────────────────────────────────────────────── */
+.analytics-panel {
+  background: var(--bg2);
+  border-top: 2px solid var(--border);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: height .3s ease;
+}
+.analytics-collapsed .analytics-body { display: none; }
+.analytics-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 18px;
+  cursor: pointer;
+  user-select: none;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.analytics-header:hover { background: var(--bg3); }
+.analytics-title { font-size: 13px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 6px; }
+.analytics-body {
+  overflow-y: auto;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 420px;
+}
+
+/* Suite breakdown */
+.rpt-suite-row { display:flex; align-items:center; gap:8px; padding:5px 0; border-bottom:1px solid var(--border); }
+.rpt-suite-row:last-child { border-bottom:none; }
+.rpt-suite-name { min-width:140px; max-width:180px; font-size:11px; font-weight:600; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; flex-shrink:0; }
+.rpt-suite-bar-wrap { flex:1; height:14px; background:var(--border); border-radius:4px; overflow:hidden; display:flex; }
+.rpt-suite-bar-pass { height:100%; background:var(--green); transition:width .4s; }
+.rpt-suite-bar-fail { height:100%; background:var(--red); transition:width .4s; }
+.rpt-suite-bar-skip { height:100%; background:var(--text-dim); opacity:.5; transition:width .4s; }
+.rpt-suite-counts { min-width:90px; text-align:right; font-size:10px; color:var(--text-dim); white-space:nowrap; }
+.rpt-suite-counts .sc-pass { color:var(--green); font-weight:700; }
+.rpt-suite-counts .sc-fail { color:var(--red); font-weight:700; }
+</style>
+</head>
+<body>
+
+<!-- ── Header ──────────────────────────────────────────────────────────────── -->
+<header>
+  <div class="logo">🎭</div>
+  <div>
+    <h1>DealerPlatform QA Dashboard</h1>
+    <div class="subtitle">
+      On-Demand Playwright Runner
+      &nbsp;&nbsp;
+      <span id="env-badge" class="env-badge env-prod">PROD</span>
+      <span id="env-url" style="font-size:11px;color:var(--text-dim);margin-left:6px;"></span>
+    </div>
+  </div>
+  <button id="theme-toggle" onclick="toggleTheme()" title="Toggle light / dark theme"
+    style="background:none;border:1px solid var(--border);border-radius:20px;padding:5px 12px;
+           cursor:pointer;font-size:15px;color:var(--text-dim);transition:border-color 0.2s,color 0.2s;
+           line-height:1;margin-left:auto;">☀️</button>
+  <div class="status-pill" style="margin-left:0;">
+    <div class="status-dot" id="status-dot"></div>
+    <span id="status-text">Idle</span>
+  </div>
+</header>
+
+<!-- ── Main ────────────────────────────────────────────────────────────────── -->
+<div class="main">
+
+  <!-- ── Left: Config Panel ──────────────────────────────────────────────── -->
+  <div class="panel-config">
+
+    <!-- Environment -->
+    <div>
+      <div class="section-title">Environment</div>
+      <label class="field-label" for="sel-test-env">Target Environment</label>
+      <select id="sel-test-env" onchange="updateEnvBadge()">
+        <option value="production" selected>Production</option>
+        <option value="uat">UAT</option>
+        <option value="testing">Testing</option>
+        <option value="dev">Dev</option>
+      </select>
+      <div style="margin-top:10px;">
+        <label class="field-label" for="inp-base-url">
+          Base URL
+          <span style="font-size:10px;color:var(--text-dim);font-weight:400;margin-left:4px;">
+            (overrides .env — leave blank to use .env.{tier})
+          </span>
+        </label>
+        <input type="text" id="inp-base-url"
+          placeholder="https://app.example.com"
+          oninput="updateCommandPreview()"
+          autocomplete="off" />
+        <div id="url-resolved" style="margin-top:4px;font-size:10px;color:var(--text-dim);line-height:1.4;">
+          Reads from <code style="color:var(--accent)">.env.production</code>
+        </div>
+      </div>
+    </div>
+
+    <!-- Test User -->
+    <div>
+      <div class="section-title">Test User</div>
+
+      <!-- Dealer -->
+      <div style="margin-bottom:10px;">
+        <div style="font-size:11px;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Dealer</div>
+        <div class="checkbox-group" id="role-group" style="gap:6px;">
+          <label class="checkbox-item checked" data-value="dealer" style="border-radius:6px;">
+            <input type="radio" name="role" value="dealer" checked onchange="onRoleChange()" />
+            <span class="cb-label">Saved Session</span>
+            <span class="cb-tag">default</span>
+          </label>
+          <label class="checkbox-item" data-value="dealer-custom" style="border-radius:6px;">
+            <input type="radio" name="role" value="dealer-custom" onchange="onRoleChange()" />
+            <span class="cb-label">Custom Credentials</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Admin -->
+      <div>
+        <div style="font-size:11px;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Admin</div>
+        <div class="checkbox-group" style="gap:6px;">
+          <label class="checkbox-item" data-value="admin" style="border-radius:6px;">
+            <input type="radio" name="role" value="admin" onchange="onRoleChange()" />
+            <span class="cb-label">Saved Session</span>
+            <span class="cb-tag" style="background:#7c3aed;color:#fff;">admin</span>
+          </label>
+          <label class="checkbox-item" data-value="admin-custom" style="border-radius:6px;">
+            <input type="radio" name="role" value="admin-custom" onchange="onRoleChange()" />
+            <span class="cb-label">Custom Credentials</span>
+            <span class="cb-tag" style="background:#7c3aed;color:#fff;">admin</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Custom credential inputs — shown for dealer-custom or admin-custom -->
+      <div id="cred-section" style="margin-top:10px; display:none; flex-direction:column; gap:8px;">
+        <div>
+          <label class="field-label" for="inp-user">Username / Email</label>
+          <input type="text" id="inp-user" placeholder="user@example.com" autocomplete="off" />
+        </div>
+        <div>
+          <label class="field-label" for="inp-pass">Password</label>
+          <input type="password" id="inp-pass" placeholder="••••••••" autocomplete="off" />
+        </div>
+        <div style="font-size:10px;color:var(--text-dim);line-height:1.5;">
+          Playwright re-authenticates before running. Session lasts this run only.
+        </div>
+      </div>
+    </div>
+
+    <!-- Features -->
+    <div>
+      <div class="section-title">Features</div>
+      <div class="checkbox-group" id="feature-group">
+        <label class="checkbox-item checked" data-value="all">
+          <input type="checkbox" value="all" checked /> <span class="cb-label">All Features</span>
+        </label>
+        <!-- Co-op → Dealer -->
+        <label class="checkbox-item" data-value="coop-submit-claim" style="border-top:1px solid var(--border);margin-top:6px;padding-top:6px;">
+          <input type="checkbox" value="coop-submit-claim" /> <span class="cb-label">Coop — Submit Claim</span> <span class="cb-tag">coop</span>
+        </label>
+        <label class="checkbox-item" data-value="coop-submit-preapproval">
+          <input type="checkbox" value="coop-submit-preapproval" /> <span class="cb-label">Coop — Submit Preapproval</span> <span class="cb-tag">coop</span>
+        </label>
+        <label class="checkbox-item" data-value="coop-dealer-dashboard">
+          <input type="checkbox" value="coop-dealer-dashboard" /> <span class="cb-label">Coop — Dealer Dashboard</span> <span class="cb-tag">coop</span>
+        </label>
+        <label class="checkbox-item" data-value="coop-admin-reports">
+          <input type="checkbox" value="coop-admin-reports" /> <span class="cb-label">Coop — Admin Reports</span> <span class="cb-tag" style="background:#7c3aed;color:#fff;">admin</span>
+        </label>
+        <!-- Co-op → API -->
+        <label class="checkbox-item" data-value="coop-api-submit-claim" style="border-top:1px solid var(--border);margin-top:6px;padding-top:6px;">
+          <input type="checkbox" value="coop-api-submit-claim" /> <span class="cb-label">Coop API — Submit Claim</span> <span class="cb-tag" style="background:#0891b2;color:#fff;">api</span>
+        </label>
+        <label class="checkbox-item" data-value="coop-api-submit-preapproval">
+          <input type="checkbox" value="coop-api-submit-preapproval" /> <span class="cb-label">Coop API — Submit Preapproval</span> <span class="cb-tag" style="background:#0891b2;color:#fff;">api</span>
+        </label>
+        <label class="checkbox-item" data-value="popshop-new-order" style="border-top:1px solid var(--border);margin-top:6px;padding-top:6px;">
+          <input type="checkbox" value="popshop-new-order" /> <span class="cb-label">PopShop — New Order</span> <span class="cb-tag">popshop</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Test Tiers -->
+    <div>
+      <div class="section-title">Test Tier</div>
+      <div class="checkbox-group" id="tier-group">
+        <label class="checkbox-item checked" data-value="all">
+          <input type="checkbox" value="all" checked /> <span class="cb-label">All Tiers</span>
+        </label>
+        <label class="checkbox-item tier-smoke" data-value="smoke">
+          <input type="checkbox" value="smoke" /> <span class="cb-label">Smoke</span> <span class="cb-tag">@smoke</span>
+        </label>
+        <label class="checkbox-item tier-regression" data-value="regression">
+          <input type="checkbox" value="regression" /> <span class="cb-label">Feature / Regression</span> <span class="cb-tag">@regression</span>
+        </label>
+        <label class="checkbox-item tier-e2e" data-value="e2e">
+          <input type="checkbox" value="e2e" /> <span class="cb-label">E2E Journeys</span> <span class="cb-tag">@e2e</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div>
+      <div class="section-title">Actions</div>
+      <div class="btn-row" style="margin-bottom:8px;">
+        <button class="btn btn-run"  id="btn-run"  onclick="runTests()">▶ Run Tests</button>
+        <button class="btn btn-stop" id="btn-stop" onclick="stopTests()" disabled>■ Stop</button>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-clear" onclick="clearConsole()">Clear Output</button>
+      </div>
+    </div>
+
+    <!-- Command preview -->
+    <div>
+      <div class="section-title">Command Preview</div>
+      <div id="cmd-preview" style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:8px;font-family:monospace;font-size:11px;color:var(--text-dim);word-break:break-all;line-height:1.5;">
+        npx playwright test --reporter=list
+      </div>
+    </div>
+
+    <!-- Catalog version info -->
+    <div>
+      <div class="section-title" style="display:flex;align-items:center;justify-content:space-between;">
+        Catalog Coverage
+        <select id="catalog-select" onchange="onCatalogSelect()" style="background:var(--bg3);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-size:11px;cursor:pointer;">
+          <option value="">— select feature —</option>
+        </select>
+      </div>
+      <div id="catalog-panel"></div>
+    </div>
+
+  </div><!-- /panel-config -->
+
+  <!-- ── Right: Output Panel ─────────────────────────────────────────────── -->
+  <div class="panel-right">
+
+    <!-- Stats -->
+    <div class="stats-bar">
+      <div class="stat-card stat-total">  <div class="stat-value" id="st-total">0</div>  <div class="stat-label">Total</div></div>
+      <div class="stat-card stat-pass">   <div class="stat-value" id="st-pass">0</div>   <div class="stat-label">Passed</div></div>
+      <div class="stat-card stat-fail">   <div class="stat-value" id="st-fail">0</div>   <div class="stat-label">Failed</div></div>
+      <div class="stat-card stat-skip">   <div class="stat-value" id="st-skip">0</div>   <div class="stat-label">Skipped</div></div>
+      <div class="stat-card stat-dur">    <div class="stat-value" id="st-dur">—</div>    <div class="stat-label">Duration</div></div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tab-bar">
+      <div class="tab active" onclick="switchTab('results')">Test Results</div>
+      <div class="tab"        onclick="switchTab('console')">Console Output</div>
+      <div class="tab"        onclick="switchTab('compare')" id="tab-compare-btn">
+        Migration Compare
+        <span id="cmp-regression-badge" style="display:none;background:var(--red);color:#fff;border-radius:10px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:5px;"></span>
+      </div>
+      <div class="tab"        onclick="switchTab('history')">Run History <span id="hist-badge" style="color:var(--text-dim);font-size:11px;"></span></div>
+    </div>
+
+    <!-- Results Tab -->
+    <div class="tab-content active" id="tab-results">
+      <div class="results-table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th class="td-idx">#</th>
+              <th class="td-status">Status</th>
+              <th class="td-name">Test</th>
+              <th class="td-dur">Duration</th>
+            </tr>
+          </thead>
+          <tbody id="results-body">
+            <tr><td colspan="4" style="text-align:center;color:var(--text-dim);padding:40px;">
+              Configure options and click <strong>Run Tests</strong> to begin.
+            </td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Console Tab -->
+    <div class="tab-content" id="tab-console">
+      <div class="console-wrap">
+        <div id="console"></div>
+        <div class="console-autoscroll" onclick="toggleAutoscroll()" id="autoscroll-btn">↓ Auto-scroll ON</div>
+      </div>
+    </div>
+
+    <!-- History Tab -->
+    <div class="tab-content" id="tab-history">
+      <div class="history-wrap" id="history-list">
+        <div class="history-empty">No runs yet in this session.</div>
+      </div>
+    </div>
+
+    <!-- Compare Tab -->
+    <div class="tab-content" id="tab-compare" style="flex-direction:column;overflow:hidden;">
+
+      <!-- Compare config strip -->
+      <div style="background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 20px;flex-shrink:0;display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;">
+        <div style="flex:1;min-width:200px;">
+          <label class="field-label">Legacy URL</label>
+          <input type="text" id="cmp-legacy-url" placeholder="https://legacy.example.com" oninput="updateCmpPreview()" />
+        </div>
+        <div style="flex:1;min-width:200px;">
+          <label class="field-label">Modern URL</label>
+          <input type="text" id="cmp-modern-url" placeholder="https://modern.example.com" oninput="updateCmpPreview()" />
+        </div>
+        <div style="display:flex;gap:8px;flex-shrink:0;">
+          <button class="btn btn-run" id="btn-compare" onclick="startComparison()" style="flex:none;padding:9px 18px;">▶ Run Comparison</button>
+          <button class="btn btn-stop" onclick="stopTests()" style="flex:none;padding:9px 14px;">■</button>
+        </div>
+      </div>
+
+      <!-- Phase indicator -->
+      <div id="cmp-phases" style="background:var(--bg3);border-bottom:1px solid var(--border);padding:8px 20px;display:flex;gap:32px;align-items:center;flex-shrink:0;">
+        <div class="cmp-phase" id="cmp-ph-legacy">
+          <span class="cmp-phase-dot" id="cmp-dot-legacy">○</span>
+          <span style="font-size:12px;font-weight:600;">Legacy Run</span>
+          <span id="cmp-sum-legacy" style="font-size:11px;color:var(--text-dim);margin-left:6px;"></span>
+        </div>
+        <div style="font-size:16px;color:var(--border);">→</div>
+        <div class="cmp-phase" id="cmp-ph-modern">
+          <span class="cmp-phase-dot" id="cmp-dot-modern">○</span>
+          <span style="font-size:12px;font-weight:600;">Modern Run</span>
+          <span id="cmp-sum-modern" style="font-size:11px;color:var(--text-dim);margin-left:6px;"></span>
+        </div>
+        <div style="font-size:16px;color:var(--border);">→</div>
+        <div class="cmp-phase" id="cmp-ph-diff">
+          <span class="cmp-phase-dot" id="cmp-dot-diff">○</span>
+          <span style="font-size:12px;font-weight:600;">Compare Results</span>
+        </div>
+      </div>
+
+      <!-- Compare stats bar -->
+      <div id="cmp-stats-bar" style="display:flex;gap:1px;background:var(--border);border-bottom:1px solid var(--border);flex-shrink:0;">
+        <div class="stat-card" style="flex:1;"><div class="stat-value" id="cs-match" style="color:var(--green);">—</div><div class="stat-label">Both Pass</div></div>
+        <div class="stat-card" style="flex:1;"><div class="stat-value" id="cs-regression" style="color:var(--red);">—</div><div class="stat-label">Regressions 🚨</div></div>
+        <div class="stat-card" style="flex:1;"><div class="stat-value" id="cs-fixed" style="color:var(--cyan);">—</div><div class="stat-label">Fixed in Modern 🔧</div></div>
+        <div class="stat-card" style="flex:1;"><div class="stat-value" id="cs-bothfail" style="color:var(--yellow);">—</div><div class="stat-label">Both Fail</div></div>
+      </div>
+
+      <!-- Comparison results table -->
+      <div style="flex:1;overflow-y:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:13px;">
+          <thead>
+            <tr style="position:sticky;top:0;background:var(--bg3);z-index:1;">
+              <th style="padding:8px 12px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text-dim);border-bottom:1px solid var(--border);">#</th>
+              <th style="padding:8px 12px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text-dim);border-bottom:1px solid var(--border);">Test</th>
+              <th style="padding:8px 12px;text-align:center;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text-dim);border-bottom:1px solid var(--border);width:100px;">Legacy</th>
+              <th style="padding:8px 12px;text-align:center;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text-dim);border-bottom:1px solid var(--border);width:100px;">Modern</th>
+              <th style="padding:8px 12px;text-align:center;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text-dim);border-bottom:1px solid var(--border);width:140px;">Result</th>
+            </tr>
+          </thead>
+          <tbody id="cmp-results-body">
+            <tr><td colspan="5" style="text-align:center;color:var(--text-dim);padding:40px;">
+              Enter Legacy and Modern URLs then click <strong>Run Comparison</strong>.
+            </td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Test Result Analytics — removed from tab system, now a bottom panel -->
+
+    <!-- [orphan open div below is closed at the original closing tag] -->
+  </div><!-- /panel-right -->
+
+</div><!-- /main -->
+
+<!-- ── Test Result Analytics — standalone bottom panel ──────────────────── -->
+<div id="analytics-panel" class="analytics-panel analytics-collapsed">
+
+  <!-- Collapsible header bar -->
+  <div class="analytics-header" onclick="toggleAnalytics()">
+    <span class="analytics-title">
+      📊 Test Result Analytics
+      <span id="rpt-badge" style="font-size:11px;margin-left:6px;"></span>
+    </span>
+    <div style="display:flex;align-items:center;gap:14px;">
+      <span id="analytics-summary" style="font-size:11px;color:var(--text-dim);"></span>
+      <span id="analytics-chevron" style="font-size:14px;transition:transform .25s;">▲</span>
+    </div>
+  </div>
+
+  <!-- Analytics content (shown when expanded) -->
+  <div class="analytics-body" id="analytics-body">
+
+    <!-- Row 1: metric cards -->
+    <div class="rpt-hero">
+      <div class="rpt-metric pass">
+        <div class="rpt-metric-value" id="rpt-passrate">—</div>
+        <div class="rpt-metric-label">Pass Rate</div>
+      </div>
+      <div class="rpt-metric total">
+        <div class="rpt-metric-value" id="rpt-total">—</div>
+        <div class="rpt-metric-label">Total Tests</div>
+      </div>
+      <div class="rpt-metric">
+        <div class="rpt-metric-value" id="rpt-leg-pass" style="color:var(--green)">0</div>
+        <div class="rpt-metric-label">Passed</div>
+      </div>
+      <div class="rpt-metric">
+        <div class="rpt-metric-value" id="rpt-leg-fail" style="color:var(--red)">0</div>
+        <div class="rpt-metric-label">Failed</div>
+      </div>
+      <div class="rpt-metric">
+        <div class="rpt-metric-value" id="rpt-leg-skip" style="color:var(--text-dim)">0</div>
+        <div class="rpt-metric-label">Skipped</div>
+      </div>
+      <div class="rpt-metric">
+        <div class="rpt-metric-value" id="rpt-dur-card" style="color:var(--blue);font-size:22px">—</div>
+        <div class="rpt-metric-label">Duration</div>
+      </div>
+    </div>
+
+    <!-- Row 2: Donut + Trend side by side -->
+    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+
+      <!-- Donut -->
+      <div class="rpt-donut-card" style="min-width:220px;flex:0 0 auto;">
+        <div class="rpt-section-title" style="margin-bottom:10px">Result Breakdown</div>
+        <div style="display:flex;align-items:center;gap:18px;">
+          <svg class="rpt-donut-svg" width="110" height="110" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="36" fill="none" stroke="var(--border)" stroke-width="14"/>
+            <circle id="donut-pass" cx="50" cy="50" r="36" fill="none"
+              stroke="var(--green)" stroke-width="14" stroke-dasharray="0 226.2"
+              transform="rotate(-90 50 50)" style="transition:stroke-dasharray .5s"/>
+            <circle id="donut-fail" cx="50" cy="50" r="36" fill="none"
+              stroke="var(--red)" stroke-width="14" stroke-dasharray="0 226.2"
+              transform="rotate(-90 50 50)" style="transition:stroke-dasharray .5s"/>
+            <circle id="donut-skip" cx="50" cy="50" r="36" fill="none"
+              stroke="var(--text-dim)" stroke-width="14" opacity=".6" stroke-dasharray="0 226.2"
+              transform="rotate(-90 50 50)" style="transition:stroke-dasharray .5s"/>
+            <text id="donut-center" x="50" y="54" text-anchor="middle"
+              font-size="14" font-weight="700" fill="var(--text)">—</text>
+          </svg>
+          <div class="rpt-legend">
+            <div class="rpt-legend-item"><span class="rpt-legend-dot pass"></span>Passed</div>
+            <div class="rpt-legend-item"><span class="rpt-legend-dot fail"></span>Failed</div>
+            <div class="rpt-legend-item"><span class="rpt-legend-dot skip"></span>Skipped</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trend -->
+      <div class="rpt-trend-card" style="flex:1;min-width:200px;">
+        <div class="rpt-section-title">
+          Pass Rate Trend &amp; Failed Count
+          <span style="float:right;font-size:9px;color:var(--text-dim);font-weight:400;">
+            ■ Failed &nbsp; <span style="color:var(--green)">● Pass rate</span>
+          </span>
+        </div>
+        <svg id="rpt-trend-svg" class="rpt-trend-chart" viewBox="0 0 500 90" preserveAspectRatio="none">
+          <text x="250" y="50" text-anchor="middle" fill="var(--text-dim)" font-size="11">Run tests to see trend</text>
+        </svg>
+        <div id="rpt-trend-dates" style="display:flex;justify-content:space-between;font-size:9px;color:var(--text-dim);margin-top:3px;padding:0 2px;"></div>
+      </div>
+    </div>
+
+    <!-- Row 3: Suite breakdown -->
+    <div class="rpt-fail-card">
+      <div class="rpt-section-title" style="margin-bottom:8px">Results by Test Suite</div>
+      <div id="rpt-suite-body"><div class="rpt-empty">Run tests to see suite breakdown</div></div>
+    </div>
+
+    <!-- Row 4: Unique failing tests -->
+    <div class="rpt-fail-card">
+      <div class="rpt-fail-header">
+        <div class="rpt-section-title" style="margin-bottom:0">Unique Failing Tests</div>
+        <span class="rpt-fail-count" id="rpt-fail-count">0</span>
+        <span style="font-size:11px;color:var(--text-dim);margin-left:4px;" id="rpt-fail-sub"></span>
+      </div>
+      <div id="rpt-fail-body"><div class="rpt-empty">Run tests to see results</div></div>
+    </div>
+
+  </div><!-- /analytics-body -->
+</div><!-- /analytics-panel -->
+
+<script>
+// ── State ──────────────────────────────────────────────────────────────────
+let running   = false;
+let autoscroll = true;
+let evtSource  = null;
+let stats = { total: 0, pass: 0, fail: 0, skip: 0, dur: "—" };
+let results = [];
+// Analytics state: name → { failed, total, totalDurMs }
+let failureMap = {};
+// Suite state: suiteName → { pass, fail, skip }
+let suiteMap = {};
+
+// ── SSE Connection ─────────────────────────────────────────────────────────
+function connectSSE() {
+  if (evtSource) evtSource.close();
+  evtSource = new EventSource("/api/events");
+
+  evtSource.onopen = () => {
+    setStatus("idle");
+    logLine("✓ Connected to dashboard server", "log-pass");
+  };
+
+  evtSource.onmessage = (e) => {
+    try {
+      const msg = JSON.parse(e.data);
+      handleMessage(msg);
+    } catch { /* ignore parse errors from heartbeat comments */ }
+  };
+
+  evtSource.onerror = () => {
+    setStatus("disconnected");
+    logLine("⚠ Connection lost — reconnecting in 3s…", "log-err");
+    setTimeout(connectSSE, 3000);
+  };
+}
+
+// ── Message handler ────────────────────────────────────────────────────────
+function handleMessage(msg) {
+  switch (msg.type) {
+    case "state":
+      running = msg.running;
+      syncRunningUI();
+      if (msg.history) renderHistory(msg.history);
+      break;
+
+    case "start": {
+      running = true;
+      results = [];
+      failureMap = {};
+      suiteMap   = {};
+      stats   = { total: 0, pass: 0, fail: 0, skip: 0, dur: "—" };
+      updateStats();
+      clearResults();
+      resetAnalytics();
+      syncRunningUI();
+      setStatus("running");
+      switchTab("console");
+      logLine(`▶ ${msg.args}`, "log-start");
+      const envMeta = ENV_META[msg.config.env] || ENV_META.production;
+      const userLabel = msg.config.username ? msg.config.username : "Dealer01 (saved session)";
+      logLine(`  Env: ${envMeta.label} (${envMeta.url})  |  User: ${userLabel}`, "log-info");
+      // Show catalog version for selected features
+      const feats = (msg.config.features || ["all"]);
+      const keys  = feats.includes("all") ? Object.keys(catalogManifest) : feats.filter(f => catalogManifest[f]);
+      if (keys.length > 0) {
+        keys.forEach(k => {
+          const c = catalogManifest[k];
+          if (c) logLine(
+            `  📋 ${c.feature}  ${c.version}  |  Generated: ${c.generated}  |  Coverage: ${c.tests.implemented}/${c.tests.total} tests (${Math.round(c.tests.implemented/c.tests.total*100)}%)`,
+            "log-info"
+          );
+        });
+      }
+      logLine("─".repeat(60), "log-dim");
+      break;
+    }
+
+    case "result": {
+      // Update stats counter
+      stats.total++;
+      if (msg.status === "pass")      stats.pass++;
+      else if (msg.status === "fail") stats.fail++;
+      else if (msg.status === "skip") stats.skip++;
+      updateStats();
+      results.push(msg);
+      appendResultRow(msg);
+      // Track for analytics
+      const key   = msg.name || "";
+      const suite = extractSuite(key);
+      if (!failureMap[key]) failureMap[key] = { failed: 0, total: 0, totalDurMs: 0 };
+      failureMap[key].total++;
+      if (msg.status === "fail") failureMap[key].failed++;
+      const durMs = parseDurMs(msg.duration);
+      if (durMs > 0) failureMap[key].totalDurMs += durMs;
+      if (!suiteMap[suite]) suiteMap[suite] = { pass: 0, fail: 0, skip: 0 };
+      if (msg.status === "pass")      suiteMap[suite].pass++;
+      else if (msg.status === "fail") suiteMap[suite].fail++;
+      else                            suiteMap[suite].skip++;
+      break;
+    }
+
+    case "summary-update": {
+      if (msg.passed  !== undefined) stats.pass = msg.passed;
+      if (msg.failed  !== undefined) stats.fail = msg.failed;
+      if (msg.skipped !== undefined) stats.skip = msg.skipped;
+      if (msg.duration) stats.dur = msg.duration;
+      updateStats();
+      break;
+    }
+
+    case "line": {
+      // Raw output line → goes to Console tab only
+      if (msg.text !== undefined) logLine(msg.text, "log-info");
+      break;
+    }
+
+    case "detail": {
+      // Populate the error output for a failed test (sent by server after the fail result)
+      const resultRow = document.getElementById(`row-${msg.idx}`);
+      const detailRow = document.getElementById(`detail-${msg.idx}`);
+      if (resultRow && detailRow && msg.content) {
+        renderDetailContent(detailRow.querySelector(".detail-content"), msg.content);
+        // Auto-expand the first failure so the user sees it immediately
+        if (!document.querySelector(".result-row.expanded")) {
+          resultRow.classList.add("expanded");
+          detailRow.classList.add("open");
+        }
+      }
+      break;
+    }
+
+    case "end": {
+      running = false;
+      syncRunningUI();
+      // If stopped by user, UI was already reset — just log and switch tab
+      if (msg.stopped) {
+        setTimeout(() => switchTab("results"), 800);
+        break;
+      }
+      const ok = msg.exitCode === 0;
+      setStatus(ok ? "pass" : "fail");
+      logLine("─".repeat(60), "log-dim");
+      logLine(
+        `${ok ? "✅ All tests passed" : "❌ Run finished with failures"}  (exit ${msg.exitCode})  ` +
+        `${stats.pass}✓  ${stats.fail}✗  ${stats.skip}–  ${stats.dur}`,
+        ok ? "log-pass" : "log-fail"
+      );
+      // Build analytics panel then switch output tabs to Results
+      buildAnalytics();
+      if (msg.summary) renderHistory(state && state.history ? state.history : []);
+      // Switch to Test Results tab; analytics panel expands below
+      setTimeout(() => { switchTab("results"); expandAnalytics(); }, 800);
+      break;
+    }
+
+    case "error": {
+      logLine(`❌ Server error: ${msg.message}`, "log-err");
+      running = false;
+      syncRunningUI();
+      setStatus("fail");
+      break;
+    }
+  }
+}
+
+// ── UI helpers ─────────────────────────────────────────────────────────────
+function setStatus(state) {
+  const dot  = document.getElementById("status-dot");
+  const text = document.getElementById("status-text");
+  dot.className = "status-dot " + state;
+  text.textContent = state === "running" ? "Running…"
+                   : state === "pass"    ? "Passed"
+                   : state === "fail"    ? "Failed"
+                   : state === "disconnected" ? "Disconnected"
+                   : "Idle";
+}
+
+function syncRunningUI() {
+  const btnRun  = document.getElementById("btn-run");
+  const btnStop = document.getElementById("btn-stop");
+  btnRun.disabled  = running;
+  btnStop.disabled = !running;
+  if (!running && document.getElementById("status-dot").classList.contains("running")) {
+    setStatus("idle");
+  }
+}
+
+function updateStats() {
+  document.getElementById("st-total").textContent = stats.total;
+  document.getElementById("st-pass").textContent  = stats.pass;
+  document.getElementById("st-fail").textContent  = stats.fail;
+  document.getElementById("st-skip").textContent  = stats.skip;
+  document.getElementById("st-dur").textContent   = stats.dur;
+}
+
+function clearResults() {
+  document.getElementById("results-body").innerHTML =
+    '<tr><td colspan="4" style="text-align:center;color:var(--text-dim);padding:20px;">Running tests…</td></tr>';
+}
+
+function appendResultRow(msg) {
+  const tbody = document.getElementById("results-body");
+  // Remove placeholder row
+  if (tbody.rows[0]?.cells[0]?.getAttribute("colspan")) tbody.deleteRow(0);
+
+  const statusHtml = msg.status === "pass"
+    ? '<span class="badge badge-pass">✓ Pass</span>'
+    : msg.status === "fail"
+    ? '<span class="badge badge-fail">✗ Fail</span>'
+    : '<span class="badge badge-skip">– Skip</span>';
+
+  // Extract test ID (e.g. "CD-001") from name for display
+  const nameParts = msg.name.split(" — ");
+  const testId   = nameParts[0]?.trim();
+  const testDesc = nameParts.slice(1).join(" — ").trim();
+
+  const tr = document.createElement("tr");
+  tr.className = `result-row status-${msg.status}`;
+  tr.id        = `row-${msg.idx}`;
+  tr.innerHTML = `
+    <td class="td-idx">${msg.idx}</td>
+    <td class="td-status">${statusHtml}</td>
+    <td class="td-name">
+      <strong>${escHtml(testId)}</strong>
+      ${testDesc ? `<span class="test-name-suite">${escHtml(testDesc)}</span>` : ""}
+      <span class="expand-chevron">▶</span>
+    </td>
+    <td class="td-dur">${msg.duration || "—"}</td>
+  `;
+  tr.addEventListener("click", () => toggleDetail(msg.idx));
+  tbody.appendChild(tr);
+
+  // Detail row — content depends on status
+  const detailTr = document.createElement("tr");
+  detailTr.className = "detail-row";
+  detailTr.id        = `detail-${msg.idx}`;
+  detailTr.innerHTML = `<td colspan="4"><div class="detail-content"></div></td>`;
+  tbody.appendChild(detailTr);
+
+  // Pass and skip: populate detail immediately from the result data (no server follow-up needed)
+  // Fail: detail content is filled in later when the 'detail' SSE event arrives
+  if (msg.status !== "fail") {
+    const icon    = msg.status === "pass" ? "✓" : "–";
+    const label   = msg.status === "pass" ? "Test passed" : "Test skipped";
+    const durLine = msg.duration ? `Duration : ${msg.duration}` : "";
+    const detail  = `${icon}  ${label}${msg.duration ? `  ·  ${msg.duration}` : ""}\n\n`
+      + `Test     : ${msg.name}`;
+    detailTr.querySelector(".detail-content").textContent = detail;
+  }
+}
+
+function toggleDetail(idx) {
+  const resultRow = document.getElementById(`row-${idx}`);
+  const detailRow = document.getElementById(`detail-${idx}`);
+  if (!resultRow || !detailRow) return;
+  const opening = !resultRow.classList.contains("expanded");
+  resultRow.classList.toggle("expanded", opening);
+  detailRow.classList.toggle("open", opening);
+  if (opening) detailRow.querySelector(".detail-content").scrollTop = 0;
+}
+
+// ── Console ────────────────────────────────────────────────────────────────
+function logLine(text, cls = "log-info") {
+  const console_ = document.getElementById("console");
+  const span = document.createElement("span");
+  span.className = cls;
+  span.textContent = text + "\n";
+  console_.appendChild(span);
+  if (autoscroll) console_.scrollTop = console_.scrollHeight;
+}
+
+function clearConsole() {
+  document.getElementById("console").innerHTML = "";
+  document.getElementById("results-body").innerHTML =
+    '<tr><td colspan="4" style="text-align:center;color:var(--text-dim);padding:40px;">Configure options and click <strong>Run Tests</strong> to begin.</td></tr>';
+  stats = { total: 0, pass: 0, fail: 0, skip: 0, dur: "—" };
+  updateStats();
+  results = [];
+  failureMap = {};
+  suiteMap   = {};
+  resetAnalytics();
+  setStatus("idle");
+}
+
+function toggleAutoscroll() {
+  autoscroll = !autoscroll;
+  document.getElementById("autoscroll-btn").textContent =
+    autoscroll ? "↓ Auto-scroll ON" : "↓ Auto-scroll OFF";
+}
+
+// ── Tabs ───────────────────────────────────────────────────────────────────
+function switchTab(name) {
+  document.querySelectorAll(".tab").forEach((t, i) => {
+    const names = ["results", "console", "history"];
+    t.classList.toggle("active", names[i] === name);
+  });
+  document.querySelectorAll(".tab-content").forEach(tc => {
+    tc.classList.toggle("active", tc.id === "tab-" + name);
+  });
+}
+
+let analyticsExpanded = false;
+function toggleAnalytics() {
+  const panel   = document.getElementById("analytics-panel");
+  const chevron = document.getElementById("analytics-chevron");
+  analyticsExpanded = !analyticsExpanded;
+  panel.classList.toggle("analytics-collapsed", !analyticsExpanded);
+  chevron.style.transform = analyticsExpanded ? "rotate(0deg)" : "rotate(180deg)";
+}
+function expandAnalytics() {
+  const panel   = document.getElementById("analytics-panel");
+  const chevron = document.getElementById("analytics-chevron");
+  analyticsExpanded = true;
+  panel.classList.remove("analytics-collapsed");
+  chevron.style.transform = "rotate(0deg)";
+}
+
+// ── History ────────────────────────────────────────────────────────────────
+function renderHistory(history) {
+  const wrap = document.getElementById("history-list");
+  const badge = document.getElementById("hist-badge");
+  if (!history || history.length === 0) {
+    wrap.innerHTML = '<div class="history-empty">No runs yet in this session.</div>';
+    badge.textContent = "";
+    return;
+  }
+  badge.textContent = `(${history.length})`;
+  wrap.innerHTML = history.map(h => {
+    const d = new Date(h.startedAt);
+    const timeStr = d.toLocaleTimeString();
+    const dateStr = d.toLocaleDateString();
+    const { passed, failed, skipped, duration } = h.summary || {};
+    const ok = h.exitCode === 0;
+    return `<div class="history-item">
+      <div class="hi-time">${dateStr} ${timeStr}</div>
+      <div class="hi-config">${escHtml((ENV_META[h.config?.testEnv||"production"]||ENV_META.production).label)} | ${escHtml(h.config?.username || "saved session")} | ${escHtml((h.config?.tiers||["all"]).join(","))} | ${escHtml((h.config?.features||["all"]).join(","))}</div>
+      <div class="hi-stats">
+        <span class="hi-pass">✓ ${passed || 0}</span>
+        <span class="hi-fail">✗ ${failed || 0}</span>
+        <span class="hi-skip">– ${skipped || 0}</span>
+        ${duration ? `<span style="color:var(--blue)">${duration}</span>` : ""}
+      </div>
+      <span class="badge ${ok ? "badge-pass" : "badge-fail"}">${ok ? "Pass" : "Fail"}</span>
+    </div>`;
+  }).join("");
+}
+
+// ── Catalog manifest ────────────────────────────────────────────────────────
+let catalogManifest = {};
+
+async function loadCatalogManifest() {
+  try {
+    const res = await fetch("/api/catalog");
+    catalogManifest = await res.json();
+  } catch { catalogManifest = {}; }
+  populateCatalogDropdown();
+}
+
+function populateCatalogDropdown() {
+  const sel = document.getElementById("catalog-select");
+  // Keep the placeholder option, add one per feature
+  sel.innerHTML = '<option value="">— select feature —</option>';
+  Object.keys(catalogManifest).forEach(key => {
+    const opt = document.createElement("option");
+    opt.value = key;
+    opt.textContent = catalogManifest[key].feature;
+    sel.appendChild(opt);
+  });
+}
+
+function onCatalogSelect() {
+  const key = document.getElementById("catalog-select").value;
+  renderCatalogPanel(key);
+}
+
+function renderCatalogPanel(key) {
+  const panel = document.getElementById("catalog-panel");
+  if (!key || !catalogManifest[key]) {
+    panel.className = "";
+    panel.innerHTML = "";
+    return;
+  }
+  const c = catalogManifest[key];
+  const pct = c.tests.total > 0 ? Math.round((c.tests.implemented / c.tests.total) * 100) : 0;
+  const barColor = pct === 100 ? "var(--green)" : pct >= 50 ? "var(--yellow)" : "var(--red)";
+
+  panel.className = "visible";
+  panel.innerHTML = `
+    <div class="cat-row">
+      <span class="cat-title">📋 ${escHtml(c.feature)}</span>
+      <span class="cat-version">${escHtml(c.version)}</span>
+      <a class="cat-link" href="/${escHtml(c.catalogFile)}" target="_blank">View Catalog ↗</a>
+    </div>
+    <div class="cat-meta">
+      <span>📅 ${escHtml(c.generated)}</span>
+      <span>👤 ${escHtml(c.auditedAs)}</span>
+      <span>📂 ${c.sections} sections</span>
+      ${c.lastUpdated ? `<span>🔄 Updated: ${new Date(c.lastUpdated).toLocaleDateString()}</span>` : ''}
+    </div>
+    <div class="cat-progress">
+      <div class="cat-stats">
+        <span class="cat-stat-impl">✓ ${c.tests.implemented} done</span>
+        <span class="cat-stat-fixme">⏳ ${c.tests.fixme} pending</span>
+        <span class="cat-stat-total">/ ${c.tests.total} total</span>
+        <span style="color:${barColor};font-weight:700;margin-left:auto">${pct}%</span>
+      </div>
+      <div class="cat-progress-bar">
+        <div class="cat-progress-fill" style="width:${pct}%;background:${barColor}"></div>
+      </div>
+    </div>
+    ${c.implementationStatus ? `<div style="margin-top:8px;font-size:10px;">
+      <strong style="color:var(--text);font-size:11px;">Test Suite Implementation:</strong>
+      <div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap;">
+        ${Object.entries(c.implementationStatus).map(([tier, status]) => {
+          const icon = status.implemented ? '✅' : '⏸️';
+          const color = status.implemented ? 'var(--green)' : 'var(--text-dim)';
+          const lastUpd = status.lastUpdated ? new Date(status.lastUpdated).toLocaleDateString() : 'N/A';
+          return `<span style="padding:3px 8px;border:1px solid ${color};border-radius:4px;background:rgba(0,0,0,.02)">
+            <span style="color:${color}">${icon}</span> <strong>${tier}</strong> <span style="color:var(--text-dim);font-size:9px">(${lastUpd})</span>
+          </span>`;
+        }).join('')}
+      </div>
+    </div>` : ''}
+    <div style="margin-top:6px;font-size:10px;color:var(--text-dim);">
+      <strong style="color:var(--text);">Spec files:</strong>
+      ${Object.entries(c.specFiles).map(([tier, file]) =>
+        `<span style="margin-right:10px">
+          <span style="color:var(--accent)">${tier}</span> → <code style="font-size:10px;color:var(--text-dim)">${escHtml(file.split('/').pop())}</code>
+        </span>`
+      ).join("")}
+    </div>
+    ${c.lastRun ? (() => {
+      const lr = c.lastRun;
+      const tiers = ['smoke','regression','e2e'].filter(t => lr[t]);
+      const tierHtml = tiers.map(t => {
+        const td = lr[t];
+        const failColor = td.fail > 0 ? 'color:var(--red)' : '';
+        return `<span class="cat-tier-pill cat-tier-${t}">
+          <span class="cat-tier-label">${t}</span>
+          <span class="cat-tier-pass">✓${td.pass}</span>
+          ${td.skip > 0 ? `<span class="cat-tier-skip">-${td.skip}</span>` : ''}
+          ${td.fail > 0 ? `<span class="cat-tier-fail">✗${td.fail}</span>` : ''}
+        </span>`;
+      }).join('');
+      return `<div style="margin-top:6px">
+        <div style="font-size:10px;color:var(--text-dim);margin-bottom:3px;font-weight:600;">
+          📊 Last Run <span style="font-weight:400">(${escHtml(lr.env||'prod')} · ${escHtml(lr.date||'')})</span>
+        </div>
+        <div class="cat-tiers">${tierHtml}</div>
+      </div>`;
+    })() : ''}`;
+}
+
+function updateCatalogPanel() {
+  // Auto-select the dropdown to match the single selected feature (if exactly one chosen)
+  const features = getSelectedValues("feature-group");
+  const sel = document.getElementById("catalog-select");
+  if (!features.includes("all") && features.length === 1 && catalogManifest[features[0]]) {
+    sel.value = features[0];
+    renderCatalogPanel(features[0]);
+  }
+  // If "all" or multiple — leave dropdown unchanged, don't force a selection
+}
+
+// ── Checkbox mutual exclusion (All vs individual) ──────────────────────────
+function setupCheckboxGroup(groupId) {
+  const group = document.getElementById(groupId);
+  group.addEventListener("change", (e) => {
+    const cb = e.target;
+    const allCb = group.querySelector('input[value="all"]');
+    if (cb.value === "all") {
+      group.querySelectorAll("input:not([value=all])").forEach(c => { c.checked = false; c.closest(".checkbox-item").classList.remove("checked"); });
+      cb.closest(".checkbox-item").classList.toggle("checked", cb.checked);
+    } else {
+      allCb.checked = false;
+      allCb.closest(".checkbox-item").classList.remove("checked");
+      cb.closest(".checkbox-item").classList.toggle("checked", cb.checked);
+      const anyChecked = [...group.querySelectorAll("input:not([value=all])")].some(c => c.checked);
+      if (!anyChecked) { allCb.checked = true; allCb.closest(".checkbox-item").classList.add("checked"); }
+    }
+    updateCommandPreview();
+    if (groupId === "feature-group") updateCatalogPanel();
+  });
+}
+
+// ── Command preview ────────────────────────────────────────────────────────
+function getSelectedValues(groupId) {
+  const group = document.getElementById(groupId);
+  const allCb = group.querySelector("input[value=all]");
+  if (allCb?.checked) return ["all"];
+  return [...group.querySelectorAll("input:not([value=all])")].filter(c => c.checked).map(c => c.value);
+}
+
+const FEATURE_FOLDERS = {
+  "coop-submit-claim":            "tests/playwright/specs/coop/feature-submit-claim",
+  "coop-submit-preapproval":      "tests/playwright/specs/coop/feature-submit-preapproval",
+  "coop-dealer-dashboard":        "tests/playwright/specs/coop/feature-dealer-dashboard",
+  "coop-admin-reports":           "tests/playwright/specs/coop/feature-admin-reports",
+  "coop-api-submit-claim":        "tests/api/coop/feature-submit-claim",
+  "coop-api-submit-preapproval":  "tests/api/coop/feature-submit-preapproval",
+};
+const TIER_TAGS = { smoke: "@smoke", regression: "@regression", e2e: "@e2e" };
+
+const ENV_META = {
+  production: { label: "PROD",    cls: "env-prod",    url: (typeof process !== "undefined" && process?.env?.BASE_URL) || "" },
+  uat:        { label: "UAT",     cls: "env-uat",     url: "" },
+  testing:    { label: "TEST",    cls: "env-testing", url: "" },
+  dev:        { label: "DEV",     cls: "env-dev",     url: "" },
+};
+
+function updateEnvBadge() {
+  const testEnv  = document.getElementById("sel-test-env").value;
+  const override = document.getElementById("inp-base-url")?.value?.trim();
+  const meta     = ENV_META[testEnv] || ENV_META.production;
+  const badge    = document.getElementById("env-badge");
+  const resolved = document.getElementById("url-resolved");
+  badge.textContent = meta.label;
+  badge.className   = "env-badge " + meta.cls;
+  if (resolved) {
+    if (override) {
+      resolved.innerHTML = `URL override: <code style="color:var(--green)">${escHtml(override)}</code>`;
+    } else {
+      resolved.innerHTML = `Reads from <code style="color:var(--accent)">.env.${escHtml(testEnv)}</code>`;
+    }
+  }
+  updateCommandPreview();
+}
+
+function updateCommandPreview() {
+  const testEnv  = document.getElementById("sel-test-env").value;
+  const features = getSelectedValues("feature-group");
+  const tiers    = getSelectedValues("tier-group");
+  const role     = getRole();
+  const baseUrl  = document.getElementById("inp-base-url")?.value?.trim() || "";
+  const username = document.getElementById("inp-user")?.value?.trim() || "";
+  const isAdmin  = role === "admin" || role === "admin-custom";
+  let cmd = `TEST_ENV=${testEnv}`;
+  if (baseUrl)  cmd += ` BASE_URL=${baseUrl}`;
+  if ((role === "dealer-custom" || role === "admin-custom") && username) cmd += ` TEST_USER_EMAIL=${username}`;
+  cmd += " npx playwright test";
+  if (isAdmin) cmd += " --project=setup-admin --project=chromium-admin";
+  if (!features.includes("all")) {
+    cmd += " " + features.map(f => FEATURE_FOLDERS[f] || f).join(" ");
+  }
+  if (!tiers.includes("all")) {
+    cmd += ` --grep "${tiers.map(t => TIER_TAGS[t] || t).join("|")}"`;
+  }
+  cmd += " --reporter=list";
+  document.getElementById("cmd-preview").textContent = cmd;
+}
+
+function getRole() {
+  return document.querySelector('input[name="role"]:checked')?.value || "dealer";
+}
+
+function onRoleChange() {
+  const role = getRole();
+  // Sync checked CSS on radio labels
+  document.querySelectorAll('#role-group .checkbox-item, [data-value="admin"] , [data-value="admin-custom"]').forEach(el => {
+    el.classList.toggle("checked", el.dataset.value === role);
+  });
+  // Show credential inputs only for custom roles
+  const needsCreds = role === "dealer-custom" || role === "admin-custom";
+  document.getElementById("cred-section").style.display = needsCreds ? "flex" : "none";
+  updateCommandPreview();
+}
+
+// ── Run / Stop ─────────────────────────────────────────────────────────────
+async function runTests() {
+  if (running) return;
+  const testEnv  = document.getElementById("sel-test-env").value;
+  const role     = getRole();
+  const username = document.getElementById("inp-user").value.trim();
+  const password = document.getElementById("inp-pass").value.trim();
+  const features = getSelectedValues("feature-group");
+  const tiers    = getSelectedValues("tier-group");
+
+  switchTab("console");
+
+  const baseUrl  = document.getElementById("inp-base-url")?.value?.trim() || "";
+  const payload  = { testEnv, baseUrl: baseUrl || undefined, role, features, tiers };
+  if (username) payload.username = username;
+  if (password) payload.password = password;
+
+  const res = await fetch("/api/run", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json();
+  if (!data.ok) {
+    logLine(`⚠ ${data.error}`, "log-err");
+  }
+}
+
+async function stopTests() {
+  const res  = await fetch("/api/stop", { method: "POST" });
+  const data = await res.json();
+  if (data.ok) {
+    // Immediately re-enable UI — the SSE "end" event will also arrive but may be slow on Windows
+    running = false;
+    syncRunningUI();
+    setStatus("idle");
+    logLine("⏹ Stopped by user.", "log-dim");
+  }
+}
+
+function escHtml(str) {
+  return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+/**
+ * Render detail error content with color-coded lines:
+ *   Error / AssertionError  → red
+ *   Expected / Received     → yellow
+ *   stack frames (at …)     → dim grey
+ *   everything else         → default console color
+ */
+function renderDetailContent(container, text) {
+  container.innerHTML = "";
+  for (const line of text.split("\n")) {
+    const span = document.createElement("span");
+    span.style.display = "block";
+    span.textContent   = line;
+    if (/^\s*(Error|AssertionError|TimeoutError)/.test(line)) {
+      span.style.color = "#ff6b6b";
+    } else if (/^\s+(Expected|Received|Value)\s*[:→]/.test(line)) {
+      span.style.color = "#f59e0b";
+    } else if (/^\s+at /.test(line)) {
+      span.style.color = "#4a5568";
+      span.style.fontSize = "10px";
+    }
+    container.appendChild(span);
+  }
+}
+
+// ── Test Result Analytics ──────────────────────────────────────────────────
+
+/**
+ * Extract a suite label from a test name.
+ * "CDA-PG-001 @smoke — ..." → "CDA"
+ * "COR-PA-001 @smoke — ..." → "COR-PA"
+ */
+const SUITE_LABELS = {
+  // Coop — dealer
+  "COOP-SMOKE":      "Coop Smoke",
+  "COOP-TC":         "Coop Submit Claim",
+  "COOP-SC":         "Submit Claim",
+  "COOP-API":        "Coop API",
+  "COOP-PREAPP":     "Coop Preapproval",
+  "COOP-PA":         "Submit Pre-Approval",
+  "COOP-DD":         "Dealer Dashboard",
+  "COOP-DD-DI":      "Dealer Info Tab",
+  "COOP-DD-BG":      "Budget Tab",
+  "COOP-DD-TD":      "My Todo Tab",
+  "COOP-DD-CA":      "Coop Activity Tab",
+  "COOP-DD-RP":      "Reports Tab",
+  "COOP-ADMIN":      "Admin Reports",
+};
+
+function extractSuite(name) {
+  // Match "ABC-DEF-001" or "ABC-001" at the start
+  const m = name.match(/^([A-Z]+-[A-Z]+(?:-[A-Z]+)?)-\d+/);
+  if (m) {
+    const raw = m[1];
+    // If 3-part (COR-PA) check that first, then 2-part (COR), then 1-part
+    if (SUITE_LABELS[raw]) return raw;
+    const two = raw.split("-").slice(0, 2).join("-");
+    if (SUITE_LABELS[two]) return two;
+    const one = raw.split("-")[0];
+    return one;
+  }
+  return "Other";
+}
+
+/** Parse "12.5s" / "1.2m" → milliseconds (0 if unparseable) */
+function parseDurMs(dur) {
+  if (!dur) return 0;
+  const s = dur.trim();
+  const mMatch = s.match(/^([\d.]+)m(?:([\d.]+)s?)?$/);
+  if (mMatch) return (parseFloat(mMatch[1]) * 60 + parseFloat(mMatch[2] || 0)) * 1000;
+  const sMatch = s.match(/^([\d.]+)s$/);
+  if (sMatch) return parseFloat(sMatch[1]) * 1000;
+  return 0;
+}
+
+/** Format ms → "X.Xs" or "Xm Xs" */
+function fmtDur(ms) {
+  if (ms <= 0) return "—";
+  if (ms < 60000) return (ms / 1000).toFixed(1) + "s";
+  const m = Math.floor(ms / 60000);
+  const s = ((ms % 60000) / 1000).toFixed(0);
+  return `${m}m ${s}s`;
+}
+
+/** Reset the analytics UI when a new run starts (collapse panel) */
+function resetAnalytics() {
+  analyticsExpanded = false;
+  const panel = document.getElementById("analytics-panel");
+  if (panel) panel.classList.add("analytics-collapsed");
+  const chevron = document.getElementById("analytics-chevron");
+  if (chevron) chevron.style.transform = "rotate(180deg)";
+  document.getElementById("rpt-passrate").textContent  = "—";
+  document.getElementById("rpt-total").textContent     = "—";
+  document.getElementById("rpt-leg-pass").textContent  = "0";
+  document.getElementById("rpt-leg-fail").textContent  = "0";
+  document.getElementById("rpt-leg-skip").textContent  = "0";
+  document.getElementById("rpt-dur-card").textContent  = "—";
+  document.getElementById("rpt-fail-count").textContent = "0";
+  document.getElementById("rpt-fail-sub").textContent  = "";
+  document.getElementById("rpt-fail-body").innerHTML   = '<div class="rpt-empty">Running…</div>';
+  document.getElementById("rpt-suite-body").innerHTML  = '<div class="rpt-empty">Running…</div>';
+  document.getElementById("rpt-badge").textContent     = "";
+  const center = document.getElementById("donut-center");
+  if (center) center.textContent = "—";
+  setDonutArc("donut-pass", 0, 226.2, 0);
+  setDonutArc("donut-fail", 0, 226.2, 0);
+  setDonutArc("donut-skip", 0, 226.2, 0);
+}
+
+/** Update one arc of the SVG donut */
+function setDonutArc(id, len, C, offsetLen) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.setAttribute("stroke-dasharray", `${len.toFixed(2)} ${(C - len).toFixed(2)}`);
+  el.setAttribute("stroke-dashoffset", (-offsetLen).toFixed(2));
+}
+
+/** Build + render the complete Test Result Analytics from current run data */
+function buildAnalytics() {
+  const pass  = stats.pass;
+  const fail  = stats.fail;
+  const skip  = stats.skip;
+  const total = stats.total;
+  const rate  = total > 0 ? Math.round((pass / total) * 100) : 0;
+
+  // ── Hero metrics ──────────────────────────────────────────────────────────
+  document.getElementById("rpt-passrate").textContent = total > 0 ? rate + "%" : "—";
+  document.getElementById("rpt-total").textContent    = total || "—";
+  document.getElementById("rpt-leg-pass").textContent = pass;
+  document.getElementById("rpt-leg-fail").textContent = fail;
+  document.getElementById("rpt-leg-skip").textContent = skip;
+  document.getElementById("rpt-dur-card").textContent = stats.dur || "—";
+
+  // Badge in analytics header
+  const badge   = document.getElementById("rpt-badge");
+  const summary = document.getElementById("analytics-summary");
+  if (total > 0) {
+    if (fail > 0) { badge.textContent = `${fail} ✗`; badge.style.color = "var(--red)"; }
+    else          { badge.textContent = "✓ All";      badge.style.color = "var(--green)"; }
+    if (summary) summary.textContent = `${pass} passed · ${fail} failed · ${skip} skipped`;
+  } else {
+    badge.textContent = ""; if (badge) badge.style.color = "";
+    if (summary) summary.textContent = "";
+  }
+
+  // ── Donut chart with center pass-rate text ────────────────────────────────
+  const C = 226.2;
+  if (total > 0) {
+    const passLen = C * pass / total;
+    const failLen = C * fail / total;
+    const skipLen = C - passLen - failLen;
+    setDonutArc("donut-pass", passLen, C, 0);
+    setDonutArc("donut-fail", failLen, C, passLen);
+    setDonutArc("donut-skip", skipLen, C, passLen + failLen);
+    const center = document.getElementById("donut-center");
+    if (center) center.textContent = rate + "%";
+  }
+
+  // ── Trend chart ───────────────────────────────────────────────────────────
+  buildTrendChart();
+
+  // ── Suite breakdown ───────────────────────────────────────────────────────
+  buildSuiteBreakdown();
+
+  // ── Failing tests table ───────────────────────────────────────────────────
+  const failing = Object.entries(failureMap)
+    .filter(([, v]) => v.failed > 0)
+    .sort((a, b) => b[1].failed - a[1].failed);
+
+  const totalFailed = failing.reduce((s, [, v]) => s + v.failed, 0);
+  document.getElementById("rpt-fail-count").textContent = failing.length;
+  document.getElementById("rpt-fail-sub").textContent   =
+    failing.length > 0 ? `${failing.length} test${failing.length > 1 ? "s" : ""} causing ${totalFailed} failed result${totalFailed > 1 ? "s" : ""}` : "";
+
+  const body = document.getElementById("rpt-fail-body");
+  if (failing.length === 0) {
+    body.innerHTML = '<div class="rpt-empty">✅ All tests passed!</div>';
+    return;
+  }
+
+  const rows = failing.map(([name, v]) => {
+    const passRate = v.total > 0 ? Math.round(((v.total - v.failed) / v.total) * 100) : 0;
+    const avgDur   = v.total > 0 ? fmtDur(v.totalDurMs / v.total) : "—";
+    // Split name: "TCID @tags — description" into id + desc
+    const parts  = name.split(" — ");
+    const tcId   = parts[0]?.trim();
+    const tcDesc = parts.slice(1).join(" — ").trim();
+    return `<tr>
+      <td class="rpt-fail-name">
+        <strong>${escHtml(tcId)}</strong>
+        ${tcDesc ? `<em>${escHtml(tcDesc)}</em>` : ""}
+      </td>
+      <td style="text-align:center;color:var(--red);font-weight:700">${v.failed}</td>
+      <td style="text-align:center">
+        <div class="rpt-rate-bar">
+          <div class="rpt-rate-bg">
+            <div class="rpt-rate-fill" style="width:${passRate}%;background:${passRate===100?"var(--green)":passRate>=50?"var(--yellow)":"var(--red)"}"></div>
+          </div>
+          <span style="font-size:11px;color:var(--text-dim);white-space:nowrap">${passRate}%</span>
+        </div>
+      </td>
+      <td style="text-align:center;color:var(--text-dim)">${v.total}</td>
+      <td style="text-align:center;color:var(--text-dim)">${avgDur}</td>
+    </tr>`;
+  }).join("");
+
+  body.innerHTML = `<table class="rpt-fail-table">
+    <thead><tr>
+      <th>Test</th>
+      <th>Failed</th>
+      <th>Pass Rate</th>
+      <th>Total</th>
+      <th>Avg Duration</th>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+/** Render the suite breakdown horizontal bar chart */
+function buildSuiteBreakdown() {
+  const body = document.getElementById("rpt-suite-body");
+  if (!body) return;
+  const entries = Object.entries(suiteMap);
+  if (entries.length === 0) {
+    body.innerHTML = '<div class="rpt-empty">No suite data — run tests first</div>';
+    return;
+  }
+
+  // Sort by total desc
+  entries.sort((a, b) => (b[1].pass + b[1].fail + b[1].skip) - (a[1].pass + a[1].fail + a[1].skip));
+
+  const rows = entries.map(([key, v]) => {
+    const total    = v.pass + v.fail + v.skip;
+    const passW    = total > 0 ? (v.pass / total * 100).toFixed(1) : 0;
+    const failW    = total > 0 ? (v.fail / total * 100).toFixed(1) : 0;
+    const skipW    = total > 0 ? (v.skip / total * 100).toFixed(1) : 0;
+    const label    = SUITE_LABELS[key] || key;
+    const allPass  = v.fail === 0 && total > 0;
+    return `<div class="rpt-suite-row">
+      <div class="rpt-suite-name" title="${escHtml(label)}">${escHtml(label)}</div>
+      <div class="rpt-suite-bar-wrap" title="${v.pass} pass · ${v.fail} fail · ${v.skip} skip">
+        <div class="rpt-suite-bar-pass" style="width:${passW}%"></div>
+        <div class="rpt-suite-bar-fail" style="width:${failW}%"></div>
+        <div class="rpt-suite-bar-skip" style="width:${skipW}%"></div>
+      </div>
+      <div class="rpt-suite-counts">
+        <span class="sc-pass">✓${v.pass}</span>
+        ${v.fail > 0 ? `<span class="sc-fail"> ✗${v.fail}</span>` : ""}
+        ${v.skip > 0 ? ` <span>–${v.skip}</span>` : ""}
+        <span style="color:var(--text-dim);margin-left:3px">(${total})</span>
+      </div>
+    </div>`;
+  }).join("");
+
+  body.innerHTML = rows;
+}
+
+/** Render the trend SVG from run history */
+function buildTrendChart() {
+  const svg   = document.getElementById("rpt-trend-svg");
+  const dates = document.getElementById("rpt-trend-dates");
+  if (!svg) return;
+
+  // Collect history from DOM (server sends it on connect)
+  const histItems = document.querySelectorAll(".history-item");
+  // Also check the in-memory stats for the current run
+  const runs = [];
+
+  // Read from current session history rendered in history tab
+  histItems.forEach(item => {
+    const statsEl = item.querySelector(".hi-stats");
+    if (!statsEl) return;
+    const passEl  = statsEl.querySelector(".hi-pass");
+    const failEl  = statsEl.querySelector(".hi-fail");
+    const skipEl  = statsEl.querySelector(".hi-skip");
+    const timeEl  = item.querySelector(".hi-time");
+    const passed  = parseInt((passEl?.textContent || "").replace(/\D/g, "")) || 0;
+    const failed  = parseInt((failEl?.textContent || "").replace(/\D/g, "")) || 0;
+    const total   = passed + failed + (parseInt((skipEl?.textContent || "").replace(/\D/g, "")) || 0);
+    const rate    = total > 0 ? Math.round(passed / total * 100) : 0;
+    runs.push({ passed, failed, total, rate, label: timeEl?.textContent?.trim() || "" });
+  });
+
+  // Prepend current run if stats are set
+  if (stats.total > 0) {
+    const rate = Math.round(stats.pass / stats.total * 100);
+    runs.unshift({ passed: stats.pass, failed: stats.fail, total: stats.total, rate, label: "Now" });
+  }
+
+  if (runs.length === 0) {
+    svg.innerHTML = '<text x="250" y="50" text-anchor="middle" fill="var(--text-dim)" font-size="11">No run history yet</text>';
+    dates.innerHTML = "";
+    return;
+  }
+
+  const W = 500, H = 90, PAD = 28, BAR_PAD = 4;
+  const maxFail  = Math.max(...runs.map(r => r.failed), 1);
+  const slotW    = (W - PAD * 2) / runs.length;
+  const barW     = Math.max(slotW - BAR_PAD * 2, 4);
+  const chartH   = H - 20; // leave room for x-axis labels
+
+  let barsHtml = "", linePoints = "";
+
+  runs.forEach((r, i) => {
+    const x     = PAD + i * slotW;
+    const barH  = r.failed > 0 ? Math.round((r.failed / maxFail) * (chartH - 8)) : 2;
+    const barY  = chartH - barH;
+    const barX  = x + BAR_PAD;
+    const dotX  = x + slotW / 2;
+    const dotY  = Math.round(chartH - (r.rate / 100) * (chartH - 8));
+
+    // Bar (red for failed)
+    const barColor = r.failed > 0 ? "var(--red)" : "var(--border)";
+    barsHtml += `<rect x="${barX.toFixed(1)}" y="${barY.toFixed(1)}" width="${barW.toFixed(1)}" height="${barH.toFixed(1)}" fill="${barColor}" rx="2"/>`;
+    // Failed count label if non-zero
+    if (r.failed > 0 && barH > 12) {
+      barsHtml += `<text x="${(barX + barW/2).toFixed(1)}" y="${(barY - 2).toFixed(1)}" text-anchor="middle" font-size="8" fill="var(--red)">${r.failed}</text>`;
+    }
+    // Pass rate dot for line
+    linePoints += `${dotX.toFixed(1)},${dotY.toFixed(1)} `;
+  });
+
+  // Pass rate line
+  const lineColor = "var(--green)";
+  const lineHtml  = runs.length > 1
+    ? `<polyline points="${linePoints.trim()}" fill="none" stroke="${lineColor}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>`
+    : "";
+
+  // Dots on line
+  const dotsHtml = runs.map((r, i) => {
+    const dotX = PAD + i * slotW + slotW / 2;
+    const dotY = Math.round(chartH - (r.rate / 100) * (chartH - 8));
+    return `<circle cx="${dotX.toFixed(1)}" cy="${dotY.toFixed(1)}" r="3" fill="${lineColor}"/>
+            <title>${r.label}: ${r.passed}✓ ${r.failed}✗ (${r.rate}%)</title>`;
+  }).join("");
+
+  // Y-axis labels
+  const yLabels = [0, Math.round(maxFail / 2), maxFail].map(v => {
+    const y = chartH - Math.round((v / maxFail) * (chartH - 8));
+    return `<text x="2" y="${y + 3}" font-size="7" fill="var(--text-dim)">${v}</text>`;
+  }).join("");
+
+  svg.innerHTML = yLabels + barsHtml + lineHtml + dotsHtml;
+
+  // Date labels
+  const step  = Math.max(1, Math.floor(runs.length / 6));
+  const shown = runs.filter((_, i) => i % step === 0 || i === runs.length - 1);
+  dates.innerHTML = shown.map(r =>
+    `<span>${escHtml(r.label.split(" ")[1] || r.label)}</span>`
+  ).join("");
+}
+
+// ── Theme (v2.1.0) ────────────────────────────────────────────────────────
+function initTheme() {
+  const saved = localStorage.getItem("dp-dashboard-theme") || "dark";
+  document.documentElement.setAttribute("data-theme", saved);
+  const btn = document.getElementById("theme-toggle");
+  if (btn) btn.textContent = saved === "light" ? "🌙" : "☀️";
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute("data-theme") || "dark";
+  const next    = current === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", next);
+  localStorage.setItem("dp-dashboard-theme", next);
+  const btn = document.getElementById("theme-toggle");
+  if (btn) btn.textContent = next === "light" ? "🌙" : "☀️";
+}
+
+// ── Compare Mode ──────────────────────────────────────────────────────────
+
+function updateCmpPreview() { /* placeholder for future command preview */ }
+
+function startComparison() {
+  if (running) return;
+  const legacyUrl = document.getElementById("cmp-legacy-url").value.trim();
+  const modernUrl = document.getElementById("cmp-modern-url").value.trim();
+  if (!legacyUrl || !modernUrl) {
+    logLine("⚠ Enter both Legacy URL and Modern URL before running comparison.", "log-err");
+    switchTab("console");
+    return;
+  }
+
+  // Reset compare UI
+  resetCompareUI();
+  switchTab("compare");
+
+  const features = getSelectedValues("feature-group");
+  const tiers    = getSelectedValues("tier-group");
+  const role     = getRole();
+  const testEnv  = document.getElementById("sel-test-env").value;
+
+  fetch("/api/compare", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ legacyUrl, modernUrl, features, tiers, role, testEnv }),
+  });
+}
+
+function resetCompareUI() {
+  document.getElementById("cmp-results-body").innerHTML =
+    '<tr><td colspan="5" style="text-align:center;color:var(--text-dim);padding:20px;">Running comparison…</td></tr>';
+  ["cs-match","cs-regression","cs-fixed","cs-bothfail"].forEach(id => {
+    document.getElementById(id).textContent = "—";
+  });
+  ["legacy","modern","diff"].forEach(p => {
+    const dot = document.getElementById(`cmp-dot-${p}`);
+    const sum = document.getElementById(`cmp-sum-${p}`);
+    if (dot) dot.textContent = "○";
+    if (sum) sum.textContent = "";
+    document.getElementById(`cmp-ph-${p}`)?.style?.setProperty("opacity", "0.4");
+  });
+  const badge = document.getElementById("cmp-regression-badge");
+  if (badge) badge.style.display = "none";
+}
+
+function setPhaseActive(phase) {
+  ["legacy","modern","diff"].forEach(p => {
+    const el  = document.getElementById(`cmp-ph-${p}`);
+    const dot = document.getElementById(`cmp-dot-${p}`);
+    if (p === phase) {
+      if (el)  el.style.opacity  = "1";
+      if (dot) dot.textContent   = "●";
+      if (dot) dot.style.color   = "var(--accent)";
+    } else if (el) {
+      // leave done phases at full opacity
+    }
+  });
+}
+
+function setPhaseComplete(phase, summaryText) {
+  const dot = document.getElementById(`cmp-dot-${phase}`);
+  const sum = document.getElementById(`cmp-sum-${phase}`);
+  const el  = document.getElementById(`cmp-ph-${phase}`);
+  if (dot) { dot.textContent = "✓"; dot.style.color = "var(--green)"; }
+  if (sum) sum.textContent = summaryText;
+  if (el)  el.style.opacity = "1";
+}
+
+// ── Compare SSE events ──────────────────────────────────────────────────────
+function handleCompareMessage(msg) {
+  switch (msg.type) {
+
+    case "compare-start":
+      running = true;
+      syncRunningUI();
+      setStatus("running");
+      setPhaseActive("legacy");
+      logLine(`▶ Compare: ${msg.legacyUrl} vs ${msg.modernUrl}`, "log-start");
+      logLine(`  Command: ${msg.args}`, "log-info");
+      logLine("─".repeat(60), "log-dim");
+      break;
+
+    case "compare-phase":
+      if (msg.phase === "modern") {
+        setPhaseActive("modern");
+        logLine("─".repeat(40) + " MODERN RUN " + "─".repeat(40), "log-start");
+      }
+      break;
+
+    case "compare-phase-done": {
+      const s = msg.summary || {};
+      const label = `✓${s.passed||0} ✗${s.failed||0} –${s.skipped||0}`;
+      setPhaseComplete(msg.phase, label);
+      break;
+    }
+
+    case "compare-result":
+      // Trickle results into console (already handled by generic "line" event)
+      break;
+
+    case "compare-done": {
+      running = false;
+      syncRunningUI();
+      if (msg.stopped) { setStatus("idle"); break; }
+
+      setPhaseActive("diff");
+      setPhaseComplete("diff", "");
+      setStatus(msg.diff?.summary?.regression > 0 ? "fail" : "pass");
+
+      const diff = msg.diff || { rows: [], summary: {} };
+      renderCompareDiff(diff);
+
+      logLine("─".repeat(60), "log-dim");
+      const s = diff.summary;
+      const ok = (s.regression || 0) === 0;
+      logLine(
+        `${ok ? "✅" : "❌"} Compare done — ` +
+        `${s.bothPass||0} both-pass  🚨${s.regression||0} regression  🔧${s.fixed||0} fixed  ${s.bothFail||0} both-fail`,
+        ok ? "log-pass" : "log-fail"
+      );
+      break;
+    }
+  }
+}
+
+function renderCompareDiff(diff) {
+  const s = diff.summary || {};
+  document.getElementById("cs-match").textContent      = s.bothPass   || 0;
+  document.getElementById("cs-regression").textContent = s.regression || 0;
+  document.getElementById("cs-fixed").textContent      = s.fixed      || 0;
+  document.getElementById("cs-bothfail").textContent   = s.bothFail   || 0;
+
+  // Update badge on tab
+  const badge = document.getElementById("cmp-regression-badge");
+  if (badge) {
+    if ((s.regression || 0) > 0) {
+      badge.textContent  = `${s.regression} 🚨`;
+      badge.style.display = "inline";
+    } else {
+      badge.style.display = "none";
+    }
+  }
+
+  const CATEGORY_META = {
+    "both-pass":   { icon: "✅", label: "Both Pass",         cls: "log-pass",    bg: "rgba(34,197,94,.06)"  },
+    "regression":  { icon: "🚨", label: "Regression",        cls: "log-fail",    bg: "rgba(239,68,68,.10)"  },
+    "fixed":       { icon: "🔧", label: "Fixed in Modern",   cls: "",            bg: "rgba(6,182,212,.06)"  },
+    "both-fail":   { icon: "⚠️", label: "Both Fail",         cls: "log-skip",    bg: "rgba(245,158,11,.06)" },
+    "legacy-only": { icon: "◧",  label: "Legacy Only",       cls: "",            bg: "rgba(100,116,139,.06)"},
+    "modern-only": { icon: "◨",  label: "Modern Only",       cls: "",            bg: "rgba(100,116,139,.06)"},
+    "skip":        { icon: "–",  label: "Skipped",           cls: "",            bg: ""                     },
+  };
+
+  const ORDER = ["regression", "both-fail", "fixed", "legacy-only", "modern-only", "both-pass", "skip"];
+  const sorted = [...(diff.rows || [])].sort((a, b) =>
+    ORDER.indexOf(a.category) - ORDER.indexOf(b.category)
+  );
+
+  const statusBadge = (r) => {
+    if (!r) return '<span style="color:var(--text-dim);font-size:11px;">—</span>';
+    const map = { pass: '<span class="badge badge-pass">✓ Pass</span>',
+                  fail: '<span class="badge badge-fail">✗ Fail</span>',
+                  skip: '<span class="badge badge-skip">– Skip</span>' };
+    return map[r.status] || "—";
+  };
+
+  const tbody = document.getElementById("cmp-results-body");
+  if (!sorted.length) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-dim);padding:30px;">No results to compare.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = sorted.map((row, i) => {
+    const meta = CATEGORY_META[row.category] || CATEGORY_META["both-pass"];
+    const parts  = row.name.split(" — ");
+    const testId = parts[0]?.trim();
+    const desc   = parts.slice(1).join(" — ").trim();
+    return `<tr style="border-bottom:1px solid var(--border);background:${meta.bg}">
+      <td style="padding:7px 12px;color:var(--text-dim);width:40px;font-size:12px;">${i + 1}</td>
+      <td style="padding:7px 12px;">
+        <strong>${escHtml(testId)}</strong>
+        ${desc ? `<span style="display:block;font-size:11px;color:var(--text-dim)">${escHtml(desc)}</span>` : ""}
+      </td>
+      <td style="padding:7px 12px;text-align:center;">${statusBadge(row.legacy)}</td>
+      <td style="padding:7px 12px;text-align:center;">${statusBadge(row.modern)}</td>
+      <td style="padding:7px 12px;text-align:center;font-size:12px;font-weight:600;">
+        ${meta.icon} ${meta.label}
+      </td>
+    </tr>`;
+  }).join("");
+}
+
+// ── Patch the SSE message handler to also dispatch compare events ─────────────
+const _origHandleMessage = handleMessage;
+function handleMessage(msg) {
+  if (msg.type.startsWith("compare-")) {
+    handleCompareMessage(msg);
+    // compare-result/line also goes to console
+    if (msg.type === "compare-result" || msg.type === "line") _origHandleMessage(msg);
+    return;
+  }
+  _origHandleMessage(msg);
+}
+
+// ── Patch switchTab to handle compare ────────────────────────────────────────
+const _origSwitchTab = switchTab;
+function switchTab(name) {
+  document.querySelectorAll(".tab").forEach((t, i) => {
+    const names = ["results", "console", "compare", "history"];
+    t.classList.toggle("active", names[i] === name);
+  });
+  document.querySelectorAll(".tab-content").forEach(tc => {
+    tc.classList.toggle("active", tc.id === "tab-" + name);
+  });
+}
+
+// ── Init ───────────────────────────────────────────────────────────────────
+document.addEventListener("DOMContentLoaded", () => {
+  initTheme();              // restore saved theme before any rendering
+  setupCheckboxGroup("feature-group");
+  setupCheckboxGroup("tier-group");
+  // env change: already wired via onchange="updateEnvBadge()" which calls updateCommandPreview internally
+  // username input: update command preview in real time
+  document.getElementById("inp-user").addEventListener("input", updateCommandPreview);
+  document.getElementById("inp-base-url").addEventListener("input", updateEnvBadge);
+  updateEnvBadge();        // set initial badge state
+  loadCatalogManifest();   // fetch catalog manifest + render panel
+  connectSSE();
+});
+</script>
+</body>
+</html>

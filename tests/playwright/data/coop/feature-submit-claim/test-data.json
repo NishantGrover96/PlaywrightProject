@@ -1,0 +1,109 @@
+{
+  "_comment": "Submit Claim — test data. Credentials loaded from env vars; values here are safe defaults for local non-prod runs.",
+  "_verified": "2026-06-17 against demoportal.channel-fusion.com (DemoClient, Dealer01)",
+
+  "users": {
+    "dealer": {
+      "email":       "",
+      "password":    "",
+      "dealerNumber":"10000",
+      "dealerName":  "TEST DEALER",
+      "contact": {
+        "name":  "Paul Kasian",
+        "email": "vverma@channel-fusion.com",
+        "phone": "999-999-9999"
+      }
+    },
+    "admin": {
+      "email":    "",
+      "password": ""
+    }
+  },
+
+  "urls": {
+    "submitClaim": "/CoopManagement/Claims/Submit/SubmitClaim",
+    "activityList": "/CoopManagement/dealer/Activity/list"
+  },
+
+  "mediaTiles": {
+    "all": [
+      "Direct", "Display Advertising", "FLYERS / INSERTS", "Outdoor",
+      "Paid Search", "Paid Social", "Point of Sale", "Print Advertising",
+      "Radio", "Screens", "Shows and Events", "Sponsorships",
+      "Website Development and SEO"
+    ],
+    "count": 13,
+    "excluded": "Campaign"
+  },
+
+  "valid": {
+    "mediaType":     "Direct",
+    "mediaName":     "QA Test — Direct Mail Flyer",
+    "invoiceAmount": "500.00",
+    "invoiceNumber": "INV-QA-001",
+    "contactName":   "QA Tester",
+    "contactEmail":  "qa@example.com",
+    "contactPhone":  "416-555-0123",
+    "activityDate":  "01/15/2026",
+    "comment":       "Automated QA submission — do not process"
+  },
+
+  "validB": {
+    "mediaType":     "Paid Search",
+    "mediaName":     "QA Test — Paid Search Campaign",
+    "invoiceAmount": "250.00",
+    "invoiceNumber": "INV-QA-002",
+    "activityDate":  "02/01/2026"
+  },
+
+  "invalid": {
+    "futureDate":          "12/31/2099",
+    "duplicateDate":       "01/15/2026",
+    "productLineSumOver":  "60",
+    "productLineSumUnder": "40",
+    "xssPayload":          "<script>alert('xss')</script>",
+    "longString":          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "emptyString":         ""
+  },
+
+  "boundary": {
+    "invoiceAmountMaxLength":  "999999999.99999",
+    "invoiceNumberMaxLength":  "INV-BOUNDARY-MAXLE",
+    "mediaNameMaxLength":      "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "preApprovalMaxLength":    "AAAAAAAAAAAAAAAAAAAAAAAAA",
+    "commentMaxLength":        "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+
+  "productLines": {
+    "single":    [{ "percent": "100" }],
+    "split":     [{ "percent": "60" }, { "percent": "40" }],
+    "invalid":   [{ "percent": "60" }, { "percent": "30" }],
+    "over100":   [{ "percent": "60" }, { "percent": "60" }]
+  },
+
+  "fieldLengths": {
+    "preApprovalNumber": 25,
+    "invoiceAmount":     15,
+    "invoiceNumber":     20,
+    "mediaName":         100,
+    "submissionComment": 500
+  },
+
+  "patterns": {
+    "tempClaimNumber":  "^\\d{6}$",
+    "finalClaimNumber": "^\\d{4}$"
+  },
+
+  "filePaths": {
+    "sampleInvoice":    "tests/playwright/data/coop/feature-submit-claim/sample-invoice.pdf",
+    "sampleSupporting": "tests/playwright/data/coop/feature-submit-claim/sample-supporting.pdf",
+    "largeFile":        "tests/playwright/data/coop/feature-submit-claim/large-file.pdf"
+  },
+
+  "expectedMessages": {
+    "draftSaved":       "Your Claim Has Been Saved For Later",
+    "claimSubmitted":   "Congratulations",
+    "confirmationNum":  "Confirmation Number",
+    "tempNum":          "Temporary Claim Number"
+  }
+}

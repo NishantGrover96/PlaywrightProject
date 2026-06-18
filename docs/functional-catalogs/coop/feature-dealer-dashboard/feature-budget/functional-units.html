@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coop Dealer Dashboard — Budget Tab — Functional Units Catalog</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1600px; margin: 0 auto; background: white;
+            border-radius: 10px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden;
+        }
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; padding: 30px; text-align: center;
+        }
+        header h1 { font-size: 2.5em; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
+        header p { font-size: 1.1em; opacity: 0.9; }
+        .stats {
+            display: flex; justify-content: space-around; padding: 20px;
+            background: #f8f9fa; border-bottom: 2px solid #e9ecef; flex-wrap: wrap;
+        }
+        .stat-card { text-align: center; padding: 15px; min-width: 150px; }
+        .stat-number { font-size: 2.5em; font-weight: bold; color: #667eea; }
+        .stat-label { color: #6c757d; font-size: 0.9em; margin-top: 5px; }
+        .controls {
+            padding: 20px; background: #ffffff; border-bottom: 1px solid #e9ecef;
+            display: flex; gap: 15px; flex-wrap: wrap; align-items: center;
+        }
+        .control-group { display: flex; flex-direction: column; gap: 5px; }
+        .control-group label { font-size: 0.85em; color: #495057; font-weight: 600; }
+        input[type="text"], select {
+            padding: 10px 15px; border: 2px solid #e9ecef; border-radius: 5px;
+            font-size: 14px; transition: all 0.3s; min-width: 200px;
+        }
+        input[type="text"]:focus, select:focus {
+            outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+        }
+        .btn {
+            padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;
+            font-size: 14px; font-weight: 600; transition: all 0.3s; align-self: flex-end;
+        }
+        .btn-primary { background: #667eea; color: white; }
+        .btn-primary:hover { background: #5568d3; transform: translateY(-2px); }
+        .table-container { overflow-x: auto; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; position: sticky; top: 0; z-index: 10;
+        }
+        th { padding: 15px; text-align: left; font-weight: 600; cursor: pointer; user-select: none; }
+        th.sortable::after { content: ' ⇅'; opacity: 0.5; font-size: 0.8em; }
+        th.sorted-asc::after { content: ' ▲'; opacity: 1; }
+        th.sorted-desc::after { content: ' ▼'; opacity: 1; }
+        tbody tr { border-bottom: 1px solid #e9ecef; transition: all 0.2s; }
+        tbody tr:hover { background: #f8f9fa; }
+        td { padding: 15px; vertical-align: top; }
+        .badge {
+            display: inline-block; padding: 5px 12px; border-radius: 20px;
+            font-size: 0.85em; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .badge-ui { background: #e3f2fd; color: #1976d2; }
+        .badge-dataentry { background: #f3e5f5; color: #7b1fa2; }
+        .badge-businesslogic { background: #fff3e0; color: #f57c00; }
+        .badge-workflow { background: #e8f5e9; color: #388e3c; }
+        .badge-datapersistence { background: #fce4ec; color: #c2185b; }
+        .badge-security { background: #ffebee; color: #c62828; }
+        .badge-critical { background: #b71c1c; color: white; }
+        .badge-high { background: #d84315; color: white; }
+        .badge-medium { background: #f57c00; color: white; }
+        .badge-low { background: #388e3c; color: white; }
+        .badge-implemented { background: #4caf50; color: white; }
+        .badge-partial { background: #ff9800; color: white; }
+        .badge-missing { background: #f44336; color: white; }
+        .fu-id { font-family: 'Courier New', monospace; font-weight: bold; color: #667eea; }
+        .description { line-height: 1.6; color: #495057; }
+        .location {
+            font-family: 'Courier New', monospace; font-size: 0.9em; color: #6c757d;
+            background: #f8f9fa; padding: 3px 6px; border-radius: 3px;
+        }
+        .no-results { text-align: center; padding: 50px; color: #6c757d; font-size: 1.2em; }
+        footer { text-align: center; padding: 20px; background: #f8f9fa; color: #6c757d; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💰 Coop Dealer Dashboard — Budget Tab</h1>
+            <p>Functional Units Catalog — Migration Analysis (Legacy vs Modern)</p>
+        </header>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalCount">29</div>
+                <div class="stat-label">Total Functional Units</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="criticalCount">4</div>
+                <div class="stat-label">Critical Risk</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="highCount">13</div>
+                <div class="stat-label">High Risk</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="implementedCount">0</div>
+                <div class="stat-label">Verified Implemented</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="control-group">
+                <label for="searchInput">🔍 Search</label>
+                <input type="text" id="searchInput" placeholder="Search by ID, title, or description...">
+            </div>
+            <div class="control-group">
+                <label for="categoryFilter">Category</label>
+                <select id="categoryFilter">
+                    <option value="">All Categories</option>
+                    <option value="UI">UI</option>
+                    <option value="DataEntry">Data Entry</option>
+                    <option value="BusinessLogic">Business Logic</option>
+                    <option value="Workflow">Workflow</option>
+                    <option value="DataPersistence">Data Persistence</option>
+                    <option value="Security">Security</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="riskFilter">Risk Level</label>
+                <select id="riskFilter">
+                    <option value="">All Risk Levels</option>
+                    <option value="Critical">Critical</option>
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="statusFilter">Modern Status</label>
+                <select id="statusFilter">
+                    <option value="">All Statuses</option>
+                    <option value="Implemented">Implemented</option>
+                    <option value="Partial">Partial</option>
+                    <option value="Missing">Missing</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" onclick="resetFilters()">Reset Filters</button>
+        </div>
+
+        <div class="table-container">
+            <table id="fuTable">
+                <thead>
+                    <tr>
+                        <th class="sortable" data-column="id">FU ID</th>
+                        <th class="sortable" data-column="title">Title</th>
+                        <th class="sortable" data-column="category">Category</th>
+                        <th class="sortable" data-column="risk">Risk</th>
+                        <th class="sortable" data-column="location">Legacy Location</th>
+                        <th class="sortable" data-column="status">Modern Status</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+            <div id="noResults" class="no-results" style="display:none;">No functional units match your filter criteria.</div>
+        </div>
+
+        <footer>
+            <p>Generated on 2026-06-18 | Coop Dealer Dashboard — Budget Tab | DealerPlatform.QA</p>
+        </footer>
+    </div>
+
+    <script>
+        const functionalUnits = [
+            // ── UI ──────────────────────────────────────────────────────────────────────
+            { id: 'COOP-FU-BDG-001', title: 'Budget Summary KPI Header Display', category: 'UI', risk: 'High', location: 'Budget/List.cshtml:budgetInfoRow', status: 'Partial', description: 'Render four KPI tiles: Initial Allocation (#hTotalBudget), Adjustments (#hAdjustments), Spent/Committed (#hBudgetSpent), and Available (#hBudgetAvailable). Values start as $0.00 and are updated via AJAX.' },
+            { id: 'COOP-FU-BDG-002', title: 'Fiscal Year Dropdown Population', category: 'UI', risk: 'Medium', location: 'Budget/List.cshtml.cs:BindFiscalYearList()', status: 'Partial', description: 'Populate fiscal year dropdown (#sltFilterYearly) filtered by active division. Falls back to all years when no division is active. Includes fiscal range data attribute shown as span text.' },
+            { id: 'COOP-FU-BDG-003', title: 'Program Budget Type Dropdown (Dynamic)', category: 'UI', risk: 'High', location: 'Budget/jsDealerBudgetTab.js:getDealerBudgetType()', status: 'Partial', description: 'Dynamically populate program type dropdown (#sltProgramType) via AJAX call to OnGetProgramType handler. Uses Select2 plugin with no-results localization.' },
+            { id: 'COOP-FU-BDG-004', title: 'Fiscal Date Range Inline Display', category: 'UI', risk: 'Low', location: 'Budget/List.cshtml:#fiscalrange', status: 'Implemented', description: 'Display the fiscal date range string next to fiscal year dropdown. Reads data-fiscal_range attribute of selected option and renders into #fiscalrange span on load and on change.' },
+            { id: 'COOP-FU-BDG-005', title: 'Spent/Committed Breakdown Pie Chart', category: 'UI', risk: 'High', location: 'Budget/jsDealerBudgetTab.js:renderBudgetSpendByCategoryGraph()', status: 'Partial', description: 'Render Highcharts pie chart (#dvBudgetSpendBreakdown) showing spend by category with percentage and dollar tooltip. Includes "Available Budget" slice. Filters out AdZone, Group Shows, VYC Media, and Digital Health Check categories.' },
+            { id: 'COOP-FU-BDG-006', title: 'Budget Utilization Column Chart (2-Year)', category: 'UI', risk: 'High', location: 'Budget/jsDealerBudgetTab.js:renderBudgetUtilizationGraph()', status: 'Partial', description: 'Render Highcharts column chart (#dvBudgetUtilization) showing % of budget spent YTD for current and prior fiscal year. Y-axis labeled as % of budget spent.' },
+            { id: 'COOP-FU-BDG-007', title: 'Spend by Media Group Column Chart', category: 'UI', risk: 'High', location: 'Budget/jsDealerBudgetTab.js:renderBudgetUtilizationByMediaGraph()', status: 'Partial', description: 'Render Highcharts column chart (#dvSpendByMediaType) showing reimbursement % by media type. Only renders bars for media types with media_spent > 0. Includes "More Detail" button linking to Budget By Media Type Report.' },
+            { id: 'COOP-FU-BDG-008', title: 'More Detail Report Links', category: 'UI', risk: 'Low', location: 'Budget/jsDealerBudgetTab.js:updateMoreDetailLink()', status: 'Partial', description: 'Render hidden fields with base report URLs (Spent Breakdown, Budget Utilization, Media Type, Product Group) and update #btnMediaType href dynamically when fiscal year or program type changes.' },
+
+            // ── DataEntry ────────────────────────────────────────────────────────────────
+            { id: 'COOP-FU-BDG-009', title: 'Fiscal Year Selection & Dashboard Refresh', category: 'DataEntry', risk: 'Medium', location: 'Budget/jsDealerBudgetTab.js:on(change,#sltFilterYearly)', status: 'Partial', description: 'When fiscal year dropdown changes, trigger full dashboard refresh: re-fetch program types, budget summary, and all three charts for newly selected fiscal year.' },
+            { id: 'COOP-FU-BDG-010', title: 'Program Budget Type Selection & Data Refresh', category: 'DataEntry', risk: 'High', location: 'Budget/jsDealerBudgetTab.js:on(change,#sltProgramType)', status: 'Partial', description: 'When program type dropdown changes, refresh: budget summary KPIs, budget title, and all charts (spent breakdown, utilization, spend by media). Triggers getDealerBudgetData(), updateBudgetTitle(), loadDashBoard().' },
+
+            // ── BusinessLogic ─────────────────────────────────────────────────────────────
+            { id: 'COOP-FU-BDG-011', title: 'Budget Summary Calculation', category: 'BusinessLogic', risk: 'Critical', location: 'Budget/List.cshtml.cs:OnGetBudgetData()', status: 'Partial', description: 'Calculate TotalBudget (original_budget only), Adjustments (budget_adjustments + budget_adjustments_commitment), Available (current_budget), and ReservedAmount from GetBudgetRecapByProgramSaas result. Returns zeroed model when budget type not found.' },
+            { id: 'COOP-FU-BDG-012', title: 'Multi-Source Spent/Committed Calculation', category: 'BusinessLogic', risk: 'Critical', location: 'Budget/List.cshtml.cs:OnGetBudgetData()', status: 'Partial', description: 'TotalAmountSpent is the sum of absolute values across 6 sources: coop_activity_positive, coop_activity_from_commitment, commitment_activity_from_budget, commitment_activity, spent_for_engage, spent_for_popshop. ReservedAmount added in JS (not in server model).' },
+            { id: 'COOP-FU-BDG-013', title: 'Budget Utilization % Calculation (Current + Prior Year)', category: 'BusinessLogic', risk: 'High', location: 'Budget/List.cshtml.cs:OnGetBudgetUtilization()', status: 'Partial', description: 'Calculate % spent = TotalAmountSpent / TotalBudget * 100 using adjusted budget (original + adjustments + adjustments_commitment as denominator), including reserved_budget in numerator. Returns data for current fiscal year AND (fiscal_year - 1) for year-over-year comparison.' },
+            { id: 'COOP-FU-BDG-014', title: 'Spend by Media Reimbursement % Calculation', category: 'BusinessLogic', risk: 'High', location: 'Budget/List.cshtml.cs:OnGetBudgetUtilizationByMedia()', status: 'Partial', description: 'For each media type: reimbursement % = amount_reimbursed / media_spent * 100. Only media types with media_spent > 0 are rendered in chart. Uses IBudgetService.GetBudgetUtilizationByMedia with programBudgetType filter.' },
+            { id: 'COOP-FU-BDG-015', title: 'Excluded Category Filtering in Pie Chart', category: 'BusinessLogic', risk: 'High', location: 'Budget/jsDealerBudgetTab.js:renderBudgetSpendByCategoryGraph()', status: 'Partial', description: 'Client-side filter removes categories containing: "AdZone Orders", "Group Shows/Sponsorships", "VYC Media Plan", "Digital Health Check" from the pie chart data before rendering. Zeroed-value entries are also excluded.' },
+            { id: 'COOP-FU-BDG-016', title: 'Default Fiscal Year Determination', category: 'BusinessLogic', risk: 'Medium', location: 'Budget/List.cshtml.cs:BindFiscalYearList()', status: 'Partial', description: 'When FiscalYear is 0 (not provided), use _webHelper.GetFiscalYearDates() to determine current fiscal year. Applied on both page load and AJAX handler calls.' },
+            { id: 'COOP-FU-BDG-017', title: 'Division-Filtered Fiscal Year List', category: 'BusinessLogic', risk: 'Medium', location: 'Budget/List.cshtml.cs:BindFiscalYearList()', status: 'Partial', description: 'GetFiscalYearsByProgramSeq returns all fiscal years; list is filtered by active division_seq when division is set. Falls back to unfiltered list when no division is active. Division filtering applies to both legacy and modern.' },
+            { id: 'COOP-FU-BDG-018', title: 'Dealer Number Resolution from Seq', category: 'BusinessLogic', risk: 'High', location: 'Budget/List.cshtml.cs:GetDealerByDealerNumberSeq()', status: 'Partial', description: 'Legacy: calls IDealerService.GetDealerByDealerNumberSeq(). Modern: calls IDealerBudgetApiService.GetDealerNumberByDealerNumberSeqAsync(). Both resolve DealerNumber string from encrypted seq. Different failure behavior: legacy throws, modern catches and sets error message.' },
+
+            // ── Workflow ──────────────────────────────────────────────────────────────────
+            { id: 'COOP-FU-BDG-019', title: 'Page Load: Dealer Validation & Binding', category: 'Workflow', risk: 'High', location: 'Budget/List.cshtml.cs:OnGet()', status: 'Partial', description: 'OnGet flow: (1) Get dealer_number_seq from query or from session if IsDealer, (2) Redirect to AdminIndex if missing, (3) Decrypt and store DealerNumberSeq, (4) BindFiscalYearList, (5) GetDealerByDealerNumberSeq, (6) Set ViewData Tab = Budget.' },
+            { id: 'COOP-FU-BDG-020', title: 'On-Load Dashboard Initialization Sequence', category: 'Workflow', risk: 'High', location: 'Budget/jsDealerBudgetTab.js:document.ready()', status: 'Partial', description: 'On document ready: (1) getDealerBudgetType() → populates program type dropdown, then synchronously (2) getDealerBudgetData() → updates KPI tiles, then (3) loadDashBoard() → fires budgetSpentByCategory(), budgetUtilization(), spendByMediaType() simultaneously.' },
+            { id: 'COOP-FU-BDG-021', title: 'Fiscal Year Change → Full Dashboard Refresh', category: 'Workflow', risk: 'Medium', location: 'Budget/jsDealerBudgetTab.js:on(change,#sltFilterYearly)', status: 'Partial', description: 'Changing fiscal year triggers getDealerBudgetType() which cascades to getDealerBudgetData() and loadDashBoard(), refreshing all 3 charts and all 4 KPI tiles. Fiscal range span is also updated.' },
+            { id: 'COOP-FU-BDG-022', title: 'Program Type Change → Budget & Charts Refresh', category: 'Workflow', risk: 'High', location: 'Budget/jsDealerBudgetTab.js:on(change,#sltProgramType)', status: 'Partial', description: 'Changing program type fires: getDealerBudgetData() (KPI update), updateBudgetTitle() (title update), loadDashBoard() (all 3 charts). Does NOT re-fetch program type list — only budget data and charts are refreshed.' },
+            { id: 'COOP-FU-BDG-023', title: 'Report Link URL Update on Selection Change', category: 'Workflow', risk: 'Low', location: 'Budget/jsDealerBudgetTab.js:updateMoreDetailLink()', status: 'Implemented', description: 'When fiscal year or program type changes, update href of report navigation links: #btnBudgetSpentBreakdown, #btnBudgetUtilization, #btnMediaType, #btnProductGroup by appending fiscal_year and division_seq parameters to base URLs from hidden fields.' },
+
+            // ── DataPersistence ───────────────────────────────────────────────────────────
+            { id: 'COOP-FU-BDG-024', title: 'Encrypted Dealer Identifiers in Hidden Fields', category: 'DataPersistence', risk: 'High', location: 'Budget/List.cshtml:#hdDealerNumberSeq,#hdDealerNumber', status: 'Implemented', description: 'DealerNumberSeq is encrypted via IEncryptDecrypt and stored in #hdDealerNumberSeq hidden field. DealerNumber is stored in #hdDealerNumber. Both are passed to every AJAX call to avoid re-reading from session.' },
+            { id: 'COOP-FU-BDG-025', title: 'Report Base URLs in Hidden Fields', category: 'DataPersistence', risk: 'Low', location: 'Budget/List.cshtml:#hdSpentBreakdownLink,#hdBudgetUtilizationLink,#hdMediaTypeLink,#hdProductGroupLink', status: 'Implemented', description: 'Four report base URLs are embedded as encrypted hidden field values at render time. JavaScript appends fiscal_year and division_seq at runtime. Prevents URL tampering for report navigation.' },
+
+            // ── Security ──────────────────────────────────────────────────────────────────
+            { id: 'COOP-FU-BDG-026', title: 'URL Parameter Decryption & Validation on All Handlers', category: 'Security', risk: 'Critical', location: 'Budget/List.cshtml.cs:OnGet,OnGetBudgetData,etc.', status: 'Partial', description: 'All handlers decrypt dealer_number_seq using IEncryptDecrypt.Decrypt() before use. Invalid or missing encrypted values cause exceptions caught by try/catch returning 500. Modern uses same pattern with IDealerBudgetApiService.' },
+            { id: 'COOP-FU-BDG-027', title: 'IsDealer Self-Access Enforcement', category: 'Security', risk: 'Critical', location: 'Budget/List.cshtml.cs:OnGet():_webHelper.IsDealer()', status: 'Partial', description: 'When user is a dealer role, override query string dealer_number_seq with encrypted UserSession.Dealer_number_seq regardless of what was passed in URL. Prevents dealer users from accessing other dealers\' budget data.' },
+            { id: 'COOP-FU-BDG-028', title: 'ViewOnly Permission → Disable Write Actions', category: 'Security', risk: 'High', location: 'Budget/List.cshtml:permissionUpdate,ViewOnlyRoleDisable()', status: 'Partial', description: 'Check BudgetTab permission using _webHelper.GetModuleAccess(ProgramConfig, CommonItem.BudgetTab). When ViewOnly permission found, set writePermission="1" and call ViewOnlyRoleDisable() on ajaxComplete to disable interactive controls.' },
+            { id: 'COOP-FU-BDG-029', title: 'Missing Dealer Seq Redirect Guard', category: 'Security', risk: 'Medium', location: 'Budget/List.cshtml.cs:OnGet():isEmpty check', status: 'Implemented', description: 'When dealer_number_seq is empty after role check, store PageReturnURL in session and redirect to /CoopManagement/dealer/AdminIndex. Prevents unauthenticated or incomplete access to the budget tab.' }
+        ];
+
+        let currentSort = { column: null, direction: 'asc' };
+        let filteredData = [...functionalUnits];
+
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            const noResults = document.getElementById('noResults');
+            if (filteredData.length === 0) {
+                tbody.innerHTML = '';
+                noResults.style.display = 'block';
+                return;
+            }
+            noResults.style.display = 'none';
+            tbody.innerHTML = filteredData.map(fu => `
+                <tr>
+                    <td><span class="fu-id">${fu.id}</span></td>
+                    <td><strong>${fu.title}</strong></td>
+                    <td><span class="badge badge-${fu.category.toLowerCase().replace(/\s+/g,'')}">${fu.category}</span></td>
+                    <td><span class="badge badge-${fu.risk.toLowerCase()}">${fu.risk}</span></td>
+                    <td><span class="location">${fu.location}</span></td>
+                    <td><span class="badge badge-${fu.status.toLowerCase()}">${fu.status}</span></td>
+                    <td><span class="description">${fu.description}</span></td>
+                </tr>
+            `).join('');
+            updateStats();
+        }
+
+        function updateStats() {
+            document.getElementById('totalCount').textContent = filteredData.length;
+            document.getElementById('criticalCount').textContent = filteredData.filter(fu => fu.risk === 'Critical').length;
+            document.getElementById('highCount').textContent = filteredData.filter(fu => fu.risk === 'High').length;
+            document.getElementById('implementedCount').textContent = filteredData.filter(fu => fu.status === 'Implemented').length;
+        }
+
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const riskFilter = document.getElementById('riskFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+            filteredData = functionalUnits.filter(fu => {
+                const matchesSearch = !searchTerm ||
+                    fu.id.toLowerCase().includes(searchTerm) ||
+                    fu.title.toLowerCase().includes(searchTerm) ||
+                    fu.description.toLowerCase().includes(searchTerm);
+                const matchesCategory = !categoryFilter || fu.category === categoryFilter;
+                const matchesRisk = !riskFilter || fu.risk === riskFilter;
+                const matchesStatus = !statusFilter || fu.status === statusFilter;
+                return matchesSearch && matchesCategory && matchesRisk && matchesStatus;
+            });
+            if (currentSort.column) { sortData(currentSort.column, false); } else { renderTable(); }
+        }
+
+        function sortData(column, toggleDirection = true) {
+            if (toggleDirection) {
+                if (currentSort.column === column) {
+                    currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+                } else {
+                    currentSort.column = column;
+                    currentSort.direction = 'asc';
+                }
+            }
+            filteredData.sort((a, b) => {
+                const aVal = a[column] || '';
+                const bVal = b[column] || '';
+                const result = aVal.localeCompare(bVal);
+                return currentSort.direction === 'asc' ? result : -result;
+            });
+            document.querySelectorAll('th').forEach(th => {
+                th.classList.remove('sorted-asc', 'sorted-desc');
+                if (th.dataset.column === currentSort.column) {
+                    th.classList.add(currentSort.direction === 'asc' ? 'sorted-asc' : 'sorted-desc');
+                }
+            });
+            renderTable();
+        }
+
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('categoryFilter').value = '';
+            document.getElementById('riskFilter').value = '';
+            document.getElementById('statusFilter').value = '';
+            filteredData = [...functionalUnits];
+            currentSort = { column: null, direction: 'asc' };
+            document.querySelectorAll('th').forEach(th => th.classList.remove('sorted-asc', 'sorted-desc'));
+            renderTable();
+        }
+
+        document.getElementById('searchInput').addEventListener('input', applyFilters);
+        document.getElementById('categoryFilter').addEventListener('change', applyFilters);
+        document.getElementById('riskFilter').addEventListener('change', applyFilters);
+        document.getElementById('statusFilter').addEventListener('change', applyFilters);
+        document.querySelectorAll('th.sortable').forEach(th => {
+            th.addEventListener('click', () => sortData(th.dataset.column));
+        });
+
+        renderTable();
+    </script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+{
+  "name": "dealerplatform-qa",
+  "version": "1.0.0",
+  "description": "Migration Validation and QA Automation — Legacy vs Modern Dealer Platform",
+  "scripts": {
+    "test": "playwright test",
+    "test:smoke": "playwright test --grep @smoke",
+    "test:regression": "playwright test --grep @regression",
+    "test:e2e": "playwright test --grep @e2e",
+    "test:uat": "cross-env TEST_ENV=uat playwright test",
+    "test:prod": "cross-env TEST_ENV=production playwright test",
+    "test:coop": "playwright test tests/playwright/specs/coop/",
+    "test:coop:smoke": "playwright test tests/playwright/specs/coop/ --grep @smoke",
+    "test:coop:regression": "playwright test tests/playwright/specs/coop/ --grep @regression",
+    "test:coop:e2e": "playwright test tests/playwright/specs/coop/ --grep @e2e",
+    "test:coop:submit-claim": "playwright test tests/playwright/specs/coop/feature-submit-claim/",
+    "test:coop:submit-claim:smoke": "playwright test tests/playwright/specs/coop/feature-submit-claim/ --grep @smoke",
+    "test:coop:submit-preapproval": "playwright test tests/playwright/specs/coop/feature-submit-preapproval/",
+    "test:coop:dealer-dashboard": "playwright test tests/playwright/specs/coop/feature-dealer-dashboard/",
+    "test:coop:admin-reports": "playwright test tests/playwright/specs/coop/feature-admin-reports/",
+    "test:api": "playwright test tests/api/ --project=api",
+    "test:api:coop": "playwright test tests/api/coop/ --project=api",
+    "dashboard": "node dashboard/server.js",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.48.2",
+    "@types/node": "^20.0.0",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.0",
+    "typescript": "^5.4.0"
+  }
+}

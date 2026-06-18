@@ -1,0 +1,55 @@
+{
+  "users": {
+    "dealer": {
+      "email": "",
+      "password": "",
+      "dealerId": "",
+      "dealerNumberSeq": ""
+    },
+    "admin": {
+      "email": "",
+      "password": ""
+    }
+  },
+  "valid": {
+    "mainbranchMediaName": "Direct Mail",
+    "campaignMediaName": "Campaign",
+    "showMediaName": "Individual Show",
+    "sponsorMediaName": "Sponsorship",
+    "adTitle": "Test Preapproval Ad",
+    "adLandingURL": "https://example.com/preapproval-test",
+    "campaignTitle": "Test Campaign 2026",
+    "showName": "Test Equipment Show",
+    "showAddress": "123 Main St",
+    "showCity": "Springfield",
+    "showState": "IL",
+    "showZip": "62701",
+    "showStartDate": "2026-07-01",
+    "showEndDate": "2026-07-03",
+    "showCost": "5000",
+    "sponsorName": "Test Community Sponsorship",
+    "sponsorStartDate": "2026-08-01",
+    "sponsorEndDate": "2026-08-31",
+    "comment": "Test submission comment",
+    "otherContactEmail": "other@example.com",
+    "dealerId": "TEST-DEALER-001"
+  },
+  "invalid": {
+    "emptyTitle": "",
+    "futureDate": "2099-12-31",
+    "invalidEmail": "not-an-email",
+    "xssPayload": "<script>alert('xss')</script>"
+  },
+  "mediaTiles": {
+    "count": 0,
+    "_comment": "Set count to actual number of tiles for your program during test setup"
+  },
+  "expectedStatuses": {
+    "standard": "Submitted",
+    "awaitingCSR": "Awaiting CSR Review"
+  },
+  "expectedMessages": {
+    "congratulations": "Congratulations",
+    "confirmationNumber": "Confirmation Number"
+  }
+}

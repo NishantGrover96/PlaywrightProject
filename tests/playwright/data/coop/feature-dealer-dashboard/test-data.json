@@ -1,0 +1,174 @@
+{
+  "users": {
+    "dealer": {
+      "username": "dealer_test@example.com",
+      "password": "Test123!@#",
+      "dealerNumber": "12345",
+      "dealerSeq": 1001,
+      "role": "Dealer"
+    },
+    "dealerB": {
+      "username": "dealer_b@example.com",
+      "password": "Test456!@#",
+      "dealerNumber": "67890",
+      "dealerSeq": 1002,
+      "role": "Dealer"
+    },
+    "agency": {
+      "username": "agency_test@example.com",
+      "password": "Agency123!@#",
+      "agencySeq": 2001,
+      "role": "Agency"
+    },
+    "admin": {
+      "username": "admin_test@example.com",
+      "password": "Admin123!@#",
+      "role": "Admin"
+    }
+  },
+  "fiscalYears": [
+    "2024",
+    "2025",
+    "2026"
+  ],
+  "dealers": {
+    "valid": {
+      "dealerNumber": "12345",
+      "dealerName": "Test Dealer Inc",
+      "dealerSeq": 1001,
+      "address": "123 Main St",
+      "city": "Chicago",
+      "state": "IL",
+      "stateSeq": 14,
+      "zip": "60601",
+      "country": "USA",
+      "countrySeq": 1,
+      "dealerType": "Retail",
+      "contract": "Standard"
+    },
+    "invalid": {
+      "dealerNumber": "99999",
+      "dealerName": "Non-Existent Dealer"
+    },
+    "crossDealerTest": {
+      "dealerNumber": "67890",
+      "dealerSeq": 1002
+    }
+  },
+  "countries": [
+    {
+      "name": "USA",
+      "value": "1",
+      "code": "US"
+    },
+    {
+      "name": "Canada",
+      "value": "2",
+      "code": "CA"
+    },
+    {
+      "name": "Mexico",
+      "value": "3",
+      "code": "MX"
+    }
+  ],
+  "states": {
+    "USA": [
+      {
+        "name": "Illinois",
+        "value": "14",
+        "code": "IL"
+      },
+      {
+        "name": "California",
+        "value": "5",
+        "code": "CA"
+      },
+      {
+        "name": "Texas",
+        "value": "43",
+        "code": "TX"
+      },
+      {
+        "name": "New York",
+        "value": "33",
+        "code": "NY"
+      }
+    ],
+    "Canada": [
+      {
+        "name": "Ontario",
+        "value": "101",
+        "code": "ON"
+      },
+      {
+        "name": "Quebec",
+        "value": "102",
+        "code": "QC"
+      }
+    ]
+  },
+  "errorMessages": {
+    "dealerNotFound": "Dealer not found.",
+    "dealerRequired": "Please enter dealer number.",
+    "dealerUnauthorized": "Dealer is not authorized.",
+    "agencyNotWorkedWith": "We don't show you're currently working with that dealer. If you are, please add them to Dealers We Work With or use the chat to contact us."
+  },
+  "sessionKeys": [
+    "dealerSeq",
+    "dealerNumber",
+    "dealerName",
+    "dealerTypeSeq",
+    "dealerType",
+    "fiscalYear",
+    "countrySeq",
+    "stateSeq",
+    "divisionSeq",
+    "orderingSeq",
+    "contractType",
+    "activeFlag",
+    "returnUrl",
+    "mediaCompanyDealerSeq",
+    "agencySeq",
+    "userId"
+  ],
+  "agencyDealers": [
+    {
+      "dealerNumber": "12345",
+      "dealerName": "Test Dealer Inc",
+      "contactName": "John Smith",
+      "contactPhone": "555-1234",
+      "contactEmail": "john@testdealer.com",
+      "estimatedSpend": "$50,000",
+      "status": "Active"
+    },
+    {
+      "dealerNumber": "23456",
+      "dealerName": "Sample Motors",
+      "contactName": "Jane Doe",
+      "contactPhone": "555-5678",
+      "contactEmail": "jane@samplemotors.com",
+      "estimatedSpend": "$75,000",
+      "status": "Active"
+    }
+  ],
+  "searchFilters": {
+    "multiField": {
+      "dealerName": "Test Dealer",
+      "country": "USA",
+      "state": "Illinois",
+      "city": "Chicago"
+    },
+    "byCity": {
+      "city": "Chicago"
+    },
+    "byState": {
+      "country": "USA",
+      "state": "California"
+    }
+  },
+  "pagination": {
+    "defaultPageSize": 10,
+    "availablePageSizes": [10, 25, 50, 100]
+  }
+}

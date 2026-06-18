@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coop — Submit Claim : Functional Unit Catalog</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;font-size:13px;color:#222;background:#f4f5f9}
+header{background:linear-gradient(135deg,#7b1c1c 0%,#c0392b 60%,#e74c3c 100%);color:#fff;padding:26px 36px}
+header h1{font-size:22px;font-weight:700;letter-spacing:.4px}
+header p{font-size:12px;opacity:.88;margin-top:5px}
+.live-banner{background:#155724;color:#d4edda;padding:13px 36px;font-size:12px;border-bottom:3px solid #28a745;line-height:1.8}
+.live-banner strong{color:#fff;font-size:13px}
+.live-banner ul{margin:5px 0 0 20px}
+.container{max-width:1450px;margin:0 auto;padding:22px 18px}
+.toc{background:#fff;border:1px solid #ddd;border-radius:7px;padding:15px 22px;margin-bottom:22px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.toc h2{font-size:13px;color:#7b1c1c;margin-bottom:9px;border-bottom:2px solid #c0392b;padding-bottom:5px}
+.toc ul{list-style:none;columns:2;column-gap:28px}
+.toc li{padding:2px 0}
+.toc a{color:#c0392b;text-decoration:none;font-size:11.5px}
+.toc a:hover{text-decoration:underline}
+.section{background:#fff;border:1px solid #e0e0e0;border-radius:7px;margin-bottom:22px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.section-header{background:linear-gradient(135deg,#7b1c1c,#c0392b);color:#fff;padding:11px 18px;font-size:13.5px;font-weight:700;letter-spacing:.2px}
+table{width:100%;border-collapse:collapse}
+th{background:#fdf0ef;color:#7b1c1c;padding:8px 9px;text-align:left;font-size:11.5px;border-bottom:2px solid #c0392b;font-weight:700}
+td{padding:7px 9px;border-bottom:1px solid #f5e8e8;vertical-align:top;font-size:12px}
+tr:hover td{background:#fff8f8}
+.stats{display:flex;gap:14px;margin-bottom:20px;flex-wrap:wrap}
+.stat-card{background:#fff;border:1px solid #ddd;border-radius:7px;padding:13px 18px;text-align:center;flex:1;min-width:110px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.stat-card .num{font-size:26px;font-weight:700;color:#c0392b}
+.stat-card .lbl{font-size:10.5px;color:#888;margin-top:3px}
+footer{background:#2c2c2c;color:#bbb;text-align:center;padding:15px;font-size:11px;margin-top:28px}
+code{background:#f0f0f0;padding:2px 5px;border-radius:3px;font-size:11px;font-family:Consolas,monospace;color:#c0392b}
+.risk-high{color:#c0392b;font-weight:600}
+.risk-medium{color:#d68910;font-weight:600}
+.risk-low{color:#27ae60;font-weight:600}
+.risk-critical{color:#a93226;font-weight:700}
+</style>
+</head>
+<body>
+<header>
+  <h1>Coop — Submit Claim : Functional Unit Catalog</h1>
+  <p>Module: coop | Feature: submit-claim | Pipeline Step 2 — Functional Unit Discovery</p>
+</header>
+
+<div class="live-banner">
+  <strong>📋 Catalog Information</strong>
+  <ul>
+    <li><strong>Generated:</strong> 2026-06-17</li>
+    <li><strong>Total Functional Units:</strong> 53</li>
+    <li><strong>Breakdown:</strong> UI×6, DataEntry×22, BusinessLogic×8, Workflow×5, DataPersistence×8, Security×4</li>
+  </ul>
+</div>
+
+<div class="container">
+<div class="stats">
+  <div class="stat-card"><div class="num">53</div><div class="lbl">Total FUs</div></div>
+  <div class="stat-card"><div class="num">6</div><div class="lbl">UI Behaviors</div></div>
+  <div class="stat-card"><div class="num">22</div><div class="lbl">Data Entry</div></div>
+  <div class="stat-card"><div class="num">8</div><div class="lbl">Business Logic</div></div>
+  <div class="stat-card"><div class="num">5</div><div class="lbl">Workflow</div></div>
+  <div class="stat-card"><div class="num">8</div><div class="lbl">Data Persistence</div></div>
+  <div class="stat-card"><div class="num">4</div><div class="lbl">Security</div></div>
+</div>
+
+<div class="toc">
+  <h2>Table of Contents</h2>
+  <ul>
+    <li><a href='#ui'>UI Behaviors (6)</a></li>
+    <li><a href='#dataentry'>Data Entry (22)</a></li>
+    <li><a href='#businesslogic'>Business Logic (8)</a></li>
+    <li><a href='#workflow'>Workflow (5)</a></li>
+    <li><a href='#datapersistence'>Data Persistence (8)</a></li>
+    <li><a href='#security'>Security (4)</a></li>
+  </ul>
+</div>
+
+<div id="ui" class="section">
+  <div class="section-header">UI Behaviors</div>
+  <table>
+    <thead>
+      <tr><th>ID</th><th>Name</th><th>Category</th><th>Risk</th><th>Legacy</th><th>Modern</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>COOP-FU-001</td>
+        <td>Page Load & Auth Redirect</td>
+        <td>UI</td>
+        <td class="risk-high">High</td>
+        <td><code>SubmitClaim.cshtml.cs:OnGet</code> — resolves dealer, checks session, sets flags</td>
+        <td><code>SubmitClaim.cshtml.cs:OnGet</code> (async) — same logic via API calls</td>
+        <td>Unauthenticated or dealer-missing requests redirect. Page initialises fiscal year, OCR config, media types, budget in one GET.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-002</td>
+        <td>Fiscal Year Selection Display</td>
+        <td>UI</td>
+        <td class="risk-medium">Medium</td>
+        <td><code>OnGet</code> — <code>ShowFiscalYearSelection = prevEndDate < now && prevCutoffDate >= now</code></td>
+        <td>Same logic</td>
+        <td>Radio buttons for current and previous fiscal year appear only within the prior-year cut-off window. Selecting a year reloads the page with <code>?SelectedFiscalYear=</code>.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-003</td>
+        <td>Claim Type Radio (Pre-approval Yes / No)</td>
+        <td>UI</td>
+        <td class="risk-medium">Medium</td>
+        <td><code>SubmitClaim.cshtml</code> — radio <code>ClaimType</code>; JS shows/hides <code>dvPreApprovalAdCodeNo</code></td>
+        <td>Identical CSHTML</td>
+        <td>"Yes" reveals the pre-approval number input; "No" hides it. Default is <code>NoPreapproval</code>.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-004</td>
+        <td>Dealer Search Step (Conditional)</td>
+        <td>UI</td>
+        <td class="risk-medium">Medium</td>
+        <td><code>OnGet</code> sets <code>showDealerSearch</code>; partial <code>_SearchDealer</code> / <code>_DealerSearchList</code></td>
+        <td>Same</td>
+        <td>Step 2 (dealer search) is injected into the wizard only when <code>showDealerSearch == true</code>. Dealer users skip this step entirely.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-005</td>
+        <td>Media Type Grid Rendering</td>
+        <td>UI</td>
+        <td class="risk-medium">Medium</td>
+        <td><code>_ClaimMediaType.cshtml</code> iterates <code>Model.MediaTypes</code>; <code>campaign</code> and <code>grpshow</code> branches excluded</td>
+        <td>Identical CSHTML; data sourced via <code>ClaimActivityApiService.GetMediaTypesBranchWithProgramSeqAsync</code></td>
+        <td>Media type icons rendered with embedded JSON data attributes (requirements, creative types, claim forms). Grid filtered by selected <code>programDealerTypeDropdown</code>.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-006</td>
+        <td>Budget Available Display</td>
+        <td>UI</td>
+        <td class="risk-low">Low</td>
+        <td><code>OnGet</code> sets <code>BudgetAvaiable</code>; shown in Step 4 header when <code>DisplayProductBlock != "Y"</code></td>
+        <td>Same</td>
+        <td>Displays formatted budget amount in the form header. Hidden when product block mode is enabled.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div id="dataentry" class="section">
+  <div class="section-header">Data Entry</div>
+  <table>
+    <thead>
+      <tr><th>ID</th><th>Name</th><th>Category</th><th>Risk</th><th>Legacy</th><th>Modern</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>COOP-FU-007</td>
+        <td>Contact Name — Required</td>
+        <td>DataEntry</td>
+        <td class="risk-high">High</td>
+        <td><code>txtContactName</code> / <code>txtContactName1</code>; <code>spnErrContactName</code> error span</td>
+        <td>Same field; JS validation</td>
+        <td>Submitter contact name is required before proceeding past Step 1.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-008</td>
+        <td>Contact Email — Required</td>
+        <td>DataEntry</td>
+        <td class="risk-high">High</td>
+        <td><code>txtContactEmail</code>; JS validation</td>
+        <td>Same</td>
+        <td>Submitter email is required. Used as the primary confirmation email recipient.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-009</td>
+        <td>Contact Phone — Required</td>
+        <td>DataEntry</td>
+        <td class="risk-high">High</td>
+        <td><code>txtContactPhone</code>; <code>clsPhoneMask</code> applied</td>
+        <td>Same</td>
+        <td>Phone number is required and formatted via phone mask (locale-aware).</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-010</td>
+        <td>Contact Auto-Population from User Profile</td>
+        <td>DataEntry</td>
+        <td class="risk-medium">Medium</td>
+        <td><code>GetUserProfileInfo()</code> — <code>_userService.GetCRCUser</code> → <code>_addressService.GetContact</code></td>
+        <td><code>GetUserProfileInfo()</code> — <code>_claimActivityApiService.GetCRCUserAsync</code> → <code>GetContactAsync</code></td>
+        <td>On page load, name/phone/email pre-filled from the logged-in user's CRC profile. Can be overridden.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-011</td>
+        <td>Pre-Approval Number Entry</td>
+        <td>DataEntry</td>
+        <td class="risk-high">High</td>
+        <td><code>txtAdCode</code> (maxlength=25); triggers <code>OnGetCheckAdCodeNumber</code></td>
+        <td>Same</td>
+        <td>Numeric pre-approval number entered by user. Validated on blur via AJAX.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-012</td>
+        <td>Pre-Approval Lookup Modal</td>
+        <td>DataEntry</td>
+        <td class="risk-medium">Medium</td>
+        <td><code>#preapprovallist</code> modal; <code>ddldealership</code> select; <code>tblPreapprovals</code> table</td>
+        <td>Identical CSHTML</td>
+        <td>"Click here" opens a modal listing the dealer's pre-approvals. User clicks to populate <code>txtAdCode</code>.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-013</td>
+        <td>Pre-Approval Validation</td>
+        <td>DataEntry</td>
+        <td class="risk-high">High</td>
+        <td><code>OnGetCheckAdCodeNumber</code> — <code>_preapprovalService.GetPreapprovalBySearch</code>; status must be <code>"APPROVED"</code></td>
+        <td><code>_claimActivityApiService.GetPreapprovalBySearchAsync</code>; same status check</td>
+        <td>Pre-approval must exist and be APPROVED. Response pre-fills dealer info and contact details. Campaign pre-approvals resolve child media types.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-014</td>
+        <td>Invoice File Upload — Required</td>
+        <td>DataEntry</td>
+        <td class="risk-high">High</td>
+        <td><code>dropzone_fuBGImageInvoice</code>; <code>OnPostUploadInvoiceFile</code>; stored to <code>DocumentPhysicalFilePath.Claim</code></td>
+        <td>Same handlers; verify storage path</td>
+        <td>Invoice document (PDF, image) is required per activity. Uploaded via Dropzone; file renamed with dealer number + activity seq.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-015</td>
+        <td>Supporting Documents Upload — Optional</td>
+        <td>DataEntry</td>
+        <td class="risk-medium">Medium</td>
+        <td><code>dropzone_fuBGImage</code>; <code>OnPostUploadFile</code>; document type = "Other Proof of Performance"</td>
+        <td>Same</td>
+        <td>Additional supporting documents are optional. Uploaded separately from invoice.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-016</td>
+        <td>Invoice Amount — Required</td>
+        <td>DataEntry</td>
+        <td class="risk-high">High</td>
+        <td><code>txtInvoiceAmt</code>; currency format; maxlength=15; <code>spnInvoiceAmt</code> error</td>
+        <td>Same</td>
+        <td>Invoice amount is required and must be a valid currency value.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-017</td>
+        <td>Invoice Number — Required</td>
+        <td>DataEntry</td>
+        <td class="risk-high">High</td>
+        <td><code>txtInvoiceNumber</code>; maxlength=20; <code>spnInvoiceNumber</code> error</td>
+        <td>Same</td>
+        <td>Invoice number is required; max 20 characters.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-018</td>
+        <td>Activity Date — No Future Dates, No Duplicates</td>
+        <td>DataEntry</td>
+        <td class="risk-high">High</td>
+        <td>Date picker <code>hdtxtActivityDate</code>; server-side: <code>parsedDate.Date > DateTime.Today</code> → reject; duplicate key check</td>
+        <td>Date picker identical; <strong>server-side future-date and duplicate-date checks removed</strong> in <code>OnPostSaveClaim</code>; only silently skipped in <code>UpdateTempActivities</code></td>
+        <td>One or more activity dates added to a table. Legacy validates no future dates and no duplicates at submission. Modern partially validates only in UpdateTempActivities (silently skips), not returns error. <strong>Gap: G-02, G-03 — missing server-side error responses in modern</strong></td>
+      </tr>
+      <tr>
+        <td>COOP-FU-019</td>
+        <td>Media Name Entry</td>
+        <td>DataEntry</td>
+        <td class="risk-high">High</td>
+        <td><code>txtMediaName</code>; maxlength=100; shown when <code>getVendorInformation=false</code></td>
+        <td>Same</td>
+        <td>Free-text media/publication name, required per activity when vendor form is disabled.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-020</td>
+        <td>Dealer ID Field (Conditional)</td>
+        <td>DataEntry</td>
+        <td class="risk-medium">Medium</td>
+        <td><code>txtDealerIdText</code>; shown per media type <code>dealeridtextrequiredflag</code>; validated via <code>OnGetVerifyDealerID</code></td>
+        <td><code>_coopApiService.GetDealersByBranchParentSeqSaaSAsync</code> + <code>GetProgramDataAsync</code> for contract check</td>
+        <td>Some media types require a dealer ID that is validated against the program's allowed contracts.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-021</td>
+        <td>Activity Creative Type Selection (Conditional)</td>
+        <td>DataEntry</td>
+        <td class="risk-medium">Medium</td>
+        <td><code>activityCreativeType</code> select; populated from media type requirements <code>activitycreativetype</code></td>
+        <td>Same; data from <code>ClaimActivityApiService.GetMediaTypesRequirementByProgramSeqAsync</code></td>
+        <td>Some media types require selecting a creative type. Saved to <code>ONLINE_ACTIVITY_TEMP</code> via <code>InsertActivityMediaTypeRequirement</code>.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-022</td>
+        <td>Invoice Currency Selection (Conditional)</td>
+        <td>DataEntry</td>
+        <td class="risk-medium">Medium</td>
+        <td><code>ddlInvoiceCurrency</code>; shown when <code>MultiCurrencyInvoice && CurrencyLists.Count > 1</code></td>
+        <td>Same; currencies from <code>CoopApiService.GetProgramCurrencyAsync</code></td>
+        <td>When multi-currency is enabled, user selects the currency of the invoice amount. Conversion rate applied at save time.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-023</td>
+        <td>Product Line Allocation (Conditional — Must Sum to 100%)</td>
+        <td>DataEntry</td>
+        <td class="risk-high">High</td>
+        <td><code>drpProductCodes</code> + <code>txtProductMeasurement</code>; server-side: <code>total != 100 → 400</code></td>
+        <td>Same validation in <code>OnPostSaveClaim</code>; product list from <code>CoopApiService.GetProductLineByDealerNumberSeqAsync</code></td>
+        <td>When <code>DisplayProductBlock != "N"</code>, each activity must have product line allocations summing to exactly 100%. Enforced server-side in both legacy and modern.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-024</td>
+        <td>Vendor Information Form (Conditional)</td>
+        <td>DataEntry</td>
+        <td class="risk-medium">Medium</td>
+        <td><code>_VendorInformation.cshtml</code>; <code>OnGetVendorList</code> + <code>OnGetVendorInformation</code> → <code>_addressService</code></td>
+        <td>Same page model handlers; <strong>both <code>OnGetVendorList</code> and <code>OnGetVendorInformation</code> still call <code>_addressService</code> directly</strong> (NOT via API)</td>
+        <td>When vendor mode is enabled, user selects or enters a vendor with full contact/address fields. Saved to <code>CONTACT</code> + <code>ADDRESS</code> tables. <strong>Gap: G-01 — vendor lookup endpoints not yet migrated to API</strong></td>
+      </tr>
+      <tr>
+        <td>COOP-FU-025</td>
+        <td>Submitter Email (Read-Only, Auto-Populated)</td>
+        <td>DataEntry</td>
+        <td class="risk-low">Low</td>
+        <td><code>txtEmailMe</code> readonly; bound to <code>Model.Email</code> from user profile</td>
+        <td>Same</td>
+        <td>The logged-in user's email is pre-filled and read-only. Always included in confirmation recipients.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-026</td>
+        <td>Dealer Contacts Selection</td>
+        <td>DataEntry</td>
+        <td class="risk-low">Low</td>
+        <td><code>GetDealerMediaContact()</code> — <code>_addressService.GetContact(code=="coop")</code>; checkboxes in <code>_DealerShipContactDetail</code></td>
+        <td><code>DealerInfoApiService.GetContactAsync</code>; same filter</td>
+        <td>Coop-tagged dealer contact emails displayed as opt-in checkboxes. Selected contacts copied to claim on submit.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-027</td>
+        <td>Other Contacts (Freeform)</td>
+        <td>DataEntry</td>
+        <td class="risk-low">Low</td>
+        <td><code>txtOtherMediaContact</code> + <code>btnAddOtherContact</code>; JS adds to list</td>
+        <td>Identical</td>
+        <td>User can type additional email addresses to receive confirmation. Added client-side to submission data.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-028</td>
+        <td>Submission Comment (Optional)</td>
+        <td>DataEntry</td>
+        <td class="risk-low">Low</td>
+        <td><code>txtMainComment</code>; maxlength=500; saved to <code>COMMENT</code> (owner = TempClaim or Claim)</td>
+        <td><code>_claimActivityApiService.UpdateCommentAsync</code> / <code>_commonAPIService.DeleteCommentAsync</code></td>
+        <td>Optional free-text comment attached to the claim. Saved at draft and moved to final claim on submit.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div id="businesslogic" class="section">
+  <div class="section-header">Business Logic</div>
+  <table>
+    <thead>
+      <tr><th>ID</th><th>Name</th><th>Category</th><th>Risk</th><th>Legacy</th><th>Modern</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>COOP-FU-029</td>
+        <td>Dealer Type List Population</td>
+        <td>BusinessLogic</td>
+        <td class="risk-medium">Medium</td>
+        <td><code>OnGetDealerTypeList</code> — <code>_dealerService.GetDealerTypeByDealerNumberSeq</code></td>
+        <td><code>_coopApiService.GetDealerTypeByDealerNumberSeqSaaSAsync</code></td>
+        <td>Populates the dealer type dropdown in Step 3. Each type has a <code>program_dealer_type_seq</code> used to filter eligible media types.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-030</td>
+        <td>Dealer Budget Info & Currency Conversion Rates</td>
+        <td>BusinessLogic</td>
+        <td class="risk-high">High</td>
+        <td><code>OnGetDealerBudgetInfo</code> — <code>_budgetService.GetDealerBudgetType</code> + <code>_addressService.GetDealerLanguageCurrency</code> + <code>_programService.GetCurrencyConversionLogbyDate</code></td>
+        <td><code>_coopApiService.GetDealerBudgetTypeAsync</code> + <code>GetDealerLanguageCurrencyAsync</code> + <code>GetCurrencyConversionLogByDateAsync</code></td>
+        <td>Returns available budget (formatted), program budget seq, dealer currency, and conversion rates. Powers the budget display and multi-currency invoice workflow.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-031</td>
+        <td>Product Line List by Dealer</td>
+        <td>BusinessLogic</td>
+        <td class="risk-medium">Medium</td>
+        <td><code>OnGetProductList</code> — <code>_budgetService.GetProductLineByDealerNumberSeq</code></td>
+        <td><code>_coopApiService.GetProductLineByDealerNumberSeqAsync</code></td>
+        <td>Returns product lines (code, name, available budget) for the dealer. Populates the product allocation dropdown.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-032</td>
+        <td>OCR Invoice Scanning</td>
+        <td>BusinessLogic</td>
+        <td class="risk-high">High</td>
+        <td><code>_oCRService</code> (Azure Form Recognizer); <code>isOCREnabled</code> from <code>_programService.GetProgramData(OCRConfig.CoopOCRConfig)</code>; OCR usage tracked per activity (<code>"OCR"</code> / <code>"OCR + Manual"</code> / <code>"Manual"</code>)</td>
+        <td>OCR config from <code>_coopApiService.GetProgramDataAsync</code>; OCR usage tracking same logic; <code>UpdateOCRHit</code> called per invoice</td>
+        <td>When enabled, invoices are scanned via Azure Form Recognizer. Pre-fills media name, invoice number, and amount. Tracks whether user used/modified OCR-extracted values.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-033</td>
+        <td>Campaign Pre-Approval (Multi-Media-Type)</td>
+        <td>BusinessLogic</td>
+        <td class="risk-high">High</td>
+        <td><code>OnGetCheckAdCodeNumber</code> — when media_type == "campaign", loads child media type seqs into session</td>
+        <td>Same logic; <code>_claimActivityApiService.GetPreapprovalBySearchAsync</code></td>
+        <td>Campaign pre-approvals contain child media types. Each child's <code>preapproval_seq</code> is stored in session keyed by <code>media_type_seq</code> and used when saving activities.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-034</td>
+        <td>Dealer ID Verification Against Program Contracts</td>
+        <td>BusinessLogic</td>
+        <td class="risk-medium">Medium</td>
+        <td><code>OnGetVerifyDealerID</code> — <code>_dealerService.GetDealersbyBranchParentSeq</code> + <code>_programService.GetProgramData(mediaType)</code> for contract list</td>
+        <td><code>_coopApiService.GetDealersByBranchParentSeqSaaSAsync</code> + <code>GetProgramDataAsync</code></td>
+        <td>Validates entered dealer ID against the program's allowed contract types for the selected media. Returns true/false to JS.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-035</td>
+        <td>Corporate Dealer Auto-Bind</td>
+        <td>BusinessLogic</td>
+        <td class="risk-medium">Medium</td>
+        <td><code>OnGet</code> — <code>_dealerSearch.SearchCorporateDealer()</code> for non-dealer users when <code>IncCorpClaim = false</code></td>
+        <td>Same</td>
+        <td>When a corporate user has a single associated dealer, the dealer is resolved automatically without showing the search step.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-036</td>
+        <td>Multi-Currency Invoice Conversion</td>
+        <td>BusinessLogic</td>
+        <td class="risk-medium">Medium</td>
+        <td><code>UpdateTempActivities</code> — <code>_programService.GetCurrencyConversionByDate</code> + <code>InsertCurrencyConversionLog</code></td>
+        <td><code>CoopApiService.GetCurrencyConversionByDateAsync</code> + <code>InsertCurrencyConversionLogAsync</code></td>
+        <td>When invoice currency differs from dealer currency, the conversion rate is looked up and logged at save time. The seq is stored on the activity.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div id="workflow" class="section">
+  <div class="section-header">Workflow</div>
+  <table>
+    <thead>
+      <tr><th>ID</th><th>Name</th><th>Category</th><th>Risk</th><th>Legacy</th><th>Modern</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>COOP-FU-037</td>
+        <td>Draft Save ("Save and Submit Later")</td>
+        <td>Workflow</td>
+        <td class="risk-high">High</td>
+        <td><code>OnPostSaveClaim(SubmitFlag=false)</code> — <code>CreateTempClaim</code> + <code>UpdateTempActivities</code>; returns <code>TempClaimSeq</code></td>
+        <td>Same structure; all writes via API</td>
+        <td>Saves the claim as a draft. Returns a <code>TempClaimSeq</code> (temporary claim number). User can resume from the Activity page. Draft comment preserved.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-038</td>
+        <td>Final Submit</td>
+        <td>Workflow</td>
+        <td class="risk-critical">Critical</td>
+        <td><code>OnPostSaveClaim(SubmitFlag=true)</code> → <code>CreateTempClaim</code> + <code>UpdateTempActivities</code> + <code>CreateClaim</code> → returns <code>ClaimProcessNumber</code></td>
+        <td>Same; <code>CreateClaim</code> calls <code>CoopApiService.CreateClaimAndActivityRecordsAsync</code> + <code>InsertActivityProductSaaSAsync</code></td>
+        <td>Promotes temp records to final claim. Assigns process number, sends confirmation email, deletes temp comment. On success shows confirmation screen with process number.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-039</td>
+        <td>Resume Incomplete Claim</td>
+        <td>Workflow</td>
+        <td class="risk-high">High</td>
+        <td><code>OnGet(?temp_seq=enc)</code> — <code>GetTemporaryClaimInfo</code> + <code>GetTempComment</code>; pre-fills all wizard fields</td>
+        <td><code>GetTemporaryClaimInfo</code> via <code>_coopApiService.GetTempClaimByTempClaimSeqAsync</code> + <code>GetOnlineActivityTempByTempSeqAsync</code></td>
+        <td>When <code>?temp_seq</code> is present, the full draft claim is loaded including all activities, documents, vendor info, and comment.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-040</td>
+        <td>Submit Another Claim (Reset)</td>
+        <td>Workflow</td>
+        <td class="risk-low">Low</td>
+        <td><code>btnSubmitNewClaim</code> / <code>btnSubmitNewClaimSame</code> on success screen</td>
+        <td>Identical CSHTML</td>
+        <td>After successful submit, buttons allow submitting a new claim or another claim for the same dealer. Hidden for BMDLR/DIST/BMDIST roles.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-041</td>
+        <td>Post-Submit Confirmation Email</td>
+        <td>Workflow</td>
+        <td class="risk-high">High</td>
+        <td><code>CreateClaim</code> → <code>SendClaimEmailToUser(objClaim, TotalClaimAmount, false, false)</code> (Email.cs partial class)</td>
+        <td><code>SubmitClaim.cshtml.Email.cs</code> partial class — verify email service dependency</td>
+        <td>Confirmation email sent to submitter + selected dealer contacts after successful submit. Includes process number and total amount. <strong>Gap: G-04 — need to verify Email.cs uses API vs legacy <code>IEmailService</code></strong></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div id="datapersistence" class="section">
+  <div class="section-header">Data Persistence</div>
+  <table>
+    <thead>
+      <tr><th>ID</th><th>Name</th><th>Category</th><th>Risk</th><th>Legacy</th><th>Modern</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>COOP-FU-042</td>
+        <td>Temp Claim Header Record</td>
+        <td>DataPersistence</td>
+        <td class="risk-high">High</td>
+        <td><code>CreateTempClaim</code> → <code>_onlineClaimService.UpdateOnlineClaimTemp</code> → <code>USP_ONLINE_CLAIM_TEMP_U01</code></td>
+        <td><code>_coopApiService.UpdateOnlineClaimTempAsync</code> → API → same SP</td>
+        <td>Creates or updates <code>ONLINE_CLAIM_TEMP</code>. Fields: dealer_number_seq, contact_seq, fiscal_year, claim_type, crc_user_seq, media_user_company_seq.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-043</td>
+        <td>Temp Activity Records</td>
+        <td>DataPersistence</td>
+        <td class="risk-high">High</td>
+        <td><code>UpdateTempActivities</code> → <code>_onlineClaimService.UpdateOnlineActivityTemp</code> per activity</td>
+        <td><code>_coopApiService.UpdateOnlineActivityTempAsync</code></td>
+        <td>Creates or updates <code>ONLINE_ACTIVITY_TEMP</code>. Fields: media_type_seq, preapproval_seq, media_name, invoice_number, invoice_amount, invoice_date, ocr_usage, currency_conversion_seq.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-044</td>
+        <td>Document Image Records (Invoice + Supporting)</td>
+        <td>DataPersistence</td>
+        <td class="risk-high">High</td>
+        <td><code>UpdateTempActivities</code> → <code>_documentService.UpdateDocumentImage</code>; file physically renamed <code>{dealerNumber}_{activitySeq}_{index}</code></td>
+        <td>Same handler logic; verify file storage path consistency</td>
+        <td>Two document types per activity: "invoice" and "other proof of performance". Files stored on disk; <code>DOCUMENT_IMAGE</code> record links file name to activity seq. <strong>Gap: G-05 — verify storage path in modern</strong></td>
+      </tr>
+      <tr>
+        <td>COOP-FU-045</td>
+        <td>Activity Product Line Records</td>
+        <td>DataPersistence</td>
+        <td class="risk-high">High</td>
+        <td><code>_activityService.DeleteOnlineActivityProduct</code> then insert via <code>UpdateOnlineActivityProduct</code></td>
+        <td><code>_coopApiService.UpdateOnlineActivityProductAsync</code>; delete then re-insert pattern identical</td>
+        <td>Product lines stored in <code>ONLINE_ACTIVITY_PRODUCT</code>. Pattern: delete existing then insert fresh on every save.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-046</td>
+        <td>Activity Date Records</td>
+        <td>DataPersistence</td>
+        <td class="risk-medium">Medium</td>
+        <td><code>_activityService.DeleteOnlineActivityDate</code> then <code>UpdateOnlineActivityDate</code> per date</td>
+        <td>API equivalents; delete-and-reinsert pattern</td>
+        <td>Activity dates stored in <code>ONLINE_ACTIVITY_DATE</code>. Future dates silently skipped.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-047</td>
+        <td>Vendor Contact & Address Records (Conditional)</td>
+        <td>DataPersistence</td>
+        <td class="risk-medium">Medium</td>
+        <td><code>_addressService.UpdateContact</code> + <code>updateAddress</code> for <code>ONLINE_ACTIVITY_TEMP</code> owner</td>
+        <td><strong>NOT migrated</strong> — same <code>_addressService</code> direct calls in modern</td>
+        <td>Vendor name, address, phone, email stored in <code>CONTACT</code> + <code>ADDRESS</code> tables linked to the activity. <strong>Gap: G-01</strong></td>
+      </tr>
+      <tr>
+        <td>COOP-FU-048</td>
+        <td>Final Claim & Activity Promotion</td>
+        <td>DataPersistence</td>
+        <td class="risk-critical">Critical</td>
+        <td><code>_onlineClaimService.CreateClaimAndActivityRecords</code> → <code>USP_CREATE_CLAIM_AND_ACTIVITY_RECORDS</code>; then <code>InsertActivityProduct_SaaS</code></td>
+        <td><code>_coopApiService.CreateClaimAndActivityRecordsAsync</code> + <code>InsertActivityProductSaaSAsync</code></td>
+        <td>Single SP call promotes all temp records to permanent <code>CLAIM</code> + <code>ACTIVITY</code> tables. Budget consumed. Returns <code>ClaimSeq</code>; subsequent read gets <code>process_number</code>.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-049</td>
+        <td>Email Contact Records on Claim</td>
+        <td>DataPersistence</td>
+        <td class="risk-medium">Medium</td>
+        <td><code>SaveEmailsToClaim</code> → <code>_addressService.UpdateContact</code> for each selected email (To/CC)</td>
+        <td>Needs verification — <code>SaveEmailsToClaim</code> not yet confirmed as API-migrated</td>
+        <td>Each selected confirmation email saved as a <code>CONTACT</code> record linked to the <code>CLAIM</code>, enabling audit trail of who was notified.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div id="security" class="section">
+  <div class="section-header">Security</div>
+  <table>
+    <thead>
+      <tr><th>ID</th><th>Name</th><th>Category</th><th>Risk</th><th>Legacy</th><th>Modern</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>COOP-FU-050</td>
+        <td>Unauthenticated Access Redirect</td>
+        <td>Security</td>
+        <td class="risk-critical">Critical</td>
+        <td><code>BasePageModel</code> auth check; dealer without <code>dealer_number_seq</code> → redirect to <code>/CoopManagement/dealer/AdminIndex</code></td>
+        <td>Same</td>
+        <td>Unauthenticated users redirected to login. Dealer users without an established dealer context redirected to admin index with <code>PageReturnURL</code> set.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-051</td>
+        <td>Dealer Data Scoping</td>
+        <td>Security</td>
+        <td class="risk-critical">Critical</td>
+        <td>All service calls scoped to <code>DealerNumberSeq</code> resolved at <code>OnGet</code>; dealer users forced to their own seq</td>
+        <td>Same</td>
+        <td>Dealer users can only submit claims for their own dealer. Admin users must select a dealer first. <code>dealer_number_seq</code> resolved and stored in session; all subsequent calls use it.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-052</td>
+        <td>Pre-Approval Dealer Ownership Check</td>
+        <td>Security</td>
+        <td class="risk-high">High</td>
+        <td><code>OnGetCheckAdCodeNumber</code> — org structure check: verifies the PA's dealer is in the user's authorized dealer list</td>
+        <td><code>_coopApiService.GetDealersListAsync</code> for org structure check</td>
+        <td>Corporate users with org structure can only use pre-approvals belonging to dealers in their hierarchy. Prevents cross-dealer PA use.</td>
+      </tr>
+      <tr>
+        <td>COOP-FU-053</td>
+        <td>Encrypted Parameters in Requests</td>
+        <td>Security</td>
+        <td class="risk-high">High</td>
+        <td><code>dealer_number_seq</code>, <code>program_dealer_type_seq</code>, <code>product_seq</code>, <code>preapproval_seq</code> encrypted in all client-facing values via <code>_encryptDecrypt</code></td>
+        <td>Same encryption pattern applied consistently</td>
+        <td>All database sequence IDs exposed to the client are encrypted. Server-side decrypts before use. Prevents enumeration attacks.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</div>
+
+<footer>
+  Generated by QA Migration Framework — Step 2 (Functional Unit Discovery) | 2026-06-17
+</footer>
+</body>
+</html>
