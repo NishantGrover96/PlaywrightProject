@@ -30,6 +30,7 @@ const FEATURE_FOLDERS = {
   "coop-api-submit-claim":       "tests/api/coop/feature-submit-claim",
   "coop-api-submit-preapproval": "tests/api/coop/feature-submit-preapproval",
   "popshop-new-order":           "tests/playwright/specs/popshop/feature-new-order",
+  "engage-ads-view-package":     "tests/playwright/specs/engage-ads/feature-view-package",
 };
 
 const TIER_TAGS = { smoke: "@smoke", regression: "@regression", e2e: "@e2e" };

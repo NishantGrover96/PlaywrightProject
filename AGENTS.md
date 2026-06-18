@@ -14,15 +14,25 @@ This repository contains reusable skill documents under `.github/skills/`.
 - Dashboard tracks implementation status per test tier (smoke, regression, e2e, functionalUnit).
 
 ## Skill Index
-- `.github/skills/api-verification/SKILL.md`
-- `.github/skills/coverage-signoff/SKILL.md`
-- `.github/skills/database-verification/SKILL.md`
-- `.github/skills/functional-unit-discovery/SKILL.md`
-- `.github/skills/gap-analysis/SKILL.md`
-- `.github/skills/migration-comparison/SKILL.md`
-- `.github/skills/migration-qa-framework/SKILL.md`
-- `.github/skills/playwright-test-generation/SKILL.md`
-- `.github/skills/scaffold/SKILL.md`
+
+### Functional QA Test Generation Pipeline (new — no legacy/modern comparison)
+- `.github/skills/functional-qa-test-generation/SKILL.md` — **Orchestrator**: full pipeline from repo analysis to test execution
+- `.github/skills/repo-analysis/SKILL.md` — Step 1: Codebase discovery (fields, rules, endpoints, DB, security)
+- `.github/skills/ui-analysis/SKILL.md` — Step 2: Live app Playwright analysis (UI structure, selectors, journeys)
+- `.github/skills/functional-test-catalog/SKILL.md` — Steps 3–4: Business rule discovery + test catalog generation
+
+### Migration QA Pipeline (legacy vs modern comparison)
+- `.github/skills/migration-qa-framework/SKILL.md` — **Orchestrator**: Steps 2→4 for migration QA
+- `.github/skills/functional-unit-discovery/SKILL.md` — Steps 1–2: Legacy + modern codebase discovery
+- `.github/skills/gap-analysis/SKILL.md` — Step 2.5: Legacy vs modern gap analysis
+- `.github/skills/coverage-signoff/SKILL.md` — Step 2.6: Gate before automation
+- `.github/skills/scaffold/SKILL.md` — Step 0: New module/feature setup
+- `.github/skills/playwright-test-generation/SKILL.md` — Step 3: Generate Playwright test assets
+
+### Shared / Supporting Skills
+- `.github/skills/api-verification/SKILL.md` — API test generation and validation
+- `.github/skills/database-verification/SKILL.md` — DB state verification SQL scripts
+- `.github/skills/migration-comparison/SKILL.md` — Migration comparison utilities
 
 ## Baseline Rules
 - Make minimal, focused changes.

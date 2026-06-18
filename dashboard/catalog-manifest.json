@@ -155,5 +155,30 @@
     "coverage": { "functional": 95.1, "validation": 100, "workflow": 100, "database": 88, "security": 100 },
     "gaps": { "critical": 0, "high": 0, "medium": 4, "low": 2 },
     "lastRun": null
+  },
+  "engage-ads-view-package": {
+    "feature":     "EngageAds — View Package",
+    "catalogFile": "docs/functional-catalogs/engage-ads/feature-view-package/functional-units.html",
+    "version":     "v1",
+    "generated":   "2026-06-18",
+    "auditedAs":   "DemoPortal UAT (https://demoportaluat.channel-fusion.com/EngageAds/BundledAdPackages, 2026-06-18)",
+    "lastUpdated": "2026-06-18T16:47:00Z",
+    "sections":    8,
+    "pipeline":    "functional-qa",
+    "implementationStatus": {
+      "smoke":          { "implemented": true,  "lastUpdated": "2026-06-18T16:47:00Z" },
+      "regression":     { "implemented": true,  "lastUpdated": "2026-06-18T16:47:00Z" },
+      "e2e":            { "implemented": true,  "lastUpdated": "2026-06-18T16:47:00Z" },
+      "functionalUnit": { "implemented": true,  "lastUpdated": "2026-06-18T16:47:00Z" }
+    },
+    "specFiles": {
+      "smoke":      "tests/playwright/specs/engage-ads/feature-view-package/view-package.spec.ts",
+      "regression": "tests/playwright/specs/engage-ads/feature-view-package/view-package.spec.ts",
+      "e2e":        "tests/playwright/specs/engage-ads/feature-view-package/view-package.spec.ts"
+    },
+    "tests":    { "total": 45, "implemented": 44, "fixme": 1 },
+    "coverage": { "functional": 95, "validation": 100, "workflow": 90, "database": 70, "security": 100 },
+    "gaps":     { "critical": 0, "high": 0, "medium": 1, "low": 2 },
+    "lastRun":  null
   }
 }

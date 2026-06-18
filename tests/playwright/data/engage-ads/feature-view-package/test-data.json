@@ -1,0 +1,45 @@
+{
+  "featureUrl": "/EngageAds/BundledAdPackages",
+  "packages": {
+    "knownStandard": { "name": "Local Lead Starter", "price": 2875 },
+    "knownCustom": { "name": "Custom Package" }
+  },
+  "budget": {
+    "availableUAT": 1139.0
+  },
+  "coop": {
+    "validAmount": "100",
+    "exceedsPackage": "999999",
+    "zero": "0",
+    "negative": "-50",
+    "nonNumeric": "abc"
+  },
+  "expertForm": {
+    "valid": {
+      "city": "Los Angeles",
+      "monthlyBudget": "5000",
+      "additionalNotes": "Automation test note"
+    },
+    "invalid": {
+      "monthlyBudgetTooLong": "This monthly budget value is intentionally too long to exceed the fifty character maximum length limit set by the form"
+    }
+  },
+  "expectedErrors": {
+    "coopNoSelection": "Please select a valid product code and enter a value.",
+    "coopExceedsProductBudget": "exceeds available balance",
+    "coopExceedsPackageTotal": "Co-op amount cannot exceed the package cost",
+    "coopDuplicate": "This product code has already been added.",
+    "cardAmountZero": "Card amount must be greater than zero",
+    "packageNotFound": "Package not found"
+  },
+  "expectedMessages": {
+    "packageInactive": "will not be activated",
+    "consultationSubmitted": "consultation request has been submitted",
+    "splitPayment": "Split Payment"
+  },
+  "redirects": {
+    "payment": "/EngageAds/Payment",
+    "orderConfirmation": "/EngageAds/OrderConfirmation",
+    "login": "/Account/Login"
+  }
+}

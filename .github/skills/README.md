@@ -2,14 +2,24 @@
 
 These skills are copied from .claude/skills using directory format for Copilot CLI compatibility.
 
-## Skills
+## Functional QA Test Generation Pipeline (new — no legacy/modern comparison)
 
-- api-verification
-- coverage-signoff
-- database-verification
+- functional-qa-test-generation *(orchestrator)*
+- repo-analysis
+- ui-analysis
+- functional-test-catalog
+
+## Migration QA Pipeline (legacy vs modern comparison)
+
+- migration-qa-framework *(orchestrator)*
 - functional-unit-discovery
 - gap-analysis
-- migration-comparison
-- migration-qa-framework
-- playwright-test-generation
+- coverage-signoff
 - scaffold
+- playwright-test-generation
+
+## Shared / Supporting Skills
+
+- api-verification
+- database-verification
+- migration-comparison
