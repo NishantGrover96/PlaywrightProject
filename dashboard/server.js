@@ -315,6 +315,72 @@ function computeDiff(legacyResults, modernResults) {
   };
 }
 
+// ── Spawn helper (used by comparison phases) ──────────────────────────────────
+// onResult(parsedResult)  — called for each pass/fail/skip line
+// onDone(summary, code)   — called when process exits
+function spawnPlaywright(args, env, onResult, onDone) {
+  const playwrightCli = path.join(ROOT_DIR, "node_modules", "@playwright", "test", "cli.js");
+  if (!fs.existsSync(playwrightCli)) {
+    const err = `Playwright CLI not found: ${playwrightCli}`;
+    console.error(`[dashboard] ${err}`);
+    broadcast("line", { text: `[dashboard] ERROR: ${err}` });
+    onDone({ passed: 0, failed: 0, skipped: 0, duration: "" }, 1);
+    return;
+  }
+
+  const proc = spawn(process.execPath, [playwrightCli, ...args], {
+    cwd: ROOT_DIR,
+    env,
+    shell: false,
+    stdio: ["pipe", "pipe", "pipe"],
+  });
+
+  // Keep state.proc so stopRun() can kill it
+  state.proc = proc;
+
+  let buffer  = "";
+  let summary = { passed: 0, failed: 0, skipped: 0, duration: "" };
+
+  function onData(chunk) {
+    buffer += chunk.toString().replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+    const lines = buffer.split("\n");
+    buffer = lines.pop();
+    for (const raw of lines) {
+      broadcast("line", { text: raw });
+      const parsed = parseLine(raw);
+      if (parsed.kind === "result") {
+        onResult(parsed);
+      } else if (parsed.kind === "summary") {
+        summary = {
+          passed:   parsed.passed   || 0,
+          failed:   parsed.failed   || 0,
+          skipped:  parsed.skipped  || 0,
+          duration: parsed.duration || summary.duration,
+        };
+        broadcast("summary-update", summary);
+      }
+    }
+  }
+
+  proc.stdout.on("data", onData);
+  proc.stderr.on("data", onData);
+
+  proc.on("close", (code) => {
+    // Flush remaining buffer
+    if (buffer.trim()) {
+      broadcast("line", { text: buffer });
+      const parsed = parseLine(buffer);
+      if (parsed.kind === "result") onResult(parsed);
+    }
+    onDone(summary, code);
+  });
+
+  proc.on("error", (err) => {
+    broadcast("line", { text: `[dashboard] Process error: ${err.message}` });
+    onDone(summary, 1);
+  });
+}
+
 function runComparison(config) {
   if (state.running) return { ok: false, error: "A run is already in progress." };
   if (!config.legacyUrl) return { ok: false, error: "legacyUrl is required." };
@@ -349,6 +415,7 @@ function runComparison(config) {
       spawnPlaywright(args, buildEnv(config, config.modernUrl),
         (r) => { modernResults.push(r); broadcast("compare-result", { phase: "modern", ...r }); },
         (modernSummary, _code2) => {
+          broadcast("compare-phase-done", { phase: "modern", summary: modernSummary });
           state.running = false;
           const diff = computeDiff(legacyResults, modernResults);
           const entry = {
