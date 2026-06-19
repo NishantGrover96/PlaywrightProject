@@ -27,6 +27,7 @@ export default defineConfig({
   reporter: [
     ['html',  { outputFolder: `reports/${TEST_ENV}-html`, open: 'never' }],
     ['json',  { outputFile: `reports/${TEST_ENV}/results.json` }],
+    ['junit', { outputFile: `reports/${TEST_ENV}/junit.xml` }],
     ['list'],
   ],
 
