@@ -1,3 +1,8 @@
+---
+name: functional-test-catalog
+description: Discover business rules from analysis reports and generate a comprehensive test catalog organized by tier (Smoke, Regression, E2E).
+---
+
 # Functional Test Catalog — Steps 3 & 4: Business Rule Discovery + Test Catalog Generation
 
 ## Purpose

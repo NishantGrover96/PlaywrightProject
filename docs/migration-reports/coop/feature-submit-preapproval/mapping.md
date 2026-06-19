@@ -1,7 +1,7 @@
 # Coop — Submit Pre-Approval — Migration Mapping
 
 > Module: `coop` | Feature: `submit-preapproval`
-> Generated: 2026-06-17 | Pipeline: Step 2 (Functional Unit Discovery)
+> Generated: 2026-06-19 | Pipeline: Step 2 (Functional Unit Discovery — Re-run)
 
 ---
 
@@ -53,6 +53,7 @@
 | COOP-PA-FU-044 | Dealer Role — Own Dealer Number | `_webHelper.IsDealer(UserSession.Role)` + `UserSession.Dealer_number_seq` | Same | Equivalent | — |
 | COOP-PA-FU-045 | Corp/Admin Dealer Selection | `_dealerSearch.SearchCorporateDealer()` | Same | Equivalent | — |
 | COOP-PA-FU-046 | Encrypted Parameter Handling | `IEncryptDecrypt.Encrypt/Decrypt` | Same | Equivalent | — |
+| COOP-PA-FU-047 | Media Types Re-loaded During POST | Not present — POST handler processes submitted data directly without media reload | `OnPostProcessPreApproval` calls `GetMediaType(SelectedFiscalYear)` at start; required by `MapToSubmitPreapprovalApiModel` to look up media metadata | New in Modern | Additional API dependency during POST. If `SelectedFiscalYear` binding fails or API call fails, submission mapping breaks. |
 
 ---
 
@@ -63,5 +64,6 @@
 | Equivalent | 43 |
 | Different (but functionally equivalent) | 2 (FU-029, FU-033) |
 | Partial (gap exists) | 1 (FU-036) |
+| New in Modern | 1 (FU-047) |
 | Missing in Modern | 0 |
-| **Total** | **46** |
+| **Total** | **47** |

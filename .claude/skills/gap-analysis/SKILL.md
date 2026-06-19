@@ -1,3 +1,8 @@
+---
+name: gap-analysis
+description: Compare legacy vs modern functional units and produce a coverage matrix classifying gaps as Critical, High, Medium, or Low.
+---
+
 # Gap Analysis — Step 2.5: Legacy vs Modern
 
 ## Purpose

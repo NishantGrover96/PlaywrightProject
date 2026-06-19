@@ -1,10 +1,11 @@
 /**
  * Coop — Submit Pre-Approval — Spec File
  * Module: coop | Feature: submit-preapproval
- * Generated: 2026-06-17 | Pipeline: Step 3 (Playwright Test Generation)
+ * Generated: 2026-06-19 | Pipeline: Step 3 (Playwright Test Generation — Re-run)
  *
  * FU catalog: docs/functional-catalogs/coop/feature-submit-preapproval/functional-units.md
  * Sign-off:   docs/functional-catalogs/coop/feature-submit-preapproval/signoff.md
+ * Total FUs:  47 (46 legacy + 1 new-in-modern: FU-047)
  *
  * Run tags:
  *   @smoke      — critical-path, fast, safe on production
@@ -58,7 +59,11 @@ test.describe('Coop — Submit Pre-Approval — Smoke', () => {
   // FU-005
   test('COOP-PA-SMOKE-004 @smoke — submit button present in form step', async ({ page }) => {
     const preapproval = await navigateToFormStep(page);
-    await expect(preapproval.btnSubmit).toBeVisible();
+    // Submit button is revealed by jQuery .change() on .clsmaincommon fields → ValidateSection AJAX.
+    // Playwright fill() fires 'input' not 'change', so dispatch change explicitly.
+    await preapproval.fillAdTitle(testData.valid.adTitle);
+    await preapproval.adTitleInput.dispatchEvent('change');
+    await preapproval.expectSubmitButtonVisible();
   });
 
   // FU-032, FU-039, FU-006
@@ -73,8 +78,10 @@ test.describe('Coop — Submit Pre-Approval — Smoke', () => {
   test('COOP-PA-SMOKE-006 @smoke — unauthenticated access redirects to login', async ({ browser }) => {
     const context = await browser.newContext({ storageState: undefined });
     const page    = await context.newPage();
-    await page.goto('/CoopManagement/PreApproval/Submit/SubmitPreapproval');
-    await expect(page).not.toHaveURL(/SubmitPreApproval/i, { timeout: 10_000 });
+    await page.goto('/CoopManagement/PreApproval/Submit/SubmitPreapproval', { waitUntil: 'domcontentloaded' });
+    // Unauthenticated users are redirected to login. The returnUrl may still contain
+    // "SubmitPreapproval", so check for the login page directly.
+    await expect(page).toHaveURL(/login|account/i, { timeout: 10_000 });
     await context.close();
   });
 
@@ -351,6 +358,24 @@ test.describe('Coop — Submit Pre-Approval — Regression — Success Panel', (
     test.skip(FILE_MISSING, 'Sample file missing — cannot upload');
     const { preapproval } = await submitMainbranchPreapproval(page);
     await expect(preapproval.btnSubmitAnother).toBeVisible();
+  });
+
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// REGRESSION SUITE — Modern Behavior (new-in-modern FUs)
+// ─────────────────────────────────────────────────────────────────────────────
+
+test.describe('Coop — Submit Pre-Approval — Regression — Modern Behavior', () => {
+
+  // FU-047: Modern OnPostProcessPreApproval calls GetMediaType(SelectedFiscalYear) at the start.
+  // This requires #hdnSelectedFiscalYear to be present in the DOM and bound to a valid fiscal year.
+  // If the field is absent or empty the media-type lookup will fail, causing a 500 or empty submission.
+  test('COOP-PA-REG-031 @regression — SelectedFiscalYear hidden field present and populated on page load', async ({ page }) => {
+    const preapproval = new SubmitPreapprovalPage(page);
+    await preapproval.navigate();
+    await preapproval.expectMediaTilesVisible();
+    await preapproval.expectSelectedFiscalYearPresent();
   });
 
 });

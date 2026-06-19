@@ -1,7 +1,7 @@
 # Coop — Submit Pre-Approval — Gap Analysis
 
 > Module: `coop` | Feature: `submit-preapproval`
-> Generated: 2026-06-17 | Pipeline: Step 2.5 (Gap Analysis)
+> Generated: 2026-06-19 | Pipeline: Step 2.5 (Gap Analysis — Re-run)
 > Input: `docs/functional-catalogs/coop/feature-submit-preapproval/functional-units.md`
 >         `docs/migration-reports/coop/feature-submit-preapproval/mapping.md`
 
@@ -9,120 +9,158 @@
 
 ## Missing Functional Units
 
-_None. All 46 FUs are implemented in modern (43 equivalent, 2 different-but-equivalent, 1 partial)._
+_None. All 47 FUs have coverage in modern. FU-047 is new in modern (additional behavior)._
 
 ---
 
-## Missing Validations
+## Partial Coverage / Gaps
 
-_None. Validation is entirely client-side in `jsSubmitPreApproval.js` and UI is identical between legacy and modern. All validation logic is shared (same .cshtml + same .js loaded by both)._
+### FU-036 — Shows & Events Record — MEDIUM
 
-| Field | Legacy Rule | Modern Status | Gap Level |
+| Dimension | Legacy | Modern | Gap |
 |---|---|---|---|
-| Campaign Title | Required when branch=campaign; `RequiredField` message | Full — same JS | — |
-| Ad Landing URL | Required per `MediaURLRequiredFlag`; `RequiredField` message | Full — same JS | — |
-| Multiple URLs | Required per `MediaURLRequiredFlag`; `RequiredField` message | Full — same JS | — |
-| Ad Title | Required for mainbranch; `RequiredField` message | Full — same JS | — |
-| Show Name | Required for indvshow/grpshow; `RequiredField` | Full — same JS | — |
-| Show Address | Required for indvshow/grpshow; `RequiredField` | Full — same JS | — |
-| Show City | Required; `RequiredField` | Full — same JS | — |
-| Show State | Required; `RequiredField` | Full — same JS | — |
-| Show Zip | Required; `RequiredField` | Full — same JS | — |
-| Show Start Date | Required for show branches | Full — same JS | — |
-| Show End Date | Required for show branches | Full — same JS | — |
-| Show Cost | Required for show branches | Full — same JS | — |
-| Dealer ID | Required when `dealeridtextrequiredflag="Y"` | Full — same JS | — |
-| File Upload | Required for all preapprovals; `RequiredField` | Full — same JS | — |
-| Email — Me | Required (readonly, pre-filled from session) | Full — same .cshtml | — |
-| Sponsorship Name | Required for sponsor branch | Full — same JS | — |
-| Sponsorship Dates | Required for sponsor branch | Full — same JS | — |
+| `ShowName` | Persisted | ✅ Passed to `LinkShowToPreapprovalAsync` | No gap |
+| `ShowLocation` | Persisted | ✅ Passed to `LinkShowToPreapprovalAsync` | No gap |
+| `StartDate` | Persisted | ✅ Passed as `showDate` | No gap |
+| `ShowType` | Persisted (IndvShow/GrpShow) | ✅ Passed to `LinkShowToPreapprovalAsync` | No gap |
+| `EquipmentList` | Persisted via `DealerShows.EquipmentList` | ❌ NOT passed to API | **Gap** |
+| `Dealers` (group participating) | Persisted via `DealerShows.Dealers` | ❌ NOT passed to API | **Gap** |
+| `Cost` / `ShowCost` | Persisted via `DealerShows.Cost` | ❌ NOT passed to API | **Gap** |
+| `DlrRacf` (submitter user ID) | Persisted via `DealerShows.DlrRacf` | ❌ NOT passed to API | **Gap** |
+| `Email` (submitter TO email) | Persisted via `DealerShows.Email` | ❌ NOT passed to API | **Gap** |
+| `DlrFormStatus` | Set to `"SUBMITTED"` | ❌ Not controlled from page model | **Gap** |
+
+**Assessment**: The core preapproval record IS created and the show is linked. Missing fields are supplemental `dealer_shows` record fields. These affect:
+- Shows & Events reporting (equipment list display, cost tracking)
+- Group show participant visibility
+- Audit trail (who submitted, from which email)
+
+**Impact Level**: **Medium** — Core preapproval flow succeeds. Affected users: IndvShow and GrpShow branch users only. The preapproval number IS issued and email IS sent; the supplemental dealer_shows record is incomplete.
 
 ---
 
-## Missing Workflow Steps
+## Different Implementations (Functionally Equivalent)
 
-| Step | Legacy Trigger | Modern Status | Gap Level |
+### FU-029 — Media Type Requirements (N+1 vs Batch) — LOW
+
+| Aspect | Legacy | Modern |
+|---|---|---|
+| API call pattern | 1 batch call: `GetAllMediaTypesRequirementByProgramSeq` | N calls per media type: `GetMediaTypesRequirementByProgramSeqAsync` |
+| Result | All requirements for all media types | Same requirements, fetched individually |
+| Output to client | Identical | Identical |
+
+**Impact**: Performance regression for programs with many media types (e.g., 10 media types = 10 API calls instead of 1). No functional difference in output. **Low** impact for automation testing.
+
+---
+
+### FU-033 — Campaign Child Preapproval Processing — LOW
+
+| Aspect | Legacy | Modern |
+|---|---|---|
+| Pattern | Server-side foreach, each child processed as separate `ProcessPreApproval` call | Children nested in `ChildPreapprovals` property of `SubmitPreapprovalApiModel`, processed by API in single call |
+| Parent linking | Each child explicitly linked with `lngParentSeq` | API handles parent-child relationship internally |
+| Result | Multiple preapproval records created | Same multiple preapproval records created |
+
+**Impact**: Functionally identical from UI perspective. Same DB records produced. **Low** impact.
+
+---
+
+### FU-047 — Media Types Re-loaded on POST (New in Modern) — LOW
+
+| Aspect | Legacy | Modern |
+|---|---|---|
+| On POST | No media type reload | `GetMediaType(SelectedFiscalYear)` called before mapping |
+| Purpose | N/A | Required to populate `MediaTypes` list used by `MapToSubmitPreapprovalApiModel` |
+| Additional API calls | 0 extra | N+1 extra (same as page load) |
+
+**Testing implication**: Modern submission depends on `SelectedFiscalYear` being correctly bound from form. If binding fails (e.g., missing hidden field), media type mapping may use wrong fiscal year. Test must verify `hdnSelectedFiscalYear` is correctly submitted.
+
+---
+
+## Validation Coverage
+
+All 19 DataEntry FUs (FU-007 through FU-025) confirmed present in both legacy and modern. Validation is implemented entirely client-side (JavaScript in `jsSubmitPreApproval.js`) and the `.cshtml` files are identical between legacy and modern. No validation gaps.
+
+| Validation Rule | Legacy | Modern | Status |
 |---|---|---|---|
-| Preapproval record created | `IPreapprovalService.ProcessPreApproval` | Full — via `SubmitPreapprovalAsync` | — |
-| Dealer linked | `UpdatePreApprovalDealer` | Full — via `LinkDealerToPreapprovalAsync` | — |
-| Parent dealer linked | `UpdatePreApprovalDealer(parentSeq)` | Full — via `LinkDealerToPreapprovalAsync` | — |
-| Product linked | `InsertPreapprovalProduct_SaaS` | Full — via `LinkProductToPreapprovalAsync` | — |
-| Document linked | `IDocumentService.UpdateDocumentImage` | Full — via `UpdateDocumentImageAsync` | — |
-| URL additional info saved | `SaveAdditionalInfoToPreApproval` | Full — via `SaveAdditionalInfoAsync` | — |
-| Email contacts persisted | `IAddressService.UpdateContact` per contact | Full — via `UpdateContactAsync` per contact | — |
-| Confirmation email sent | `IEmailService` + email template | Full — same `IEmailService` | — |
-| Comment saved | `ICommentService.updateComment` | Full — via `UpdateCommentAsync` | — |
-| Campaign child preapprovals | Loop `ProcessPreApproval(child, parentSeq)` | Different — mapped as nested `ChildPreapprovals` in single API call. Functionally equivalent. | Low |
-| Shows & Events record — full fields | `UpdateDealerShows` with EquipmentList, Dealers, Cost, DlrRacf, Email | **Partial** — `LinkShowToPreapprovalAsync` only passes seq, dealerSeq, showDate, showName, location, showType | **Medium** |
+| Campaign title required | JS `#spnErrorCampaingTitle` | Same JS + same .cshtml | ✅ Full |
+| Ad title required | JS `#spnErrorAdTitle` | Same | ✅ Full |
+| URL required (per media) | JS `#spnAdlandingPageURL` | Same | ✅ Full |
+| Multiple URL format | JS `ValidateMultipleUrl()` | Same | ✅ Full |
+| Show name required | JS `#spnErrorShowsAdTitle` | Same | ✅ Full |
+| Show location required | JS address/city/state/zip spans | Same | ✅ Full |
+| Show dates required | JS date picker validation | Same | ✅ Full |
+| Show cost required | JS `#spnErrorShowsEquipmentCost` | Same | ✅ Full |
+| Group dealer number required | JS `#spnErrorGroupDealerNumber` | Same | ✅ Full |
+| Sponsorship name required | JS `#spnErrorSponsorshipAdTitle` | Same | ✅ Full |
+| File upload required | JS `#spnErrorFile` + Dropzone | Same | ✅ Full |
+| Email (me) required | JS `#spnEmailToMe` | Same | ✅ Full |
+| Dealer ID (conditional) | JS per `dealeridtextrequiredflag` | Same | ✅ Full |
 
 ---
 
-## Missing Database Operations
+## Workflow Coverage
 
-| Operation | Legacy Table/SP | Modern Status | Gap Level |
+| Transition | Legacy | Modern | Status |
 |---|---|---|---|
-| Preapproval header insert | SP via `IPreapprovalService.ProcessPreApproval` | Full — API handles | — |
-| Preapproval dealer link | `preapproval_dealer` table | Full — API handles | — |
-| Preapproval product link | `preapproval_product` table | Full — API handles | — |
-| Document image record | `document_image` table | Full — API handles | — |
-| Additional info record | `preapproval_additional_info` or equivalent | Full — API handles | — |
-| Contact records | `contact` table per email | Full — API handles | — |
-| Comment record | `comment` table | Full — API handles | — |
-| Dealer shows record (Shows & Events) | `dealer_shows` table — EquipmentList, Dealers, Cost, Email, DlrRacf | **Partial** — modern API `LinkShowToPreapprovalAsync` does not accept EquipmentList, Dealers, Cost, DlrRacf, Email parameters | **Medium** |
+| Submit → Submitted status | `GetPreApprovalStatusByBranch` → `Submitted` | Same method, identical code | ✅ Full |
+| Submit → AwaitingCSR (shows/sponsor/webseo) | Same method | Same | ✅ Full |
+| Dealer linked after create | `UpdatePreApprovalDealer` | `LinkDealerToPreapprovalAsync` | ✅ Full |
+| Parent dealer linked | Conditional `UpdatePreApprovalDealer` | Conditional `LinkDealerToPreapprovalAsync` | ✅ Full |
+| Shows record created | `UpdateDealerShows` (12 fields) | `LinkShowToPreapprovalAsync` (6 fields) | ⚠️ Partial |
+| URL saved | `SaveAdditionalInfoToPreApproval` | `SaveAdditionalInfoAsync` | ✅ Full |
+| Comment saved | `updateComment` | `UpdateCommentAsync` | ✅ Full |
+| Confirmation email sent | `SendPreApprovalEmail` | Same method | ✅ Full |
 
 ---
 
-## Missing Security Rules
+## Database Operations Coverage
 
-_None. Security layer is identical between legacy and modern._
-
-| Rule | Legacy Enforcement | Modern Status | Gap Level |
+| Operation | Legacy Table | Modern | Status |
 |---|---|---|---|
-| Auth required | `BasePageModel` + session middleware | Full — same `BasePageModel` | — |
-| Dealer sees own data only | `UserSession.Dealer_number_seq` used server-side | Full — same | — |
-| Corp/Admin must select dealer | `SearchCorporateDealer()` + dealer search step | Full — same | — |
-| Encrypted params | `IEncryptDecrypt` throughout | Full — same | — |
+| Preapproval header | `preapproval` table | API creates equivalent record | ✅ Full |
+| Preapproval dealer | `preapproval_dealer` table | `LinkDealerToPreapprovalAsync` | ✅ Full |
+| Dealer shows (core) | `dealer_shows` table (ShowName, Location, StartDate, ShowType) | `LinkShowToPreapprovalAsync` | ✅ Partial (5 fields missing) |
+| Document image | `document_image` table | `UpdateDocumentImageAsync` | ✅ Full |
+| Comment | `comment` table | `UpdateCommentAsync` | ✅ Full |
+| Contact (email) | `contact` table | `UpdateContactAsync` | ✅ Full |
+| Additional info | `preapproval_additional_info` | `SaveAdditionalInfoAsync` | ✅ Full |
+| Product link | `preapproval_product` | `LinkProductToPreapprovalAsync` | ✅ Full |
 
 ---
 
-## Metrics
+## Security Rules Coverage
 
-- **Functional Coverage: 97.8%** (45 of 46 FUs fully covered; 1 partial)
-- **Validation Coverage: 100%** (all client-side validations identical — same .cshtml + same JS)
-- **Workflow Coverage: 90.9%** (10 of 11 workflow steps fully covered; 1 partial gap)
-- **Database Coverage: 87.5%** (7 of 8 DB operations fully covered; 1 partial gap)
-- **Security Coverage: 100%** (all 4 security FUs fully covered)
+| Rule | Legacy | Modern | Status |
+|---|---|---|---|
+| Auth gate | `BasePageModel` `[Authorize]` | Same `BasePageModel` | ✅ Full |
+| Dealer role — own dealer only | `UserSession.Dealer_number_seq` binding | Same session binding | ✅ Full |
+| Corp/Admin — dealer search required | `SearchCorporateDealer()` | Same | ✅ Full |
+| Dealer number seq encrypted | `IEncryptDecrypt.Encrypt/Decrypt` | Same | ✅ Full |
+| `pdts` param (dealer type) encrypted | Same `_encryptDecrypt` | Same | ✅ Full |
+| File path traversal prevention | GUID-based temp file naming | Same `Guid.NewGuid()` pattern | ✅ Full |
 
-### Gap Summary
+---
+
+## Gap Classification Summary
 
 | Level | Count | Items |
 |---|---|---|
 | Critical | 0 | — |
 | High | 0 | — |
-| Medium | 1 | COOP-PA-FU-036: Shows & Events record missing EquipmentList, Dealers, Cost, DlrRacf, Email in `LinkShowToPreapprovalAsync` |
-| Low | 1 | FU-033: Campaign child preapprovals processing (different implementation, functionally equivalent) |
-| **Total** | **2** | — |
+| Medium | 1 | FU-036: Shows & Events — EquipmentList, Dealers, Cost, DlrRacf, Email not persisted via `LinkShowToPreapprovalAsync` |
+| Low | 3 | FU-029: N+1 media requirements API calls; FU-033: Campaign child processing pattern; FU-047: Media re-load on POST |
 
 ---
 
-## Gap Detail: COOP-PA-FU-036 (Medium)
+## Metrics
 
-**Title:** Shows & Events Record — Missing Fields
-
-**Legacy:** `IDealerService.UpdateDealerShows(DealerShows)` passes all fields:
-- `EquipmentList` — comma-separated equipment names
-- `Dealers` — comma-separated participating dealer numbers (group shows)
-- `Cost` — expected eligible show cost
-- `DlrRacf` — submitter user ID
-- `Email` — TO email address from dealer contacts
-- `DlrFormStatus = "SUBMITTED"`
-
-**Modern:** `IPreapprovalSubmissionApiService.LinkShowToPreapprovalAsync(preapprovalSeq, dealerSeq, showDate, showName, location, showType)` — interface signature does NOT include: EquipmentList, Dealers, Cost, DlrRacf, Email.
-
-**Impact:** For Individual Shows and Group Shows branch preapprovals:
-- Equipment list entered on form is collected client-side but NOT persisted server-side in modern
-- Group dealer participants NOT persisted server-side in modern
-- Show cost NOT persisted in dealer_shows record in modern
-- CSR viewing the dealer show record may see incomplete information
-
-**Recommendation:** Verify via database test after submission. If confirmed missing, backend API `LinkShowToPreapprovalAsync` must be extended to accept and persist these fields. Log as `test.fixme` for affected test cases until backend fix is confirmed.
+- **Functional Coverage**: 97.9% (46/47 FUs fully or partially covered; 1 partial)
+- **Validation Coverage**: 100% (13/13 validation rules — identical .cshtml + JS)
+- **Workflow Coverage**: 85.7% (6/7 workflow FUs — FU-036 partial)
+- **Database Coverage**: 93.8% (7.5/8 operations — dealer_shows partial)
+- **Security Coverage**: 100% (6/6 rules)
+- **Critical gaps**: 0
+- **High gaps**: 0
+- **Medium gaps**: 1
+- **Low gaps**: 3

@@ -1,3 +1,8 @@
+---
+name: playwright-test-generation
+description: Generate Playwright test assets including page objects, spec files, helpers, and API and database verification scripts from functional catalogs.
+---
+
 # Playwright Test Generation — Prompt 3: Generate Test Assets
 
 ## Purpose

@@ -1,3 +1,8 @@
+---
+name: api-verification
+description: Generate and execute API validation tests to verify REST endpoints produce correct responses and match legacy behavior.
+---
+
 # API Verification Skill
 
 ## Purpose

@@ -2,9 +2,9 @@ import { Page, expect } from '@playwright/test';
 import { existsSync } from 'fs';
 import * as path from 'path';
 import { SubmitPreapprovalPage } from '../../../pages/coop/feature-submit-preapproval/SubmitPreapprovalPage';
-import testData from '../../data/coop/feature-submit-preapproval/test-data.json';
+import testData from '../../../data/coop/feature-submit-preapproval/test-data.json';
 
-export const DATA_DIR      = path.resolve(__dirname, '../../data/coop/feature-submit-preapproval');
+export const DATA_DIR      = path.resolve(__dirname, '../../../data/coop/feature-submit-preapproval');
 export const SAMPLE_FILE   = path.join(DATA_DIR, 'sample-preapproval.pdf');
 
 /** True when no sample file exists — skip upload-dependent tests with this flag. */

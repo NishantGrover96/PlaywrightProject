@@ -1,3 +1,8 @@
+---
+name: coverage-signoff
+description: Review gap analysis results and issue a formal sign-off decision as a hard gate before Playwright test generation.
+---
+
 # Coverage Sign-off — Step 2.6: Gate Before Automation
 
 ## Purpose

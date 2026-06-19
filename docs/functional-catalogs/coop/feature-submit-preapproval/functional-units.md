@@ -1,10 +1,10 @@
 # Coop — Submit Pre-Approval — Functional Unit Catalog
 
 > Module: `coop` | Feature: `submit-preapproval`
-> Generated: 2026-06-17 | Pipeline: Step 2 (Functional Unit Discovery)
+> Generated: 2026-06-19 | Pipeline: Step 2 (Functional Unit Discovery — Re-run)
 > Source: `docs/module-analysis/coop/feature-submit-preapproval/discovery.md`
 
-Total FUs: **46** | UI: 6 | DataEntry: 19 | BusinessLogic: 6 | Workflow: 7 | DataPersistence: 4 | Security: 4
+Total FUs: **47** | UI: 6 | DataEntry: 19 | BusinessLogic: 7 | Workflow: 7 | DataPersistence: 4 | Security: 4
 
 ---
 
@@ -268,6 +268,14 @@ Behavior: Fiscal year selector appears during the overlap period when previous F
 
 ---
 
+**COOP-PA-FU-047** — Media Types Re-loaded During POST (Modern Only)
+Category: BusinessLogic | Risk: Medium | Status: Implemented
+Legacy: `SubmitPreapproval.cshtml.cs#OnPostProcessPreApproval` — processes submitted `PreApprovalInformation` directly, no media type reload
+Modern: `SubmitPreapproval.cshtml.cs#OnPostProcessPreApproval` — calls `GetMediaType(Convert.ToInt32(SelectedFiscalYear))` at start of handler to populate `MediaTypes` list before `MapToSubmitPreapprovalApiModel` is called
+Behavior: Modern POST handler re-fetches all media types via `IClaimActivityApiService.GetMediaTypesBranchWithProgramSeqAsync` before mapping the submission. This is required because `MapToSubmitPreapprovalApiModel` looks up the matching media type by seq/name from the `MediaTypes` list to populate API model fields (ImagePath, SortOrder, ProgramPercent, etc.). If this call fails, the submission cannot be mapped.
+
+---
+
 ## Workflow
 
 ---
@@ -406,8 +414,8 @@ Behavior: All dealer and type sequence IDs are encrypted before being placed in 
 |---|---|---|
 | UI | 6 | 1 High, 4 High, 1 High |
 | DataEntry | 19 | 1 High, 1 High, 3 Medium, 1 Medium, 4 Medium, 1 Medium, 1 Medium, 1 Medium, 1 High, 2 Low, 1 Medium, 1 Low, 1 Low |
-| BusinessLogic | 6 | 1 High, 1 Medium, 1 High, 1 Medium, 1 Low, 1 Medium |
+| BusinessLogic | 7 | 1 High, 1 Medium, 1 High, 1 Medium, 1 Low, 1 Medium, 1 Medium |
 | Workflow | 7 | 1 Critical, 1 High, 1 High, 1 Medium, 1 Medium, 1 Low, 1 Low |
 | DataPersistence | 4 | 1 Critical, 1 High, 1 Medium, 1 Medium |
 | Security | 4 | 1 Critical, 2 High, 1 High |
-| **TOTAL** | **46** | Critical: 3, High: 20, Medium: 17, Low: 6 |
+| **TOTAL** | **47** | Critical: 3, High: 20, Medium: 18, Low: 6 |

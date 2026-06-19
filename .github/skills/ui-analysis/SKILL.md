@@ -1,3 +1,8 @@
+---
+name: ui-analysis
+description: Navigate a live application via Playwright to document UI structure, user journeys, form fields, validations, and error states.
+---
+
 # UI Analysis — Step 2: Live Application Analysis via Playwright
 
 ## Purpose
