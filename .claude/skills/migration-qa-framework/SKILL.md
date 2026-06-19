@@ -1,3 +1,8 @@
+---
+name: migration-qa-framework
+description: Orchestrates the migration QA analysis-to-automation pipeline from functional unit discovery through Playwright test generation.
+---
+
 # Migration QA Framework — Orchestrator (Steps 2 → 3)
 
 ## Purpose

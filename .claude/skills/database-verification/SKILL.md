@@ -1,3 +1,8 @@
+---
+name: database-verification
+description: Generate SQL verification scripts that confirm correct database state after functional operations across legacy and modern platforms.
+---
+
 # Database Verification Skill
 
 ## Purpose

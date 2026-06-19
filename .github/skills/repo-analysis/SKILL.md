@@ -1,3 +1,8 @@
+---
+name: repo-analysis
+description: Scan and analyze source code to extract business logic, workflows, validations, endpoints, data models, and security rules for a given module or feature.
+---
+
 # Repository Analysis — Step 1: Codebase Discovery
 
 ## Purpose

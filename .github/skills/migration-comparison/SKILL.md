@@ -1,3 +1,8 @@
+---
+name: migration-comparison
+description: Run test suites against both legacy and modern platforms and produce a side-by-side comparison report of equivalent, differing, and missing behaviors.
+---
+
 # Migration Comparison Skill
 
 ## Purpose

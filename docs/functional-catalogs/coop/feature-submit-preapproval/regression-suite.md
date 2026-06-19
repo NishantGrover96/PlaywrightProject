@@ -1,7 +1,7 @@
 # Coop — Submit Pre-Approval — Regression Suite
 
 > Module: `coop` | Feature: `submit-preapproval`
-> Generated: 2026-06-17 | Pipeline: Step 3 inputs
+> Generated: 2026-06-19 | Pipeline: Step 3 re-run
 
 | TC ID | Title | FUs Covered | Tags |
 |---|---|---|---|
@@ -35,3 +35,4 @@
 | COOP-PA-REG-028 | Sponsorship name and dates required | FU-018 | @regression |
 | COOP-PA-REG-029 | Dealer ID required when media config demands | FU-019 | @regression |
 | COOP-PA-REG-030 | Submit another preapproval button navigates correctly | FU-006 | @regression |
+| COOP-PA-REG-031 | SelectedFiscalYear hidden field present and populated (modern POST requirement) | FU-047 | @regression |

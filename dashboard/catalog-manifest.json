@@ -1,184 +1,409 @@
 {
   "coop-submit-claim": {
-    "feature":     "Coop — Submit Claim",
+    "feature": "Coop — Submit Claim",
     "catalogFile": "docs/functional-catalogs/coop/feature-submit-claim/functional-units.html",
-    "version":     "v1",
-    "generated":   "2026-06-17",
-    "auditedAs":   "demoportal.channel-fusion.com (Dealer01, 2026-06-17)",
+    "version": "v1",
+    "generated": "2026-06-17",
+    "auditedAs": "demoportal.channel-fusion.com (Dealer01, 2026-06-17)",
     "lastUpdated": "2026-06-18T10:30:00Z",
-    "sections":    6,
+    "sections": 6,
     "implementationStatus": {
-      "smoke":          { "implemented": true, "lastUpdated": "2026-06-18T10:30:00Z" },
-      "regression":     { "implemented": true, "lastUpdated": "2026-06-18T10:25:00Z" },
-      "e2e":            { "implemented": false, "lastUpdated": null },
-      "functionalUnit": { "implemented": true, "lastUpdated": "2026-06-18T10:30:00Z" }
+      "smoke": {
+        "implemented": true,
+        "lastUpdated": "2026-06-18T10:30:00Z"
+      },
+      "regression": {
+        "implemented": true,
+        "lastUpdated": "2026-06-18T10:25:00Z"
+      },
+      "e2e": {
+        "implemented": false,
+        "lastUpdated": null
+      },
+      "functionalUnit": {
+        "implemented": true,
+        "lastUpdated": "2026-06-18T10:30:00Z"
+      }
     },
     "specFiles": {
-      "smoke":      "tests/playwright/specs/coop/feature-submit-claim/submit-claim.spec.ts",
+      "smoke": "tests/playwright/specs/coop/feature-submit-claim/submit-claim.spec.ts",
       "regression": "tests/playwright/specs/coop/feature-submit-claim/submit-claim.spec.ts",
-      "e2e":        "tests/playwright/specs/coop/feature-submit-claim/submit-claim.spec.ts"
+      "e2e": "tests/playwright/specs/coop/feature-submit-claim/submit-claim.spec.ts"
     },
-    "tests": { "total": 56, "implemented": 50, "fixme": 6 },
-    "coverage": { "functional": 93.8, "validation": 90.5, "workflow": 100, "database": 87.5, "security": 100 },
-    "gaps": { "critical": 0, "high": 0, "medium": 7, "low": 2 },
+    "tests": {
+      "total": 56,
+      "implemented": 50,
+      "fixme": 6
+    },
+    "coverage": {
+      "functional": 93.8,
+      "validation": 90.5,
+      "workflow": 100,
+      "database": 87.5,
+      "security": 100
+    },
+    "gaps": {
+      "critical": 0,
+      "high": 0,
+      "medium": 7,
+      "low": 2
+    },
     "lastRun": null
   },
   "coop-submit-preapproval": {
-    "feature":     "Coop — Submit Preapproval",
+    "feature": "Coop — Submit Preapproval",
     "catalogFile": "docs/functional-catalogs/coop/feature-submit-preapproval/functional-units.md",
-    "version":     "v1",
-    "generated":   "2026-06-17",
-    "auditedAs":   "PlatformToAPIWorkspace (Dealer Role, 2026-06-17)",
-    "lastUpdated": "2026-06-18T11:00:00Z",
-    "sections":    6,
+    "version": "v2",
+    "generated": "2026-06-19",
+    "auditedAs": "PlatformToAPIWorkspace (Dealer Role, 2026-06-19)",
+    "lastUpdated": "2026-06-19T00:00:00Z",
+    "sections": 6,
     "implementationStatus": {
-      "smoke":          { "implemented": true, "lastUpdated": "2026-06-17T19:20:00Z" },
-      "regression":     { "implemented": true, "lastUpdated": "2026-06-17T19:20:00Z" },
-      "e2e":            { "implemented": true, "lastUpdated": "2026-06-17T19:20:00Z" },
-      "functionalUnit": { "implemented": true, "lastUpdated": "2026-06-18T11:00:00Z" }
+      "smoke": {
+        "implemented": true,
+        "lastUpdated": "2026-06-19T00:00:00Z"
+      },
+      "regression": {
+        "implemented": true,
+        "lastUpdated": "2026-06-19T00:00:00Z"
+      },
+      "e2e": {
+        "implemented": true,
+        "lastUpdated": "2026-06-19T00:00:00Z"
+      },
+      "functionalUnit": {
+        "implemented": true,
+        "lastUpdated": "2026-06-19T00:00:00Z"
+      }
     },
     "specFiles": {
-      "smoke":      "tests/playwright/specs/coop/feature-submit-preapproval/submit-preapproval.spec.ts",
+      "smoke": "tests/playwright/specs/coop/feature-submit-preapproval/submit-preapproval.spec.ts",
       "regression": "tests/playwright/specs/coop/feature-submit-preapproval/submit-preapproval.spec.ts",
-      "e2e":        "tests/playwright/specs/coop/feature-submit-preapproval/submit-preapproval.spec.ts"
+      "e2e": "tests/playwright/specs/coop/feature-submit-preapproval/submit-preapproval.spec.ts"
     },
-    "tests": { "total": 37, "implemented": 36, "fixme": 1 },
-    "coverage": { "functional": 97.8, "validation": 100, "workflow": 85.7, "database": 87.5, "security": 100 },
-    "gaps": { "critical": 0, "high": 0, "medium": 1, "low": 1 },
+    "tests": {
+      "total": 38,
+      "implemented": 37,
+      "fixme": 1
+    },
+    "coverage": {
+      "functional": 97.9,
+      "validation": 100,
+      "workflow": 85.7,
+      "database": 93.8,
+      "security": 100
+    },
+    "gaps": {
+      "critical": 0,
+      "high": 0,
+      "medium": 1,
+      "low": 3
+    },
     "lastRun": null
   },
   "coop-dealer-dashboard": {
-    "feature":     "Coop — Dealer Dashboard",
+    "feature": "Coop — Dealer Dashboard",
     "catalogFile": "docs/functional-catalogs/coop/feature-dealer-dashboard/functional-units.html",
-    "version":     "v1",
-    "generated":   "2026-06-18",
-    "auditedAs":   "DemoPortalV2 (Legacy + Modern, 2026-06-18)",
+    "version": "v1",
+    "generated": "2026-06-18",
+    "auditedAs": "DemoPortalV2 (Legacy + Modern, 2026-06-18)",
     "lastUpdated": "2026-06-18T15:00:00Z",
-    "sections":    6,
+    "sections": 6,
     "implementationStatus": {
-      "smoke":          { "implemented": true, "lastUpdated": "2026-06-18T15:00:00Z" },
-      "regression":     { "implemented": true, "lastUpdated": "2026-06-18T15:00:00Z" },
-      "e2e":            { "implemented": true, "lastUpdated": "2026-06-18T15:00:00Z" },
-      "functionalUnit": { "implemented": true, "lastUpdated": "2026-06-18T15:00:00Z" }
+      "smoke": {
+        "implemented": true,
+        "lastUpdated": "2026-06-18T15:00:00Z"
+      },
+      "regression": {
+        "implemented": true,
+        "lastUpdated": "2026-06-18T15:00:00Z"
+      },
+      "e2e": {
+        "implemented": true,
+        "lastUpdated": "2026-06-18T15:00:00Z"
+      },
+      "functionalUnit": {
+        "implemented": true,
+        "lastUpdated": "2026-06-18T15:00:00Z"
+      }
     },
     "specFiles": {
-      "smoke":      "tests/playwright/specs/coop/feature-dealer-dashboard/dealer-dashboard.spec.ts",
+      "smoke": "tests/playwright/specs/coop/feature-dealer-dashboard/dealer-dashboard.spec.ts",
       "regression": "tests/playwright/specs/coop/feature-dealer-dashboard/dealer-dashboard.spec.ts",
-      "e2e":        "tests/playwright/specs/coop/feature-dealer-dashboard/dealer-dashboard.spec.ts",
-      "api":        "tests/api/coop/feature-dealer-dashboard/dealer-dashboard.api.spec.ts"
+      "e2e": "tests/playwright/specs/coop/feature-dealer-dashboard/dealer-dashboard.spec.ts",
+      "api": "tests/api/coop/feature-dealer-dashboard/dealer-dashboard.api.spec.ts"
     },
-    "tests": { "total": 56, "implemented": 56, "fixme": 0 },
-    "coverage": { "functional": 100, "validation": 100, "workflow": 100, "database": 100, "security": 100 },
-    "gaps": { "critical": 0, "high": 0, "medium": 0, "low": 0 },
+    "tests": {
+      "total": 56,
+      "implemented": 56,
+      "fixme": 0
+    },
+    "coverage": {
+      "functional": 100,
+      "validation": 100,
+      "workflow": 100,
+      "database": 100,
+      "security": 100
+    },
+    "gaps": {
+      "critical": 0,
+      "high": 0,
+      "medium": 0,
+      "low": 0
+    },
     "lastRun": null
   },
   "coop-admin-reports": {
-    "feature":     "Coop — Admin Reports",
+    "feature": "Coop — Admin Reports",
     "catalogFile": "docs/functional-catalogs/coop/feature-admin-reports/test-catalog.md",
-    "version":     "v1",
-    "generated":   "",
-    "auditedAs":   "",
-    "sections":    0,
+    "version": "v1",
+    "generated": "",
+    "auditedAs": "",
+    "sections": 0,
     "specFiles": {
-      "smoke":      "tests/playwright/specs/coop/feature-admin-reports/",
+      "smoke": "tests/playwright/specs/coop/feature-admin-reports/",
       "regression": "tests/playwright/specs/coop/feature-admin-reports/"
     },
-    "tests": { "total": 0, "implemented": 0, "fixme": 0 },
+    "tests": {
+      "total": 0,
+      "implemented": 0,
+      "fixme": 0
+    },
     "lastRun": null
   },
   "coop-api-submit-claim": {
-    "feature":     "Coop API — Submit Claim",
+    "feature": "Coop API — Submit Claim",
     "catalogFile": "docs/functional-catalogs/coop/feature-submit-claim/test-catalog.md",
-    "version":     "v1",
-    "generated":   "",
-    "auditedAs":   "",
-    "sections":    0,
+    "version": "v1",
+    "generated": "",
+    "auditedAs": "",
+    "sections": 0,
     "specFiles": {
-      "smoke":      "tests/api/coop/feature-submit-claim/submit-claim.api.spec.ts",
+      "smoke": "tests/api/coop/feature-submit-claim/submit-claim.api.spec.ts",
       "regression": "tests/api/coop/feature-submit-claim/submit-claim.api.spec.ts"
     },
-    "tests": { "total": 0, "implemented": 0, "fixme": 0 },
+    "tests": {
+      "total": 0,
+      "implemented": 0,
+      "fixme": 0
+    },
     "lastRun": null
   },
   "coop-api-submit-preapproval": {
-    "feature":     "Coop API — Submit Preapproval",
+    "feature": "Coop API — Submit Preapproval",
     "catalogFile": "docs/functional-catalogs/coop/feature-submit-preapproval/functional-units.md",
-    "version":     "v1",
-    "generated":   "2026-06-17",
-    "auditedAs":   "PlatformToAPIWorkspace (API Layer, 2026-06-17)",
-    "sections":    1,
+    "version": "v1",
+    "generated": "2026-06-17",
+    "auditedAs": "PlatformToAPIWorkspace (API Layer, 2026-06-17)",
+    "sections": 1,
     "specFiles": {
-      "smoke":      "tests/api/coop/feature-submit-preapproval/submit-preapproval.api.spec.ts",
+      "smoke": "tests/api/coop/feature-submit-preapproval/submit-preapproval.api.spec.ts",
       "regression": "tests/api/coop/feature-submit-preapproval/submit-preapproval.api.spec.ts"
     },
-    "tests": { "total": 4, "implemented": 4, "fixme": 0 },
-    "coverage": { "functional": 100, "validation": 100, "workflow": 100, "database": 100, "security": 100 },
-    "gaps": { "critical": 0, "high": 0, "medium": 0, "low": 0 },
+    "tests": {
+      "total": 4,
+      "implemented": 4,
+      "fixme": 0
+    },
+    "coverage": {
+      "functional": 100,
+      "validation": 100,
+      "workflow": 100,
+      "database": 100,
+      "security": 100
+    },
+    "gaps": {
+      "critical": 0,
+      "high": 0,
+      "medium": 0,
+      "low": 0
+    },
     "lastRun": null
   },
   "popshop-new-order": {
-    "feature":     "PopShop — New Order",
+    "feature": "PopShop — New Order",
     "catalogFile": "docs/functional-catalogs/popshop/feature-new-order/test-catalog.md",
-    "version":     "v1",
-    "generated":   "",
-    "auditedAs":   "",
-    "sections":    0,
+    "version": "v1",
+    "generated": "",
+    "auditedAs": "",
+    "sections": 0,
     "specFiles": {
-      "smoke":      "tests/playwright/specs/popshop/feature-new-order/new-order.spec.ts",
+      "smoke": "tests/playwright/specs/popshop/feature-new-order/new-order.spec.ts",
       "regression": "tests/playwright/specs/popshop/feature-new-order/new-order.spec.ts",
-      "e2e":        "tests/playwright/specs/popshop/feature-new-order/new-order.spec.ts"
+      "e2e": "tests/playwright/specs/popshop/feature-new-order/new-order.spec.ts"
     },
-    "tests": { "total": 0, "implemented": 0, "fixme": 0 },
+    "tests": {
+      "total": 0,
+      "implemented": 0,
+      "fixme": 0
+    },
     "lastRun": null
   },
   "coop-dealer-dashboard-budget": {
-    "feature":     "Coop — Dealer Dashboard: Budget Tab",
+    "feature": "Coop — Dealer Dashboard: Budget Tab",
     "catalogFile": "docs/functional-catalogs/coop/feature-dealer-dashboard/feature-budget/functional-units.html",
-    "version":     "v1",
-    "generated":   "2026-06-18",
-    "auditedAs":   "DemoPortalV2 Legacy + PlatformToAPIWorkspace Modern (2026-06-18)",
+    "version": "v1",
+    "generated": "2026-06-18",
+    "auditedAs": "DemoPortalV2 Legacy + PlatformToAPIWorkspace Modern (2026-06-18)",
     "lastUpdated": "2026-06-18T12:26:00Z",
-    "sections":    6,
+    "sections": 6,
     "implementationStatus": {
-      "smoke":          { "implemented": true,  "lastUpdated": "2026-06-18T12:26:00Z" },
-      "regression":     { "implemented": true,  "lastUpdated": "2026-06-18T12:26:00Z" },
-      "e2e":            { "implemented": true,  "lastUpdated": "2026-06-18T12:26:00Z" },
-      "functionalUnit": { "implemented": true,  "lastUpdated": "2026-06-18T12:26:00Z" }
+      "smoke": {
+        "implemented": true,
+        "lastUpdated": "2026-06-18T12:26:00Z"
+      },
+      "regression": {
+        "implemented": true,
+        "lastUpdated": "2026-06-18T12:26:00Z"
+      },
+      "e2e": {
+        "implemented": true,
+        "lastUpdated": "2026-06-18T12:26:00Z"
+      },
+      "functionalUnit": {
+        "implemented": true,
+        "lastUpdated": "2026-06-18T12:26:00Z"
+      }
     },
     "specFiles": {
-      "smoke":      "tests/playwright/specs/coop/feature-dealer-dashboard/feature-budget/dealer-budget.spec.ts",
+      "smoke": "tests/playwright/specs/coop/feature-dealer-dashboard/feature-budget/dealer-budget.spec.ts",
       "regression": "tests/playwright/specs/coop/feature-dealer-dashboard/feature-budget/dealer-budget.spec.ts",
-      "e2e":        "tests/playwright/specs/coop/feature-dealer-dashboard/feature-budget/dealer-budget.spec.ts",
-      "api":        "tests/api/coop/feature-dealer-dashboard/feature-budget/dealer-budget.api.spec.ts"
+      "e2e": "tests/playwright/specs/coop/feature-dealer-dashboard/feature-budget/dealer-budget.spec.ts",
+      "api": "tests/api/coop/feature-dealer-dashboard/feature-budget/dealer-budget.api.spec.ts"
     },
-    "tests": { "total": 42, "implemented": 42, "fixme": 0 },
-    "coverage": { "functional": 95.1, "validation": 100, "workflow": 100, "database": 88, "security": 100 },
-    "gaps": { "critical": 0, "high": 0, "medium": 4, "low": 2 },
+    "tests": {
+      "total": 42,
+      "implemented": 42,
+      "fixme": 0
+    },
+    "coverage": {
+      "functional": 95.1,
+      "validation": 100,
+      "workflow": 100,
+      "database": 88,
+      "security": 100
+    },
+    "gaps": {
+      "critical": 0,
+      "high": 0,
+      "medium": 4,
+      "low": 2
+    },
     "lastRun": null
   },
   "engage-ads-view-package": {
-    "feature":     "EngageAds — View Package",
+    "feature": "EngageAds — View Package",
     "catalogFile": "docs/functional-catalogs/engage-ads/feature-view-package/functional-units.html",
-    "version":     "v1",
-    "generated":   "2026-06-18",
-    "auditedAs":   "DemoPortal UAT (https://demoportaluat.channel-fusion.com/EngageAds/BundledAdPackages, 2026-06-18)",
+    "version": "v1",
+    "generated": "2026-06-18",
+    "auditedAs": "DemoPortal UAT (https://demoportaluat.channel-fusion.com/EngageAds/BundledAdPackages, 2026-06-18)",
     "lastUpdated": "2026-06-18T16:47:00Z",
-    "sections":    8,
-    "pipeline":    "functional-qa",
+    "sections": 8,
+    "pipeline": "functional-qa",
     "implementationStatus": {
-      "smoke":          { "implemented": true,  "lastUpdated": "2026-06-18T16:47:00Z" },
-      "regression":     { "implemented": true,  "lastUpdated": "2026-06-18T16:47:00Z" },
-      "e2e":            { "implemented": true,  "lastUpdated": "2026-06-18T16:47:00Z" },
-      "functionalUnit": { "implemented": true,  "lastUpdated": "2026-06-18T16:47:00Z" }
+      "smoke": {
+        "implemented": true,
+        "lastUpdated": "2026-06-18T16:47:00Z"
+      },
+      "regression": {
+        "implemented": true,
+        "lastUpdated": "2026-06-18T16:47:00Z"
+      },
+      "e2e": {
+        "implemented": true,
+        "lastUpdated": "2026-06-18T16:47:00Z"
+      },
+      "functionalUnit": {
+        "implemented": true,
+        "lastUpdated": "2026-06-18T16:47:00Z"
+      }
     },
     "specFiles": {
-      "smoke":      "tests/playwright/specs/engage-ads/feature-view-package/view-package.spec.ts",
+      "smoke": "tests/playwright/specs/engage-ads/feature-view-package/view-package.spec.ts",
       "regression": "tests/playwright/specs/engage-ads/feature-view-package/view-package.spec.ts",
-      "e2e":        "tests/playwright/specs/engage-ads/feature-view-package/view-package.spec.ts"
+      "e2e": "tests/playwright/specs/engage-ads/feature-view-package/view-package.spec.ts"
     },
-    "tests":    { "total": 45, "implemented": 44, "fixme": 1 },
-    "coverage": { "functional": 95, "validation": 100, "workflow": 90, "database": 70, "security": 100 },
-    "gaps":     { "critical": 0, "high": 0, "medium": 1, "low": 2 },
-    "lastRun":  null
+    "tests": {
+      "total": 45,
+      "implemented": 44,
+      "fixme": 1
+    },
+    "coverage": {
+      "functional": 95,
+      "validation": 100,
+      "workflow": 90,
+      "database": 70,
+      "security": 100
+    },
+    "gaps": {
+      "critical": 0,
+      "high": 0,
+      "medium": 1,
+      "low": 2
+    },
+    "lastRun": null
+  },
+  "admin-feature-list": {
+    "feature": "Admin — Feature List",
+    "catalogFile": "docs/functional-catalogs/admin/feature-feature-list/functional-units.html",
+    "version": "v1",
+    "generated": "2026-06-19",
+    "auditedAs": "demoportal.channel-fusion.com (Admin, 2026-06-19)",
+    "lastUpdated": "2026-06-19T12:00:00Z",
+    "status": "verified",
+    "implementationStatus": {
+      "smoke": {
+        "implemented": true,
+        "lastUpdated": "2026-06-19T12:00:00Z"
+      },
+      "regression": {
+        "implemented": true,
+        "lastUpdated": "2026-06-19T11:31:40Z"
+      },
+      "e2e": {
+        "implemented": false,
+        "lastUpdated": null
+      },
+      "functionalUnit": {
+        "implemented": true,
+        "lastUpdated": "2026-06-19T11:31:40Z"
+      }
+    },
+    "tests": {
+      "total": 47,
+      "implemented": 44,
+      "fixme": 3
+    },
+    "testResults": {
+      "smoke": {
+        "passed": 7,
+        "failed": 0,
+        "skipped": 2,
+        "total": 9,
+        "lastRun": "2026-06-19T12:00:00Z",
+        "duration": "1.9m",
+        "status": "passed"
+      }
+    },
+    "coverage": {
+      "functional": 96,
+      "validation": 95,
+      "workflow": 100,
+      "database": 85,
+      "security": 100
+    },
+    "gaps": {
+      "critical": 0,
+      "high": 0,
+      "medium": 3,
+      "low": 2
+    },
+    "specFiles": {
+      "smoke": "tests/playwright/specs/admin/feature-feature-list/feature-list.spec.ts",
+      "regression": "tests/playwright/specs/admin/feature-feature-list/feature-list.spec.ts",
+      "e2e": "tests/playwright/specs/admin/feature-feature-list/feature-list.spec.ts",
+      "api": "tests/api/admin/feature-feature-list/feature-list.api.spec.ts"
+    },
+    "lastRun": "2026-06-19T12:00:00Z"
   }
 }

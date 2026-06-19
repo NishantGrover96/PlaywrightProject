@@ -1,3 +1,8 @@
+---
+name: functional-qa-test-generation
+description: Orchestrates the full analyze-to-automate pipeline for generating new functional test coverage from repo analysis through test catalog.
+---
+
 # Functional QA Test Generation — Orchestrator
 
 ## Purpose

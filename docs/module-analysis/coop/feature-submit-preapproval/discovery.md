@@ -1,7 +1,8 @@
 # Coop — Submit Pre-Approval — Discovery Report
 
 > Module: `coop` | Feature: `submit-preapproval`
-> Generated: 2026-06-17 | Pipeline: Step 2 (Functional Unit Discovery)
+> Generated: 2026-06-19 | Pipeline: Step 1 (Repository Discovery)
+> Analyst: Migration QA Framework re-run
 
 ---
 
@@ -9,158 +10,171 @@
 
 | File | Purpose |
 |---|---|
-| `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\SubmitPreApproval.cshtml` | Main page: 4-step wizard (fiscal year, dealer search, media type, form submission) |
-| `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\SubmitPreapproval.cshtml.cs` | Page model: handlers OnGet, OnPostProcessPreApproval, OnGetDealerTypeList, OnPostUploadFile |
-| `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\SubmitPreapproval.cshtml.Email.cs` | Partial class: SendPreApprovalEmail, SaveEmailsToPreapproval |
-| `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\_PreApprovalMediaType.cshtml` | Step 2 partial: dealer type dropdown + media tile list |
-| `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\_PreApprovalFormSubmission.cshtml` | Step 3 partial: all form fields (campaign, screen, show, sponsor branches), email section |
-| `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\_PreApprovalProcess.cshtml` | Wizard progress bar partial |
-| `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\_PreApprovalProcessHeader.cshtml` | Wizard header partial |
-| `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\_PreapprovalFields1.cshtml` | Extended fields partial (program-configured) |
-| `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\_PreApprovalFormSubmission.cshtml` | Screen/Show/Sponsor branch fields partial |
-| `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\_ExternalPreApprovalMedia.cshtml` | External media sub-partial |
+| `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\SubmitPreApproval.cshtml` | Main page template — 4-step wizard (fiscal year, dealer, media type, form submission) |
+| `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\SubmitPreapproval.cshtml.cs` | Page model — all handlers, business logic, service calls (67,602 bytes) |
+| `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\SubmitPreapproval.cshtml.Email.cs` | Email sending partial class (12,122 bytes) |
+| `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\_PreApprovalMediaType.cshtml` | Step 2: Media type tile selection + dealer type dropdown |
+| `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\_PreApprovalFormSubmission.cshtml` | Step 3: Full submission form — all branch-specific field blocks (36,187 bytes) |
+| `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\_PreApprovalProcess.cshtml` | Legacy process form partial (additional field layout) |
+| `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\_PreApprovalProcessHeader.cshtml` | Process header partial |
+| `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\_PreapprovalFields1.cshtml` | Extended fields partial (program-specific) |
+| `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\_ExternalPreApprovalMedia.cshtml` | External media type UI partial |
 | `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\_RecentDealerViewed.cshtml` | Recently viewed dealers panel |
-| `Presentation\Web\wwwroot\WebScripts\CoopManagement\PreApproval\jsSubmitPreApproval.js` | Client-side: wizard navigation, field validation, AJAX submit, campaign logic |
-| `Presentation\Web\wwwroot\WebScripts\CoopManagement\DealerSearch\DealerSearch.js` | Dealer search autocomplete logic |
+| `Presentation\Web\wwwroot\WebScripts\CoopManagement\PreApproval\jsSubmitPreApproval.js` | Client-side: wizard navigation, form validation, AJAX handlers |
+| `Libraries\BusinessLogic\Services\Preapproval\` | Legacy service implementations (IPreapprovalService, ICommentService) |
+| `Libraries\CommonEntity\Preapproval\` | Legacy entity models (PreApprovalInformation, DealerShows) |
+| `RAL\Resources\Coop\ViewResource.en-US.resx` | Validation message strings (en-US) |
+| `RAL\Resources\Coop\ViewResource.en-CA.resx` | Validation message strings (en-CA) |
+| `RAL\Resources\Coop\ViewResource.fr-CA.resx` | Validation message strings (fr-CA) |
+| `tests\playwright\coop\tests\preapproval\pa-wizard.spec.ts` | Existing wizard navigation tests |
+| `tests\playwright\coop\tests\preapproval\pa-form-media.spec.ts` | Existing form/media tests |
+| `tests\playwright\coop\tests\preapproval\pa-smoke.spec.ts` | Existing smoke tests |
+| `tests\playwright\coop\tests\preapproval\pa-submission.spec.ts` | Existing submission tests |
+| `tests\playwright\coop\tests\preapproval\pa-e2e.spec.ts` | Existing E2E flow tests |
+
+---
 
 ## Modern Source Files
 
 | File | Purpose |
 |---|---|
-| `DemoPortalV2\Presentation\Web\Pages\CoopManagement\PreApproval\Submit\SubmitPreApproval.cshtml` | Identical to legacy — same wizard markup |
-| `DemoPortalV2\Presentation\Web\Pages\CoopManagement\PreApproval\Submit\SubmitPreapproval.cshtml.cs` | Page model: same handlers but uses API clients instead of direct services |
-| `DemoPortalV2\Presentation\Web\Pages\CoopManagement\PreApproval\Submit\SubmitPreapproval.cshtml.Email.cs` | Partial class: email sending — same structure |
-| `Infrastructure\ApiClients\Coop\IPreapprovalSubmissionApiService.cs` | SubmitPreapprovalAsync, ProcessPreApprovalAsync, LinkDealerToPreapprovalAsync, LinkProductToPreapprovalAsync, SaveAdditionalInfoAsync, LinkShowToPreapprovalAsync |
-| `Infrastructure\ApiClients\Coop\PreapprovalSubmissionApiService.cs` | HTTP client implementation |
-| `Infrastructure\ApiClients\Coop\IPreapprovalLetterApiService.cs` | GetPreApprovalAsync, GetProgramDataAsync, GetPreapprovalBySearchAsync |
-| `Infrastructure\ApiClients\Coop\PreapprovalLetterApiService.cs` | HTTP client implementation |
-| `Infrastructure\ApiClients\Common\IClaimActivityApiService.cs` | GetMediaTypesBranchWithProgramSeqAsync, GetMediaTypesRequirementByProgramSeqAsync, UpdateCommentAsync, UpdateDocumentImageAsync, GetContactAsync |
-| `Infrastructure\ApiClients\Dealer\IDealerApiService.cs` | GetDealerNameByProgramSeqAsync |
-| `Infrastructure\ApiClients\Dealer\IDealerInfoApiService.cs` | GetDealerSummaryByDealerNumberSeqAsync |
-| `Infrastructure\ApiClients\Coop\ICoopApiService.cs` | GetDealerTypeByDealerNumberSeqSaaSAsync |
+| `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\SubmitPreApproval.cshtml` | Same view template (identical .cshtml files) |
+| `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\SubmitPreapproval.cshtml.cs` | Modern page model — replaces direct DB services with API clients (71,715 bytes) |
+| `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\SubmitPreapproval.cshtml.Email.cs` | Email sending partial class (11,890 bytes) |
+| `Presentation\Web\Infrastructure\ApiClients\Coop\` | Coop API client interfaces and implementations |
+| `Presentation\Web\Models\PreApproval\` | Modern view models |
+| `Presentation\Web\Models\PreapprovalModel\` | Additional preapproval models (SubmitPreapprovalApiModel) |
+| `WebAPI\API\Models\Preapproval\` | API-side preapproval models |
 
 ---
 
 ## UI Components (Legacy)
 
 ### Wizard Steps
-| Step | Condition | Content |
-|---|---|---|
-| Step 0 — Fiscal Year | `ShowFiscalYearSelection = true` (prev FY end < now AND prev FY cutoff ≥ now) | Radio buttons per available fiscal year |
-| Step 1 — Dealer Search | `!SubmitAnotherProapprovalForSameDealer` | `_SearchDealer.cshtml` + `_DealerSearchList.cshtml` shared partials |
-| Step 2 — Media Type | Always shown | Dealer type dropdown, media tile list (`#PreapprovalMediaList`), Continue button |
-| Step 3 — Form Submission | Always shown | Branch-specific form + email section + Submit/Reset buttons |
+- **Step 0** (conditional): `#hdnShowFiscalYearSelection` — fiscal year radio buttons (`.fiscalYearRadio`); `#ContinueAfterZero` button
+- **Step 1** (conditional): `_SearchDealer.cshtml` + `_DealerSearchList.cshtml` shared partials; shown when no dealer pre-selected
+- **Step 2**: `_PreApprovalMediaType.cshtml` — `#PreapprovalMediaList` ul; `.clsSelectMediaType` tiles; `#programDealerTypeDropdown`; `#btnContinue`
+- **Step 3**: `_PreApprovalFormSubmission.cshtml` — all form fields; `#btnSubmitPreApproval`
 
-### Step 3 Form Fields
-| Field | ID | Branch | Required |
-|---|---|---|---|
-| Campaign Title | `#txtCampaingTitle` | campaign | Y |
-| Ad Includes Offer checkbox | `#chkAdOfferCampaign` | campaign | N |
-| Earliest Expiration Date (campaign) | `#hdtxtCalExpirationDateCampaign` | campaign + offer checked | conditional |
-| Select Campaign Media Type list | `#campaignList` | campaign | Y |
-| Ad Includes Offer (screen) | `#chkAdOffer` | mainbranch | N |
-| Expiration Date (screen) | `#hdtxtCalExpirationDate` | mainbranch + offer | conditional |
-| Ad Landing Page URL (single) | `#txtAdLandingURL` | per media config `MediaURLFlag=Y` | per config |
-| Ad Landing Page URL (multiple) | `#txtAdLandingURLMultiple` | per media config `MultipleURLFlag=Y` | per config |
-| Ad Title | `#txtAdTitle` | mainbranch | Y |
-| Show Name | `#txtShowsAdTitle` | indvshow/grpshow | Y |
-| Show Location — Address | `#txtShowsLocationAddress` | indvshow/grpshow | Y |
-| Show Location — City | `#txtShowsLocationCity` | indvshow/grpshow | Y |
-| Show Location — State/Province | `#txtShowsLocationState` | indvshow/grpshow | Y |
-| Show Location — Zip/Postal | `#txtShowsLocationZip` | indvshow/grpshow | Y |
-| Show Start Date | `#hdtxtCalShowsStartDate` | indvshow/grpshow | Y |
-| Show End Date | `#hdtxtCalShowsEndDate` | indvshow/grpshow | Y |
-| Expected Eligible Show Cost | `#txtShowsEligibleCost` | indvshow/grpshow | Y |
-| Participating Dealers | `#txtGroupDealerNumber` + `#btnAddShowsGroupDealer` | grpshow | Y |
-| Equipment to be Displayed | `#txtEquipmentName` + `#btnAddEquipmentContact` | indvshow/grpshow | N |
-| Sponsorship Name | `#txtSponsorshipAdTitle` | sponsor | Y |
-| Sponsorship Start Date | `#hdtxtCalSponsorShipStartDate` | sponsor | Y |
-| Sponsorship End Date | `#hdtxtCalSponsorShipEndDate` | sponsor | Y |
-| Dealer ID | `#txtDealerIdText` | per `dealeridtextrequiredflag` config | conditional |
-| File Upload (dropzone) | `#dropzone_fuBGImage` | all | Y |
-| Estimated Cost | `#txtEstimatedCost` | conditional per program config | conditional |
-| Submission Comment | `#txtMainComment` | all | N |
-| Email — Me | `#txtEmailMe` | all | Y (readonly) |
-| Dealership Contacts | `.clsDealerShipContact` checkboxes | all | N |
-| Other Contacts | `#txtOtherMediaContact` + `#btnAddOtherContact` | all | N |
-| Campaign Media table | `#tblMediaCampaign` | campaign | auto-populated |
-
-### Action Buttons
-| Button | ID | Purpose |
-|---|---|---|
-| Continue (Fiscal Year step) | `#ContinueAfterZero` | Advance past FY selection |
-| Continue (Media step) | `#btnContinue` | Advance to form |
-| Back (Media step) | `.clsBackClaimWizardMedia` | Return to dealer search |
-| Add to Campaign | `#btnAddCampaign` | Add media to campaign table |
-| Add Additional Media | `#btnAddAdditionalMedia` | Add another campaign media type |
-| Submit | `#btnSubmitPreApproval` | POST to OnPostProcessPreApproval |
-| Reset | `#ResetPreApprovalForm` | Clear form fields |
-| Back (Form step) | `#FormSubmissionBackBtn` | Return to media type step |
+### Key Form Fields
+| Field ID | Label | Type | Max | Required |
+|---|---|---|---|---|
+| `#txtCampaingTitle` | Campaign Title | text | 100 | Yes (campaign) |
+| `#chkAdOfferCampaign` / `#chkAdOffer` | This Ad Includes an Offer | checkbox | — | No |
+| `#hdtxtCalExpirationDateCampaign` | Earliest Expiration Date | date | — | When offer checked |
+| `#txtAdLandingURL` | Ad Landing Page URL | text | 550 | Per media config |
+| `#txtAdLandingURLMultiple` | Ad Landing Page URL (multiple) | textarea | 550 | Per media config |
+| `#txtAdTitle` | Ad Title | text | 100 | Yes (mainbranch) |
+| `#txtShowsAdTitle` | Show Name | text | 100 | Yes (indvshow/grpshow) |
+| `#txtShowsLocationAddress` | Address | text | 100 | Yes (show) |
+| `#txtShowsLocationCity` | City | text | 25 | Yes (show) |
+| `#txtShowsLocationState` | State/Province | text | 25 | Yes (show) |
+| `#txtShowsLocationZip` | Zip/Postal Code | text | 7 | Yes (show) |
+| `#hdtxtCalShowsStartDate` | Start Date | date | — | Yes (show) |
+| `#hdtxtCalShowsEndDate` | End Date | date | — | Yes (show) |
+| `#txtShowsEligibleCost` | Expected Eligible Show Cost | text | 12 | Yes (show) |
+| `#txtGroupDealerNumber` | Participating Dealer Number | text | 50 | Yes (grpshow) |
+| `#txtEquipmentName` | Equipment to be Displayed | text | 50 | No |
+| `#txtSponsorshipAdTitle` | Name of Sponsorship | text | 100 | Yes (sponsor) |
+| `#hdtxtCalSponsorShipStartDate` | Sponsorship Start Date | date | — | Yes (sponsor) |
+| `#hdtxtCalSponsorShipEndDate` | Sponsorship End Date | date | — | Yes (sponsor) |
+| `#txtDealerIdText` | Dealer ID | text | 100 | Per media config |
+| `#dropzone_fuBGImage` | File Upload (Dropzone) | file | — | Yes (per media config) |
+| `#txtMainComment` | Submission Comment | textarea | 500 | No |
+| `#txtEmailMe` | Me (email) | text (readonly) | — | Yes |
+| `.clsDealerShipContact` | Dealership Contacts | checkbox | — | No |
+| `#txtOtherMediaContact` | Other Contacts | text | — | No |
 
 ### Success Panel
-- `#CompleteConfirmationModel` — displayed after successful submission
-- `#spnPreApprovalConfirmationNumber` — shows preapproval number
-- "Submit Another Pre-Approval" button (`#SubmitAnotherPreApproval`)
-- "Submit New Pre-Approval" link (when not same-dealer mode)
-- "Check Activity" link to dealer activity list
+- `#CompleteConfirmationModel` — confirmation number (`#spnPreApprovalConfirmationNumber`), email instructions, activity link, "Submit Another"/"Submit New" buttons
 
 ---
 
-## API Endpoints (Modern)
+## Page Handlers (Both Legacy and Modern)
 
-All backend API endpoints are routed via HTTP clients. The exact backend routes are in `BackendAPI\src\modules\coop\Coop.API\Controllers` — no PreApproval-specific controllers found at discovery time, suggesting these are handled by the existing Coop API module.
-
-| Client | Method | Purpose |
+| Handler | Method | Purpose |
 |---|---|---|
-| `IPreapprovalSubmissionApiService.SubmitPreapprovalAsync` | POST | Submit preapproval + child preapprovals |
-| `IPreapprovalSubmissionApiService.LinkDealerToPreapprovalAsync` | POST | Associate dealer with preapproval |
-| `IPreapprovalSubmissionApiService.LinkProductToPreapprovalAsync` | POST | Link product to preapproval |
-| `IPreapprovalSubmissionApiService.SaveAdditionalInfoAsync` | POST | Save URL and other additional info |
-| `IPreapprovalSubmissionApiService.LinkShowToPreapprovalAsync` | POST | Create dealer show for Shows & Events |
-| `IPreapprovalLetterApiService.GetPreApprovalAsync` | GET | Retrieve preapproval by seq (to get preapproval_number) |
-| `IPreapprovalLetterApiService.GetProgramDataAsync` | GET | Retrieve extended preapproval fields config |
-| `IClaimActivityApiService.GetMediaTypesBranchWithProgramSeqAsync` | GET | Media types for program + fiscal year |
-| `IClaimActivityApiService.GetMediaTypesRequirementByProgramSeqAsync` | GET | Per-type media requirements |
-| `IClaimActivityApiService.UpdateCommentAsync` | POST | Insert/update comment |
-| `IClaimActivityApiService.UpdateDocumentImageAsync` | POST | Link document file to preapproval |
-| `IClaimActivityApiService.GetContactAsync` | GET | Get dealer coop contacts for email field |
-| `ICoopApiService.GetDealerTypeByDealerNumberSeqSaaSAsync` | GET | Dealer type for program dealer type |
-| `IDealerApiService.GetDealerNameByProgramSeqAsync` | GET | Dealer name lookup |
-| `IDealerInfoApiService.GetDealerSummaryByDealerNumberSeqAsync` | GET | Parent dealer lookup |
-| `ICommonSupportService.UpdateContactAsync` | POST | Save email contacts to preapproval |
+| `OnGet` | GET | Page initialization — fiscal year, media types, dealer setup |
+| `OnGetDealerTypeList` | GET | AJAX — populate dealer type dropdown |
+| `OnPostProcessPreApproval` | POST | Submit preapproval (main flow) |
+| `OnPostUploadFile` | POST | Stage uploaded file |
+| `OnPostRemoveFile` | POST | Remove staged file |
+| `OnGetCheckDealer` | GET | Validate dealer number |
+| `OnPostBindState` | POST | Load states for country |
+| `OnPostBindCorpDealer` | POST | Auto-match corporate dealer |
+| `OnPostSearchDealer` | POST | Dealer search |
+| `OnPostSelectDealer` | POST | Select dealer by number |
+| `OnPostGetDealerMediaContact` | POST | Get dealer's coop email contacts |
+| `OnPostGetRecentDealerViewed` | POST | Get recently viewed dealers |
+| `OnPostSelectPreApproval` | POST | Media type selection response |
+| `OnGetVerifyDealer` | GET | Verify group show dealer contract |
 
 ---
 
-## Services
+## Services Comparison
 
-| Layer | Legacy | Modern Equivalent |
+| Service | Legacy | Modern Equivalent |
 |---|---|---|
-| Preapproval CRUD | `IPreapprovalService.ProcessPreApproval` | `IPreapprovalSubmissionApiService.SubmitPreapprovalAsync` |
-| Preapproval dealer | `IPreapprovalService.UpdatePreApprovalDealer` | `IPreapprovalSubmissionApiService.LinkDealerToPreapprovalAsync` |
-| Preapproval product | `IPreapprovalService.InsertPreapprovalProduct_SaaS` | `IPreapprovalSubmissionApiService.LinkProductToPreapprovalAsync` |
-| Additional info | `IPreapprovalService.SaveAdditionalInfoToPreApproval` | `IPreapprovalSubmissionApiService.SaveAdditionalInfoAsync` |
-| Get preapproval | `IPreapprovalService.GetPreApproval` | `IPreapprovalLetterApiService.GetPreApprovalAsync` |
-| Media types | `IMediaService.GetMediaTypesBranchWithProgramSeq` | `IClaimActivityApiService.GetMediaTypesBranchWithProgramSeqAsync` |
-| Media requirements (batch) | `IMediaService.GetAllMediaTypesRequirementByProgramSeq` | `IClaimActivityApiService.GetMediaTypesRequirementByProgramSeqAsync` (per type) |
-| Dealer type | `IDealerService.GetDealerTypeByDealerNumberSeq` | `ICoopApiService.GetDealerTypeByDealerNumberSeqSaaSAsync` |
+| Division loading | `IDivisionService.GetDivisionByProgramSeq` | `ICommonSupportService.GetDivisionListByProgramAsync` |
 | Dealer name | `IDealerService.GetDealerName` | `IDealerApiService.GetDealerNameByProgramSeqAsync` |
-| Parent dealer | `IDealerService.GetDealerByDealerNumberSeq` | `IDealerInfoApiService.GetDealerSummaryByDealerNumberSeqAsync` |
-| Shows & Events | `IDealerService.UpdateDealerShows` | `IPreapprovalSubmissionApiService.LinkShowToPreapprovalAsync` |
-| Document | `IDocumentService.UpdateDocumentImage` | `IClaimActivityApiService.UpdateDocumentImageAsync` |
-| Comment | `ICommentService.updateComment` | `IClaimActivityApiService.UpdateCommentAsync` |
+| Dealer type | `IDealerService.GetDealerTypeByDealerNumberSeq` | `ICoopApiService.GetDealerTypeByDealerNumberSeqSaaSAsync` |
+| Media types | `IMediaService.GetMediaTypesBranchWithProgramSeq` | `IClaimActivityApiService.GetMediaTypesBranchWithProgramSeqAsync` |
+| Media requirements | `IMediaService.GetAllMediaTypesRequirementByProgramSeq` (batch) | `IClaimActivityApiService.GetMediaTypesRequirementByProgramSeqAsync` (N+1 per type) |
+| Extended fields | `IProgramService.GetProgramData(seq, "PreapprovalFields")` | `IPreapprovalLetterApiService.GetProgramDataAsync(seq, "PreapprovalFields")` |
+| Preapproval submit | `IPreapprovalService.ProcessPreApproval(12+ params)` | `IPreapprovalSubmissionApiService.SubmitPreapprovalAsync(SubmitPreapprovalApiModel)` |
+| Campaign children | Server-side foreach loop in handler | Nested in `ChildPreapprovals` property of API model |
+| Link dealer | `IPreapprovalService.UpdatePreApprovalDealer` | `IPreapprovalSubmissionApiService.LinkDealerToPreapprovalAsync` |
+| Product link | `IPreapprovalService.InsertPreapprovalProduct_SaaS` | `IPreapprovalSubmissionApiService.LinkProductToPreapprovalAsync` |
+| Shows & events | `IDealerService.UpdateDealerShows(DealerShows{all fields})` | `IPreapprovalSubmissionApiService.LinkShowToPreapprovalAsync(6 of 12 fields)` |
+| Save URL info | `IPreapprovalService.SaveAdditionalInfoToPreApproval` | `IPreapprovalSubmissionApiService.SaveAdditionalInfoAsync` |
+| Get preapproval | `IPreapprovalService.GetPreApproval` | `IPreapprovalLetterApiService.GetPreApprovalAsync` |
+| Comment save | `ICommentService.updateComment` | `IClaimActivityApiService.UpdateCommentAsync` |
 | Email contacts | `IAddressService.UpdateContact` | `ICommonSupportService.UpdateContactAsync` |
-| Dealer contacts | `IAddressService.GetContact` | `IClaimActivityApiService.GetContactAsync` |
-| Email send | `IEmailService` | `IEmailService` (unchanged) |
-| Fiscal year | `IFiscalService` | `IFiscalService` (unchanged — not yet migrated) |
-| Division | `IDivisionService` | `ICommonSupportService.GetDivisionListByProgramAsync` |
-| Program data | `IProgramService.GetProgramData` | `IPreapprovalLetterApiService.GetProgramDataAsync` |
-| Enrollment | `IEnrollmentService` | `IEnrollmentService` (unchanged) |
+| Dealer contacts | `IAddressService.GetContact(DealerNumber, "coop")` | `IClaimActivityApiService.GetContactAsync(DealerNumber, "coop")` |
+| Document type seq | `IDocumentService.getDocumentType` | `IClaimActivityApiService.GetProgramDocumentTypeAsync` |
+| Document image | `IDocumentService.UpdateDocumentImage` | `IClaimActivityApiService.UpdateDocumentImageAsync(UpdateDocumentImageApiModel)` |
+| Dealer lookup | `IDealerService.GetProgramDealerByDealerNumber` | `IDealerInfoApiService.GetDealerByDealerNumberAsync` |
+| Parent dealer | `IDealerService.GetDealerByDealerNumberSeq` | `IDealerInfoApiService.GetDealerSummaryByDealerNumberSeqAsync` |
+| Branch dealers | `IDealerService.GetDealersbyBranchParentSeq` | `ICoopApiService.GetDealersByBranchParentSeqSaaSAsync` |
+| Verify dealer contract | `IProgramService.GetProgramData(seq, mediaType)` | `IPreapprovalLetterApiService.GetProgramDataAsync(seq, mediaType)` |
 
 ---
 
-## Known Gaps (Preliminary)
+## Key Architectural Differences (New Findings — 2026-06-19)
 
-| Gap | Legacy | Modern | Notes |
-|---|---|---|---|
-| Shows & Events full data | `UpdateDealerShows` passes EquipmentList, Dealers, Cost, DlrFormStatus, Email | `LinkShowToPreapprovalAsync` only passes seq, dealerSeq, showDate, showName, location, showType | Equipment list + group dealers may not be persisted in modern |
-| Media type requirements | Batch call `GetAllMediaTypesRequirementByProgramSeq` | Per-type loop `GetMediaTypesRequirementByProgramSeqAsync` | Functionally equivalent but N+1 API calls in modern |
+### 1. Media Type Re-load on POST (Modern Only)
+**Legacy** `OnPostProcessPreApproval`: Processes submitted `PreApprovalInformation` directly — no media type reload.
+**Modern** `OnPostProcessPreApproval`: Calls `GetMediaType(Convert.ToInt32(SelectedFiscalYear))` at the START of the handler to populate `MediaTypes` list, which is then used by `MapToSubmitPreapprovalApiModel`. This results in an additional API call during form submission.
+
+This creates a new FU (COOP-PA-FU-047) and a test assertion: the submission must complete successfully even if media types must be re-fetched from the API during POST.
+
+### 2. Shows & Events Gap (Confirmed — unchanged from prior analysis)
+`LinkShowToPreapprovalAsync` signature accepts only 6 parameters: `(preApprovalSeqOut, dealerSeq, showDate, title, showLocation, showType)`.
+Missing: `EquipmentList`, `Dealers` (group), `Cost`, `DlrRacf`, `Email`, `DlrFormStatus`.
+
+### 3. N+1 API Calls for Media Requirements (Confirmed — unchanged)
+Modern makes one HTTP call per media type for requirements vs. legacy single batch call.
+
+---
+
+## Data Models
+
+| Entity | Legacy | Modern |
+|---|---|---|
+| Preapproval header | `preapproval` table via `IPreapprovalService` | API via `IPreapprovalSubmissionApiService.SubmitPreapprovalAsync` |
+| Preapproval dealer | `preapproval_dealer` table via `UpdatePreApprovalDealer` | API via `LinkDealerToPreapprovalAsync` |
+| Dealer shows | `dealer_shows` table via `IDealerService.UpdateDealerShows` | API via `LinkShowToPreapprovalAsync` (partial fields) |
+| Document image | `document_image` table via `IDocumentService.UpdateDocumentImage` | API via `IClaimActivityApiService.UpdateDocumentImageAsync` |
+| Comment | `comment` table via `ICommentService.updateComment` | API via `IClaimActivityApiService.UpdateCommentAsync` |
+| Contact (email) | `contact` table via `IAddressService.UpdateContact` | API via `ICommonSupportService.UpdateContactAsync` |
+| Additional info | `preapproval_additional_info` via `SaveAdditionalInfoToPreApproval` | API via `SaveAdditionalInfoAsync` |
+
+---
+
+## Known Gaps
+
+| Gap | Severity | Description |
+|---|---|---|
+| Shows & Events fields missing | Medium | `LinkShowToPreapprovalAsync` does not pass EquipmentList, Dealers (group), Cost, DlrRacf, Email |
+| N+1 media requirements | Low | Performance regression — modern makes N API calls vs. 1 batch |
+| Media re-load on POST | Low | Modern re-fetches media types during POST — additional API call dependency |

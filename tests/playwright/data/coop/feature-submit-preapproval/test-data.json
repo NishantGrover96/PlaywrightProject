@@ -12,10 +12,10 @@
     }
   },
   "valid": {
-    "mainbranchMediaName": "Direct Mail",
+    "mainbranchMediaName": "Direct",
     "campaignMediaName": "Campaign",
-    "showMediaName": "Individual Show",
-    "sponsorMediaName": "Sponsorship",
+    "showMediaName": "Shows and Events",
+    "sponsorMediaName": "Sponsorships",
     "adTitle": "Test Preapproval Ad",
     "adLandingURL": "https://example.com/preapproval-test",
     "campaignTitle": "Test Campaign 2026",

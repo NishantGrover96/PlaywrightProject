@@ -5,7 +5,7 @@ import { Page, Locator, expect } from '@playwright/test';
  * URL: /CoopManagement/PreApproval/Submit/SubmitPreapproval
  *
  * Selectors sourced from:
- *   SubmitPreApproval.cshtml (legacy + modern — identical files, 2026-06-17)
+ *   SubmitPreApproval.cshtml (legacy + modern — identical files, 2026-06-19)
  *   _PreApprovalMediaType.cshtml, _PreApprovalFormSubmission.cshtml
  *
  * Wizard steps for dealer role (no dealer-search step shown):
@@ -14,6 +14,9 @@ import { Page, Locator, expect } from '@playwright/test';
  *   Step 2 — Media type tile selection
  *   Step 3 — Form submission + email section
  *   Success — Confirmation panel
+ *
+ * FU-047 note: Modern POST handler calls GetMediaType(SelectedFiscalYear) before processing.
+ *   hdnSelectedFiscalYear must be present and non-empty for correct media mapping.
  */
 export class SubmitPreapprovalPage {
   readonly page: Page;
@@ -25,6 +28,7 @@ export class SubmitPreapprovalPage {
   // ── Step 0 — Fiscal year (conditional) ───────────────────────────────────────
   readonly fiscalYearRadios:      Locator;  // input.fiscalYearRadio
   readonly btnContinueAfterZero:  Locator;  // #ContinueAfterZero
+  readonly hdnSelectedFiscalYear: Locator;  // #hdnSelectedFiscalYear (bound via SelectedFiscalYear property; required by modern POST handler FU-047)
 
   // ── Step 2 — Media type ───────────────────────────────────────────────────────
   readonly mediaTiles:              Locator;  // ul#PreapprovalMediaList li a.clsSelectMediaType
@@ -129,6 +133,7 @@ export class SubmitPreapprovalPage {
     // Step 0 — Fiscal year
     this.fiscalYearRadios     = page.locator('input.fiscalYearRadio');
     this.btnContinueAfterZero = page.locator('#ContinueAfterZero');
+    this.hdnSelectedFiscalYear = page.locator('#hdnSelectedFiscalYear');
 
     // Step 2 — Media type
     this.mediaTiles              = page.locator('#PreapprovalMediaList li a.clsSelectMediaType');
@@ -229,7 +234,9 @@ export class SubmitPreapprovalPage {
   // ── Navigation ────────────────────────────────────────────────────────────────
 
   async navigate(): Promise<void> {
-    await this.page.goto(this.url);
+    // Use domcontentloaded — the preapproval page has background requests that
+    // prevent the 'load' event from firing within the default 60s timeout.
+    await this.page.goto(this.url, { waitUntil: 'domcontentloaded' });
   }
 
   // ── Wizard navigation ─────────────────────────────────────────────────────────
@@ -247,7 +254,10 @@ export class SubmitPreapprovalPage {
 
   async advanceFromMediaStep(): Promise<void> {
     await this.btnMediaContinue.click();
-    await expect(this.btnSubmit).toBeVisible({ timeout: 15_000 });
+    // The form step is shown by TriggerNextStep(3) — wait for the Ad Title input
+    // which is immediately visible. The Submit button only reveals after field
+    // validation fires, so it cannot be used here.
+    await expect(this.adTitleInput).toBeVisible({ timeout: 15_000 });
   }
 
   // ── Form filling ──────────────────────────────────────────────────────────────
@@ -328,6 +338,12 @@ export class SubmitPreapprovalPage {
   }
 
   async expectFormStepVisible(): Promise<void> {
+    // Check the form step container is active — adTitleInput is always visible in this step.
+    await expect(this.adTitleInput).toBeVisible({ timeout: 15_000 });
+  }
+
+  /** Assert the Submit button is revealed (requires at least one field to have changed). */
+  async expectSubmitButtonVisible(): Promise<void> {
     await expect(this.btnSubmit).toBeVisible({ timeout: 15_000 });
   }
 
@@ -350,5 +366,13 @@ export class SubmitPreapprovalPage {
       await this.dealerTypeDropdown.locator('option').count(),
     );
     expect(await this.dealerTypeDropdown.locator('option').count()).toBeGreaterThan(0);
+  }
+
+  /** FU-047: Modern POST requires SelectedFiscalYear hidden field to be present and non-empty. */
+  async expectSelectedFiscalYearPresent(): Promise<void> {
+    await expect(this.hdnSelectedFiscalYear).toBeAttached();
+    const val = await this.hdnSelectedFiscalYear.inputValue();
+    expect(val.trim().length).toBeGreaterThan(0);
+    expect(Number(val)).toBeGreaterThan(2000);
   }
 }

@@ -1,3 +1,8 @@
+---
+name: functional-unit-discovery
+description: Read legacy and modern codebases to map files, endpoints, services, and UI components, then extract all independently testable functional units.
+---
+
 # Functional Unit Discovery — Steps 1 & 2
 
 ## Purpose

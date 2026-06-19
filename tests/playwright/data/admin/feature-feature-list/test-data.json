@@ -1,0 +1,37 @@
+{
+  "admin": {
+    "username": "admin@demo.com",
+    "password": "Admin@1234",
+    "pin": "1234"
+  },
+  "modules": {
+    "first": "Claims"
+  },
+  "search": {
+    "partialFeatureName": "Submit",
+    "noMatchText": "ZZZNOMATCHXXX"
+  },
+  "addFeature": {
+    "existingModule": "Claims",
+    "existingFeatureKey": "SCTT",
+    "existingPropertyName": "ShowContractorTypeTab",
+    "newModule": "Claims",
+    "newFeature": "Test Automation Feature",
+    "newFeatureKey": "TAUTO001",
+    "newPropertyName": "ShowTestAutomationFeature",
+    "newDescription": "Created by Playwright automation test"
+  },
+  "moduleList": {
+    "searchName": "Claims",
+    "sampleUserModuleSeq": "1",
+    "sampleProgramUserModuleSeq": "1",
+    "sampleModuleName": "Claims"
+  },
+  "api": {
+    "sampleMasterConfigId": 1
+  },
+  "import": {
+    "validXlsxFile": "valid-feature-flags.xlsx",
+    "invalidFile": "test.csv"
+  }
+}

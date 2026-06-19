@@ -25,7 +25,11 @@ setup('authenticate dealer user', async ({ page }) => {
   await page.fill('#UserLogin_Username', username);
   await page.fill('#UserLogin_Password', password);
   await page.click('#btnLogin');
-  await page.waitForLoadState('load', { timeout: 90_000 });
+  // Wait for navigation away from the login page (post-login redirect).
+  // The dealer dashboard may have background requests that prevent 'load' from firing,
+  // so we confirm success by URL leaving /login rather than waiting for full load state.
+  await page.waitForURL(url => !/\/login/i.test(url), { timeout: 90_000 });
+  await page.waitForLoadState('domcontentloaded', { timeout: 30_000 });
 
   const currentURL = page.url();
   if (/\/login/i.test(currentURL) && !/dashboard|coop|index/i.test(currentURL)) {

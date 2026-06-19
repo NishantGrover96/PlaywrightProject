@@ -1,3 +1,8 @@
+---
+name: scaffold
+description: One-time interactive setup for a new module or feature, creating all folders, starter files, and updating config and dashboard.
+---
+
 # Scaffold — Step 0: New Module / Feature Setup
 
 ## Purpose

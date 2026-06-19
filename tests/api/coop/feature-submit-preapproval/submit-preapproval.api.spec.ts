@@ -1,7 +1,7 @@
 /**
  * Coop — Submit Pre-Approval — API Spec
  * Module: coop | Feature: submit-preapproval
- * Generated: 2026-06-17 | Pipeline: Step 3 (Playwright Test Generation)
+ * Generated: 2026-06-19 | Pipeline: Step 3 (Playwright Test Generation — Re-run)
  *
  * Tests the modern API endpoints that back the submit-preapproval feature.
  * These tests call the BackendAPI endpoints directly via HTTP.

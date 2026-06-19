@@ -1,6 +1,6 @@
 -- Coop — Submit Pre-Approval — Legacy vs Modern Comparison Queries
 -- Module: coop | Feature: submit-preapproval
--- Generated: 2026-06-17 | Pipeline: Step 3 (Database Comparison)
+-- Generated: 2026-06-19 | Pipeline: Step 3 (Database Comparison — Re-run)
 --
 -- Run against BOTH legacy and modern databases with the same preapproval_number.
 -- Compare results to verify data parity between the two implementations.
