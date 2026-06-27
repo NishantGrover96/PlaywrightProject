@@ -1,0 +1,36 @@
+{
+  "newPackage": {
+    "name": "PW Test Package",
+    "billingTerm": "MONTHLY",
+    "subtitle": "Playwright automation test package",
+    "priceDollars": 100,
+    "channelCount": 1
+  },
+  "inquiryOnlyPackage": {
+    "name": "PW Inquiry Only Package",
+    "billingTerm": "YEARLY",
+    "isInquiryOnly": true
+  },
+  "breakdownValid": {
+    "name": "PW Breakdown Valid Package",
+    "billingTerm": "MONTHLY",
+    "priceDollars": 100,
+    "breakdownAmounts": [60, 40]
+  },
+  "breakdownInvalid": {
+    "name": "PW Breakdown Invalid Package",
+    "billingTerm": "MONTHLY",
+    "priceDollars": 100,
+    "breakdownAmounts": [60, 30]
+  },
+  "existingPackageSeqForEdit": 22,
+  "billingTermOptions": ["MONTHLY", "YEARLY", "QUARTERLY"],
+  "db": {
+    "connectionString": "CHANNELSOFT_UAT",
+    "schema": "EngageAds",
+    "packageTable": "package",
+    "eligibilityTable": "package_eligibility",
+    "pricingTable": "package_pricing",
+    "descriptionItemsTable": "package_description_items"
+  }
+}
