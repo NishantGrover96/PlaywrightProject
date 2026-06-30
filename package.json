@@ -21,7 +21,8 @@
     "test:api": "playwright test tests/api/ --project=api",
     "test:api:coop": "playwright test tests/api/coop/ --project=api",
     "dashboard": "node dashboard/server.js",
-    "report": "playwright show-report"
+    "report": "playwright show-report",
+    "engage-ads": "powershell -ExecutionPolicy Bypass -File scripts/run-engage-ads.ps1"
   },
   "devDependencies": {
     "@playwright/test": "1.48.2",

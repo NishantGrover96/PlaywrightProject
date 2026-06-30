@@ -1,3 +1,37 @@
+/**
+ * ViewPackagePage.ts — EngageAds BundledAdPackages Page Object
+ * DOM verified: 2026-06-29 on https://demoportaluat.channel-fusion.com/EngageAds/BundledAdPackages
+ *
+ * Locator Validation Report
+ * | Locator                          | HTML element matched              | Why chosen                       | Stable |
+ * |----------------------------------|-----------------------------------|----------------------------------|--------|
+ * | .commonWizard                    | div.commonWizard                  | Unique wizard shell class        | High   |
+ * | .card                            | div.card (each package card)      | Confirmed class on package cards | High   |
+ * | .cardBadge                       | span.cardBadge[packageseq]        | Package name + seq attribute     | High   |
+ * | button.selectPackage             | button.btnFill.selectPackage      | Confirmed class from DOM         | High   |
+ * | a.btnBordered[href*="Detail"]     | a with View Details href          | Href+class stable selector       | High   |
+ * | .talkToExpertBtn                 | a.btnBordered.talkToExpertBtn     | Confirmed class                  | High   |
+ * | #termsAndConditions              | input[type=checkbox]              | Confirmed ID from DOM            | High   |
+ * | #lblTermsAndConditions           | label.field-validation-error      | Confirmed ID from DOM            | High   |
+ * | a.termsLink                      | a.termsLink                       | Confirmed class from DOM         | High   |
+ * | button.btnCancelPlan             | button.btnBordered.btnCancelPlan  | Confirmed class from DOM         | High   |
+ * | button.btnPayment                | button.btnFill.btnPayment         | Confirmed class from DOM         | High   |
+ * | .budgetTypes                     | div.budgetTypes                   | Confirmed class from DOM         | High   |
+ * | .dvWithCoop .availableFunds      | div with available balance row    | Stable class chain               | High   |
+ * | #ddlBudgetTypeNames              | select#ddlBudgetTypeNames         | Confirmed ID from DOM            | High   |
+ * | #txtCoopPercentage               | input#txtCoopPercentage           | Confirmed ID from DOM            | High   |
+ * | #btnAddCoop                      | input[type=button]#btnAddCoop     | Confirmed ID from DOM            | High   |
+ * | .spnTotalCoopAmount etc.         | span.spnTotalCoopAmount           | Confirmed classes from DOM       | High   |
+ * | .quoteBox                        | div.quoteBox                      | Confirmed class from DOM         | High   |
+ * | .paymentCheckout                 | div.paymentCheckout               | Confirmed class from DOM         | High   |
+ * | #talkToExpertModal               | div#talkToExpertModal.modal.fade  | Confirmed ID from DOM            | High   |
+ * | #termsConditionsModal            | div#termsConditionsModal.modal    | Confirmed ID from DOM            | High   |
+ * | #businessGoal                    | select#businessGoal in expert     | Confirmed ID from DOM            | High   |
+ * | #txtCity                         | input#txtCity in expert modal     | Confirmed ID from DOM            | High   |
+ * | #ddlState                        | select#ddlState in expert modal   | Confirmed ID from DOM            | High   |
+ * | #submitExpertConsultation        | button ("Request Consultation")   | Confirmed ID from DOM            | High   |
+ * | #coopFunds                       | NOT IN DOM — REMOVED              | No such ID exists on UAT         | N/A    |
+ */
 import { expect, type Locator, type Page } from '@playwright/test';
 
 export interface ExpertFormData {
@@ -29,8 +63,13 @@ export class ViewPackagePage {
   readonly termsError: Locator;
   readonly paymentButton: Locator;
   readonly cancelPlanButton: Locator;
-  readonly coopFundsCheckbox: Locator;
-  readonly budgetTypesSection: Locator;
+  // Co-op section
+  // NOTE: #coopFunds checkbox does NOT exist in DOM (confirmed 2026-06-29).
+  // The .budgetTypes row is always present but hidden via style="display:none".
+  // It becomes visible only when the dealer has available co-op balance (> $0).
+  // Tests that interact with co-op allocation require a dealer with available funds.
+  readonly coopFundsAvailableBalance: Locator;  // .dvWithCoop .availableFunds .costValue
+  readonly budgetTypesSection: Locator;          // .budgetTypes (shown when balance > 0)
   readonly ddlBudgetTypeNames: Locator;
   readonly txtCoopPercentage: Locator;
   readonly btnAddCoop: Locator;
@@ -70,6 +109,7 @@ export class ViewPackagePage {
   readonly detailPriceHero: Locator;
   readonly cookieAcceptButton: Locator;
   readonly skipButton: Locator;
+  readonly loadingSpinner: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -91,8 +131,9 @@ export class ViewPackagePage {
     this.termsError = page.locator('#lblTermsAndConditions');
     this.paymentButton = page.locator('.btnPayment');
     this.cancelPlanButton = page.locator('.btnCancelPlan');
-    this.coopFundsCheckbox = page.locator('#coopFunds');
-    this.budgetTypesSection = page.locator('.budgetTypes');
+    // Co-op section — #coopFunds does NOT exist in DOM (verified 2026-06-29)
+    this.coopFundsAvailableBalance = page.locator('.dvWithCoop .availableFunds .costValue'); // ✅ confirmed
+    this.budgetTypesSection = page.locator('.budgetTypes');                                  // ✅ confirmed (hidden until balance > 0)
     this.ddlBudgetTypeNames = page.locator('#ddlBudgetTypeNames');
     this.txtCoopPercentage = page.locator('#txtCoopPercentage');
     this.btnAddCoop = page.locator('#btnAddCoop');
@@ -132,6 +173,9 @@ export class ViewPackagePage {
     this.detailPriceHero = page.locator('text=/\\$\\s*\\d+[\\d,]*(\\.\\d{2})?\\s*\\/campaign|\\/mailing/i').first();
     this.cookieAcceptButton = page.getByRole('button', { name: /accept/i });
     this.skipButton = page.getByRole('button', { name: /skip/i });
+    this.loadingSpinner = page.locator(
+      '.loading-overlay, .spinner-overlay, [data-loading], .spinner-border, .loader',
+    ).first();
   }
 
   private async dismissTransientUi(): Promise<void> {
@@ -177,6 +221,20 @@ export class ViewPackagePage {
     await this.dismissTransientUi();
   }
 
+  /**
+   * Guideline 1 — Page Readiness:
+   * Waits for the loading spinner to disappear, then confirms the wizard
+   * container is visible before any test interaction begins.
+   * URL assertion is omitted: a dealer with an in-progress order is redirected
+   * to CampaignSetup instead of BundledAdPackages.
+   */
+  async waitForReady(): Promise<void> {
+    await expect(this.loadingSpinner)
+      .toBeHidden({ timeout: 15_000 })
+      .catch(() => undefined); // spinner may not be present on every load
+    await expect(this.wizardContainer).toBeVisible({ timeout: 20_000 });
+  }
+
   async navigateWithPackage(encryptedSeq: string): Promise<void> {
     const targetUrl = `${this.url}?packageSeq=${encodeURIComponent(encryptedSeq)}`;
     await this.page.goto(targetUrl, { waitUntil: 'commit', timeout: 60_000 });
@@ -207,15 +265,20 @@ export class ViewPackagePage {
   }
 
   async applyCoop(budgetTypeIndex: number, amount: string): Promise<void> {
-    if (!(await this.coopFundsCheckbox.isChecked().catch(() => false))) {
-      await this.coopFundsCheckbox.check();
+    // #coopFunds checkbox does NOT exist in DOM. budgetTypes section is shown automatically
+    // when the dealer has available co-op balance. Guard before attempting to interact.
+    const isVisible = await this.budgetTypesSection.isVisible().catch(() => false);
+    if (!isVisible) {
+      throw new Error(
+        'Co-op allocation controls (.budgetTypes) are not visible. ' +
+        'This dealer may have $0 available co-op balance. ' +
+        'Use a dealer account with available co-op funds for this test.',
+      );
     }
-    await expect(this.budgetTypesSection).toBeVisible({ timeout: 10_000 });
     await this.ddlBudgetTypeNames.selectOption({ index: budgetTypeIndex });
     await this.txtCoopPercentage.fill(amount);
     await this.btnAddCoop.click();
     await this.page.waitForLoadState('networkidle', { timeout: 10_000 }).catch(() => undefined);
-    await this.page.waitForTimeout(500);
   }
 
   async openTalkToExpert(buttonIndex = 0): Promise<void> {

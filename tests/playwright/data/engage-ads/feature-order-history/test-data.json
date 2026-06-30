@@ -1,0 +1,24 @@
+{
+  "featureUrl": "/EngageAds/OrderHistory",
+  "statuses": {
+    "paid": "PAID",
+    "submitted": "Submitted",
+    "inProgress": "In Progress",
+    "cancelled": "Cancelled",
+    "completed": "Completed"
+  },
+  "paymentTypes": {
+    "all": "All",
+    "creditCard": "Credit Card",
+    "coop": "Coop"
+  },
+  "pageSizes": ["10", "25", "50", "100"],
+  "expectedMessages": {
+    "noOrders": "No data available in table"
+  },
+  "redirects": {
+    "login": "/Account/Login",
+    "campaignSetup": "/EngageAds/CampaignSetup",
+    "bundledAdPackages": "/EngageAds/BundledAdPackages"
+  }
+}

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * DealerPlatform QA â€” On-Demand Test Dashboard
  *
  * Modes:
@@ -31,6 +31,8 @@ const FEATURE_FOLDERS = {
   "coop-api-submit-preapproval": "tests/api/coop/feature-submit-preapproval",
   "popshop-new-order":           "tests/playwright/specs/popshop/feature-new-order",
   "engage-ads-view-package":     "tests/playwright/specs/engage-ads/feature-view-package",
+  "engage-ads-campaign-setup":   "tests/playwright/specs/engage-ads/feature-campaign-setup",
+  "engage-ads-order-history":    "tests/playwright/specs/engage-ads/feature-order-history",
 };
 
 const TIER_TAGS = { smoke: "@smoke", regression: "@regression", e2e: "@e2e" };
@@ -223,9 +225,11 @@ function runTests(config) {
         summary = { passed: parsed.passed || 0, failed: parsed.failed || 0,
                     skipped: parsed.skipped || 0, duration: parsed.duration || summary.duration };
         broadcast("summary-update", summary);
-      } else if (pendingDetail && pendingDetail.lines.length < 80) {
-        // Cap at 80 lines to avoid huge payloads for very verbose failures
-        pendingDetail.lines.push(raw);
+      } else if (pendingDetail && pendingDetail.lines.length < 150) {
+        // Cap at 150 lines; skip pure node_modules frames to reduce noise
+        if (!/node_modules[\\/]/.test(raw) || pendingDetail.lines.length < 10) {
+          pendingDetail.lines.push(raw);
+        }
       }
     }
   }
@@ -253,7 +257,7 @@ function runTests(config) {
     state.history.unshift(entry);
     if (state.history.length > 20) state.history.pop();
 
-    broadcast("end", { exitCode: code, summary });
+    broadcast("end", { exitCode: code, summary, history: state.history });
   });
 
   proc.on("error", (err) => {

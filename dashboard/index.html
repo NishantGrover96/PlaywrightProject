@@ -732,6 +732,12 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
         <label class="checkbox-item" data-value="engage-ads-view-package" data-module="engage-ads" style="border-top:1px solid var(--border);margin-top:6px;padding-top:6px;">
           <input type="checkbox" value="engage-ads-view-package" /> <span class="cb-label">EngageAds — View Package</span> <span class="cb-tag">engage-ads</span>
         </label>
+        <label class="checkbox-item" data-value="engage-ads-campaign-setup" data-module="engage-ads">
+          <input type="checkbox" value="engage-ads-campaign-setup" /> <span class="cb-label">EngageAds — Campaign Setup</span> <span class="cb-tag">engage-ads</span>
+        </label>
+        <label class="checkbox-item" data-value="engage-ads-order-history" data-module="engage-ads">
+          <input type="checkbox" value="engage-ads-order-history" /> <span class="cb-label">EngageAds — Order History</span> <span class="cb-tag">engage-ads</span>
+        </label>
       </div>
     </div>
 
@@ -1135,6 +1141,8 @@ function handleMessage(msg) {
       if (msg.passed  !== undefined) stats.pass = msg.passed;
       if (msg.failed  !== undefined) stats.fail = msg.failed;
       if (msg.skipped !== undefined) stats.skip = msg.skipped;
+      // Recalculate total from authoritative summary values so pass rate stays ≤ 100%
+      stats.total = stats.pass + stats.fail + stats.skip;
       if (msg.duration) stats.dur = msg.duration;
       updateStats();
       break;
@@ -1179,7 +1187,7 @@ function handleMessage(msg) {
       );
       // Build analytics panel then switch output tabs to Results
       buildAnalytics();
-      if (msg.summary) renderHistory(state && state.history ? state.history : []);
+      if (msg.history) renderHistory(msg.history);
       // Switch to Test Results tab; analytics panel expands below
       setTimeout(() => { switchTab("results"); expandAnalytics(); }, 800);
       break;
@@ -1500,15 +1508,50 @@ function setupCheckboxGroup(groupId) {
   group.addEventListener("change", (e) => {
     const cb = e.target;
     const allCb = group.querySelector('input[value="all"]');
+
+    // Helper: only consider visible individual items (respect module filter)
+    const visibleIndividuals = () =>
+      [...group.querySelectorAll("input:not([value=all])")]
+        .filter(c => c.closest(".checkbox-item").style.display !== "none");
+
     if (cb.value === "all") {
-      group.querySelectorAll("input:not([value=all])").forEach(c => { c.checked = false; c.closest(".checkbox-item").classList.remove("checked"); });
+      if (cb.checked) {
+        // Checking "All" → check every visible individual item too
+        visibleIndividuals().forEach(c => {
+          c.checked = true;
+          c.closest(".checkbox-item").classList.add("checked");
+        });
+      } else {
+        // Unchecking "All" → uncheck all individuals so user can pick specific ones
+        visibleIndividuals().forEach(c => {
+          c.checked = false;
+          c.closest(".checkbox-item").classList.remove("checked");
+        });
+        // Do NOT restore All here — let the user select individual items
+      }
       cb.closest(".checkbox-item").classList.toggle("checked", cb.checked);
     } else {
-      allCb.checked = false;
-      allCb.closest(".checkbox-item").classList.remove("checked");
+      // An individual item was toggled
       cb.closest(".checkbox-item").classList.toggle("checked", cb.checked);
-      const anyChecked = [...group.querySelectorAll("input:not([value=all])")].some(c => c.checked);
-      if (!anyChecked) { allCb.checked = true; allCb.closest(".checkbox-item").classList.add("checked"); }
+
+      const individuals  = visibleIndividuals();
+      const checkedCount = individuals.filter(c => c.checked).length;
+
+      if (!cb.checked) {
+        // Unchecked one individual → uncheck "All"
+        allCb.checked = false;
+        allCb.closest(".checkbox-item").classList.remove("checked");
+      }
+
+      if (checkedCount === 0) {
+        // Nothing left selected → restore "All" as the only fallback
+        allCb.checked = true;
+        allCb.closest(".checkbox-item").classList.add("checked");
+      } else if (checkedCount === individuals.length) {
+        // Every individual is now checked → mirror that on "All"
+        allCb.checked = true;
+        allCb.closest(".checkbox-item").classList.add("checked");
+      }
     }
     updateCommandPreview();
     if (groupId === "feature-group") updateCatalogPanel();
@@ -1532,6 +1575,8 @@ const FEATURE_FOLDERS = {
   "coop-api-submit-preapproval":  "tests/api/coop/feature-submit-preapproval",
   "popshop-new-order":            "tests/playwright/specs/popshop/feature-new-order",
   "engage-ads-view-package":      "tests/playwright/specs/engage-ads/feature-view-package",
+  "engage-ads-campaign-setup":    "tests/playwright/specs/engage-ads/feature-campaign-setup",
+  "engage-ads-order-history":      "tests/playwright/specs/engage-ads/feature-order-history",
 };
 const TIER_TAGS = { smoke: "@smoke", regression: "@regression", e2e: "@e2e" };
 
@@ -1562,12 +1607,20 @@ function updateEnvBadge() {
 
 function updateCommandPreview() {
   const testEnv  = document.getElementById("sel-test-env").value;
-  const features = getSelectedValues("feature-group");
+  let   features = getSelectedValues("feature-group");
   const tiers    = getSelectedValues("tier-group");
   const role     = getRole();
   const baseUrl  = document.getElementById("inp-base-url")?.value?.trim() || "";
   const username = document.getElementById("inp-user")?.value?.trim() || "";
   const isAdmin  = role === "admin" || role === "admin-custom";
+
+  // Resolve "all" to only the selected module's features for an accurate preview
+  const selectedModule = document.getElementById("sel-module").value;
+  if (features.includes("all") && selectedModule !== "all") {
+    features = [...document.querySelectorAll(`#feature-group .checkbox-item[data-module="${selectedModule}"]`)]
+      .map(el => el.getAttribute("data-value")).filter(Boolean);
+  }
+
   let cmd = `TEST_ENV=${testEnv}`;
   if (baseUrl)  cmd += ` BASE_URL=${baseUrl}`;
   if ((role === "dealer-custom" || role === "admin-custom") && username) cmd += ` TEST_USER_EMAIL=${username}`;
@@ -1643,8 +1696,20 @@ async function runTests() {
   const role     = getRole();
   const username = document.getElementById("inp-user").value.trim();
   const password = document.getElementById("inp-pass").value.trim();
-  const features = getSelectedValues("feature-group");
+  let   features = getSelectedValues("feature-group");
   const tiers    = getSelectedValues("tier-group");
+
+  // If "All Features" is checked but a specific module is selected,
+  // resolve to only that module's features so we don't run the entire suite
+  const selectedModule = document.getElementById("sel-module").value;
+  if (features.includes("all") && selectedModule !== "all") {
+    features = [...document.querySelectorAll(`#feature-group .checkbox-item[data-module="${selectedModule}"]`)]
+      .map(el => el.getAttribute("data-value")).filter(Boolean);
+    if (features.length === 0) {
+      logLine("⚠ No features found for the selected module", "log-err");
+      return;
+    }
+  }
 
   // Validation
   if (features.length === 0 || tiers.length === 0) {
@@ -1711,20 +1776,118 @@ function escHtml(str) {
  */
 function renderDetailContent(container, text) {
   container.innerHTML = "";
-  for (const line of text.split("\n")) {
-    const span = document.createElement("span");
-    span.style.display = "block";
-    span.textContent   = line;
-    if (/^\s*(Error|AssertionError|TimeoutError)/.test(line)) {
-      span.style.color = "#ff6b6b";
-    } else if (/^\s+(Expected|Received|Value)\s*[:→]/.test(line)) {
-      span.style.color = "#f59e0b";
-    } else if (/^\s+at /.test(line)) {
-      span.style.color = "#4a5568";
-      span.style.fontSize = "10px";
+  const lines = text.split("\n");
+
+  // ── 1. Extract structured info ──────────────────────────────────────────
+  let errorType    = "";
+  let errorMessage = "";
+  let firstUserFrame = "";  // first stack frame NOT inside node_modules
+
+  for (const line of lines) {
+    const stripped = line.replace(/\x1B\[[0-9;]*m/g, "").trim();
+    if (!errorType && /^(Error|AssertionError|TimeoutError|locator\.|page\.)/.test(stripped)) {
+      const colonIdx = stripped.indexOf(":");
+      errorType    = colonIdx > 0 ? stripped.slice(0, colonIdx).trim() : stripped;
+      errorMessage = colonIdx > 0 ? stripped.slice(colonIdx + 1).trim() : "";
     }
+    if (!firstUserFrame && /^\s+at /.test(line) && !/node_modules[\\/]/.test(line)) {
+      // Extract  "at functionName (path/file.ts:line:col)"
+      const m = line.match(/at\s+(?:\S+\s+)?\(?(.*?\.(?:ts|js|mjs)):(\d+)/);
+      if (m) {
+        const rel = m[1].replace(/.*[\\/]tests[\\/]/, "tests/").replace(/.*[\\/]specs[\\/]/, "specs/");
+        firstUserFrame = `${rel}:${m[2]}`;
+      }
+    }
+  }
+
+  // ── 2. Header block ────────────────────────────────────────────────────
+  if (errorType) {
+    const header = document.createElement("div");
+    header.style.cssText = "margin-bottom:8px;padding:8px 10px;background:rgba(239,68,68,0.12);" +
+      "border:1px solid rgba(239,68,68,0.35);border-radius:5px;";
+    header.innerHTML =
+      `<div style="color:#ff6b6b;font-weight:700;font-size:12px;margin-bottom:2px;">${escHtml(errorType)}</div>` +
+      (errorMessage ? `<div style="color:#fca5a5;font-size:11px;word-break:break-word;">${escHtml(errorMessage)}</div>` : "") +
+      (firstUserFrame ? `<div style="margin-top:5px;font-size:10px;color:#94a3b8;">📍 ${escHtml(firstUserFrame)}</div>` : "");
+    container.appendChild(header);
+  }
+
+  // ── 3. Render lines ────────────────────────────────────────────────────
+  let inDiff    = false;
+  let nodeBlock = null;  // collapsed node_modules section
+  let nodeCount = 0;
+
+  for (const line of lines) {
+    const stripped = line.replace(/\x1B\[[0-9;]*m/g, "").trim();
+
+    // Skip lines already shown in header
+    if (errorType && stripped.startsWith(errorType)) continue;
+
+    // ── Assertion diff block ──
+    if (/^\s+(Expected|Received|Error|Value|-\s|[+]\s)/.test(line) &&
+        !/^\s+at /.test(line)) {
+      inDiff = true;
+      if (nodeBlock) { container.appendChild(nodeBlock); nodeBlock = null; nodeCount = 0; }
+      const span = document.createElement("span");
+      span.style.cssText = "display:block;padding:0 4px;border-radius:2px;";
+      if (/^\s+Expected/.test(line))      { span.style.background = "rgba(34,197,94,0.12)";  span.style.color = "#86efac"; }
+      else if (/^\s+Received/.test(line)) { span.style.background = "rgba(239,68,68,0.12)";  span.style.color = "#fca5a5"; }
+      else if (/^\s+-\s/.test(line))      { span.style.background = "rgba(239,68,68,0.10)";  span.style.color = "#fca5a5"; }
+      else if (/^\s+[+]\s/.test(line))    { span.style.background = "rgba(34,197,94,0.10)";  span.style.color = "#86efac"; }
+      else                                { span.style.color = "#f59e0b"; }
+      span.textContent = line;
+      container.appendChild(span);
+      continue;
+    }
+
+    // ── Stack frames ──
+    if (/^\s+at /.test(line)) {
+      inDiff = false;
+      const isNodeInternal = /node_modules[\\/]|<anonymous>|internal\//.test(line);
+      if (isNodeInternal) {
+        // Accumulate into a collapsed block
+        nodeCount++;
+        if (!nodeBlock) {
+          nodeBlock = document.createElement("span");
+          nodeBlock.style.cssText = "display:block;color:#4a5568;font-size:10px;cursor:pointer;user-select:none;";
+          nodeBlock.setAttribute("title", "Click to expand internal frames");
+          nodeBlock.addEventListener("click", function() {
+            this.style.whiteSpace = this.style.whiteSpace === "normal" ? "nowrap" : "normal";
+          });
+        }
+        nodeBlock.textContent = `  [${nodeCount} internal playwright/node frame${nodeCount > 1 ? "s" : ""} hidden — click to reveal]`;
+        nodeBlock.dataset.full = (nodeBlock.dataset.full || "") + line + "\n";
+        continue;
+      } else {
+        // User code frame — flush node block first, then show prominently
+        if (nodeBlock) { container.appendChild(nodeBlock); nodeBlock = null; nodeCount = 0; }
+        const span = document.createElement("span");
+        span.style.cssText = "display:block;color:#93c5fd;font-size:11px;font-weight:600;";
+        span.textContent = line;
+        container.appendChild(span);
+        continue;
+      }
+    }
+
+    // ── Plain line ──
+    if (nodeBlock) { container.appendChild(nodeBlock); nodeBlock = null; nodeCount = 0; }
+    inDiff = false;
+    if (!stripped) {
+      const br = document.createElement("span");
+      br.style.display = "block";
+      br.textContent   = "";
+      container.appendChild(br);
+      continue;
+    }
+    const span = document.createElement("span");
+    span.style.display  = "block";
+    span.style.color    = "#94a3b8";
+    span.style.fontSize = "11px";
+    span.textContent    = line;
     container.appendChild(span);
   }
+
+  if (nodeBlock) container.appendChild(nodeBlock);
 }
 
 // ── Test Result Analytics ──────────────────────────────────────────────────
@@ -1751,6 +1914,7 @@ const SUITE_LABELS = {
   "COOP-ADMIN":      "Admin Reports",
   // EngageAds
   "ENGAGEADS-TC":    "EngageAds — View Package",
+  "ENGAGEADS-CS":    "EngageAds — Campaign Setup",
   "ENGAGEADS":       "EngageAds",
 };
 

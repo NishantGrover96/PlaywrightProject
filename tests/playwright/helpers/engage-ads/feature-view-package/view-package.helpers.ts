@@ -1,10 +1,19 @@
 import { type Page } from '@playwright/test';
 import { ViewPackagePage, type ExpertFormData } from '../../../pages/engage-ads/feature-view-package/ViewPackagePage';
+// import { measurePageLoad } from '../page-performance';
 import testData from '@data/engage-ads/feature-view-package/test-data.json';
 
 export async function goToViewPackage(page: Page): Promise<ViewPackagePage> {
   const viewPackage = new ViewPackagePage(page);
+  // await measurePageLoad(
+  //   async () => {
+  //     await viewPackage.navigate();
+  //     await viewPackage.waitForReady();
+  //   },
+  //   'ViewPackage',
+  // );
   await viewPackage.navigate();
+  await viewPackage.waitForReady();
   return viewPackage;
 }
 

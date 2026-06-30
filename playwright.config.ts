@@ -29,6 +29,7 @@ export default defineConfig({
     ['json',  { outputFile: `reports/${TEST_ENV}/results.json` }],
     ['junit', { outputFile: `reports/${TEST_ENV}/junit.xml` }],
     ['list'],
+    ['./tests/playwright/reporters/screenshot-organizer.reporter.ts'],
   ],
 
   use: {
@@ -57,6 +58,7 @@ export default defineConfig({
       use: {
         ...devices['Desktop Chrome'],
         storageState: 'tests/playwright/fixtures/.auth/user.json',
+        launchOptions: { args: ['--start-maximized'] },
       },
       dependencies: ['setup'],
     },
@@ -67,6 +69,7 @@ export default defineConfig({
       use: {
         ...devices['Desktop Chrome'],
         storageState: 'tests/playwright/fixtures/.auth/admin.json',
+        launchOptions: { args: ['--start-maximized'] },
       },
       dependencies: ['setup-admin'],
     },

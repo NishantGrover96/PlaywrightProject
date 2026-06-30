@@ -343,6 +343,58 @@
     },
     "lastRun": null
   },
+  "engage-ads-order-history": {
+    "feature": "EngageAds — Order History",
+    "catalogFile": "docs/functional-catalogs/engage-ads/feature-order-history/functional-units.html",
+    "version": "v1",
+    "generated": "2026-06-23",
+    "auditedAs": "DemoPortal UAT (/EngageAds/OrderHistory, 2026-06-23)",
+    "lastUpdated": "2026-06-23T00:00:00Z",
+    "sections": 4,
+    "pipeline": "functional-qa",
+    "implementationStatus": {
+      "smoke": {
+        "implemented": true,
+        "lastUpdated": "2026-06-23T00:00:00Z"
+      },
+      "regression": {
+        "implemented": true,
+        "lastUpdated": "2026-06-23T00:00:00Z"
+      },
+      "e2e": {
+        "implemented": true,
+        "lastUpdated": "2026-06-23T00:00:00Z"
+      },
+      "functionalUnit": {
+        "implemented": false,
+        "lastUpdated": null
+      }
+    },
+    "specFiles": {
+      "smoke": "tests/playwright/specs/engage-ads/feature-order-history/order-history.spec.ts",
+      "regression": "tests/playwright/specs/engage-ads/feature-order-history/order-history.spec.ts",
+      "e2e": "tests/playwright/specs/engage-ads/feature-order-history/order-history.spec.ts"
+    },
+    "tests": {
+      "total": 15,
+      "implemented": 15,
+      "fixme": 0
+    },
+    "coverage": {
+      "functional": 85,
+      "validation": 80,
+      "workflow": 90,
+      "database": 60,
+      "security": 100
+    },
+    "gaps": {
+      "critical": 0,
+      "high": 0,
+      "medium": 2,
+      "low": 3
+    },
+    "lastRun": null
+  },
   "admin-feature-list": {
     "feature": "Admin — Feature List",
     "catalogFile": "docs/functional-catalogs/admin/feature-feature-list/functional-units.html",

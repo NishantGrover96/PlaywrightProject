@@ -1,0 +1,88 @@
+{
+  "featureUrl": "/EngageAds/CampaignSetup",
+  "orderSeq": "lUvurFjFSQUEqual",
+  "step1": {
+    "valid": {
+      "firstName": "John",
+      "lastName": "Smith",
+      "primaryContactEmail": "john.smith@testdealer.com",
+      "contactPhoneNumber": "(312) 555-0100",
+      "leadDestinationEmail": "leads@testdealer.com",
+      "phoneNumberToDisplayInAds": "(312) 555-0199"
+    },
+    "invalid": {
+      "emailMalformed": "not-an-email",
+      "firstNameTooLong": "ThisFirstNameIsWayTooLongAndExceedsTheFiftyCharacterMaximumLimitSetByTheForm"
+    }
+  },
+  "step2": {
+    "valid": {
+      "businessName": "Test Roofing LLC",
+      "streetAddress": "123 Main Street",
+      "addressLine2": "Suite 100",
+      "city": "Chicago",
+      "stateProvince": "IL",
+      "zipCode": "60601",
+      "email": "info@testroofing.com",
+      "websiteUrl": "https://www.testroofing.com"
+    },
+    "invalid": {
+      "websiteUrlNoProtocol": "www.testroofing.com",
+      "websiteUrlEmpty": ""
+    }
+  },
+  "step3": {
+    "valid": {
+      "serviceArea": "Greater Chicago Metro, or 30-mile radius of ZIP 60601",
+      "preferredLandingPageUrls": "https://www.testroofing.com/services\nhttps://www.testroofing.com/contact",
+      "facebookBusinessPageUrl": "https://www.facebook.com/testroofingllc",
+      "additionalNotes": "Please focus on residential roofing leads. Automation test note."
+    },
+    "desiredStartDate": "08/01/2027"
+  },
+  "logo": {
+    "validFileName": "test-logo.png",
+    "invalidTypeFileName": "test-logo.txt",
+    "oversizeBytes": 6291456
+  },
+  "editWindow": {
+    "editWindowHours": 72,
+    "withinWindowMessage": "You can edit this submission until",
+    "expiredMessage": "Campaign Form Already Submitted",
+    "countdownElementId": "redirectCountdown"
+  },
+  "expectedErrors": {
+    "firstNameRequired": "First name is required.",
+    "lastNameRequired": "Last name is required.",
+    "emailRequired": "Valid email is required.",
+    "phoneRequired": "Phone number is required.",
+    "businessNameRequired": "Business name is required.",
+    "streetRequired": "Street address is required.",
+    "cityRequired": "City is required.",
+    "stateRequired": "State is required.",
+    "zipRequired": "Zip code is required.",
+    "businessEmailRequired": "Email is required.",
+    "websiteUrlRequired": "Please enter a valid website URL starting with http:// or https://",
+    "serviceAreaRequired": "Service area is required.",
+    "websiteAccuracyRequired": "You must confirm website accuracy.",
+    "facebookUrlRequired": "Facebook Business Page URL is required.",
+    "termsRequired": "You must accept the terms and conditions to proceed.",
+    "logoInvalidType": "Invalid file type. Only PNG, JPG, JPEG, GIF, and SVG are allowed.",
+    "logoTooLarge": "File size exceeds 5MB limit.",
+    "editWindowExpired": "edit window",
+    "invalidOrderReference": "Invalid order reference"
+  },
+  "expectedMessages": {
+    "editModeAlertHeading": "Edit Mode",
+    "updateButtonLabel": "Update Campaign Setup",
+    "submitButtonLabel": "Submit Campaign Order",
+    "paidBadge": "PAID ✓"
+  },
+  "redirects": {
+    "orderConfirmation": "/EngageAds/OrderConfirmation",
+    "orderHistory": "/EngageAds/OrderHistory",
+    "bundledAdPackages": "/EngageAds/BundledAdPackages",
+    "accessDenied": "/Security/AccessDenied",
+    "login": "/Account/Login"
+  }
+}
