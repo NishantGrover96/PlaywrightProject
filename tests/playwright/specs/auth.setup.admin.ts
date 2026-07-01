@@ -20,7 +20,15 @@ setup('authenticate admin user', async ({ page }) => {
   }
 
   await page.goto('/CoopManagement/Dashboard');
+  const loginPath = process.env.LOGIN_PATH || '/account/login';
   await page.waitForURL(/login|account/i, { timeout: 20_000 });
+
+  // If redirected to SSO-only page (no username field), navigate directly with login path
+  const hasUsernameField = await page.locator('#UserLogin_Username').isVisible({ timeout: 3_000 }).catch(() => false);
+  if (!hasUsernameField) {
+    await page.goto(loginPath);
+    await page.waitForLoadState('domcontentloaded', { timeout: 20_000 });
+  }
 
   await page.fill('#UserLogin_Username', username);
   await page.fill('#UserLogin_Password', password);

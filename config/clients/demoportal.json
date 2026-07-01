@@ -1,0 +1,37 @@
+{
+  "clientId": "demoportal",
+  "clientName": "Demo Portal",
+  "environments": {
+    "production": {
+      "label": "Production",
+      "baseUrl": "https://demoportal.channel-fusion.com",
+      "apiUrl": "https://demoportal.channel-fusion.com",
+      "envFile": "production"
+    },
+    "uat": {
+      "label": "UAT",
+      "baseUrl": "https://demoportaluat.channel-fusion.com",
+      "apiUrl": "https://demoportaluat.channel-fusion.com",
+      "envFile": "uat"
+    },
+    "testing": {
+      "label": "Testing",
+      "baseUrl": "https://demoportaltest.channel-fusion.com",
+      "apiUrl": "https://demoportaltest.channel-fusion.com",
+      "envFile": "testing"
+    },
+    "dev": {
+      "label": "Dev",
+      "baseUrl": "https://demoportaldev.channel-fusion.com",
+      "apiUrl": "https://demoportaldev.channel-fusion.com",
+      "envFile": "dev"
+    }
+  },
+  "roles": ["dealer", "admin"],
+  "defaultEnvironment": "production",
+  "featureFlags": {
+    "engageAds": true,
+    "coop": true,
+    "popshop": true
+  }
+}

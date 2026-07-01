@@ -1,0 +1,14 @@
+{
+  "admin": {
+    "role": "admin",
+    "displayName": "Admin",
+    "email": "admin@channel-fusion.com",
+    "password": "enc:b988e64254c52d1389b0a03043907662:ee6ac412c97110926e27d9f7:874ac1173bbcedba8e3e3db71839e28d:27856c1ce6ada4bbd65a383d4cee8002"
+  },
+  "dealer": {
+    "role": "dealer",
+    "displayName": "Dealer",
+    "email": "teransom@comcast.net",
+    "password": "enc:899664945d06b9fb11291a85401602bd:ac5da638e0ccf7f1badc4a7d:2400755e76be1976f83f:34e6ef86bb565f3f99099322b46f0aa7"
+  }
+}

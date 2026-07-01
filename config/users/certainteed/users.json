@@ -1,0 +1,14 @@
+{
+  "admin": {
+    "role": "admin",
+    "displayName": "Admin",
+    "email": "admin_CertainTeed@channel-fusion.com",
+    "password": "enc:6de241415061fab16db62d849bdf5943:b0ededeef91139965f82851b:5596a1d6ab5ba0af5168:b8c9bb71dfa23e72702bcb40c64b06e8"
+  },
+  "dealer": {
+    "role": "dealer",
+    "displayName": "Dealer",
+    "email": "Terry@centralexteriors.com",
+    "password": "enc:8e9cda62c7e833f6ad0b361c207412e6:23a761ea365748c8b1e0e891:3c150bc65850978c8d17:6559358cce370297298ef7778afc8bbe"
+  }
+}

@@ -16,10 +16,13 @@ setup('authenticate dealer user', async ({ page }) => {
   const password = process.env.TEST_USER_PASSWORD ?? '';
 
   if (!username || !password) {
-    throw new Error('TEST_USER_EMAIL and TEST_USER_PASSWORD must be set. Use dealer-custom role in dashboard or set in .env.production.');
+    const envFile = `.env.${process.env.TEST_ENV || 'production'}`;
+    throw new Error(`TEST_USER_EMAIL and TEST_USER_PASSWORD must be set. Use dealer-custom role in dashboard or set in ${envFile}.`);
   }
 
-  await page.goto('/account/login');
+  const loginPath = process.env.LOGIN_PATH || '/account/login';
+
+  await page.goto(loginPath);
   await page.waitForLoadState('domcontentloaded', { timeout: 20_000 });
 
   await page.fill('#UserLogin_Username', username);

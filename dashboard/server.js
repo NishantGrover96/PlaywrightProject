@@ -16,6 +16,70 @@ const fs      = require("fs");
 const path    = require("path");
 const { spawn } = require("child_process");
 
+// ── Bootstrap: load MASTER_KEY from .env.production if not already in env ───
+// This means `npm run dashboard` works without manually setting MASTER_KEY.
+if (!process.env.MASTER_KEY) {
+  const envFile = path.join(__dirname, "..", ".env.production");
+  if (fs.existsSync(envFile)) {
+    for (const raw of fs.readFileSync(envFile, "utf8").split(/\r?\n/)) {
+      const line = raw.trim();
+      if (!line || line.startsWith("#")) continue;
+      const eq = line.indexOf("=");
+      if (eq <= 0) continue;
+      const key = line.slice(0, eq).trim();
+      const val = line.slice(eq + 1).trim().replace(/^["']|["']$/g, "");
+      if (key === "MASTER_KEY" && val) { process.env.MASTER_KEY = val; break; }
+    }
+  }
+}
+
+const { decryptPassword } = require("../utils/crypto-helper");
+
+// ── Client config helpers ────────────────────────────────────────────────────
+const CLIENTS_DIR = path.join(__dirname, "..", "config", "clients");
+const USERS_DIR   = path.join(__dirname, "..", "config", "users");
+
+function loadClientConfig(clientId) {
+  const file = path.join(CLIENTS_DIR, `${clientId}.json`);
+  if (!fs.existsSync(file)) return null;
+  try { return JSON.parse(fs.readFileSync(file, "utf8")); } catch { return null; }
+}
+
+function loadUserConfig(clientId, role) {
+  // Primary: consolidated users.json keyed by role name
+  const usersFile = path.join(USERS_DIR, clientId, "users.json");
+  if (fs.existsSync(usersFile)) {
+    try {
+      const all = JSON.parse(fs.readFileSync(usersFile, "utf8"));
+      if (all[role]) return all[role];
+      console.warn(`[dashboard] loadUserConfig: key "${role}" not found in ${usersFile}. Available keys: ${Object.keys(all).join(", ")}`);
+      return null;
+    } catch (err) {
+      console.warn(`[dashboard] loadUserConfig: failed to parse ${usersFile}:`, err.message);
+      /* fall through to legacy */
+    }
+  } else {
+    console.warn(`[dashboard] loadUserConfig: file not found: ${usersFile}`);
+  }
+  // Legacy fallback: individual {role}.json files
+  const file = path.join(USERS_DIR, clientId, `${role}.json`);
+  if (!fs.existsSync(file)) return null;
+  try { return JSON.parse(fs.readFileSync(file, "utf8")); } catch { return null; }
+}
+
+function listClients() {
+  if (!fs.existsSync(CLIENTS_DIR)) return [];
+  return fs.readdirSync(CLIENTS_DIR)
+    .filter(f => f.endsWith(".json"))
+    .map(f => {
+      try {
+        const cfg = JSON.parse(fs.readFileSync(path.join(CLIENTS_DIR, f), "utf8"));
+        return { clientId: cfg.clientId, clientName: cfg.clientName, defaultEnvironment: cfg.defaultEnvironment || "production" };
+      } catch { return null; }
+    })
+    .filter(Boolean);
+}
+
 // â”€â”€ Config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const PORT           = process.env.DASHBOARD_PORT || 3333;
 const ROOT_DIR       = path.join(__dirname, "..");
@@ -94,9 +158,9 @@ function parseLine(raw) {
   const line = raw.replace(/\x1B\[[0-9;]*m/g, "").replace(/\r/g, "").trim();
   if (!line) return { kind: "line", text: raw };
 
-  const passRx = /^\s*ok\s+(\d+)\s+\[.*?\]\s+[â€º>]\s+.*[â€º>]\s+(.*?)\s+\((\S+)\)\s*$/;
-  const failRx = /^\s*x\s+(\d+)\s+\[.*?\]\s+[â€º>]\s+.*[â€º>]\s+(.*?)\s+\((\S+)\)\s*$/;
-  const skipRx = /^\s*[-]\s+(\d+)\s+\[.*?\]\s+[â€º>]\s+.*[â€º>]\s+(.*?)(\s+\(\S+\))?\s*$/;
+  const passRx = /^\s*(?:ok|✓|✔)\s+(\d+)\s+\[.*?\]\s+[›>]\s+.*?[›>]\s+(.*?)(?:\s+\((\S+)\))?\s*$/u;
+  const failRx = /^\s*(?:x+|✗|✘|×)\s+(\d+)\s+\[.*?\]\s+[›>]\s+.*?[›>]\s+(.*?)(?:\s+\((\S+)\))?\s*$/u;
+  const skipRx = /^\s*[-]\s+(\d+)\s+\[.*?\]\s+[›>]\s+.*?[›>]\s+(.*?)(?:\s+\(\S+\))?\s*$/u;
   const summaryPassRx = /(\d+)\s+passed\s+\(([^)]+)\)/;
   const summaryFailRx = /(\d+)\s+failed/;
   const summarySkipRx = /(\d+)\s+skipped/;
@@ -112,10 +176,12 @@ function parseLine(raw) {
   const sfm  = line.match(summaryFailRx);
   const sskm = line.match(summarySkipRx);
   if (spm || sfm || sskm) {
+    // Use undefined for unmatched fields so the client handler does NOT overwrite
+    // counts that arrived on a previous summary line (Playwright emits them separately).
     return { kind: "summary",
-      passed:   spm  ? +spm[1]  : 0,
-      failed:   sfm  ? +sfm[1]  : 0,
-      skipped:  sskm ? +sskm[1] : 0,
+      passed:   spm  ? +spm[1]  : undefined,
+      failed:   sfm  ? +sfm[1]  : undefined,
+      skipped:  sskm ? +sskm[1] : undefined,
       duration: spm  ? spm[2]   : "" };
   }
   return { kind: "line", text: raw };
@@ -152,17 +218,76 @@ function buildEnv(config, urlOverride) {
     ...process.env,
     ...fileEnv,
     TEST_ENV:           config.testEnv  || "production",
-    TEST_USER_EMAIL:    isCustom && config.username ? config.username : fileEnv.TEST_USER_EMAIL    || process.env.TEST_USER_EMAIL    || "",
-    TEST_USER_PASSWORD: isCustom && config.password ? config.password : fileEnv.TEST_USER_PASSWORD || process.env.TEST_USER_PASSWORD || "",
-    ...(isAdmin && { ADMIN_EMAIL:    isCustom && config.username ? config.username : fileEnv.ADMIN_EMAIL    || process.env.ADMIN_EMAIL    || "" }),
-    ...(isAdmin && { ADMIN_PASSWORD: isCustom && config.password ? config.password : fileEnv.ADMIN_PASSWORD || process.env.ADMIN_PASSWORD || "" }),
+    TEST_USER_EMAIL:    (config.username) ? config.username : fileEnv.TEST_USER_EMAIL    || process.env.TEST_USER_EMAIL    || "",
+    TEST_USER_PASSWORD: (config.password) ? config.password : fileEnv.TEST_USER_PASSWORD || process.env.TEST_USER_PASSWORD || "",
+    ...(isAdmin && { ADMIN_EMAIL:    (config.username) ? config.username : fileEnv.ADMIN_EMAIL    || process.env.ADMIN_EMAIL    || "" }),
+    ...(isAdmin && { ADMIN_PASSWORD: (config.password) ? config.password : fileEnv.ADMIN_PASSWORD || process.env.ADMIN_PASSWORD || "" }),
   };
   const url = urlOverride || config.baseUrl;
   if (url) env.BASE_URL = url;
+
+  // Pass Campaign Setup OrderSeq when provided (takes precedence over any .env value)
+  if (config.campaignOrderSeq) {
+    env.CAMPAIGN_ORDER_SEQ = config.campaignOrderSeq;
+  }
+
+  // Pass client-specific login path (e.g. CertainTeed needs ?Internal to show username form)
+  const clientCfg = loadClientConfig(config.clientId || "demoportal");
+  if (clientCfg && clientCfg.loginPath) {
+    env.LOGIN_PATH = clientCfg.loginPath;
+  } else {
+    env.LOGIN_PATH = "/account/login";
+  }
+
   return env;
 }
 
-// â”€â”€ Single Run â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Credential resolver ──────────────────────────────────────────────────────
+// For non-custom roles: load credentials from config/users/{clientId}/{role}.json
+// and decrypt the password. Also resolves the client-specific baseUrl for the
+// selected environment so the correct portal is targeted regardless of .env file.
+async function resolveCredentials(config) {
+  const role     = config.role || "dealer";
+  const clientId = config.clientId || "demoportal";
+  const testEnv  = config.testEnv  || "production";
+  const isCustom = role === "dealer-custom" || role === "admin-custom";
+
+  // ── Resolve baseUrl from client config when no manual override is set ──────
+  // Priority: explicit UI override > client JSON env URL > .env file URL
+  if (!config.baseUrl) {
+    const clientCfg = loadClientConfig(clientId);
+    if (clientCfg && clientCfg.environments && clientCfg.environments[testEnv]) {
+      config.baseUrl = clientCfg.environments[testEnv].baseUrl;
+    }
+  }
+
+  // Custom roles: credentials come from the request body — decrypt if encrypted
+  if (isCustom) {
+    if (config.password) {
+      try { config.password = await decryptPassword(config.password); } catch { /* use as-is */ }
+    }
+    return config;
+  }
+
+  // Non-custom: load from user config JSON and decrypt
+  const userCfg = loadUserConfig(clientId, role);
+  if (userCfg) {
+    config.username = userCfg.email;
+    try {
+      config.password = await decryptPassword(userCfg.password || "");
+    } catch (err) {
+      console.warn(`[dashboard] Could not decrypt ${clientId}/${role} password:`, err.message);
+      config.password = userCfg.password || "";
+    }
+    console.log(`[dashboard] Credentials resolved: client=${clientId} role=${role} user=${config.username}`);
+  } else {
+    console.warn(`[dashboard] No user config found for client=${clientId} role=${role} — TEST_USER_EMAIL will be empty`);
+  }
+
+  return config;
+}
+
+// ── Single Run ─────────────────────────────────────────────────────────────
 function runTests(config) {
   if (state.running) return { ok: false, error: "A test run is already in progress." };
 
@@ -222,8 +347,12 @@ function runTests(config) {
       } else if (parsed.kind === "summary") {
         flushDetail();
         pendingDetail = null;
-        summary = { passed: parsed.passed || 0, failed: parsed.failed || 0,
-                    skipped: parsed.skipped || 0, duration: parsed.duration || summary.duration };
+        // Use undefined-safe merge so each of the 3 separate summary lines
+        // ("1 failed" / "1 skipped" / "14 passed (4.2m)") accumulates correctly.
+        if (parsed.passed  !== undefined) summary.passed  = parsed.passed;
+        if (parsed.failed  !== undefined) summary.failed  = parsed.failed;
+        if (parsed.skipped !== undefined) summary.skipped = parsed.skipped;
+        if (parsed.duration) summary.duration = parsed.duration;
         broadcast("summary-update", summary);
       } else if (pendingDetail && pendingDetail.lines.length < 150) {
         // Cap at 150 lines; skip pure node_modules frames to reduce noise
@@ -439,12 +568,31 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // ── Client config endpoints ────────────────────────────────────────────────
+  if (method === "GET" && url === "/api/clients") {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify(listClients()));
+    return;
+  }
+
+  if (method === "GET" && url.startsWith("/api/clients/")) {
+    const clientId = url.replace("/api/clients/", "").split("/")[0];
+    const cfg = loadClientConfig(clientId);
+    if (!cfg) { res.writeHead(404); res.end(JSON.stringify({ error: `Client "${clientId}" not found` })); return; }
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify(cfg));
+    return;
+  }
+  // ─────────────────────────────────────────────────────────────────────────
+
   if (method === "POST" && url === "/api/run") {
     let body = "";
     req.on("data", d => body += d);
-    req.on("end", () => {
+    req.on("end", async () => {
       let config = {};
       try { config = JSON.parse(body); } catch { /* defaults */ }
+      // Resolve & decrypt credentials from client config (non-custom roles)
+      config = await resolveCredentials(config);
       const result = runTests(config);
       res.writeHead(result.ok ? 200 : 409, { "Content-Type": "application/json" });
       res.end(JSON.stringify(result));
@@ -469,6 +617,26 @@ const server = http.createServer((req, res) => {
     stopRun();
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ ok: true }));
+    return;
+  }
+
+  // ── Serve test-results screenshots ────────────────────────────────────────
+  if (method === "GET" && url.startsWith("/test-results/")) {
+    const relativePath = url.replace(/^\/test-results\//, "").split("?")[0];
+    const filePath = path.join(ROOT_DIR, "test-results", relativePath);
+    const resolvedPath = path.resolve(filePath);
+    const trRoot = path.resolve(path.join(ROOT_DIR, "test-results"));
+    if (!resolvedPath.startsWith(trRoot)) { res.writeHead(403); res.end("Forbidden"); return; }
+    const ext = path.extname(filePath).toLowerCase();
+    const mime = ext === ".png" ? "image/png"
+               : ext === ".jpg" || ext === ".jpeg" ? "image/jpeg"
+               : ext === ".gif" ? "image/gif"
+               : ext === ".webp" ? "image/webp"
+               : "application/octet-stream";
+    let content;
+    try { content = fs.readFileSync(filePath); } catch { /* not found */ }
+    if (content) { res.writeHead(200, { "Content-Type": mime }); res.end(content); }
+    else         { res.writeHead(404); res.end(`Screenshot not found: ${relativePath}`); }
     return;
   }
 

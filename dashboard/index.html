@@ -200,7 +200,7 @@ select option { background: var(--bg3); }
 .tier-e2e.checked        { border-color: var(--cyan);   background: rgba(6,182,212,0.08); }
 
 /* Credential section */
-#cred-section { display: none; }
+#cred-section { display: none; flex-direction: column; gap: 8px; margin-top: 10px; }
 
 /* Run / Stop buttons */
 .btn-row { display: flex; gap: 8px; }
@@ -607,6 +607,15 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
   <!-- ── Left: Config Panel ──────────────────────────────────────────────── -->
   <div class="panel-config">
 
+    <!-- Client -->
+    <div>
+      <div class="section-title">Client</div>
+      <label class="field-label" for="sel-client">Select Client</label>
+      <select id="sel-client" onchange="onClientChange()">
+        <option value="demoportal">Demo Portal</option>
+      </select>
+    </div>
+
     <!-- Environment -->
     <div>
       <div class="section-title">Environment</div>
@@ -638,41 +647,17 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
     <div>
       <div class="section-title">Test User</div>
 
-      <!-- Dealer -->
-      <div style="margin-bottom:10px;">
-        <div style="font-size:11px;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Dealer</div>
-        <div class="checkbox-group" id="role-group" style="gap:6px;">
-          <label class="checkbox-item checked" data-value="dealer" style="border-radius:6px;">
-            <input type="radio" name="role" value="dealer" checked onchange="onRoleChange()" />
-            <span class="cb-label">Saved Session</span>
-            <span class="cb-tag">default</span>
-          </label>
-          <label class="checkbox-item" data-value="dealer-custom" style="border-radius:6px;">
-            <input type="radio" name="role" value="dealer-custom" onchange="onRoleChange()" />
-            <span class="cb-label">Custom Credentials</span>
-          </label>
-        </div>
-      </div>
+      <!-- Role dropdown — populated dynamically from client config -->
+      <label class="field-label" for="sel-role">Role</label>
+      <select id="sel-role" onchange="onRoleChange()">
+        <option value="dealer">Dealer — Saved Session</option>
+        <option value="dealer-custom">Dealer — Custom Credentials</option>
+        <option value="admin">Admin — Saved Session</option>
+        <option value="admin-custom">Admin — Custom Credentials</option>
+      </select>
 
-      <!-- Admin -->
-      <div>
-        <div style="font-size:11px;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Admin</div>
-        <div class="checkbox-group" style="gap:6px;">
-          <label class="checkbox-item" data-value="admin" style="border-radius:6px;">
-            <input type="radio" name="role" value="admin" onchange="onRoleChange()" />
-            <span class="cb-label">Saved Session</span>
-            <span class="cb-tag" style="background:#7c3aed;color:#fff;">admin</span>
-          </label>
-          <label class="checkbox-item" data-value="admin-custom" style="border-radius:6px;">
-            <input type="radio" name="role" value="admin-custom" onchange="onRoleChange()" />
-            <span class="cb-label">Custom Credentials</span>
-            <span class="cb-tag" style="background:#7c3aed;color:#fff;">admin</span>
-          </label>
-        </div>
-      </div>
-
-      <!-- Custom credential inputs — shown for dealer-custom or admin-custom -->
-      <div id="cred-section" style="margin-top:10px; display:none; flex-direction:column; gap:8px;">
+      <!-- Custom credential inputs — shown when a "custom" role is selected -->
+      <div id="cred-section">
         <div>
           <label class="field-label" for="inp-user">Username / Email</label>
           <input type="text" id="inp-user" placeholder="user@example.com" autocomplete="off" />
@@ -703,8 +688,8 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
     <div>
       <div class="section-title">Features</div>
       <div class="checkbox-group" id="feature-group">
-        <label class="checkbox-item checked" data-value="all" data-module="all">
-          <input type="checkbox" value="all" checked /> <span class="cb-label">All Features</span>
+        <label class="checkbox-item" data-value="all" data-module="all">
+          <input type="checkbox" value="all" /> <span class="cb-label">All Features</span>
         </label>
         <!-- Co-op → Dealer -->
         <label class="checkbox-item" data-value="coop-submit-claim" data-module="coop" style="border-top:1px solid var(--border);margin-top:6px;padding-top:6px;">
@@ -741,12 +726,31 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
       </div>
     </div>
 
+    <!-- Campaign Setup — OrderSeq (shown only when Campaign Setup is selected) -->
+    <div id="campaign-order-seq-field" style="display:none;" aria-live="polite">
+      <div class="section-title">Campaign Setup — OrderSeq</div>
+      <label class="field-label" for="inp-campaign-order-seq" id="inp-campaign-order-seq-label">
+        Encrypted OrderSeq <span style="color:var(--red);" aria-label="required">*</span>
+      </label>
+      <input type="text" id="inp-campaign-order-seq" name="campaignOrderSeq"
+        placeholder="Paste encrypted order sequence here"
+        aria-labelledby="inp-campaign-order-seq-label"
+        aria-required="true"
+        autocomplete="off"
+        spellcheck="false"
+        style="font-family:monospace;font-size:12px;"
+      />
+      <div style="font-size:11px;color:var(--text-dim);margin-top:4px;">
+        Leave blank to skip wizard tests &mdash; auth &amp; validation will still run.
+      </div>
+    </div>
+
     <!-- Test Tiers -->
     <div>
       <div class="section-title">Test Tier</div>
       <div class="checkbox-group" id="tier-group">
-        <label class="checkbox-item checked" data-value="all">
-          <input type="checkbox" value="all" checked /> <span class="cb-label">All Tiers</span>
+        <label class="checkbox-item" data-value="all">
+          <input type="checkbox" value="all" /> <span class="cb-label">All Tiers</span>
         </label>
         <label class="checkbox-item tier-smoke" data-value="smoke">
           <input type="checkbox" value="smoke" /> <span class="cb-label">Smoke</span> <span class="cb-tag">@smoke</span>
@@ -1180,11 +1184,18 @@ function handleMessage(msg) {
       const ok = msg.exitCode === 0;
       setStatus(ok ? "pass" : "fail");
       logLine("─".repeat(60), "log-dim");
-      logLine(
-        `${ok ? "✅ All tests passed" : "❌ Run finished with failures"}  (exit ${msg.exitCode})  ` +
-        `${stats.pass}✓  ${stats.fail}✗  ${stats.skip}–  ${stats.dur}`,
-        ok ? "log-pass" : "log-fail"
-      );
+      // Summary line with individually coloured pass/fail/skip counts
+      logSummaryLine(ok, msg.exitCode, stats);
+      // Clear "Running tests…" placeholder if no result rows were appended
+      const tbody = document.getElementById("results-body");
+      if (tbody.rows[0]?.cells[0]?.getAttribute("colspan")) {
+        if (stats.total === 0) {
+          tbody.rows[0].cells[0].innerHTML =
+            '<span style="color:var(--text-dim)">No test results captured. Check Console Output for details.</span>';
+        } else {
+          tbody.deleteRow(0);
+        }
+      }
       // Build analytics panel then switch output tabs to Results
       buildAnalytics();
       if (msg.history) renderHistory(msg.history);
@@ -1231,6 +1242,12 @@ function updateStats() {
   document.getElementById("st-fail").textContent  = stats.fail;
   document.getElementById("st-skip").textContent  = stats.skip;
   document.getElementById("st-dur").textContent   = stats.dur;
+  // Update browser tab title so counts are visible at a glance
+  if (running || stats.total > 0) {
+    document.title = `[${stats.pass}✓ ${stats.fail}✗ ${stats.skip}–] QA Dashboard`;
+  } else {
+    document.title = "DealerPlatform QA Dashboard";
+  }
 }
 
 function clearResults() {
@@ -1306,6 +1323,45 @@ function logLine(text, cls = "log-info") {
   span.className = cls;
   span.textContent = text + "\n";
   console_.appendChild(span);
+  if (autoscroll) console_.scrollTop = console_.scrollHeight;
+}
+
+/** Writes the final run summary line with green/red/yellow coloured counts. */
+function logSummaryLine(ok, exitCode, s) {
+  const console_ = document.getElementById("console");
+  const line = document.createElement("div");
+  line.style.cssText = "display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:2px 0;";
+
+  const icon = document.createElement("span");
+  icon.style.color = ok ? "var(--green)" : "var(--red)";
+  icon.style.fontWeight = "700";
+  icon.textContent = ok ? "✅ All tests passed" : "❌ Run finished with failures";
+  line.appendChild(icon);
+
+  const exit = document.createElement("span");
+  exit.style.color = "var(--text-dim)";
+  exit.style.fontSize = "11px";
+  exit.textContent = `(exit ${exitCode})`;
+  line.appendChild(exit);
+
+  const mkCount = (val, symbol, color) => {
+    const sp = document.createElement("span");
+    sp.style.cssText = `color:${color};font-weight:700;`;
+    sp.textContent = `${val}${symbol}`;
+    return sp;
+  };
+  line.appendChild(mkCount(s.pass, "✓", "var(--green)"));
+  line.appendChild(mkCount(s.fail, "✗", "var(--red)"));
+  line.appendChild(mkCount(s.skip, "–", "var(--yellow)"));
+
+  if (s.dur && s.dur !== "—") {
+    const dur = document.createElement("span");
+    dur.style.color = "var(--blue)";
+    dur.textContent = s.dur;
+    line.appendChild(dur);
+  }
+
+  console_.appendChild(line);
   if (autoscroll) console_.scrollTop = console_.scrollHeight;
 }
 
@@ -1503,16 +1559,48 @@ function updateCatalogPanel() {
 }
 
 // ── Checkbox mutual exclusion (All vs individual) ──────────────────────────
+// ── Client feature flags (updated on every client change) ────────────────
+let currentClientFlags = { engageAds: true, coop: true, popshop: true };
+
+// Central visibility function — combines module filter + client featureFlags.
+// Always call this instead of manipulating display directly in onModuleChange / onClientChange.
+function applyFeatureVisibility() {
+  const selectedModule = document.getElementById("sel-module").value;
+  const featureGroup   = document.getElementById("feature-group");
+  const moduleEnabled  = {
+    "engage-ads": currentClientFlags.engageAds !== false,
+    "coop":       currentClientFlags.coop       !== false,
+    "popshop":    currentClientFlags.popshop     !== false,
+  };
+
+  featureGroup.querySelectorAll(".checkbox-item").forEach(item => {
+    const mod   = item.getAttribute("data-module");
+    const value = item.getAttribute("data-value");
+    if (value === "all") { item.style.display = "flex"; return; }
+
+    const flagOk    = moduleEnabled[mod] !== false;          // client enables this module
+    const moduleOk  = selectedModule === "all" || mod === selectedModule; // module filter
+    const visible   = flagOk && moduleOk;
+
+    item.style.display = visible ? "flex" : "none";
+    if (!visible) {
+      const cb = item.querySelector("input[type='checkbox']");
+      if (cb && cb.checked) { cb.checked = false; item.classList.remove("checked"); }
+    }
+  });
+  syncCampaignOrderSeqVisibility();
+}
+
 function setupCheckboxGroup(groupId) {
   const group = document.getElementById(groupId);
   group.addEventListener("change", (e) => {
     const cb = e.target;
     const allCb = group.querySelector('input[value="all"]');
 
-    // Helper: only consider visible individual items (respect module filter)
+    // Helper: only consider visible checkbox items (respect module filter)
     const visibleIndividuals = () =>
-      [...group.querySelectorAll("input:not([value=all])")]
-        .filter(c => c.closest(".checkbox-item").style.display !== "none");
+      [...group.querySelectorAll("input[type='checkbox']:not([value=all])")]
+        .filter(c => c.closest(".checkbox-item")?.style.display !== "none");
 
     if (cb.value === "all") {
       if (cb.checked) {
@@ -1543,18 +1631,17 @@ function setupCheckboxGroup(groupId) {
         allCb.closest(".checkbox-item").classList.remove("checked");
       }
 
-      if (checkedCount === 0) {
-        // Nothing left selected → restore "All" as the only fallback
-        allCb.checked = true;
-        allCb.closest(".checkbox-item").classList.add("checked");
-      } else if (checkedCount === individuals.length) {
+      if (checkedCount === individuals.length && checkedCount > 0) {
         // Every individual is now checked → mirror that on "All"
         allCb.checked = true;
         allCb.closest(".checkbox-item").classList.add("checked");
       }
     }
     updateCommandPreview();
-    if (groupId === "feature-group") updateCatalogPanel();
+    if (groupId === "feature-group") {
+      syncCampaignOrderSeqVisibility();
+      updateCatalogPanel();
+    }
   });
 }
 
@@ -1606,6 +1693,7 @@ function updateEnvBadge() {
 }
 
 function updateCommandPreview() {
+  const clientId = document.getElementById("sel-client")?.value || "demoportal";
   const testEnv  = document.getElementById("sel-test-env").value;
   let   features = getSelectedValues("feature-group");
   const tiers    = getSelectedValues("tier-group");
@@ -1621,9 +1709,9 @@ function updateCommandPreview() {
       .map(el => el.getAttribute("data-value")).filter(Boolean);
   }
 
-  let cmd = `TEST_ENV=${testEnv}`;
+  let cmd = `CLIENT=${clientId} TEST_ENV=${testEnv}`;
   if (baseUrl)  cmd += ` BASE_URL=${baseUrl}`;
-  if ((role === "dealer-custom" || role === "admin-custom") && username) cmd += ` TEST_USER_EMAIL=${username}`;
+  if (role.endsWith("-custom") && username) cmd += ` TEST_USER_EMAIL=${username}`;
   cmd += " npx playwright test";
   if (isAdmin) cmd += " --project=setup-admin --project=chromium-admin";
   if (!features.includes("all")) {
@@ -1637,51 +1725,112 @@ function updateCommandPreview() {
 }
 
 function getRole() {
-  return document.querySelector('input[name="role"]:checked')?.value || "dealer";
+  return document.getElementById("sel-role")?.value || "dealer";
 }
 
-function onModuleChange() {
-  const selectedModule = document.getElementById("sel-module").value;
-  const featureGroup = document.getElementById("feature-group");
-  const allFeatures = featureGroup.querySelectorAll('.checkbox-item');
-  
-  // Show/hide features based on selected module
-  allFeatures.forEach(item => {
-    const module = item.getAttribute('data-module');
-    const value = item.getAttribute('data-value');
-    
-    // Always show "All Features" option
-    if (value === 'all') {
-      item.style.display = 'flex';
-      return;
+// ── Client / Environment / Role chained dropdowns ─────────────────────────
+
+async function loadClients() {
+  try {
+    const res  = await fetch("/api/clients");
+    const list = await res.json();  // [{ clientId, clientName, defaultEnvironment }]
+    const sel  = document.getElementById("sel-client");
+    if (!Array.isArray(list) || list.length === 0) return;
+    sel.innerHTML = list.map(c =>
+      `<option value="${escHtml(c.clientId)}">${escHtml(c.clientName)}</option>`
+    ).join("");
+    // Trigger population of environments + roles for the first client
+    await onClientChange();
+  } catch (err) {
+    console.warn("Could not load client list:", err.message);
+  }
+}
+
+async function onClientChange() {
+  const clientId = document.getElementById("sel-client")?.value;
+  if (!clientId) return;
+
+  try {
+    const res = await fetch(`/api/clients/${encodeURIComponent(clientId)}`);
+    if (!res.ok) return;
+    const cfg = await res.json();  // full client config
+
+    // Populate environments
+    const envSel = document.getElementById("sel-test-env");
+    const currentEnv = envSel.value;
+    if (cfg.environments && typeof cfg.environments === "object") {
+      const envKeys = Object.keys(cfg.environments);
+      envSel.innerHTML = envKeys.map(key => {
+        const label = cfg.environments[key].label || key;
+        const selected = key === (cfg.defaultEnvironment || "production") ? ' selected' : '';
+        return `<option value="${escHtml(key)}"${selected}>${escHtml(label)}</option>`;
+      }).join("");
+      // Restore previously selected env if still valid
+      if ([...envSel.options].some(o => o.value === currentEnv)) envSel.value = currentEnv;
     }
-    
-    // Filter by module
-    if (selectedModule === 'all' || module === selectedModule) {
-      item.style.display = 'flex';
-    } else {
-      item.style.display = 'none';
-      // Uncheck hidden items
-      const checkbox = item.querySelector('input[type="checkbox"]');
-      if (checkbox && checkbox.checked && value !== 'all') {
-        checkbox.checked = false;
-        item.classList.remove('checked');
+
+    // Populate role dropdown
+    const roleSel = document.getElementById("sel-role");
+    const currentRole = roleSel.value;
+    if (Array.isArray(cfg.roles) && cfg.roles.length > 0) {
+      const roleLabels = { dealer: "Dealer", admin: "Admin" };
+      const options = [];
+      for (const role of cfg.roles) {
+        const label = roleLabels[role] || (role.charAt(0).toUpperCase() + role.slice(1));
+        options.push(`<option value="${escHtml(role)}">${escHtml(label)} — Saved Session</option>`);
+        options.push(`<option value="${escHtml(role + '-custom')}">${escHtml(label)} — Custom Credentials</option>`);
       }
+      roleSel.innerHTML = options.join("");
+      if ([...roleSel.options].some(o => o.value === currentRole)) roleSel.value = currentRole;
     }
-  });
-  
-  updateCommandPreview();
+
+    // Apply featureFlags — update module-level flag store + dropdown options
+    const flags = cfg.featureFlags || {};
+    currentClientFlags = {
+      engageAds: flags.engageAds !== false,
+      coop:      flags.coop      !== false,
+      popshop:   flags.popshop   !== false,
+    };
+    const moduleMap  = { "engage-ads": currentClientFlags.engageAds, "coop": currentClientFlags.coop, "popshop": currentClientFlags.popshop };
+    const moduleSelect = document.getElementById("sel-module");
+
+    // Show/hide module <option> entries based on flags
+    [...moduleSelect.options].forEach(opt => {
+      if (opt.value === 'all') return;
+      opt.hidden = !moduleMap[opt.value];
+    });
+    // If currently selected module is now disabled, reset to "all"
+    if (moduleMap[moduleSelect.value] === false) moduleSelect.value = 'all';
+
+    // Apply combined module + flag visibility to feature list
+    applyFeatureVisibility();
+    updateEnvBadge();
+    onRoleChange();
+  } catch (err) {
+    console.warn("Could not load client config:", err.message);
+  }
 }
 
 function onRoleChange() {
   const role = getRole();
-  // Sync checked CSS on radio labels
-  document.querySelectorAll('#role-group .checkbox-item, [data-value="admin"] , [data-value="admin-custom"]').forEach(el => {
-    el.classList.toggle("checked", el.dataset.value === role);
-  });
-  // Show credential inputs only for custom roles
-  const needsCreds = role === "dealer-custom" || role === "admin-custom";
-  document.getElementById("cred-section").style.display = needsCreds ? "flex" : "none";
+  const needsCreds = role.endsWith("-custom");
+  const cred = document.getElementById("cred-section");
+  cred.style.display = needsCreds ? "flex" : "none";
+  updateCommandPreview();
+}
+
+function syncCampaignOrderSeqVisibility() {
+  const cb    = document.querySelector('input[value="engage-ads-campaign-setup"]');
+  const field = document.getElementById("campaign-order-seq-field");
+  if (!field) return;
+  const show = cb && cb.checked;
+  field.style.display = show ? "block" : "none";
+  const input = document.getElementById("inp-campaign-order-seq");
+  if (!show && input) input.value = "";
+}
+
+function onModuleChange() {
+  applyFeatureVisibility();
   updateCommandPreview();
 }
 
@@ -1691,7 +1840,8 @@ async function runTests() {
     logLine("⚠ Test run already in progress", "log-err");
     return;
   }
-  
+
+  const clientId = document.getElementById("sel-client")?.value || "demoportal";
   const testEnv  = document.getElementById("sel-test-env").value;
   const role     = getRole();
   const username = document.getElementById("inp-user").value.trim();
@@ -1699,21 +1849,31 @@ async function runTests() {
   let   features = getSelectedValues("feature-group");
   const tiers    = getSelectedValues("tier-group");
 
-  // If "All Features" is checked but a specific module is selected,
-  // resolve to only that module's features so we don't run the entire suite
+  // If "All Features" is checked, resolve to only VISIBLE features
+  // (respects both the selected module AND the client's featureFlags)
   const selectedModule = document.getElementById("sel-module").value;
-  if (features.includes("all") && selectedModule !== "all") {
-    features = [...document.querySelectorAll(`#feature-group .checkbox-item[data-module="${selectedModule}"]`)]
-      .map(el => el.getAttribute("data-value")).filter(Boolean);
+  if (features.includes("all")) {
+    features = [...document.querySelectorAll(`#feature-group .checkbox-item`)]
+      .filter(el => {
+        const val = el.getAttribute("data-value");
+        if (val === "all") return false;
+        return el.style.display !== "none";  // already filtered by applyFeatureVisibility
+      })
+      .map(el => el.getAttribute("data-value"))
+      .filter(Boolean);
     if (features.length === 0) {
-      logLine("⚠ No features found for the selected module", "log-err");
+      logLine("⚠ No enabled features found for the selected client and module", "log-err");
       return;
     }
   }
 
   // Validation
-  if (features.length === 0 || tiers.length === 0) {
-    logLine("⚠ Please select at least one feature and one test tier", "log-err");
+  if (features.length === 0) {
+    logLine("⚠ Please select at least one feature to run", "log-err");
+    return;
+  }
+  if (tiers.length === 0) {
+    logLine("⚠ Please select at least one test tier to run", "log-err");
     return;
   }
 
@@ -1722,10 +1882,12 @@ async function runTests() {
   logLine(`  Features: ${features.join(", ")}`, "log-dim");
   logLine(`  Tiers: ${tiers.join(", ")}`, "log-dim");
 
-  const baseUrl  = document.getElementById("inp-base-url")?.value?.trim() || "";
-  const payload  = { testEnv, baseUrl: baseUrl || undefined, role, features, tiers };
+  const baseUrl          = document.getElementById("inp-base-url")?.value?.trim() || "";
+  const campaignOrderSeq = document.getElementById("inp-campaign-order-seq")?.value?.trim() || "";
+  const payload  = { clientId, testEnv, baseUrl: baseUrl || undefined, role, features, tiers };
   if (username) payload.username = username;
   if (password) payload.password = password;
+  if (campaignOrderSeq) payload.campaignOrderSeq = campaignOrderSeq;
 
   try {
     const res = await fetch("/api/run", {
@@ -1879,6 +2041,37 @@ function renderDetailContent(container, text) {
       container.appendChild(br);
       continue;
     }
+
+    // ── Screenshot / attachment path → clickable image link ──
+    // Normalise Windows backslashes first so regex always works
+    const normStripped = stripped.replace(/\\/g, "/");
+    const screenshotMatch = normStripped.match(/test-results\/[^\s]+\.(?:png|jpe?g|gif|webp)/i)
+      || normStripped.match(/(?:screenshot|attachment|test-failed)[^\s]*\.(?:png|jpe?g|gif|webp)/i);
+    if (screenshotMatch) {
+      const trIdx   = normStripped.indexOf("test-results/");
+      const servePath = trIdx >= 0 ? "/" + normStripped.slice(trIdx) : null;
+      const wrap = document.createElement("span");
+      wrap.style.cssText = "display:block;margin:6px 0;";
+      if (servePath) {
+        wrap.innerHTML =
+          `<a href="${servePath}" target="_blank" rel="noopener"
+             style="color:var(--accent);font-size:11px;text-decoration:underline;display:inline-flex;align-items:center;gap:5px;">
+            📸 View screenshot ↗
+           </a>
+           <br>
+           <a href="${servePath}" target="_blank" rel="noopener">
+             <img src="${servePath}" alt="Test failure screenshot"
+               style="max-width:100%;max-height:220px;margin-top:6px;border:1px solid var(--border);
+                      border-radius:4px;display:block;cursor:zoom-in;"
+               onerror="this.style.display='none';this.previousElementSibling.textContent+=' (image unavailable)'">
+           </a>`;
+      } else {
+        wrap.innerHTML = `<span style="color:#94a3b8;font-size:11px;">📸 ${escHtml(stripped)}</span>`;
+      }
+      container.appendChild(wrap);
+      continue;
+    }
+
     const span = document.createElement("span");
     span.style.display  = "block";
     span.style.color    = "#94a3b8";
@@ -2463,10 +2656,9 @@ document.addEventListener("DOMContentLoaded", () => {
   initTheme();              // restore saved theme before any rendering
   setupCheckboxGroup("feature-group");
   setupCheckboxGroup("tier-group");
-  // env change: already wired via onchange="updateEnvBadge()" which calls updateCommandPreview internally
-  // username input: update command preview in real time
   document.getElementById("inp-user").addEventListener("input", updateCommandPreview);
   document.getElementById("inp-base-url").addEventListener("input", updateEnvBadge);
+  loadClients();           // fetch client list → populates client, env, role dropdowns
   updateEnvBadge();        // set initial badge state
   loadCatalogManifest();   // fetch catalog manifest + render panel
   connectSSE();

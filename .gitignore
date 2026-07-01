@@ -1,6 +1,12 @@
 node_modules/
 dist/
 
+# Environment files — contain MASTER_KEY and credentials, never commit
+.env.dev
+.env.production
+.env.testing
+.env.uat
+
 *.local.json
 tests/playwright/fixtures/.auth/
 reports/*/

@@ -1,0 +1,26 @@
+{
+  "clientId": "certainteed",
+  "clientName": "CertainTeed",
+  "environments": {
+    "production": {
+      "label": "Production",
+      "baseUrl": "https://certainteedportal.channel-fusion.com/account/login?Internal",
+      "apiUrl": "https://certainteedportal.channel-fusion.com/account/login?Internal",
+      "envFile": "production"
+    },
+    "uat": {
+      "label": "UAT",
+      "baseUrl": "https://certainteedportaluat.channel-fusion.com/account/login?Internal",
+      "apiUrl": "https://certainteedportaluat.channel-fusion.com/account/login?Internal",
+      "envFile": "uat"
+    }
+  },
+  "roles": ["dealer", "admin"],
+  "defaultEnvironment": "uat",
+  "loginPath": "/Account/Login?Internal",
+  "featureFlags": {
+    "engageAds": true,
+    "coop": true,
+    "popshop": true
+  }
+}
