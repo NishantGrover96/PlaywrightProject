@@ -1,4 +1,4 @@
----
+﻿---
 name: gap-analysis
 description: Compare legacy vs modern functional units and produce a coverage matrix classifying gaps as Critical, High, Medium, or Low.
 ---
@@ -19,7 +19,7 @@ This is the mandatory gate before any Playwright test generation.
 
 ## Inputs
 
-- **Functional Unit Catalog**: `docs/functional-catalogs/{module}/feature-{feature}/functional-units.md`
+- **Functional Unit Catalog**: `docs/functional-catalogs/{client}/{module}/feature-{feature}/functional-units.md`
 - **Migration Mapping**: `docs/migration-reports/{module}/feature-{feature}/mapping.md`
 
 ### Resolving Repo Paths — Auto-Discovery
@@ -169,8 +169,8 @@ For each SP called in legacy:
 ## Outputs
 
 ```
-docs/functional-catalogs/{module}/feature-{feature}/gap-analysis.md
-docs/functional-catalogs/{module}/feature-{feature}/coverage-matrix.md
+docs/functional-catalogs/{client}/{module}/feature-{feature}/gap-analysis.md
+docs/functional-catalogs/{client}/{module}/feature-{feature}/coverage-matrix.md
 ```
 
 ## Passing Criteria (consumed by Step 2.6)

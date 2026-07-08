@@ -35,31 +35,33 @@ if (!process.env.MASTER_KEY) {
 
 const { decryptPassword } = require("../utils/crypto-helper");
 
-// ── Client config helpers ────────────────────────────────────────────────────
-const CLIENTS_DIR = path.join(__dirname, "..", "config", "clients");
-const USERS_DIR   = path.join(__dirname, "..", "config", "users");
+// ── Services (metadata-driven — Phase 3) ─────────────────────────────────────
+const catalogService    = require("./services/catalog-service");
+const clientService     = require("./services/client-service");
+const featureService    = require("./services/feature-service");
+const executionResolver = require("./services/execution-resolver");
+const repositoryService = require("./services/repository-service");
+const apiLog            = require("./services/api-logger");
+const healthService     = require("./services/health-service");
 
-function loadClientConfig(clientId) {
-  const file = path.join(CLIENTS_DIR, `${clientId}.json`);
-  if (!fs.existsSync(file)) return null;
-  try { return JSON.parse(fs.readFileSync(file, "utf8")); } catch { return null; }
-}
+// Start file watchers so caches stay warm
+catalogService.watch();
+clientService.watch();
+
+// ── Backward-compat helpers (kept for resolveCredentials internal use) ────────
+const USERS_DIR = path.join(__dirname, "..", "config", "users");
 
 function loadUserConfig(clientId, role) {
-  // Primary: consolidated users.json keyed by role name
   const usersFile = path.join(USERS_DIR, clientId, "users.json");
   if (fs.existsSync(usersFile)) {
     try {
       const all = JSON.parse(fs.readFileSync(usersFile, "utf8"));
       if (all[role]) return all[role];
-      console.warn(`[dashboard] loadUserConfig: key "${role}" not found in ${usersFile}. Available keys: ${Object.keys(all).join(", ")}`);
+      apiLog.warn("loadUserConfig", `key "${role}" not found in ${usersFile}. Keys: ${Object.keys(all).join(", ")}`);
       return null;
     } catch (err) {
-      console.warn(`[dashboard] loadUserConfig: failed to parse ${usersFile}:`, err.message);
-      /* fall through to legacy */
+      apiLog.warn("loadUserConfig", `failed to parse ${usersFile}: ${err.message}`);
     }
-  } else {
-    console.warn(`[dashboard] loadUserConfig: file not found: ${usersFile}`);
   }
   // Legacy fallback: individual {role}.json files
   const file = path.join(USERS_DIR, clientId, `${role}.json`);
@@ -67,47 +69,16 @@ function loadUserConfig(clientId, role) {
   try { return JSON.parse(fs.readFileSync(file, "utf8")); } catch { return null; }
 }
 
-function listClients() {
-  if (!fs.existsSync(CLIENTS_DIR)) return [];
-  return fs.readdirSync(CLIENTS_DIR)
-    .filter(f => f.endsWith(".json"))
-    .map(f => {
-      try {
-        const cfg = JSON.parse(fs.readFileSync(path.join(CLIENTS_DIR, f), "utf8"));
-        return { clientId: cfg.clientId, clientName: cfg.clientName, defaultEnvironment: cfg.defaultEnvironment || "production" };
-      } catch { return null; }
-    })
-    .filter(Boolean);
-}
-
 // â”€â”€ Config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-const PORT           = process.env.DASHBOARD_PORT || 3333;
-const ROOT_DIR       = path.join(__dirname, "..");
-const HTML_FILE      = path.join(__dirname, "index.html");
-const MANIFEST_FILE  = path.join(__dirname, "catalog-manifest.json");
+const PORT      = process.env.DASHBOARD_PORT || 3333;
+const ROOT_DIR  = path.join(__dirname, "..");
+const HTML_FILE = path.join(__dirname, "index.html");
 
-const FEATURE_FOLDERS = {
-  "coop-submit-claim":           "tests/playwright/specs/coop/feature-submit-claim",
-  "coop-submit-preapproval":     "tests/playwright/specs/coop/feature-submit-preapproval",
-  "coop-admin-reports":          "tests/playwright/specs/coop/feature-admin-reports",
-  "coop-dealer-dashboard":       "tests/playwright/specs/coop/feature-dealer-dashboard",
-  "coop-api-submit-claim":       "tests/api/coop/feature-submit-claim",
-  "coop-api-submit-preapproval": "tests/api/coop/feature-submit-preapproval",
-  "popshop-new-order":           "tests/playwright/specs/popshop/feature-new-order",
-  "engage-ads-view-package":     "tests/playwright/specs/engage-ads/feature-view-package",
-  "engage-ads-campaign-setup":   "tests/playwright/specs/engage-ads/feature-campaign-setup",
-  "engage-ads-order-history":    "tests/playwright/specs/engage-ads/feature-order-history",
-};
-
+// FEATURE_FOLDERS removed — spec paths now resolved dynamically by execution-resolver
+// ROLE_PROJECTS removed   — project resolution delegated to client-service
 const TIER_TAGS = { smoke: "@smoke", regression: "@regression", e2e: "@e2e" };
 
-const ROLE_PROJECTS = {
-  "dealer":        ["setup", "chromium"],
-  "dealer-custom": ["setup", "chromium"],
-  "admin":         ["setup-admin", "chromium-admin"],
-  "admin-custom":  ["setup-admin", "chromium-admin"],
-};
-
+// loadEnvForTestEnv kept as internal fallback for resolveCredentials
 function loadEnvForTestEnv(testEnv = "production") {
   function parseEnv(content) {
     const out = {};
@@ -125,15 +96,10 @@ function loadEnvForTestEnv(testEnv = "production") {
     }
     return out;
   }
-
   const envFile = path.join(ROOT_DIR, `.env.${testEnv}`);
-  if (fs.existsSync(envFile)) {
-    return parseEnv(fs.readFileSync(envFile, "utf8"));
-  }
-  const fallbackFile = path.join(ROOT_DIR, ".env.production");
-  if (fs.existsSync(fallbackFile)) {
-    return parseEnv(fs.readFileSync(fallbackFile, "utf8"));
-  }
+  if (fs.existsSync(envFile)) return parseEnv(fs.readFileSync(envFile, "utf8"));
+  const fallback = path.join(ROOT_DIR, ".env.production");
+  if (fs.existsSync(fallback)) return parseEnv(fs.readFileSync(fallback, "utf8"));
   return {};
 }
 
@@ -189,57 +155,17 @@ function parseLine(raw) {
 
 // â”€â”€ Build args â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function buildArgs(config) {
-  const args = ["test"];
-  if (config.features && config.features.length > 0 && !config.features.includes("all")) {
-    for (const f of config.features) {
-      if (FEATURE_FOLDERS[f]) args.push(FEATURE_FOLDERS[f]);
-    }
-  }
-  if (config.tiers && config.tiers.length > 0 && !config.tiers.includes("all")) {
-    args.push("--grep", config.tiers.map(t => TIER_TAGS[t] || t).join("|"));
-  }
-  const isApiOnly = config.features && config.features.every(f => f.includes("api"));
-  if (isApiOnly) {
-    args.push("--project=api");
-  } else {
-    const projects = ROLE_PROJECTS[config.role] || ROLE_PROJECTS["dealer"];
-    for (const p of projects) args.push(`--project=${p}`);
-  }
-  args.push("--reporter=list");
-  return args;
+  const plan = executionResolver.resolve(config);
+  if (plan.warnings.length > 0) plan.warnings.forEach(w => apiLog.warn("buildArgs", w));
+  if (plan.errors.length > 0)   plan.errors.forEach(e => apiLog.error("buildArgs", e));
+  return plan.args;
 }
 
 // â”€â”€ Build env vars â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function buildEnv(config, urlOverride) {
-  const isAdmin  = config.role === "admin" || config.role === "admin-custom";
-  const isCustom = config.role === "dealer-custom" || config.role === "admin-custom";
-  const fileEnv  = loadEnvForTestEnv(config.testEnv || "production");
-  const env = {
-    ...process.env,
-    ...fileEnv,
-    TEST_ENV:           config.testEnv  || "production",
-    TEST_USER_EMAIL:    (config.username) ? config.username : fileEnv.TEST_USER_EMAIL    || process.env.TEST_USER_EMAIL    || "",
-    TEST_USER_PASSWORD: (config.password) ? config.password : fileEnv.TEST_USER_PASSWORD || process.env.TEST_USER_PASSWORD || "",
-    ...(isAdmin && { ADMIN_EMAIL:    (config.username) ? config.username : fileEnv.ADMIN_EMAIL    || process.env.ADMIN_EMAIL    || "" }),
-    ...(isAdmin && { ADMIN_PASSWORD: (config.password) ? config.password : fileEnv.ADMIN_PASSWORD || process.env.ADMIN_PASSWORD || "" }),
-  };
-  const url = urlOverride || config.baseUrl;
-  if (url) env.BASE_URL = url;
-
-  // Pass Campaign Setup OrderSeq when provided (takes precedence over any .env value)
-  if (config.campaignOrderSeq) {
-    env.CAMPAIGN_ORDER_SEQ = config.campaignOrderSeq;
-  }
-
-  // Pass client-specific login path (e.g. CertainTeed needs ?Internal to show username form)
-  const clientCfg = loadClientConfig(config.clientId || "demoportal");
-  if (clientCfg && clientCfg.loginPath) {
-    env.LOGIN_PATH = clientCfg.loginPath;
-  } else {
-    env.LOGIN_PATH = "/account/login";
-  }
-
-  return env;
+  const merged = urlOverride ? { ...config, baseUrl: urlOverride } : config;
+  const plan   = executionResolver.resolve(merged);
+  return plan.env;
 }
 
 // ── Credential resolver ──────────────────────────────────────────────────────
@@ -255,10 +181,8 @@ async function resolveCredentials(config) {
   // ── Resolve baseUrl from client config when no manual override is set ──────
   // Priority: explicit UI override > client JSON env URL > .env file URL
   if (!config.baseUrl) {
-    const clientCfg = loadClientConfig(clientId);
-    if (clientCfg && clientCfg.environments && clientCfg.environments[testEnv]) {
-      config.baseUrl = clientCfg.environments[testEnv].baseUrl;
-    }
+    const resolvedUrl = clientService.getBaseUrl(clientId, testEnv);
+    if (resolvedUrl) config.baseUrl = resolvedUrl;
   }
 
   // Custom roles: credentials come from the request body — decrypt if encrypted
@@ -435,6 +359,63 @@ function computeDiff(legacyResults, modernResults) {
   };
 }
 
+/**
+ * spawnPlaywright — shared helper used by runComparison for each phase.
+ *
+ * @param {string[]} args       Playwright CLI args (after 'test')
+ * @param {object}   env        Environment variables
+ * @param {Function} onResult   Called with each parsed result line
+ * @param {Function} onDone     Called with (summary, exitCode) when process exits
+ */
+function spawnPlaywright(args, env, onResult, onDone) {
+  const playwrightCli = path.join(ROOT_DIR, "node_modules", "@playwright", "test", "cli.js");
+
+  const proc = spawn(process.execPath, [playwrightCli, ...args], {
+    cwd: ROOT_DIR,
+    env,
+    shell: false,
+    stdio: ["pipe", "pipe", "pipe"],
+  });
+
+  state.proc = proc;
+
+  let buffer  = "";
+  let summary = { passed: 0, failed: 0, skipped: 0, duration: "" };
+
+  function onData(chunk) {
+    buffer += chunk.toString().replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+    const lines = buffer.split("\n");
+    buffer = lines.pop();
+    for (const raw of lines) {
+      broadcast("line", { text: raw });
+      const parsed = parseLine(raw);
+      if (parsed.kind === "result") {
+        onResult(parsed);
+        broadcast("result", parsed);
+      } else if (parsed.kind === "summary") {
+        if (parsed.passed  !== undefined) summary.passed  = parsed.passed;
+        if (parsed.failed  !== undefined) summary.failed  = parsed.failed;
+        if (parsed.skipped !== undefined) summary.skipped = parsed.skipped;
+        if (parsed.duration) summary.duration = parsed.duration;
+        broadcast("summary-update", summary);
+      }
+    }
+  }
+
+  proc.stdout.on("data", onData);
+  proc.stderr.on("data", onData);
+
+  proc.on("close", (code) => {
+    if (buffer.trim()) broadcast("line", { text: buffer });
+    onDone(summary, code);
+  });
+
+  proc.on("error", (err) => {
+    broadcast("error", { message: err.message });
+    onDone(summary, 1);
+  });
+}
+
 function runComparison(config) {
   if (state.running) return { ok: false, error: "A run is already in progress." };
   if (!config.legacyUrl) return { ok: false, error: "legacyUrl is required." };
@@ -522,7 +503,9 @@ process.on("uncaughtException", (err) => {
 });
 
 const server = http.createServer((req, res) => {
-  const url    = req.url.split("?")[0];
+  const _parsed = new URL(req.url, "http://localhost");
+  const url    = _parsed.pathname;
+  const qs     = Object.fromEntries(_parsed.searchParams.entries());
   const method = req.method;
 
   res.setHeader("Access-Control-Allow-Origin",  "*");
@@ -536,7 +519,20 @@ const server = http.createServer((req, res) => {
       res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
       res.end(html);
     } catch {
-      res.writeHead(500); res.end("Dashboard HTML not found â€” run: npm run dashboard");
+      res.writeHead(500); res.end("Dashboard HTML not found — run: npm run dashboard");
+    }
+    return;
+  }
+
+  // ── /workspace — Phase 4 metadata-driven Automation Workspace ──────────
+  if (method === "GET" && (url === "/workspace" || url === "/workspace.html")) {
+    const wsFile = path.join(__dirname, "workspace.html");
+    try {
+      const html = fs.readFileSync(wsFile, "utf8");
+      res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+      res.end(html);
+    } catch {
+      res.writeHead(404); res.end("workspace.html not found");
     }
     return;
   }
@@ -554,11 +550,22 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // ── /api/catalog — metadata-driven, supports ?clientId ?module ?status ?feature ──
   if (method === "GET" && url === "/api/catalog") {
-    let content = "{}";
-    try { content = fs.readFileSync(MANIFEST_FILE, "utf8"); } catch { /* no manifest */ }
-    res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(content);
+    apiLog.request(method, url, qs);
+    try {
+      const entries = catalogService.getAll({
+        clientId:  qs.clientId || qs.client,
+        moduleId:  qs.module   || qs.moduleId,
+        status:    qs.status,
+        featureId: qs.feature  || qs.featureId,
+      });
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(entries));
+    } catch (err) {
+      apiLog.error("catalog", err.message, err);
+      res.writeHead(500); res.end(JSON.stringify({ error: "Failed to load catalog" }));
+    }
     return;
   }
 
@@ -568,19 +575,127 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // ── Client config endpoints ────────────────────────────────────────────────
+  // ── /api/health — Phase 5.5 pre-flight validation ─────────────────────────
+  // ?full=1  → include async URL reachability probes (slow, ~8s per client)
+  // ?client= → restrict to a single client
+  // ?skipUrls=1 → skip URL probes even in full mode
+  if (method === "GET" && url === "/api/health") {
+    apiLog.request(method, url, qs);
+    const full     = qs.full     === "1" || qs.full     === "true";
+    const skipUrls = qs.skipUrls === "1" || qs.skipUrls === "true";
+    const clientId = qs.client   || qs.clientId || undefined;
+
+    const sendReport = (report) => {
+      res.writeHead(report.ok ? 200 : 503, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(report));
+    };
+    const sendError = (err) => {
+      apiLog.error("health", err.message, err);
+      res.writeHead(500, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ ok: false, error: "Health check failed", detail: err.message }));
+    };
+
+    if (full) {
+      healthService.runHealthChecks({ clientId, skipUrls }).then(sendReport).catch(sendError);
+    } else {
+      try { sendReport(healthService.runQuickHealthChecks({ clientId })); } catch (err) { sendError(err); }
+    }
+    return;
+  }
+
+  // ── /api/clients ──────────────────────────────────────────────────────────
   if (method === "GET" && url === "/api/clients") {
+    apiLog.request(method, url, qs);
     res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(JSON.stringify(listClients()));
+    res.end(JSON.stringify(clientService.getClients()));
     return;
   }
 
   if (method === "GET" && url.startsWith("/api/clients/")) {
     const clientId = url.replace("/api/clients/", "").split("/")[0];
-    const cfg = loadClientConfig(clientId);
+    apiLog.request(method, url, { clientId });
+    const cfg = clientService.getClient(clientId);
     if (!cfg) { res.writeHead(404); res.end(JSON.stringify({ error: `Client "${clientId}" not found` })); return; }
+    // Enrich with repo health
+    const repoHealth = repositoryService.getHealth(clientId);
     res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(JSON.stringify(cfg));
+    res.end(JSON.stringify({ ...cfg, repoHealth }));
+    return;
+  }
+
+  // ── /api/modules?clientId=X ───────────────────────────────────────────────
+  if (method === "GET" && url === "/api/modules") {
+    apiLog.request(method, url, qs);
+    const clientId = qs.clientId || qs.client || "demoportal";
+    const modules  = clientService.getModules(clientId);
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ clientId, modules }));
+    return;
+  }
+
+  // ── /api/migration-report — Phase 6 migration status ─────────────────────
+  if (method === "GET" && url === "/api/migration-report") {
+    apiLog.request(method, url, qs);
+    const reportPath = path.join(__dirname, "migration-report.json");
+    if (!fs.existsSync(reportPath)) {
+      res.writeHead(404, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({
+        ok: false,
+        error: "Migration report not yet generated",
+        hint: "Run: npm run migrate  (or: npx ts-node tests/playwright/engine/migration-engine.ts)",
+      }));
+      return;
+    }
+    try {
+      const report = fs.readFileSync(reportPath, "utf8");
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(report);
+    } catch (err) {
+      res.writeHead(500, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ ok: false, error: "Cannot read migration report", detail: err.message }));
+    }
+    return;
+  }
+
+  // ── /api/features?clientId=X&moduleId=Y&status=Z ─────────────────────────
+  if (method === "GET" && url === "/api/features") {
+    apiLog.request(method, url, qs);
+    const features = featureService.getFeatures({
+      clientId:  qs.clientId || qs.client,
+      moduleId:  qs.moduleId || qs.module,
+      status:    qs.status,
+      role:      qs.role,
+      featureId: qs.featureId || qs.feature,
+    });
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify(features));
+    return;
+  }
+
+  // ── /api/repository?clientId=X ───────────────────────────────────────────
+  if (method === "GET" && url === "/api/repository") {
+    apiLog.request(method, url, qs);
+    const clientId = qs.clientId || qs.client;
+    if (clientId) {
+      const info   = repositoryService.getForClient(clientId);
+      const health = repositoryService.getHealth(clientId);
+      res.writeHead(info ? 200 : 404, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(info ? { ...info, health } : { error: `No repo registered for '${clientId}'` }));
+    } else {
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(repositoryService.getAll()));
+    }
+    return;
+  }
+
+  // ── /api/coverage?clientId=X&moduleId=Y ──────────────────────────────────
+  if (method === "GET" && url === "/api/coverage") {
+    apiLog.request(method, url, qs);
+    const clientId = qs.clientId || qs.client;
+    const moduleId = qs.moduleId || qs.module;
+    const coverage = featureService.getCoverage(clientId, moduleId);
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ clientId: clientId || "all", moduleId: moduleId || "all", coverage }));
     return;
   }
   // ─────────────────────────────────────────────────────────────────────────
@@ -591,8 +706,17 @@ const server = http.createServer((req, res) => {
     req.on("end", async () => {
       let config = {};
       try { config = JSON.parse(body); } catch { /* defaults */ }
+      apiLog.request("POST", "/api/run", { clientId: config.clientId, role: config.role, features: config.features });
       // Resolve & decrypt credentials from client config (non-custom roles)
       config = await resolveCredentials(config);
+      // Log execution plan
+      const plan = executionResolver.resolve(config);
+      apiLog.execution(config.clientId || "demoportal", plan);
+      if (plan.errors.length > 0) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ ok: false, errors: plan.errors }));
+        return;
+      }
       const result = runTests(config);
       res.writeHead(result.ok ? 200 : 409, { "Content-Type": "application/json" });
       res.end(JSON.stringify(result));
@@ -641,19 +765,21 @@ const server = http.createServer((req, res) => {
   }
 
   if (method === "GET" && url.startsWith("/docs/")) {
-    // Serve catalog and documentation files from nested paths
+    // Serve catalog and documentation files.
+    // catalogFile paths in the manifest are fully qualified relative to docs/:
+    //   functional-catalogs/{clientId}/{module}/feature-{feature}/functional-units.html
+    // URL: /docs/functional-catalogs/{clientId}/{module}/feature-{feature}/...
     const relativePath = url.replace(/^\/docs\//, "").split("?")[0];
-    const filePath = path.join(ROOT_DIR, "docs", relativePath);
-    
+    const docsRoot     = path.resolve(path.join(ROOT_DIR, "docs"));
+    const filePath     = path.resolve(path.join(ROOT_DIR, "docs", relativePath));
+
     // Security: prevent directory traversal
-    const resolvedPath = path.resolve(filePath);
-    const docsRoot = path.resolve(path.join(ROOT_DIR, "docs"));
-    if (!resolvedPath.startsWith(docsRoot)) {
+    if (!filePath.startsWith(docsRoot)) {
       res.writeHead(403); res.end("Forbidden");
       return;
     }
 
-    const ext = path.extname(filePath).toLowerCase();
+    const ext  = path.extname(filePath).toLowerCase();
     const mime = ext === ".html" ? "text/html; charset=utf-8"
                : ext === ".md"   ? "text/plain; charset=utf-8"
                : ext === ".css"  ? "text/css; charset=utf-8"

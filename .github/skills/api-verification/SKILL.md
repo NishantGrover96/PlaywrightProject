@@ -1,4 +1,4 @@
----
+﻿---
 name: api-verification
 description: Generate and execute API validation tests to verify REST endpoints produce correct responses and match legacy behavior.
 ---
@@ -27,7 +27,7 @@ Invoke when:
 ## Output Files
 
 ```
-tests/api/{module}/{feature}.api.spec.ts
+tests/api/{client}/{module}/{feature}.api.spec.ts
 ```
 
 ## Test Categories

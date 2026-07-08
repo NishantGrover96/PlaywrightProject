@@ -1,4 +1,4 @@
----
+﻿---
 name: functional-unit-discovery
 description: Read legacy and modern codebases to map files, endpoints, services, and UI components, then extract all independently testable functional units.
 ---
@@ -168,7 +168,7 @@ Items visible in legacy with no obvious modern counterpart
 ```
 
 ### Output
-`docs/module-analysis/{module}/feature-{feature}/discovery.md`
+`docs/module-analysis/{client}/{module}/feature-{feature}/discovery.md`
 
 ---
 
@@ -241,7 +241,7 @@ For each FU, map:
 ### Outputs
 
 ```
-docs/functional-catalogs/{module}/feature-{feature}/functional-units.md
+docs/functional-catalogs/{client}/{module}/feature-{feature}/functional-units.md
 docs/migration-reports/{module}/feature-{feature}/mapping.md
 ```
 

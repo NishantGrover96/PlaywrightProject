@@ -672,15 +672,13 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
       </div>
     </div>
 
-    <!-- Module & Features -->
+    <!-- Module & Features — populated dynamically from /api/catalog?clientId=X -->
     <div>
       <div class="section-title">Module</div>
       <label class="field-label" for="sel-module">Select Module</label>
       <select id="sel-module" onchange="onModuleChange()">
         <option value="all" selected>All Modules</option>
-        <option value="coop">Coop</option>
-        <option value="popshop">PopShop</option>
-        <option value="engage-ads">EngageAds</option>
+        <!-- options injected by populateModuleDropdown() -->
       </select>
     </div>
 
@@ -691,38 +689,7 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
         <label class="checkbox-item" data-value="all" data-module="all">
           <input type="checkbox" value="all" /> <span class="cb-label">All Features</span>
         </label>
-        <!-- Co-op → Dealer -->
-        <label class="checkbox-item" data-value="coop-submit-claim" data-module="coop" style="border-top:1px solid var(--border);margin-top:6px;padding-top:6px;">
-          <input type="checkbox" value="coop-submit-claim" /> <span class="cb-label">Submit Claim</span> <span class="cb-tag">dealer</span>
-        </label>
-        <label class="checkbox-item" data-value="coop-submit-preapproval" data-module="coop">
-          <input type="checkbox" value="coop-submit-preapproval" /> <span class="cb-label">Submit Preapproval</span> <span class="cb-tag">dealer</span>
-        </label>
-        <label class="checkbox-item" data-value="coop-dealer-dashboard" data-module="coop">
-          <input type="checkbox" value="coop-dealer-dashboard" /> <span class="cb-label">Dealer Dashboard</span> <span class="cb-tag">dealer</span>
-        </label>
-        <label class="checkbox-item" data-value="coop-admin-reports" data-module="coop">
-          <input type="checkbox" value="coop-admin-reports" /> <span class="cb-label">Admin Reports</span> <span class="cb-tag" style="background:#7c3aed;color:#fff;">admin</span>
-        </label>
-        <!-- Co-op → API -->
-        <label class="checkbox-item" data-value="coop-api-submit-claim" data-module="coop" style="border-top:1px solid var(--border);margin-top:6px;padding-top:6px;">
-          <input type="checkbox" value="coop-api-submit-claim" /> <span class="cb-label">API — Submit Claim</span> <span class="cb-tag" style="background:#0891b2;color:#fff;">api</span>
-        </label>
-        <label class="checkbox-item" data-value="coop-api-submit-preapproval" data-module="coop">
-          <input type="checkbox" value="coop-api-submit-preapproval" /> <span class="cb-label">API — Submit Preapproval</span> <span class="cb-tag" style="background:#0891b2;color:#fff;">api</span>
-        </label>
-        <label class="checkbox-item" data-value="popshop-new-order" data-module="popshop" style="border-top:1px solid var(--border);margin-top:6px;padding-top:6px;">
-          <input type="checkbox" value="popshop-new-order" /> <span class="cb-label">New Order</span> <span class="cb-tag">dealer</span>
-        </label>
-        <label class="checkbox-item" data-value="engage-ads-view-package" data-module="engage-ads" style="border-top:1px solid var(--border);margin-top:6px;padding-top:6px;">
-          <input type="checkbox" value="engage-ads-view-package" /> <span class="cb-label">EngageAds — View Package</span> <span class="cb-tag">engage-ads</span>
-        </label>
-        <label class="checkbox-item" data-value="engage-ads-campaign-setup" data-module="engage-ads">
-          <input type="checkbox" value="engage-ads-campaign-setup" /> <span class="cb-label">EngageAds — Campaign Setup</span> <span class="cb-tag">engage-ads</span>
-        </label>
-        <label class="checkbox-item" data-value="engage-ads-order-history" data-module="engage-ads">
-          <input type="checkbox" value="engage-ads-order-history" /> <span class="cb-label">EngageAds — Order History</span> <span class="cb-tag">engage-ads</span>
-        </label>
+        <!-- checkboxes injected by populateFeatureCheckboxes() -->
       </div>
     </div>
 
@@ -1446,20 +1413,24 @@ let catalogManifest = {};
 
 async function loadCatalogManifest() {
   try {
-    const res = await fetch("/api/catalog");
-    catalogManifest = await res.json();
+    const clientId = document.getElementById('sel-client')?.value || 'demoportal';
+    const res = await fetch(`/api/catalog?clientId=${encodeURIComponent(clientId)}`);
+    const arr = await res.json();   // array from catalogService.getAll()
+    // Convert to object keyed by featureId so renderCatalogPanel(key) lookups work
+    catalogManifest = {};
+    (Array.isArray(arr) ? arr : Object.entries(arr).map(([k,v]) => ({...v, featureId: k})))
+      .forEach(e => { if (e.featureId) catalogManifest[e.featureId] = e; });
   } catch { catalogManifest = {}; }
   populateCatalogDropdown();
 }
 
 function populateCatalogDropdown() {
   const sel = document.getElementById("catalog-select");
-  // Keep the placeholder option, add one per feature
   sel.innerHTML = '<option value="">— select feature —</option>';
-  Object.keys(catalogManifest).forEach(key => {
+  Object.entries(catalogManifest).forEach(([key, entry]) => {
     const opt = document.createElement("option");
     opt.value = key;
-    opt.textContent = catalogManifest[key].feature;
+    opt.textContent = entry.feature || key;
     sel.appendChild(opt);
   });
 }
@@ -1480,12 +1451,16 @@ function renderCatalogPanel(key) {
   const pct = c.tests.total > 0 ? Math.round((c.tests.implemented / c.tests.total) * 100) : 0;
   const barColor = pct === 100 ? "var(--green)" : pct >= 50 ? "var(--yellow)" : "var(--red)";
 
+  // catalogFile is fully qualified: functional-catalogs/{clientId}/{module}/feature-xxx/...
+  // URL pattern: /docs/functional-catalogs/{clientId}/{module}/feature-xxx/functional-units.html
+  const catalogHref = c.catalogFile ? `/docs/${c.catalogFile}` : null;
+
   panel.className = "visible";
   panel.innerHTML = `
     <div class="cat-row">
       <span class="cat-title">📋 ${escHtml(c.feature)}</span>
       <span class="cat-version">${escHtml(c.version)}</span>
-      <a class="cat-link" href="/${escHtml(c.catalogFile)}" target="_blank">View Catalog ↗</a>
+      ${catalogHref ? `<a class="cat-link" href="${catalogHref}" target="_blank">View Catalog ↗</a>` : ''}
     </div>
     <div class="cat-meta">
       <span>📅 ${escHtml(c.generated)}</span>
@@ -1560,28 +1535,21 @@ function updateCatalogPanel() {
 
 // ── Checkbox mutual exclusion (All vs individual) ──────────────────────────
 // ── Client feature flags (updated on every client change) ────────────────
-let currentClientFlags = { engageAds: true, coop: true, popshop: true };
+let currentClientFlags = { engageAds: true, coop: true, popshop: true, rebate: true };
 
 // Central visibility function — combines module filter + client featureFlags.
 // Always call this instead of manipulating display directly in onModuleChange / onClientChange.
 function applyFeatureVisibility() {
   const selectedModule = document.getElementById("sel-module").value;
   const featureGroup   = document.getElementById("feature-group");
-  const moduleEnabled  = {
-    "engage-ads": currentClientFlags.engageAds !== false,
-    "coop":       currentClientFlags.coop       !== false,
-    "popshop":    currentClientFlags.popshop     !== false,
-  };
 
+  // After dynamic rebuild, all checkboxes present are already client-enabled.
+  // We only need to apply the module filter here.
   featureGroup.querySelectorAll(".checkbox-item").forEach(item => {
     const mod   = item.getAttribute("data-module");
     const value = item.getAttribute("data-value");
     if (value === "all") { item.style.display = "flex"; return; }
-
-    const flagOk    = moduleEnabled[mod] !== false;          // client enables this module
-    const moduleOk  = selectedModule === "all" || mod === selectedModule; // module filter
-    const visible   = flagOk && moduleOk;
-
+    const visible = selectedModule === "all" || mod === selectedModule;
     item.style.display = visible ? "flex" : "none";
     if (!visible) {
       const cb = item.querySelector("input[type='checkbox']");
@@ -1733,11 +1701,11 @@ function getRole() {
 async function loadClients() {
   try {
     const res  = await fetch("/api/clients");
-    const list = await res.json();  // [{ clientId, clientName, defaultEnvironment }]
+    const list = await res.json();  // [{ clientId, displayName, defaultEnvironment }]
     const sel  = document.getElementById("sel-client");
     if (!Array.isArray(list) || list.length === 0) return;
     sel.innerHTML = list.map(c =>
-      `<option value="${escHtml(c.clientId)}">${escHtml(c.clientName)}</option>`
+      `<option value="${escHtml(c.clientId)}">${escHtml(c.displayName || c.clientId)}</option>`
     ).join("");
     // Trigger population of environments + roles for the first client
     await onClientChange();
@@ -1784,26 +1752,33 @@ async function onClientChange() {
       if ([...roleSel.options].some(o => o.value === currentRole)) roleSel.value = currentRole;
     }
 
-    // Apply featureFlags — update module-level flag store + dropdown options
+    // Derive enabled modules — prefer explicit modules array, fall back to featureFlags
     const flags = cfg.featureFlags || {};
-    currentClientFlags = {
-      engageAds: flags.engageAds !== false,
-      coop:      flags.coop      !== false,
-      popshop:   flags.popshop   !== false,
-    };
-    const moduleMap  = { "engage-ads": currentClientFlags.engageAds, "coop": currentClientFlags.coop, "popshop": currentClientFlags.popshop };
-    const moduleSelect = document.getElementById("sel-module");
+    const clientModules = Array.isArray(cfg.modules) && cfg.modules.length > 0 ? cfg.modules : null;
+    if (clientModules) {
+      currentClientFlags = {
+        engageAds: clientModules.includes('engage-ads'),
+        coop:      clientModules.includes('coop'),
+        popshop:   clientModules.includes('popshop'),
+        rebate:    clientModules.includes('rebate'),
+      };
+    } else {
+      currentClientFlags = {
+        engageAds: flags.engageAds !== false,
+        coop:      flags.coop      !== false,
+        popshop:   flags.popshop   !== false,
+        rebate:    flags.rebate    !== false,
+      };
+    }
 
-    // Show/hide module <option> entries based on flags
-    [...moduleSelect.options].forEach(opt => {
-      if (opt.value === 'all') return;
-      opt.hidden = !moduleMap[opt.value];
-    });
-    // If currently selected module is now disabled, reset to "all"
-    if (moduleMap[moduleSelect.value] === false) moduleSelect.value = 'all';
+    // Rebuild module dropdown + feature checkboxes from catalog API
+    // Reset to 'all' first so populateModuleDropdown starts from a clean state
+    document.getElementById('sel-module').value = 'all';
+    await populateModuleDropdown(clientId);
+    await populateFeatureCheckboxes(clientId);
 
-    // Apply combined module + flag visibility to feature list
-    applyFeatureVisibility();
+    // Refresh catalog dropdown to only show entries for this client
+    await loadCatalogManifest();
     updateEnvBadge();
     onRoleChange();
   } catch (err) {
@@ -1829,8 +1804,108 @@ function syncCampaignOrderSeqVisibility() {
   if (!show && input) input.value = "";
 }
 
+// ── Dynamic module + feature builders (called on every client change) ────────
+
+// Human-readable module labels
+const MODULE_LABELS = {
+  'coop':       'Coop',
+  'engage-ads': 'EngageAds',
+  'popshop':    'PopShop',
+  'rebate':     'Rebate',
+  'admin':      'Admin',
+};
+
+// Role tag colour map
+const ROLE_STYLES = {
+  'dealer':  '',
+  'admin':   'background:#7c3aed;color:#fff;',
+  'api':     'background:#0891b2;color:#fff;',
+};
+
+async function populateModuleDropdown(clientId) {
+  try {
+    const res     = await fetch(`/api/modules?clientId=${encodeURIComponent(clientId)}`);
+    const data    = await res.json();
+    const modules = Array.isArray(data.modules) ? data.modules : [];
+    const sel     = document.getElementById("sel-module");
+    const current = sel.value;
+    // Keep "All Modules" and rebuild the rest
+    sel.innerHTML = '<option value="all">All Modules</option>';
+    modules.forEach(mod => {
+      const label = MODULE_LABELS[mod] || (mod.charAt(0).toUpperCase() + mod.slice(1));
+      sel.insertAdjacentHTML('beforeend', `<option value="${escHtml(mod)}">${escHtml(label)}</option>`);
+    });
+    // Restore selection if still valid
+    if ([...sel.options].some(o => o.value === current)) sel.value = current;
+    else sel.value = 'all';
+  } catch (err) {
+    console.warn('populateModuleDropdown failed:', err.message);
+  }
+}
+
+async function populateFeatureCheckboxes(clientId) {
+  try {
+    const res      = await fetch(`/api/catalog?clientId=${encodeURIComponent(clientId)}`);
+    const entries  = await res.json();    // array of feature entries
+    const group    = document.getElementById("feature-group");
+
+    // Clear everything except the "All Features" item (first child)
+    const allItem  = group.querySelector('[data-value="all"]');
+    group.innerHTML = '';
+    if (allItem) group.appendChild(allItem);
+
+    // Group entries by module for a clean separator per module
+    const byModule = {};
+    entries.forEach(e => {
+      const mod = e.module || 'unknown';
+      (byModule[mod] = byModule[mod] || []).push(e);
+    });
+
+    let first = true;
+    for (const [mod, features] of Object.entries(byModule)) {
+      features.forEach((e, i) => {
+        const isFirstInGroup = first || i === 0;
+        const sep = isFirstInGroup
+          ? 'border-top:1px solid var(--border);margin-top:6px;padding-top:6px;'
+          : '';
+        const role      = e.role || 'dealer';
+        const roleStyle = ROLE_STYLES[role] || '';
+        const tagStyle  = roleStyle ? ` style="${roleStyle}"` : '';
+        const featureId = e.featureId || e.feature;
+        // Derive a short label from the feature name (strip "Module — " prefix)
+        const rawLabel  = e.feature || featureId;
+        const label     = rawLabel.includes(' \u2014 ')
+          ? rawLabel.split(' \u2014 ').slice(1).join(' \u2014 ')
+          : rawLabel;
+        group.insertAdjacentHTML('beforeend', `
+          <label class="checkbox-item" data-value="${escHtml(featureId)}" data-module="${escHtml(mod)}"${sep ? ` style="${sep}"` : ''}>
+            <input type="checkbox" value="${escHtml(featureId)}" />
+            <span class="cb-label">${escHtml(label)}</span>
+            <span class="cb-tag"${tagStyle}>${escHtml(role)}</span>
+          </label>`);
+        first = false;
+      });
+      first = false;
+    }
+
+    // Re-attach checkbox group behaviour and apply module filter
+    setupCheckboxGroup("feature-group");
+    applyFeatureVisibility();
+  } catch (err) {
+    console.warn('populateFeatureCheckboxes failed:', err.message);
+  }
+}
+
 function onModuleChange() {
-  applyFeatureVisibility();
+  const group = document.getElementById('feature-group');
+  const loaded = group.querySelectorAll('.checkbox-item:not([data-value="all"])').length > 0;
+  if (!loaded) {
+    // Features haven't been fetched yet — load them now for the current client
+    const clientId = document.getElementById('sel-client')?.value || 'demoportal';
+    populateFeatureCheckboxes(clientId);
+  } else {
+    applyFeatureVisibility();
+  }
   updateCommandPreview();
 }
 

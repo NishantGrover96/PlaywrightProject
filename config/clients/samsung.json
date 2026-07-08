@@ -1,6 +1,27 @@
 {
-  "clientId": "samsung",
-  "clientName": "Samsung HVAC",
+  "clientId":    "samsung",
+  "clientName":  "Samsung HVAC",
+  "clientType":  "legacy-shared",
+  "platform":    "demoportal",
+  "stub":        true,
+
+  "authentication": {
+    "type":      "forms",
+    "loginPath": "/Account/Login",
+    "usernameSelector": "#UserLogin_Username",
+    "passwordSelector": "#UserLogin_Password",
+    "submitSelector":   "#btnLogin"
+  },
+
+  "modules": ["coop"],
+
+  "repository": {
+    "_comment": "Populate localPath in config/repos.local.json",
+    "type":        "git",
+    "branch":      "main",
+    "localPathKey": "samsung"
+  },
+
   "environments": {
     "production": {
       "label": "Production",
@@ -32,6 +53,7 @@
   "featureFlags": {
     "engageAds": false,
     "coop": true,
-    "popshop": false
+    "popshop": false,
+    "rebate": false
   }
 }

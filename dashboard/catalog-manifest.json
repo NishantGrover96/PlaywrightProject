@@ -1,7 +1,7 @@
 {
   "coop-submit-claim": {
     "feature": "Coop — Submit Claim",
-    "catalogFile": "docs/functional-catalogs/coop/feature-submit-claim/functional-units.html",
+    "catalogFile": "functional-catalogs/demoportal/coop/feature-submit-claim/functional-units.html",
     "version": "v1",
     "generated": "2026-06-17",
     "auditedAs": "demoportal.channel-fusion.com (Dealer01, 2026-06-17)",
@@ -48,11 +48,14 @@
       "medium": 7,
       "low": 2
     },
-    "lastRun": null
+    "lastRun": null,
+    "client": "demoportal",
+    "module": "coop",
+    "role": "dealer"
   },
   "coop-submit-preapproval": {
     "feature": "Coop — Submit Preapproval",
-    "catalogFile": "docs/functional-catalogs/coop/feature-submit-preapproval/functional-units.md",
+    "catalogFile": "functional-catalogs/demoportal/coop/feature-submit-preapproval/functional-units.md",
     "version": "v2",
     "generated": "2026-06-19",
     "auditedAs": "PlatformToAPIWorkspace (Dealer Role, 2026-06-19)",
@@ -99,11 +102,14 @@
       "medium": 1,
       "low": 3
     },
-    "lastRun": null
+    "lastRun": null,
+    "client": "demoportal",
+    "module": "coop",
+    "role": "dealer"
   },
   "coop-dealer-dashboard": {
     "feature": "Coop — Dealer Dashboard",
-    "catalogFile": "docs/functional-catalogs/coop/feature-dealer-dashboard/functional-units.html",
+    "catalogFile": "functional-catalogs/demoportal/coop/feature-dealer-dashboard/functional-units.html",
     "version": "v1",
     "generated": "2026-06-18",
     "auditedAs": "DemoPortalV2 (Legacy + Modern, 2026-06-18)",
@@ -151,11 +157,14 @@
       "medium": 0,
       "low": 0
     },
-    "lastRun": null
+    "lastRun": null,
+    "client": "demoportal",
+    "module": "coop",
+    "role": "dealer"
   },
   "coop-admin-reports": {
     "feature": "Coop — Admin Reports",
-    "catalogFile": "docs/functional-catalogs/coop/feature-admin-reports/test-catalog.md",
+    "catalogFile": "functional-catalogs/demoportal/coop/feature-admin-reports/test-catalog.md",
     "version": "v1",
     "generated": "",
     "auditedAs": "",
@@ -169,11 +178,14 @@
       "implemented": 0,
       "fixme": 0
     },
-    "lastRun": null
+    "lastRun": null,
+    "client": "demoportal",
+    "module": "coop",
+    "role": "admin"
   },
   "coop-api-submit-claim": {
     "feature": "Coop API — Submit Claim",
-    "catalogFile": "docs/functional-catalogs/coop/feature-submit-claim/test-catalog.md",
+    "catalogFile": "functional-catalogs/demoportal/coop/feature-submit-claim/test-catalog.md",
     "version": "v1",
     "generated": "",
     "auditedAs": "",
@@ -187,11 +199,14 @@
       "implemented": 0,
       "fixme": 0
     },
-    "lastRun": null
+    "lastRun": null,
+    "client": "demoportal",
+    "module": "coop",
+    "role": "api"
   },
   "coop-api-submit-preapproval": {
     "feature": "Coop API — Submit Preapproval",
-    "catalogFile": "docs/functional-catalogs/coop/feature-submit-preapproval/functional-units.md",
+    "catalogFile": "functional-catalogs/demoportal/coop/feature-submit-preapproval/functional-units.md",
     "version": "v1",
     "generated": "2026-06-17",
     "auditedAs": "PlatformToAPIWorkspace (API Layer, 2026-06-17)",
@@ -218,11 +233,14 @@
       "medium": 0,
       "low": 0
     },
-    "lastRun": null
+    "lastRun": null,
+    "client": "demoportal",
+    "module": "coop",
+    "role": "api"
   },
   "popshop-new-order": {
     "feature": "PopShop — New Order",
-    "catalogFile": "docs/functional-catalogs/popshop/feature-new-order/test-catalog.md",
+    "catalogFile": "functional-catalogs/demoportal/popshop/feature-new-order/test-catalog.md",
     "version": "v1",
     "generated": "",
     "auditedAs": "",
@@ -237,11 +255,14 @@
       "implemented": 0,
       "fixme": 0
     },
-    "lastRun": null
+    "lastRun": null,
+    "client": "demoportal",
+    "module": "popshop",
+    "role": "dealer"
   },
   "coop-dealer-dashboard-budget": {
     "feature": "Coop — Dealer Dashboard: Budget Tab",
-    "catalogFile": "docs/functional-catalogs/coop/feature-dealer-dashboard/feature-budget/functional-units.html",
+    "catalogFile": "functional-catalogs/demoportal/coop/feature-dealer-dashboard/feature-budget/functional-units.html",
     "version": "v1",
     "generated": "2026-06-18",
     "auditedAs": "DemoPortalV2 Legacy + PlatformToAPIWorkspace Modern (2026-06-18)",
@@ -289,11 +310,14 @@
       "medium": 4,
       "low": 2
     },
-    "lastRun": null
+    "lastRun": null,
+    "client": "demoportal",
+    "module": "coop",
+    "role": "dealer"
   },
   "engage-ads-view-package": {
     "feature": "EngageAds — View Package",
-    "catalogFile": "docs/functional-catalogs/engage-ads/feature-view-package/functional-units.html",
+    "catalogFile": "functional-catalogs/demoportal/engage-ads/feature-view-package/functional-units.html",
     "version": "v1",
     "generated": "2026-06-18",
     "auditedAs": "DemoPortal UAT (https://demoportaluat.channel-fusion.com/EngageAds/BundledAdPackages, 2026-06-18)",
@@ -341,11 +365,14 @@
       "medium": 1,
       "low": 2
     },
-    "lastRun": null
+    "lastRun": null,
+    "client": "demoportal",
+    "module": "engage-ads",
+    "role": "dealer"
   },
   "engage-ads-campaign-setup": {
     "feature": "EngageAds — Campaign Setup",
-    "catalogFile": "docs/functional-catalogs/engage-ads/feature-campaign-setup/functional-units.html",
+    "catalogFile": "functional-catalogs/demoportal/engage-ads/feature-campaign-setup/functional-units.html",
     "version": "v1",
     "generated": "2026-06-30",
     "auditedAs": "DemoPortal UAT (/EngageAds/CampaignSetup, 2026-06-30)",
@@ -353,24 +380,54 @@
     "sections": 5,
     "pipeline": "functional-qa",
     "implementationStatus": {
-      "smoke": { "implemented": true, "lastUpdated": "2026-06-30T00:00:00Z" },
-      "regression": { "implemented": true, "lastUpdated": "2026-06-30T00:00:00Z" },
-      "e2e": { "implemented": false, "lastUpdated": null },
-      "functionalUnit": { "implemented": true, "lastUpdated": "2026-06-30T00:00:00Z" }
+      "smoke": {
+        "implemented": true,
+        "lastUpdated": "2026-06-30T00:00:00Z"
+      },
+      "regression": {
+        "implemented": true,
+        "lastUpdated": "2026-06-30T00:00:00Z"
+      },
+      "e2e": {
+        "implemented": false,
+        "lastUpdated": null
+      },
+      "functionalUnit": {
+        "implemented": true,
+        "lastUpdated": "2026-06-30T00:00:00Z"
+      }
     },
     "specFiles": {
       "smoke": "tests/playwright/specs/engage-ads/feature-campaign-setup/campaign-setup.spec.ts",
       "regression": "tests/playwright/specs/engage-ads/feature-campaign-setup/campaign-setup.spec.ts",
       "e2e": "tests/playwright/specs/engage-ads/feature-campaign-setup/campaign-setup.spec.ts"
     },
-    "tests": { "total": 28, "implemented": 28, "fixme": 0 },
-    "coverage": { "functional": 95, "validation": 100, "workflow": 90, "database": 70, "security": 100 },
-    "gaps": { "critical": 0, "high": 0, "medium": 2, "low": 3 },
-    "lastRun": null
+    "tests": {
+      "total": 28,
+      "implemented": 28,
+      "fixme": 0
+    },
+    "coverage": {
+      "functional": 95,
+      "validation": 100,
+      "workflow": 90,
+      "database": 70,
+      "security": 100
+    },
+    "gaps": {
+      "critical": 0,
+      "high": 0,
+      "medium": 2,
+      "low": 3
+    },
+    "lastRun": null,
+    "client": "demoportal",
+    "module": "engage-ads",
+    "role": "dealer"
   },
   "engage-ads-order-history": {
     "feature": "EngageAds — Order History",
-    "catalogFile": "docs/functional-catalogs/engage-ads/feature-order-history/functional-units.html",
+    "catalogFile": "functional-catalogs/demoportal/engage-ads/feature-order-history/functional-units.html",
     "version": "v1",
     "generated": "2026-06-23",
     "auditedAs": "DemoPortal UAT (/EngageAds/OrderHistory, 2026-06-23)",
@@ -418,11 +475,14 @@
       "medium": 2,
       "low": 3
     },
-    "lastRun": null
+    "lastRun": null,
+    "client": "demoportal",
+    "module": "engage-ads",
+    "role": "dealer"
   },
   "admin-feature-list": {
     "feature": "Admin — Feature List",
-    "catalogFile": "docs/functional-catalogs/admin/feature-feature-list/functional-units.html",
+    "catalogFile": "functional-catalogs/demoportal/admin/feature-feature-list/functional-units.html",
     "version": "v1",
     "generated": "2026-06-19",
     "auditedAs": "demoportal.channel-fusion.com (Admin, 2026-06-19)",
@@ -481,6 +541,339 @@
       "e2e": "tests/playwright/specs/admin/feature-feature-list/feature-list.spec.ts",
       "api": "tests/api/admin/feature-feature-list/feature-list.api.spec.ts"
     },
-    "lastRun": "2026-06-19T12:00:00Z"
+    "lastRun": "2026-06-19T12:00:00Z",
+    "client": "demoportal",
+    "module": "admin",
+    "role": "admin"
+  },
+  "rebate-dashboard": {
+    "feature": "Rebate — Dashboard",
+    "catalogFile": "functional-catalogs/demoportal/rebate/feature-dashboard/functional-units.html",
+    "version": "v1",
+    "generated": "2026-07-07",
+    "auditedAs": "demoportaluat.channel-fusion.com (RebateAdmin, 2026-07-07)",
+    "lastUpdated": "2026-07-07T00:00:00Z",
+    "client": "demoportal",
+    "pipeline": "functional-qa",
+    "sections": 5,
+    "implementationStatus": {
+      "smoke": {
+        "implemented": false,
+        "lastUpdated": null
+      },
+      "regression": {
+        "implemented": false,
+        "lastUpdated": null
+      },
+      "e2e": {
+        "implemented": false,
+        "lastUpdated": null
+      },
+      "functionalUnit": {
+        "implemented": true,
+        "lastUpdated": "2026-07-07T00:00:00Z"
+      }
+    },
+    "specFiles": {
+      "smoke": "tests/playwright/specs/rebate/feature-dashboard/dashboard.spec.ts",
+      "regression": "tests/playwright/specs/rebate/feature-dashboard/dashboard.spec.ts",
+      "e2e": "tests/playwright/specs/rebate/feature-dashboard/dashboard.spec.ts"
+    },
+    "tests": {
+      "total": 26,
+      "implemented": 0,
+      "fixme": 0
+    },
+    "coverage": {
+      "functional": 0,
+      "validation": 0,
+      "workflow": 0,
+      "database": 0,
+      "security": 0
+    },
+    "gaps": {
+      "critical": 0,
+      "high": 0,
+      "medium": 0,
+      "low": 0
+    },
+    "lastRun": null,
+    "module": "rebate",
+    "role": "admin"
+  },
+  "rebate-create-offers": {
+    "feature": "Rebate — Create Offers",
+    "catalogFile": "functional-catalogs/demoportal/rebate/feature-create-offers/functional-units.html",
+    "version": "v1",
+    "generated": "2026-07-07",
+    "auditedAs": "demoportaluat.channel-fusion.com (RebateAdmin, 2026-07-07)",
+    "lastUpdated": "2026-07-07T00:00:00Z",
+    "client": "demoportal",
+    "pipeline": "functional-qa",
+    "sections": 5,
+    "implementationStatus": {
+      "smoke": {
+        "implemented": false,
+        "lastUpdated": null
+      },
+      "regression": {
+        "implemented": false,
+        "lastUpdated": null
+      },
+      "e2e": {
+        "implemented": false,
+        "lastUpdated": null
+      },
+      "functionalUnit": {
+        "implemented": true,
+        "lastUpdated": "2026-07-07T00:00:00Z"
+      }
+    },
+    "specFiles": {
+      "smoke": "tests/playwright/specs/rebate/feature-create-offers/create-offers.spec.ts",
+      "regression": "tests/playwright/specs/rebate/feature-create-offers/create-offers.spec.ts",
+      "e2e": "tests/playwright/specs/rebate/feature-create-offers/create-offers.spec.ts"
+    },
+    "tests": {
+      "total": 31,
+      "implemented": 0,
+      "fixme": 0
+    },
+    "coverage": {
+      "functional": 0,
+      "validation": 0,
+      "workflow": 0,
+      "database": 0,
+      "security": 0
+    },
+    "gaps": {
+      "critical": 0,
+      "high": 0,
+      "medium": 0,
+      "low": 0
+    },
+    "lastRun": null,
+    "module": "rebate",
+    "role": "admin"
+  },
+  "rebate-manage-offers": {
+    "feature": "Rebate — Manage Offers",
+    "catalogFile": "functional-catalogs/demoportal/rebate/feature-manage-offers/functional-units.html",
+    "version": "v1",
+    "generated": "2026-07-07",
+    "auditedAs": "demoportaluat.channel-fusion.com (RebateAdmin, 2026-07-07)",
+    "lastUpdated": "2026-07-07T00:00:00Z",
+    "client": "demoportal",
+    "pipeline": "functional-qa",
+    "sections": 5,
+    "implementationStatus": {
+      "smoke": {
+        "implemented": false,
+        "lastUpdated": null
+      },
+      "regression": {
+        "implemented": false,
+        "lastUpdated": null
+      },
+      "e2e": {
+        "implemented": false,
+        "lastUpdated": null
+      },
+      "functionalUnit": {
+        "implemented": true,
+        "lastUpdated": "2026-07-07T00:00:00Z"
+      }
+    },
+    "specFiles": {
+      "smoke": "tests/playwright/specs/rebate/feature-manage-offers/manage-offers.spec.ts",
+      "regression": "tests/playwright/specs/rebate/feature-manage-offers/manage-offers.spec.ts",
+      "e2e": "tests/playwright/specs/rebate/feature-manage-offers/manage-offers.spec.ts"
+    },
+    "tests": {
+      "total": 24,
+      "implemented": 0,
+      "fixme": 0
+    },
+    "coverage": {
+      "functional": 0,
+      "validation": 0,
+      "workflow": 0,
+      "database": 0,
+      "security": 0
+    },
+    "gaps": {
+      "critical": 0,
+      "high": 0,
+      "medium": 0,
+      "low": 0
+    },
+    "lastRun": null,
+    "module": "rebate",
+    "role": "admin"
+  },
+  "rebate-setup-campaign": {
+    "feature": "Rebate — Setup Campaign",
+    "catalogFile": "functional-catalogs/demoportal/rebate/feature-setup-campaign/functional-units.html",
+    "version": "v1",
+    "generated": "2026-07-07",
+    "auditedAs": "demoportaluat.channel-fusion.com (RebateAdmin, 2026-07-07)",
+    "lastUpdated": "2026-07-07T00:00:00Z",
+    "client": "demoportal",
+    "pipeline": "functional-qa",
+    "sections": 5,
+    "implementationStatus": {
+      "smoke": {
+        "implemented": false,
+        "lastUpdated": null
+      },
+      "regression": {
+        "implemented": false,
+        "lastUpdated": null
+      },
+      "e2e": {
+        "implemented": false,
+        "lastUpdated": null
+      },
+      "functionalUnit": {
+        "implemented": true,
+        "lastUpdated": "2026-07-07T00:00:00Z"
+      }
+    },
+    "specFiles": {
+      "smoke": "tests/playwright/specs/rebate/feature-setup-campaign/setup-campaign.spec.ts",
+      "regression": "tests/playwright/specs/rebate/feature-setup-campaign/setup-campaign.spec.ts",
+      "e2e": "tests/playwright/specs/rebate/feature-setup-campaign/setup-campaign.spec.ts"
+    },
+    "tests": {
+      "total": 45,
+      "implemented": 0,
+      "fixme": 0
+    },
+    "coverage": {
+      "functional": 0,
+      "validation": 0,
+      "workflow": 0,
+      "database": 0,
+      "security": 0
+    },
+    "gaps": {
+      "critical": 0,
+      "high": 0,
+      "medium": 0,
+      "low": 0
+    },
+    "lastRun": null,
+    "module": "rebate",
+    "role": "admin"
+  },
+  "rebate-dealer-rebate": {
+    "feature": "Rebate — Dealer Rebate",
+    "catalogFile": "functional-catalogs/demoportal/rebate/feature-dealer-rebate/functional-units.html",
+    "version": "v1",
+    "generated": "2026-07-07",
+    "auditedAs": "demoportaluat.channel-fusion.com (Dealer + RebateAdmin, 2026-07-07)",
+    "lastUpdated": "2026-07-07T00:00:00Z",
+    "client": "demoportal",
+    "pipeline": "functional-qa",
+    "sections": 5,
+    "implementationStatus": {
+      "smoke": {
+        "implemented": false,
+        "lastUpdated": null
+      },
+      "regression": {
+        "implemented": false,
+        "lastUpdated": null
+      },
+      "e2e": {
+        "implemented": false,
+        "lastUpdated": null
+      },
+      "functionalUnit": {
+        "implemented": true,
+        "lastUpdated": "2026-07-07T00:00:00Z"
+      }
+    },
+    "specFiles": {
+      "smoke": "tests/playwright/specs/rebate/feature-dealer-rebate/dealer-rebate.spec.ts",
+      "regression": "tests/playwright/specs/rebate/feature-dealer-rebate/dealer-rebate.spec.ts",
+      "e2e": "tests/playwright/specs/rebate/feature-dealer-rebate/dealer-rebate.spec.ts"
+    },
+    "tests": {
+      "total": 37,
+      "implemented": 0,
+      "fixme": 0
+    },
+    "coverage": {
+      "functional": 0,
+      "validation": 0,
+      "workflow": 0,
+      "database": 0,
+      "security": 0
+    },
+    "gaps": {
+      "critical": 0,
+      "high": 0,
+      "medium": 0,
+      "low": 0
+    },
+    "lastRun": null,
+    "module": "rebate",
+    "role": "dealer"
+  },
+  "rebate-whitelist-ip": {
+    "feature": "Rebate — Whitelist IP",
+    "catalogFile": "functional-catalogs/demoportal/rebate/feature-whitelist-ip/functional-units.html",
+    "version": "v1",
+    "generated": "2026-07-07",
+    "auditedAs": "demoportaluat.channel-fusion.com (Admin, 2026-07-07)",
+    "lastUpdated": "2026-07-07T00:00:00Z",
+    "client": "demoportal",
+    "pipeline": "functional-qa",
+    "sections": 5,
+    "implementationStatus": {
+      "smoke": {
+        "implemented": false,
+        "lastUpdated": null
+      },
+      "regression": {
+        "implemented": false,
+        "lastUpdated": null
+      },
+      "e2e": {
+        "implemented": false,
+        "lastUpdated": null
+      },
+      "functionalUnit": {
+        "implemented": true,
+        "lastUpdated": "2026-07-07T00:00:00Z"
+      }
+    },
+    "specFiles": {
+      "smoke": "tests/playwright/specs/rebate/feature-whitelist-ip/whitelist-ip.spec.ts",
+      "regression": "tests/playwright/specs/rebate/feature-whitelist-ip/whitelist-ip.spec.ts",
+      "e2e": "tests/playwright/specs/rebate/feature-whitelist-ip/whitelist-ip.spec.ts"
+    },
+    "tests": {
+      "total": 30,
+      "implemented": 0,
+      "fixme": 0
+    },
+    "coverage": {
+      "functional": 0,
+      "validation": 0,
+      "workflow": 0,
+      "database": 0,
+      "security": 0
+    },
+    "gaps": {
+      "critical": 0,
+      "high": 0,
+      "medium": 0,
+      "low": 0
+    },
+    "lastRun": null,
+    "module": "rebate",
+    "role": "admin"
   }
 }

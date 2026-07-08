@@ -15,6 +15,9 @@ This repository contains reusable skill documents under `.github/skills/`.
 
 ## Skill Index
 
+### New Developer Setup (run this first)
+- `.github/skills/developer-setup/SKILL.md` — **Step 0**: Complete first-time environment setup for a new developer. Covers tools, clone, npm install, .env files, credentials, auth sessions, smoke test verification, and dashboard check. **Run before any other skill.**
+
 ### Functional QA Test Generation Pipeline (new — no legacy/modern comparison)
 - `.github/skills/functional-qa-test-generation/SKILL.md` — **Orchestrator**: full pipeline from repo analysis to test execution
 - `.github/skills/repo-analysis/SKILL.md` — Step 1: Codebase discovery (fields, rules, endpoints, DB, security)
@@ -33,6 +36,7 @@ This repository contains reusable skill documents under `.github/skills/`.
 - `.github/skills/api-verification/SKILL.md` — API test generation and validation
 - `.github/skills/database-verification/SKILL.md` — DB state verification SQL scripts
 - `.github/skills/migration-comparison/SKILL.md` — Migration comparison utilities
+- `.github/skills/engage-ads-test-coverage/SKILL.md` — **EngageAds-specific**: full coverage requirements (positive, negative, boundary, edge case, role-based, dynamic UI) for all EngageAds feature specs
 
 ## Baseline Rules
 - Make minimal, focused changes.

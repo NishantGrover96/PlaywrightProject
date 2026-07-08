@@ -1,4 +1,4 @@
----
+﻿---
 name: playwright-test-generation
 description: Generate Playwright test assets including page objects, spec files, helpers, and API and database verification scripts from functional catalogs.
 ---
@@ -23,22 +23,22 @@ Using the Functional Unit Catalog and Test Catalog from Prompt 2, generate all t
 
 - **Module**: e.g. `coop`
 - **Feature**: e.g. `submit-claim`
-- **Test Catalog**: `docs/functional-catalogs/{module}/feature-{feature}/test-catalog.md`
-- **Smoke Suite**: `docs/functional-catalogs/{module}/feature-{feature}/smoke-suite.md`
-- **Regression Suite**: `docs/functional-catalogs/{module}/feature-{feature}/regression-suite.md`
-- **E2E Suite**: `docs/functional-catalogs/{module}/feature-{feature}/e2e-suite.md`
+- **Test Catalog**: `docs/functional-catalogs/{client}/{module}/feature-{feature}/test-catalog.md`
+- **Smoke Suite**: `docs/functional-catalogs/{client}/{module}/feature-{feature}/smoke-suite.md`
+- **Regression Suite**: `docs/functional-catalogs/{client}/{module}/feature-{feature}/regression-suite.md`
+- **E2E Suite**: `docs/functional-catalogs/{client}/{module}/feature-{feature}/e2e-suite.md`
 - **Existing DemoPortalV2 tests**: `D:\...\DemoPortalV2\tests\playwright\coop\` — reuse proven selectors and patterns
 
 ## Output Files
 
 ```
-tests/playwright/pages/{module}/feature-{feature}/{Feature}Page.ts
-tests/playwright/helpers/{module}/feature-{feature}/{feature}.helpers.ts
-tests/playwright/specs/{module}/feature-{feature}/{feature}.spec.ts
-tests/playwright/data/{module}/feature-{feature}/test-data.json
-tests/api/{module}/feature-{feature}/{feature}.api.spec.ts
-tests/database/{module}/feature-{feature}/verify-records.sql
-tests/database/{module}/feature-{feature}/compare-legacy-vs-modern.sql
+tests/playwright/pages/{client}/{module}/feature-{feature}/{Feature}Page.ts
+tests/playwright/helpers/{client}/{module}/feature-{feature}/{feature}.helpers.ts
+tests/playwright/specs/{client}/{module}/feature-{feature}/{feature}.spec.ts
+tests/playwright/data/{client}/{module}/feature-{feature}/test-data.json
+tests/api/{client}/{module}/feature-{feature}/{feature}.api.spec.ts
+tests/database/{client}/{module}/feature-{feature}/verify-records.sql
+tests/database/{client}/{module}/feature-{feature}/compare-legacy-vs-modern.sql
 ```
 
 ## Page Object Standards

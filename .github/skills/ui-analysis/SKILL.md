@@ -1,4 +1,4 @@
----
+﻿---
 name: ui-analysis
 description: Navigate a live application via Playwright to document UI structure, user journeys, form fields, validations, and error states.
 ---
@@ -85,7 +85,7 @@ Write-Host "UI Analysis targeting DemoPortal UAT: $uatUrl"
 - If `.env.uat` is missing, stop and ask user to configure it
 - If auth state is missing, document the unauthenticated redirect behavior (still valid test case)
 - Navigate to `{UAT_BASE_URL}{featurePath}`, wait for `networkidle`
-- Take a screenshot of the initial page state: `reports/test-results/{module}/feature-{feature}/ui-analysis/initial.png`
+- Take a screenshot of the initial page state: `reports/test-results/{client}/{module}/feature-{feature}/ui-analysis/initial.png`
 
 ---
 
@@ -271,9 +271,9 @@ App URL: {UAT_BASE_URL}{featurePath}
 Auth State: {authenticated as Dealer | authenticated as Admin | unauthenticated}
 
 ## Screenshots
-- Initial state: reports/test-results/{module}/feature-{feature}/ui-analysis/initial.png
-- Error state:   reports/test-results/{module}/feature-{feature}/ui-analysis/validation-errors.png
-- Success state: reports/test-results/{module}/feature-{feature}/ui-analysis/success.png
+- Initial state: reports/test-results/{client}/{module}/feature-{feature}/ui-analysis/initial.png
+- Error state:   reports/test-results/{client}/{module}/feature-{feature}/ui-analysis/validation-errors.png
+- Success state: reports/test-results/{client}/{module}/feature-{feature}/ui-analysis/success.png
 
 ## Page Structure
 {page title, sections, fields, buttons}
@@ -311,8 +311,8 @@ Auth State: {authenticated as Dealer | authenticated as Admin | unauthenticated}
 ## Output Files
 
 ```
-docs/module-analysis/{module}/feature-{feature}/ui-analysis.md
-reports/test-results/{module}/feature-{feature}/ui-analysis/
+docs/module-analysis/{client}/{module}/feature-{feature}/ui-analysis.md
+reports/test-results/{client}/{module}/feature-{feature}/ui-analysis/
   ├── initial.png
   ├── validation-errors.png
   └── success.png

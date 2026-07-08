@@ -1,4 +1,4 @@
----
+﻿---
 name: repo-analysis
 description: Scan and analyze source code to extract business logic, workflows, validations, endpoints, data models, and security rules for a given module or feature.
 ---
@@ -237,7 +237,7 @@ Generated: {timestamp}
 ## Output File
 
 ```
-docs/module-analysis/{module}/feature-{feature}/repo-analysis.md
+docs/module-analysis/{client}/{module}/feature-{feature}/repo-analysis.md
 ```
 
 ---

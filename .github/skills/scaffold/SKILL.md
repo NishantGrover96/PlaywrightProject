@@ -1,4 +1,4 @@
----
+﻿---
 name: scaffold
 description: One-time interactive setup for a new module or feature, creating all folders, starter files, and updating config and dashboard.
 ---
@@ -22,19 +22,24 @@ updates `config/repos.local.json`, `README.md`, and the dashboard.
 
 Ask in **two rounds** (max 4 questions per call).
 
-### Round 1 — Module / Feature Identity
+### Round 1 — Client / Module / Feature Identity
 
 ```
-Q1. Module name  [kebab-case]
-    e.g. coop | rebate | rewards | administration | dealer-management
+Q1. Client ID  [kebab-case]
+    The client this feature belongs to.
+    e.g. demoportal | certainteed | samsung
+    (must match a config/clients/{clientId}.json file)
 
-Q2. Feature name  [kebab-case]
+Q2. Module name  [kebab-case]
+    e.g. coop | rebate | engage-ads | popshop | rewards | administration | dealer-management
+
+Q3. Feature name  [kebab-case]
     e.g. submit-claim | submit-preapproval | dealer-dashboard | admin-reports
 
-Q3. Feature label  [human-readable]
+Q4. Feature label  [human-readable]
     e.g. "Submit Claim" | "Submit Preapproval" | "Dealer Dashboard"
 
-Q4. Feature page URL path
+Q5. Feature page URL path
     The URL route for this feature in the app.
     e.g. /CoopManagement/Claims/Submit/SubmitClaim
     (used in Playwright tests — can be updated later)
@@ -43,20 +48,20 @@ Q4. Feature page URL path
 ### Round 2 — Legacy Repository Paths
 
 ```
-Q5. Legacy Workspace Folder
+Q6. Legacy Workspace Folder
     Root of the legacy codebase on your machine.
     e.g. D:\NareshCF\Workspace4\Git\ConnectedPlatformWorkspace\DemoPortalV2
 
-Q6. Legacy Web Folder
+Q7. Legacy Web Folder
     The web project folder relative to the workspace root.
     e.g. Presentation\Web
 
-Q7. Legacy Module Folder
+Q8. Legacy Module Folder
     Module folder relative to web Pages directory.
     e.g. CoopManagement
     (resolves to: {workspace}\{webFolder}\Pages\{moduleFolder}\)
 
-Q8. Legacy Feature Folder
+Q9. Legacy Feature Folder
     Feature folder relative to the module folder.
     e.g. Claims\Submit
     (resolves to: {workspace}\{webFolder}\Pages\{moduleFolder}\{featureFolder}\)
@@ -85,10 +90,11 @@ On-demand dependencies:
 ## Step 1 — Run Scaffold Script
 
 ```powershell
-.\scripts\new-module.ps1 -Module {module} -Feature {feature} -Label "{label}"
+.\scripts\new-module.ps1 -Client {client} -Module {module} -Feature {feature} -Label "{label}"
 ```
 
 Creates all folders and starter files across `tests/`, `docs/`, `reports/`.
+All paths are client-scoped: `tests/playwright/specs/{client}/{module}/feature-{feature}/` etc.
 
 ---
 
@@ -132,33 +138,38 @@ Find the module section or create one. Add row to feature table:
 ```json
 "{module}-{feature}": {
   "feature":     "{Module} — {Feature Label}",
-  "catalogFile": "docs/functional-catalogs/{module}/feature-{feature}/test-catalog.md",
+  "catalogFile": "functional-catalogs/{client}/{module}/feature-{feature}/functional-units.html",
   "version":     "v1",
   "generated":   "",
   "auditedAs":   "",
+  "client":      "demoportal",
+  "pipeline":    "functional-qa",
   "sections":    0,
+  "implementationStatus": {
+    "smoke":         { "implemented": false, "lastUpdated": null },
+    "regression":    { "implemented": false, "lastUpdated": null },
+    "e2e":           { "implemented": false, "lastUpdated": null },
+    "functionalUnit":{ "implemented": false, "lastUpdated": null }
+  },
   "specFiles": {
-    "smoke":      "tests/playwright/specs/{module}/feature-{feature}/{feature}.spec.ts",
-    "regression": "tests/playwright/specs/{module}/feature-{feature}/{feature}.spec.ts",
-    "e2e":        "tests/playwright/specs/{module}/feature-{feature}/{feature}.spec.ts"
+    "smoke":      "tests/playwright/specs/{client}/{module}/feature-{feature}/{feature}.spec.ts",
+    "regression": "tests/playwright/specs/{client}/{module}/feature-{feature}/{feature}.spec.ts",
+    "e2e":        "tests/playwright/specs/{client}/{module}/feature-{feature}/{feature}.spec.ts"
   },
   "tests": { "total": 0, "implemented": 0, "fixme": 0 },
   "lastRun": null
 }
 ```
 
-**`dashboard/server.js`** — add to `FEATURE_FOLDERS`:
+**`dashboard/server.js`** — add to `FEATURE_FOLDERS` if used for test execution:
 ```javascript
-"{module}-{feature}": "tests/playwright/specs/{module}/feature-{feature}",
+"{module}-{feature}": "tests/playwright/specs/{client}/{module}/feature-{feature}",
 ```
 
-**`dashboard/index.html`** — add checkbox in the features group under the correct module section:
-```html
-<label class="checkbox-item" data-value="{module}-{feature}">
-  <input type="checkbox" value="{module}-{feature}" />
-  <span class="cb-label">{Module} — {Feature Label}</span>
-  <span class="cb-tag">{module}</span>
-</label>
+> **Note — `index.html` is fully dynamic.** The module dropdown and feature checkboxes are rebuilt
+> automatically from `/api/catalog?clientId=X` every time the client changes. You do NOT need to
+> edit `index.html` to add a new module or feature; the new catalog-manifest.json entry above is
+> sufficient for the feature to appear in the dashboard.
 ```
 
 ---
@@ -174,14 +185,14 @@ Resolved paths:
   Resources:       {legacyWorkspace}\RAL\Resources\{Module}\
 
 Created:
-  tests/playwright/specs/{module}/feature-{feature}/    ✅
-  tests/playwright/pages/{module}/feature-{feature}/    ✅
-  tests/playwright/helpers/{module}/feature-{feature}/  ✅
-  tests/playwright/data/{module}/feature-{feature}/     ✅
-  tests/api/{module}/feature-{feature}/                 ✅
-  tests/database/{module}/feature-{feature}/            ✅
-  docs/*/{module}/feature-{feature}/                    ✅
-  reports/*/{module}/feature-{feature}/                 ✅
+  tests/playwright/specs/{client}/{module}/feature-{feature}/    ✅
+  tests/playwright/pages/{client}/{module}/feature-{feature}/    ✅
+  tests/playwright/helpers/{client}/{module}/feature-{feature}/  ✅
+  tests/playwright/data/{client}/{module}/feature-{feature}/     ✅
+  tests/api/{client}/{module}/feature-{feature}/                 ✅
+  tests/database/{client}/{module}/feature-{feature}/            ✅
+  docs/*/{client}/{module}/feature-{feature}/            ✅
+  reports/*/{client}/{module}/feature-{feature}/         ✅
 
 Updated:
   config/repos.local.json                               ✅

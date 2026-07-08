@@ -1,4 +1,4 @@
----
+﻿---
 name: database-verification
 description: Generate SQL verification scripts that confirm correct database state after functional operations across legacy and modern platforms.
 ---
@@ -26,8 +26,8 @@ Invoke when:
 ## Output Files
 
 ```
-tests/database/{module}/verify-{feature}-records.sql
-tests/database/{module}/compare-{feature}-legacy-vs-modern.sql
+tests/database/{client}/{module}/verify-{feature}-records.sql
+tests/database/{client}/{module}/compare-{feature}-legacy-vs-modern.sql
 ```
 
 ## Verification Checklist

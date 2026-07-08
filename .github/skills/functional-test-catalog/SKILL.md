@@ -1,4 +1,4 @@
----
+﻿---
 name: functional-test-catalog
 description: Discover business rules from analysis reports and generate a comprehensive test catalog organized by tier (Smoke, Regression, E2E).
 ---
@@ -29,8 +29,9 @@ before Playwright tests are generated.
 
 - **Module**: e.g. `coop`
 - **Feature**: e.g. `submit-claim`
-- **Repo Analysis Report**: `docs/module-analysis/{module}/feature-{feature}/repo-analysis.md`
-- **UI Analysis Report**: `docs/module-analysis/{module}/feature-{feature}/ui-analysis.md`
+- **Client**: e.g. `demoportal` — prompt the user: *"Which client does this feature belong to? (e.g. demoportal, certainteed, samsung)"*
+- **Repo Analysis Report**: `docs/module-analysis/{client}/{module}/feature-{feature}/repo-analysis.md`
+- **UI Analysis Report**: `docs/module-analysis/{client}/{module}/feature-{feature}/ui-analysis.md`
 
 ---
 
@@ -296,12 +297,108 @@ Generate an interactive HTML catalog following the existing pattern in the repos
 ## Output Files
 
 ```
-docs/functional-catalogs/{module}/feature-{feature}/test-catalog.md
-docs/functional-catalogs/{module}/feature-{feature}/functional-units.html
-docs/functional-catalogs/{module}/feature-{feature}/smoke-suite.md
-docs/functional-catalogs/{module}/feature-{feature}/regression-suite.md
-docs/functional-catalogs/{module}/feature-{feature}/e2e-suite.md
-docs/module-analysis/{module}/feature-{feature}/business-rules.md
+docs/functional-catalogs/{client}/{module}/feature-{feature}/test-catalog.md
+docs/functional-catalogs/{client}/{module}/feature-{feature}/functional-units.html
+docs/functional-catalogs/{client}/{module}/feature-{feature}/smoke-suite.md
+docs/functional-catalogs/{client}/{module}/feature-{feature}/regression-suite.md
+docs/functional-catalogs/{client}/{module}/feature-{feature}/e2e-suite.md
+docs/module-analysis/{client}/{module}/feature-{feature}/business-rules.md
+```
+
+---
+
+## Step 5 — Dashboard Registration
+
+After all catalog files are written, **automatically register the feature on the QA dashboard**.
+
+### 5.1 — Prompt for Client (if not already known)
+
+If `{client}` was not provided as an input, ask:
+
+```
+Which client does this feature belong to?
+e.g. demoportal | certainteed | samsung
+```
+
+### 5.2 — Update `dashboard/catalog-manifest.json`
+
+Add (or update) the feature entry. Set `functionalUnit.implemented: true` since the HTML catalog was just created:
+
+```json
+"{module}-{feature}": {
+  "feature":     "{Module} — {Feature Label}",
+  "catalogFile": "functional-catalogs/{client}/{module}/feature-{feature}/functional-units.html",
+  "version":     "v1",
+  "generated":   "{YYYY-MM-DD}",
+  "auditedAs":   "{client} ({date})",
+  "lastUpdated": "{ISO timestamp}",
+  "client":      "{client}",
+  "pipeline":    "functional-qa",
+  "sections":    {N — count of tier sections in functional-units.html},
+  "implementationStatus": {
+    "smoke":          { "implemented": false, "lastUpdated": null },
+    "regression":     { "implemented": false, "lastUpdated": null },
+    "e2e":            { "implemented": false, "lastUpdated": null },
+    "functionalUnit": { "implemented": true,  "lastUpdated": "{ISO timestamp}" }
+  },
+  "specFiles": {
+    "smoke":      "tests/playwright/specs/{client}/{module}/feature-{feature}/{feature}.spec.ts",
+    "regression": "tests/playwright/specs/{client}/{module}/feature-{feature}/{feature}.spec.ts",
+    "e2e":        "tests/playwright/specs/{client}/{module}/feature-{feature}/{feature}.spec.ts"
+  },
+  "tests":    { "total": {N from catalog}, "implemented": 0, "fixme": 0 },
+  "coverage": { "functional": 0, "validation": 0, "workflow": 0, "database": 0, "security": 0 },
+  "gaps":     { "critical": 0, "high": 0, "medium": 0, "low": 0 },
+  "lastRun":  null
+}
+```
+
+**Rules**:
+- If the entry already exists, update only `generated`, `auditedAs`, `lastUpdated`, `sections`, `tests.total`, and `functionalUnit.implemented`/`lastUpdated`. Preserve all other fields.
+- If the entry does not exist, create the full entry above.
+
+### 5.3 — Update `dashboard/index.html`
+
+Ensure the feature checkbox exists in the correct module section.
+
+**Check**: search for `data-value="{module}-{feature}"` — if already present, skip.
+
+**If missing**, add after the last `</label>` in the `{module}` group (or after the last existing module group if this is a new module):
+
+```html
+<label class="checkbox-item" data-value="{module}-{feature}" data-module="{module}">
+  <input type="checkbox" value="{module}-{feature}" />
+  <span class="cb-label">{Feature Label}</span>
+  <span class="cb-tag">{module}</span>
+</label>
+```
+
+Also ensure the module exists in the module dropdown (`sel-module`) and in the JS `currentClientFlags` / `moduleEnabled` block. If missing, add:
+
+```html
+<!-- in module dropdown -->
+<option value="{module}">{Module Label}</option>
+```
+
+```js
+// in currentClientFlags
+let currentClientFlags = { ..., {module}: true };
+
+// in moduleEnabled map
+"{module}": currentClientFlags.{module} !== false,
+```
+
+### 5.4 — Registration Confirmation
+
+Output to user:
+
+```
+## Dashboard Registration
+
+✅ catalog-manifest.json — {module}-{feature} entry written  (client: {client})
+✅ dashboard/index.html  — checkbox confirmed  (data-module="{module}")
+   Total tests registered: {N}  (Smoke: N | Regression: N | E2E: N)
+   View on dashboard: npm run dashboard → {Module} → {Feature Label}
 ```
 
 ---

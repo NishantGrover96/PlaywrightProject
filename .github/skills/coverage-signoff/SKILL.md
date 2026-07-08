@@ -1,4 +1,4 @@
----
+﻿---
 name: coverage-signoff
 description: Review gap analysis results and issue a formal sign-off decision as a hard gate before Playwright test generation.
 ---
@@ -19,8 +19,8 @@ this skill returns `Ready for Automation`.
 
 ## Inputs
 
-- **Gap Analysis**: `docs/functional-catalogs/{module}/feature-{feature}/gap-analysis.md`
-- **Coverage Matrix**: `docs/functional-catalogs/{module}/feature-{feature}/coverage-matrix.md`
+- **Gap Analysis**: `docs/functional-catalogs/{client}/{module}/feature-{feature}/gap-analysis.md`
+- **Coverage Matrix**: `docs/functional-catalogs/{client}/{module}/feature-{feature}/coverage-matrix.md`
 
 ---
 
@@ -106,8 +106,8 @@ If BLOCKED:   Critical issues that must be resolved in Modern before any QA work
 ## Outputs
 
 ```
-docs/functional-catalogs/{module}/feature-{feature}/signoff.md
-reports/readiness/{module}/feature-{feature}/readiness.md
+docs/functional-catalogs/{client}/{module}/feature-{feature}/signoff.md
+reports/readiness/{client}/{module}/feature-{feature}/readiness.md
 ```
 
 ---

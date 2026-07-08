@@ -1,4 +1,4 @@
----
+﻿---
 name: functional-qa-test-generation
 description: Orchestrates the full analyze-to-automate pipeline for generating new functional test coverage from repo analysis through test catalog.
 ---
@@ -53,7 +53,12 @@ Q2. Feature name  [kebab-case]
 Q3. Feature label  [human-readable]
     e.g. "Submit Claim" | "Dealer Search" | "Invoice Approval"
 
-Q4. Feature page URL
+Q4. Client name
+    Which client does this feature belong to?
+    e.g. demoportal | certainteed | samsung
+    (used to tag the dashboard entry with the correct client filter)
+
+Q5. Feature page URL
     The full URL of the feature in the live application.
     e.g. http://localhost:5000/CoopManagement/Claims/Submit/SubmitClaim
     (used for Playwright UI analysis — must be accessible)
@@ -62,22 +67,22 @@ Q4. Feature page URL
 ### Round 2 — Source Code Location
 
 ```
-Q5. Source Root Folder
+Q6. Source Root Folder
     Root of the codebase on your machine.
     e.g. D:\Projects\DemoPortalV2
     (check config/repos.local.json — if already set, confirm or override)
 
-Q6. Web Project Folder  [relative to source root]
+Q7. Web Project Folder  [relative to source root]
     The web project containing the feature files.
     e.g. Presentation\Web    OR    src\Web    OR    .  (if root IS the web project)
 
-Q7. Feature Folder  [relative to source root]
+Q8. Feature Folder  [relative to source root]
     The folder containing the feature's primary files (.cshtml, Controller, Pages, etc.)
     e.g. Pages\CoopManagement\Claims\Submit
     OR   Controllers\Coop\Claims
     OR   Features\CoopClaims\Submit
 
-Q8. Auth State for Playwright  [optional — press Enter to skip]
+Q9. Auth State for Playwright  [optional — press Enter to skip]
     Path to Playwright storage state for pre-authenticated sessions.
     e.g. tests/playwright/fixtures/.auth/user.json
     (skip if feature is public or if login will be handled manually)
@@ -140,19 +145,19 @@ Verify that the QA repository folder structure exists for this module/feature. C
 
 **Check hierarchy**:
 ```
-1. Module level:   docs/functional-catalogs/{module}/
-                   docs/module-analysis/{module}/
-                   docs/migration-reports/{module}/
-                   tests/playwright/specs/{module}/
-                   tests/playwright/pages/{module}/
-                   tests/playwright/helpers/{module}/
-                   tests/playwright/data/{module}/
-                   tests/api/{module}/
-                   tests/database/{module}/
-                   reports/readiness/{module}/
-                   reports/test-results/{module}/
+1. Module level:   docs/functional-catalogs/{client}/{module}/
+                   docs/module-analysis/{client}/{module}/
+                   docs/migration-reports/{client}/{module}/
+                   tests/playwright/specs/{client}/{module}/
+                   tests/playwright/pages/{client}/{module}/
+                   tests/playwright/helpers/{client}/{module}/
+                   tests/playwright/data/{client}/{module}/
+                   tests/api/{client}/{module}/
+                   tests/database/{client}/{module}/
+                   reports/readiness/{client}/{module}/
+                   reports/test-results/{client}/{module}/
 
-2. Feature level:  {module}/feature-{feature}/
+2. Feature level:  {client}/{module}/feature-{feature}/
 ```
 
 **Decision Logic**:
@@ -169,7 +174,7 @@ Verify that the QA repository folder structure exists for this module/feature. C
 
 **Create feature folder structure only** (same as migration-qa-framework):
 ```
-docs/functional-catalogs/{module}/
+docs/functional-catalogs/{client}/{module}/
   └─ feature-{feature}/          ← CREATE
        ├─ functional-units.html
        ├─ test-catalog.md
@@ -177,45 +182,45 @@ docs/functional-catalogs/{module}/
        ├─ regression-suite.md
        └─ e2e-suite.md
 
-docs/module-analysis/{module}/
+docs/module-analysis/{client}/{module}/
   └─ feature-{feature}/          ← CREATE
        ├─ repo-analysis.md
        ├─ ui-analysis.md
        └─ business-rules.md
 
-docs/migration-reports/{module}/
+docs/migration-reports/{client}/{module}/
   └─ feature-{feature}/          ← CREATE
        └─ mapping.md              (placeholder — not used in functional QA pipeline)
 
-tests/playwright/specs/{module}/
+tests/playwright/specs/{client}/{module}/
   └─ feature-{feature}/          ← CREATE
        └─ {feature}.spec.ts
 
-tests/playwright/pages/{module}/
+tests/playwright/pages/{client}/{module}/
   └─ feature-{feature}/          ← CREATE
        └─ {Feature}Page.ts
 
-tests/playwright/helpers/{module}/
+tests/playwright/helpers/{client}/{module}/
   └─ feature-{feature}/          ← CREATE
        └─ {feature}.helpers.ts
 
-tests/playwright/data/{module}/
+tests/playwright/data/{client}/{module}/
   └─ feature-{feature}/          ← CREATE
        └─ test-data.json
 
-tests/api/{module}/
+tests/api/{client}/{module}/
   └─ feature-{feature}/          ← CREATE
        └─ {feature}.api.spec.ts
 
-tests/database/{module}/
+tests/database/{client}/{module}/
   └─ feature-{feature}/          ← CREATE
        └─ verify-records.sql
 
-reports/readiness/{module}/
+reports/readiness/{client}/{module}/
   └─ feature-{feature}/          ← CREATE
        └─ readiness.md
 
-reports/test-results/{module}/
+reports/test-results/{client}/{module}/
   └─ feature-{feature}/          ← CREATE
        └─ .gitkeep
 ```
@@ -227,48 +232,48 @@ reports/test-results/{module}/
 **Create complete module + feature structure**:
 ```
 docs/
-  ├─ functional-catalogs/{module}/          ← CREATE MODULE
+  ├─ functional-catalogs/{client}/{module}/          ← CREATE MODULE
   │    └─ feature-{feature}/                ← CREATE FEATURE
   │         ├─ functional-units.html
   │         ├─ test-catalog.md
   │         ├─ smoke-suite.md
   │         ├─ regression-suite.md
   │         └─ e2e-suite.md
-  ├─ module-analysis/{module}/              ← CREATE MODULE
+  ├─ module-analysis/{client}/{module}/              ← CREATE MODULE
   │    └─ feature-{feature}/                ← CREATE FEATURE
   │         ├─ repo-analysis.md
   │         ├─ ui-analysis.md
   │         └─ business-rules.md
-  └─ migration-reports/{module}/            ← CREATE MODULE
+  └─ migration-reports/{client}/{module}/            ← CREATE MODULE
        └─ feature-{feature}/                ← CREATE FEATURE
             └─ mapping.md
 
 tests/
   ├─ playwright/
-  │    ├─ specs/{module}/                   ← CREATE MODULE
+  │    ├─ specs/{client}/{module}/                   ← CREATE MODULE
   │    │    └─ feature-{feature}/           ← CREATE FEATURE
   │    │         └─ {feature}.spec.ts
-  │    ├─ pages/{module}/                   ← CREATE MODULE
+  │    ├─ pages/{client}/{module}/                   ← CREATE MODULE
   │    │    └─ feature-{feature}/           ← CREATE FEATURE
   │    │         └─ {Feature}Page.ts
-  │    ├─ helpers/{module}/                 ← CREATE MODULE
+  │    ├─ helpers/{client}/{module}/                 ← CREATE MODULE
   │    │    └─ feature-{feature}/           ← CREATE FEATURE
   │    │         └─ {feature}.helpers.ts
-  │    └─ data/{module}/                    ← CREATE MODULE
+  │    └─ data/{client}/{module}/                    ← CREATE MODULE
   │         └─ feature-{feature}/           ← CREATE FEATURE
   │              └─ test-data.json
-  ├─ api/{module}/                          ← CREATE MODULE
+  ├─ api/{client}/{module}/                          ← CREATE MODULE
   │    └─ feature-{feature}/                ← CREATE FEATURE
   │         └─ {feature}.api.spec.ts
-  └─ database/{module}/                     ← CREATE MODULE
+  └─ database/{client}/{module}/                     ← CREATE MODULE
        └─ feature-{feature}/                ← CREATE FEATURE
             └─ verify-records.sql
 
 reports/
-  ├─ readiness/{module}/                    ← CREATE MODULE
+  ├─ readiness/{client}/{module}/                    ← CREATE MODULE
   │    └─ feature-{feature}/                ← CREATE FEATURE
   │         └─ readiness.md
-  └─ test-results/{module}/                 ← CREATE MODULE
+  └─ test-results/{client}/{module}/                 ← CREATE MODULE
        └─ feature-{feature}/                ← CREATE FEATURE
             └─ .gitkeep
 ```
@@ -308,7 +313,7 @@ reports/
 ```json
 "{module}-{feature}": {
   "feature":     "{Module} — {Feature Label}",
-  "catalogFile": "docs/functional-catalogs/{module}/feature-{feature}/functional-units.html",
+  "catalogFile": "docs/functional-catalogs/{client}/{module}/feature-{feature}/functional-units.html",
   "version":     "v1",
   "generated":   "",
   "auditedAs":   "DemoPortal UAT ({featureUrl}, {date})",
@@ -322,9 +327,9 @@ reports/
     "functionalUnit": { "implemented": false, "lastUpdated": null }
   },
   "specFiles": {
-    "smoke":      "tests/playwright/specs/{module}/feature-{feature}/{feature}.spec.ts",
-    "regression": "tests/playwright/specs/{module}/feature-{feature}/{feature}.spec.ts",
-    "e2e":        "tests/playwright/specs/{module}/feature-{feature}/{feature}.spec.ts"
+    "smoke":      "tests/playwright/specs/{client}/{module}/feature-{feature}/{feature}.spec.ts",
+    "regression": "tests/playwright/specs/{client}/{module}/feature-{feature}/{feature}.spec.ts",
+    "e2e":        "tests/playwright/specs/{client}/{module}/feature-{feature}/{feature}.spec.ts"
   },
   "tests":    { "total": 0, "implemented": 0, "fixme": 0 },
   "coverage": { "functional": 0, "validation": 0, "workflow": 0, "database": 0, "security": 0 },
@@ -335,7 +340,7 @@ reports/
 
 **Update `dashboard/server.js`** — add to `FEATURE_FOLDERS`:
 ```javascript
-"{module}-{feature}": "tests/playwright/specs/{module}/feature-{feature}",
+"{module}-{feature}": "tests/playwright/specs/{client}/{module}/feature-{feature}",
 ```
 
 **Update `dashboard/index.html`** — add checkbox in the correct module section:
@@ -370,7 +375,7 @@ On-demand:  Services, Validators, Entities, DB layer, Resources, JS scripts, Aut
 
 **Produces**:
 ```
-docs/module-analysis/{module}/feature-{feature}/repo-analysis.md
+docs/module-analysis/{client}/{module}/feature-{feature}/repo-analysis.md
 ```
 
 **Gate**: Do not proceed until `repo-analysis.md` is complete with at least:
@@ -395,8 +400,8 @@ Invoke `/ui-analysis`.
 
 **Produces**:
 ```
-docs/module-analysis/{module}/feature-{feature}/ui-analysis.md
-reports/test-results/{module}/feature-{feature}/ui-analysis/
+docs/module-analysis/{client}/{module}/feature-{feature}/ui-analysis.md
+reports/test-results/{client}/{module}/feature-{feature}/ui-analysis/
   ├── initial.png
   ├── validation-errors.png
   └── success.png
@@ -410,10 +415,15 @@ reports/test-results/{module}/feature-{feature}/ui-analysis/
 
 Invoke `/functional-test-catalog`.
 
+**Pass these inputs**:
+- `module` = `{module}`
+- `feature` = `{feature}`
+- `client` = `{client}` ← collected in Round 1 Q4 — pass through so dashboard registration uses the correct client tag
+
 **Reads**:
 ```
-docs/module-analysis/{module}/feature-{feature}/repo-analysis.md
-docs/module-analysis/{module}/feature-{feature}/ui-analysis.md
+docs/module-analysis/{client}/{module}/feature-{feature}/repo-analysis.md
+docs/module-analysis/{client}/{module}/feature-{feature}/ui-analysis.md
 ```
 
 **Correlates** code analysis with observed UI to extract every business rule, then generates
@@ -428,12 +438,18 @@ a comprehensive test catalog covering:
 
 **Produces**:
 ```
-docs/module-analysis/{module}/feature-{feature}/business-rules.md
-docs/functional-catalogs/{module}/feature-{feature}/test-catalog.md
-docs/functional-catalogs/{module}/feature-{feature}/functional-units.html
-docs/functional-catalogs/{module}/feature-{feature}/smoke-suite.md
-docs/functional-catalogs/{module}/feature-{feature}/regression-suite.md
-docs/functional-catalogs/{module}/feature-{feature}/e2e-suite.md
+docs/module-analysis/{client}/{module}/feature-{feature}/business-rules.md
+docs/functional-catalogs/{client}/{module}/feature-{feature}/test-catalog.md
+docs/functional-catalogs/{client}/{module}/feature-{feature}/functional-units.html
+docs/functional-catalogs/{client}/{module}/feature-{feature}/smoke-suite.md
+docs/functional-catalogs/{client}/{module}/feature-{feature}/regression-suite.md
+docs/functional-catalogs/{client}/{module}/feature-{feature}/e2e-suite.md
+```
+
+**Also produces (dashboard registration — automatic at end of catalog generation)**:
+```
+dashboard/catalog-manifest.json  ← {module}-{feature} entry added/updated (client: {client})
+dashboard/index.html             ← feature checkbox added to {module} group
 ```
 
 **Gate**: Do not proceed until test catalog is complete with:
@@ -441,6 +457,7 @@ docs/functional-catalogs/{module}/feature-{feature}/e2e-suite.md
 - Regression suite: ≥ 1 test per form field + per business rule
 - E2E suite: ≥ 1 full workflow test
 - Total test count documented
+- Dashboard registration confirmed
 
 ---
 
@@ -469,11 +486,11 @@ Feature: {Feature Label}
 |---|---|---|---|
 
 ### Files Generated:
-- docs/functional-catalogs/{module}/feature-{feature}/test-catalog.md
-- docs/functional-catalogs/{module}/feature-{feature}/functional-units.html
+- docs/functional-catalogs/{client}/{module}/feature-{feature}/test-catalog.md
+- docs/functional-catalogs/{client}/{module}/feature-{feature}/functional-units.html
 
 Please review the test catalog before automation begins.
-→ Open: docs/functional-catalogs/{module}/feature-{feature}/test-catalog.md
+→ Open: docs/functional-catalogs/{client}/{module}/feature-{feature}/test-catalog.md
 
 Do you approve this catalog and want to proceed with Playwright automation?
 Options:
@@ -499,21 +516,21 @@ Options:
 Invoke `/playwright-test-generation`.
 
 **Primary sources**:
-- `docs/functional-catalogs/{module}/feature-{feature}/test-catalog.md` — approved test cases
-- `docs/functional-catalogs/{module}/feature-{feature}/smoke-suite.md`
-- `docs/functional-catalogs/{module}/feature-{feature}/regression-suite.md`
-- `docs/functional-catalogs/{module}/feature-{feature}/e2e-suite.md`
-- `docs/module-analysis/{module}/feature-{feature}/ui-analysis.md` — selectors
+- `docs/functional-catalogs/{client}/{module}/feature-{feature}/test-catalog.md` — approved test cases
+- `docs/functional-catalogs/{client}/{module}/feature-{feature}/smoke-suite.md`
+- `docs/functional-catalogs/{client}/{module}/feature-{feature}/regression-suite.md`
+- `docs/functional-catalogs/{client}/{module}/feature-{feature}/e2e-suite.md`
+- `docs/module-analysis/{client}/{module}/feature-{feature}/ui-analysis.md` — selectors
 - Existing test patterns from `tests/playwright/{module}/` — reuse proven patterns
 
 **Produces**:
 ```
-tests/playwright/pages/{module}/feature-{feature}/{Feature}Page.ts
-tests/playwright/helpers/{module}/feature-{feature}/{feature}.helpers.ts
-tests/playwright/specs/{module}/feature-{feature}/{feature}.spec.ts
-tests/playwright/data/{module}/feature-{feature}/test-data.json
-tests/api/{module}/feature-{feature}/{feature}.api.spec.ts
-tests/database/{module}/feature-{feature}/verify-records.sql
+tests/playwright/pages/{client}/{module}/feature-{feature}/{Feature}Page.ts
+tests/playwright/helpers/{client}/{module}/feature-{feature}/{feature}.helpers.ts
+tests/playwright/specs/{client}/{module}/feature-{feature}/{feature}.spec.ts
+tests/playwright/data/{client}/{module}/feature-{feature}/test-data.json
+tests/api/{client}/{module}/feature-{feature}/{feature}.api.spec.ts
+tests/database/{client}/{module}/feature-{feature}/verify-records.sql
 ```
 
 ### Step 5.1 — Auto-Update QA Dashboard
@@ -528,11 +545,13 @@ Update (or create) the full feature entry:
 ```json
 "{module}-{feature}": {
   "feature":     "{Module} — {Feature Label}",
-  "catalogFile": "docs/functional-catalogs/{module}/feature-{feature}/functional-units.html",
+  "catalogFile": "docs/functional-catalogs/{client}/{module}/feature-{feature}/functional-units.html",
   "version":     "v1",
   "generated":   "{date YYYY-MM-DD}",
-  "auditedAs":   "DemoPortal UAT ({featureUrl}, {date})",
+  "auditedAs":   "{client} UAT ({featureUrl}, {date})",
   "lastUpdated": "{ISO timestamp}",
+  "client":      "{client}",
+  "pipeline":    "functional-qa",
   "sections":    {N — count of test sections in spec file},
   "pipeline":    "functional-qa",
   "implementationStatus": {
@@ -542,10 +561,10 @@ Update (or create) the full feature entry:
     "functionalUnit": { "implemented": true, "lastUpdated": "{ISO timestamp}" }
   },
   "specFiles": {
-    "smoke":      "tests/playwright/specs/{module}/feature-{feature}/{feature}.spec.ts",
-    "regression": "tests/playwright/specs/{module}/feature-{feature}/{feature}.spec.ts",
-    "e2e":        "tests/playwright/specs/{module}/feature-{feature}/{feature}.spec.ts",
-    "api":        "tests/api/{module}/feature-{feature}/{feature}.api.spec.ts"
+    "smoke":      "tests/playwright/specs/{client}/{module}/feature-{feature}/{feature}.spec.ts",
+    "regression": "tests/playwright/specs/{client}/{module}/feature-{feature}/{feature}.spec.ts",
+    "e2e":        "tests/playwright/specs/{client}/{module}/feature-{feature}/{feature}.spec.ts",
+    "api":        "tests/api/{client}/{module}/feature-{feature}/{feature}.api.spec.ts"
   },
   "tests":    { "total": N, "implemented": N, "fixme": N },
   "coverage": {
@@ -582,7 +601,7 @@ Update (or create) the full feature entry:
 
 Ensure the feature is in `FEATURE_FOLDERS`:
 ```javascript
-"{module}-{feature}": "tests/playwright/specs/{module}/feature-{feature}",
+"{module}-{feature}": "tests/playwright/specs/{client}/{module}/feature-{feature}",
 ```
 
 Only add if not already present. Do not modify other entries.
@@ -591,11 +610,26 @@ Only add if not already present. Do not modify other entries.
 
 Ensure the feature checkbox is in the correct module section:
 ```html
-<label class="checkbox-item" data-value="{module}-{feature}">
+<label class="checkbox-item" data-value="{module}-{feature}" data-module="{module}">
   <input type="checkbox" value="{module}-{feature}" />
-  <span class="cb-label">{Module} — {Feature Label}</span>
+  <span class="cb-label">{Feature Label}</span>
   <span class="cb-tag">{module}</span>
 </label>
+```
+
+Also ensure the module exists in the module dropdown (`sel-module`) and in the JS `currentClientFlags` / `moduleEnabled` block. If missing, add:
+
+```html
+<!-- in module dropdown -->
+<option value="{module}">{Module Label}</option>
+```
+
+```js
+// in currentClientFlags
+let currentClientFlags = { ..., {module}: true };
+
+// in moduleEnabled map
+"{module}": currentClientFlags.{module} !== false,
 ```
 
 Only add if not already present.
@@ -603,9 +637,9 @@ Only add if not already present.
 **Output to User**:
 ```
 ✅ QA Dashboard updated
-   catalog-manifest.json — {module}-{feature} entry written
+   catalog-manifest.json — {module}-{feature} entry written  (client: {client})
    server.js             — FEATURE_FOLDERS entry confirmed
-   dashboard/index.html  — checkbox confirmed
+   dashboard/index.html  — checkbox confirmed  (data-module="{module}")
    Total tests: N  (implemented: N, fixme: N)
    Coverage: functional NN% | validation NN% | workflow NN% | database NN% | security 100%
 ```
@@ -642,10 +676,10 @@ Options:
 
 ```powershell
 # Single tier
-npx playwright test tests/playwright/specs/{module}/feature-{feature}/{feature}.spec.ts --grep "@{tier}"
+npx playwright test tests/playwright/specs/{client}/{module}/feature-{feature}/{feature}.spec.ts --grep "@{tier}"
 
 # All tiers
-npx playwright test tests/playwright/specs/{module}/feature-{feature}/{feature}.spec.ts
+npx playwright test tests/playwright/specs/{client}/{module}/feature-{feature}/{feature}.spec.ts
 ```
 
 ### Step 6.4 — Update QA Dashboard After Test Execution
@@ -702,7 +736,7 @@ using the same pattern as `/migration-qa-framework` Step 4.4.
 ✅ QA Dashboard updated
    View results: http://localhost:3333
    Status: {tier} — {N} passed, {N} failed
-   Report: reports/test-results/{module}/feature-{feature}/{tier}-results-{timestamp}.md
+   Report: reports/test-results/{client}/{module}/feature-{feature}/{tier}-results-{timestamp}.md
 ```
 
 ---
@@ -742,14 +776,14 @@ Step 6    Test Execution             ✅  {tier}: {N} passed, {N} failed
 ### Test Assets Generated
 | Asset | Path |
 |---|---|
-| Test Catalog | docs/functional-catalogs/{module}/feature-{feature}/test-catalog.md |
-| Interactive Catalog | docs/functional-catalogs/{module}/feature-{feature}/functional-units.html |
-| Spec File | tests/playwright/specs/{module}/feature-{feature}/{feature}.spec.ts |
-| Page Object | tests/playwright/pages/{module}/feature-{feature}/{Feature}Page.ts |
-| Helpers | tests/playwright/helpers/{module}/feature-{feature}/{feature}.helpers.ts |
-| Test Data | tests/playwright/data/{module}/feature-{feature}/test-data.json |
-| API Tests | tests/api/{module}/feature-{feature}/{feature}.api.spec.ts |
-| DB Verification | tests/database/{module}/feature-{feature}/verify-records.sql |
+| Test Catalog | docs/functional-catalogs/{client}/{module}/feature-{feature}/test-catalog.md |
+| Interactive Catalog | docs/functional-catalogs/{client}/{module}/feature-{feature}/functional-units.html |
+| Spec File | tests/playwright/specs/{client}/{module}/feature-{feature}/{feature}.spec.ts |
+| Page Object | tests/playwright/pages/{client}/{module}/feature-{feature}/{Feature}Page.ts |
+| Helpers | tests/playwright/helpers/{client}/{module}/feature-{feature}/{feature}.helpers.ts |
+| Test Data | tests/playwright/data/{client}/{module}/feature-{feature}/test-data.json |
+| API Tests | tests/api/{client}/{module}/feature-{feature}/{feature}.api.spec.ts |
+| DB Verification | tests/database/{client}/{module}/feature-{feature}/verify-records.sql |
 
 ### Notes
 - test.fixme() cases: list each with reason
