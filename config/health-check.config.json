@@ -1,0 +1,91 @@
+{
+  "_readme": "Phase 5.5 — Pre-flight Validation Config. Override per-machine in health-check.local.json (gitignored).",
+
+  "scope": {
+    "clients": "all",
+    "_clientsComment": "'all' | ['demoportal', 'certainteed'] — which clients to validate",
+    "environments": ["production"],
+    "_environmentsComment": "Which environments to run URL reachability checks against"
+  },
+
+  "checks": {
+
+    "requiredFolders": {
+      "enabled": true,
+      "severity": "CRITICAL",
+      "paths": [
+        "tests/playwright/specs",
+        "tests/playwright/pages",
+        "tests/playwright/fixtures",
+        "tests/playwright/helpers",
+        "tests/playwright/engine",
+        "config/clients",
+        "config/users",
+        "dashboard",
+        "dashboard/services",
+        "docs/functional-catalogs"
+      ]
+    },
+
+    "clientConfig": {
+      "enabled": true,
+      "severity": "CRITICAL",
+      "requiredFields": ["clientId", "clientName", "environments", "roles"]
+    },
+
+    "repositories": {
+      "enabled": true,
+      "severity": "HIGH",
+      "_comment": "Checks that config/repos.local.json exists and all configured root paths have a .git folder"
+    },
+
+    "catalogManifest": {
+      "enabled": true,
+      "severity": "CRITICAL",
+      "_comment": "Validates dashboard/catalog-manifest.json is parseable and referenced catalog files exist"
+    },
+
+    "specFiles": {
+      "enabled": true,
+      "severity": "CRITICAL",
+      "_comment": "For every specFiles entry in the catalog manifest, verifies the .ts file exists on disk"
+    },
+
+    "authSetupFiles": {
+      "enabled": true,
+      "severity": "HIGH",
+      "roles": ["dealer", "admin"],
+      "_comment": "Checks that .auth storage state files are present and contain non-empty cookies/origins"
+    },
+
+    "environmentUrls": {
+      "enabled": true,
+      "severity": "MEDIUM",
+      "timeoutMs": 8000,
+      "environments": ["production"],
+      "_comment": "HTTP GET against each configured baseUrl — expects 2xx or 3xx (redirect to login is fine)"
+    },
+
+    "dashboardServices": {
+      "enabled": true,
+      "severity": "CRITICAL",
+      "services": [
+        "dashboard/services/catalog-service",
+        "dashboard/services/client-service",
+        "dashboard/services/feature-service",
+        "dashboard/services/execution-resolver",
+        "dashboard/services/repository-service",
+        "dashboard/services/engine-adapter"
+      ],
+      "_comment": "require() each service — catches syntax errors, missing dependencies, bad paths"
+    }
+
+  },
+
+  "report": {
+    "writeTo": "docs/health-reports",
+    "formats": ["console", "json"],
+    "keepLast": 30,
+    "_comment": "JSON reports are written to docs/health-reports/health-{timestamp}.json; oldest are pruned"
+  }
+}

@@ -1,0 +1,2659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Coop Submit Claim — Multi-Client Analysis</title>
+<style>
+  body{font-family:'Segoe UI',sans-serif;font-size:13px;background:#f8fafc;color:#1e293b;margin:0;padding:20px}
+  h1{font-size:20px;font-weight:700;color:#1e40af;margin-bottom:4px}
+  .meta{color:#64748b;font-size:11px;margin-bottom:24px}
+  h2{font-size:15px;font-weight:700;color:#1e293b;margin:28px 0 10px;border-bottom:2px solid #e2e8f0;padding-bottom:6px}
+  table{width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08);margin-bottom:20px}
+  th{background:#1e40af;color:#fff;padding:8px 12px;text-align:left;font-size:11px;font-weight:600;letter-spacing:.04em}
+  td{padding:8px 12px;border-bottom:1px solid #e2e8f0;vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  tr:hover td{background:#f0f4ff}
+  .on{background:rgba(22,163,74,.15);color:#166534;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600}
+  .off{background:rgba(239,68,68,.12);color:#991b1b;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600}
+  .unknown{color:#94a3b8;font-size:11px}
+  .diff{background:#fef9c3}
+  pre{background:#1e293b;color:#e2e8f0;padding:16px;border-radius:6px;font-size:11px;overflow-x:auto}
+  .session-header{background:#eff6ff;border-left:4px solid #1e40af;padding:10px 14px;margin:16px 0 8px;border-radius:0 6px 6px 0}
+  .session-header strong{color:#1e40af}
+  .error{background:#fee2e2;border-left:4px solid #dc2626;padding:8px 12px;border-radius:0 6px 6px 0;margin:4px 0;font-size:12px}
+  .section{background:#fff;border-radius:8px;padding:16px 20px;box-shadow:0 1px 3px rgba(0,0,0,.08);margin-bottom:20px}
+</style>
+</head>
+<body>
+<h1>Coop — Submit Claim — Multi-Client UI Analysis</h1>
+<div class="meta">
+  Generated: 2026-07-01T06:42:38.984Z &nbsp;·&nbsp;
+  Sessions: DemoPortal / Dealer 1 | DemoPortal / Dealer 2 | CertainTeed / Dealer 1 | CertainTeed / Dealer 2 &nbsp;·&nbsp;
+  Feature: /CoopManagement/Claims/Submit/SubmitClaim
+</div>
+
+<h2>1 — Wizard Step Presence Matrix</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Conditional Element</th>
+      <th>demoportal<br/>dealer1</th><th>demoportal<br/>dealer2</th><th>certainteed<br/>dealer1</th><th>certainteed<br/>dealer2</th>
+      <th>Difference?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="">
+        <td><code>mediaTypeStep</code></td>
+        <td><span class="on">On</span></td><td><span class="on">On</span></td><td><span class="on">On</span></td><td><span class="on">On</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>dealerTypeDropdown</code></td>
+        <td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>productLinesBlock</code></td>
+        <td><span class="on">On</span></td><td><span class="on">On</span></td><td><span class="on">On</span></td><td><span class="on">On</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>vendorInfoBlock</code></td>
+        <td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>preApprovalInput</code></td>
+        <td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>invoiceUpload</code></td>
+        <td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>budgetDisplay</code></td>
+        <td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>multiCurrencyToggle</code></td>
+        <td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>coopOcrSection</code></td>
+        <td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>recentActivitiesSection</code></td>
+        <td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td>
+        <td>—</td>
+      </tr>
+  </tbody>
+</table>
+
+<h2>2 — Feature Flag Matrix (Coop module)</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Feature Key</th>
+      <th>demoportal<br/>dealer1</th><th>demoportal<br/>dealer2</th><th>certainteed<br/>dealer1</th><th>certainteed<br/>dealer2</th>
+      <th>Difference?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="">
+        <td><code>SPME</code></td>
+        <td><span class="on">On</span></td><td><span class="on">On</span></td><td><span class="on">On</span></td><td><span class="on">On</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>PROC</code></td>
+        <td><span class="on">On</span></td><td><span class="on">On</span></td><td><span class="on">On</span></td><td><span class="on">On</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>COCR</code></td>
+        <td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>CMPDF</code></td>
+        <td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>REAC</code></td>
+        <td><span class="on">On</span></td><td><span class="on">On</span></td><td><span class="on">On</span></td><td><span class="on">On</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>SUAC</code></td>
+        <td><span class="on">On</span></td><td><span class="on">On</span></td><td><span class="on">On</span></td><td><span class="on">On</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>PRUF</code></td>
+        <td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>CONC</code></td>
+        <td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>VNIC</code></td>
+        <td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>VNID</code></td>
+        <td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>INCC</code></td>
+        <td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>MCCI</code></td>
+        <td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>ETDCF</code></td>
+        <td><span class="on">On</span></td><td><span class="on">On</span></td><td><span class="on">On</span></td><td><span class="on">On</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>SMGP</code></td>
+        <td><span class="on">On</span></td><td><span class="on">On</span></td><td><span class="on">On</span></td><td><span class="on">On</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>AMAIL</code></td>
+        <td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>FREN</code></td>
+        <td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>HCNF</code></td>
+        <td><span class="on">On</span></td><td><span class="on">On</span></td><td><span class="on">On</span></td><td><span class="on">On</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>PMNT</code></td>
+        <td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>ORAI</code></td>
+        <td><span class="on">On</span></td><td><span class="on">On</span></td><td><span class="on">On</span></td><td><span class="on">On</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>CONP</code></td>
+        <td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>POD</code></td>
+        <td><span class="on">On</span></td><td><span class="on">On</span></td><td><span class="on">On</span></td><td><span class="on">On</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>ITAA</code></td>
+        <td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>SPDAS</code></td>
+        <td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>IMSD</code></td>
+        <td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>CFCF</code></td>
+        <td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td><td><span class="off">Off</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>UF</code></td>
+        <td><span class="on">On</span></td><td><span class="on">On</span></td><td><span class="on">On</span></td><td><span class="on">On</span></td>
+        <td>—</td>
+      </tr><tr class="">
+        <td><code>ESPS</code></td>
+        <td><span class="on">On</span></td><td><span class="on">On</span></td><td><span class="on">On</span></td><td><span class="on">On</span></td>
+        <td>—</td>
+      </tr>
+  </tbody>
+</table>
+
+<h2>3 — Field Inventory per Session</h2>
+
+<div class="session-header"><strong>DemoPortal — Dealer 1</strong> &nbsp;|&nbsp; https://certainteedportaluat.channel-fusion.com &nbsp;|&nbsp; 2026-07-01T06:39:01.371Z</div>
+
+
+<div class="section">
+  <strong>Step 1 — Claim Type & Contact</strong>
+  <table>
+    <thead><tr><th>Field ID</th><th>Label</th><th>Type</th><th>Required</th><th>Visible</th><th>MaxLength</th></tr></thead>
+    <tbody>
+      
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[radio]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[radio]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      
+    </tbody>
+  </table>
+  <p><strong>Media Tiles:</strong> Facebook – Paid, Instagram – Paid, Meta (Facebook + Instagram) – Paid, YouTube – Paid, TikTok – Paid, Pinterest – Paid, LinkedIn – Paid, X (Twitter) – Paid, Snapchat – Paid, Reddit – Paid, Other Social Media Platforms, Google Ads - Paid Seach, Microsoft Ads (Bing Ads) - Paid Seach, Native Advertising, Web Banners/Display Advertising, TV & Streaming TV (e.g., Hulu, Roku, YouTube TV), Audio Advertising (digital music streaming, podcasts, smart speakers, and traditional radio), Digital Cross-Channel (e.g. Google Performance Max, Microsoft Performance Max), Billboards (Static & Digital), Transit Signage Advertising, Retail Signage Advertising, Co-Branded Promotional Materials (e. g. Door hangers, Yard signs, Literature and Business Cards), Co-Branded Apparel/Swag & Promotional Items (e.g. Hats, Shirts / Polos, Jackets, Giveaways), Print (e.g. Newspapers, Magazines, Placemats), Vehicle Wraps, Sponsored Email Marketing (Third-Party Distribution), Co-Branded Rented List Email Campaign, Consumer Exhibitions / Home Shows</p>
+  
+</div>
+<div class="section">
+  <strong>After Step 1 Continue</strong>
+  <table>
+    <thead><tr><th>Field ID</th><th>Label</th><th>Type</th><th>Required</th><th>Visible</th><th>MaxLength</th></tr></thead>
+    <tbody>
+      
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      
+    </tbody>
+  </table>
+  <p><strong>Media Tiles:</strong> Facebook – Paid, Instagram – Paid, Meta (Facebook + Instagram) – Paid, YouTube – Paid, TikTok – Paid, Pinterest – Paid, LinkedIn – Paid, X (Twitter) – Paid, Snapchat – Paid, Reddit – Paid, Other Social Media Platforms, Google Ads - Paid Seach, Microsoft Ads (Bing Ads) - Paid Seach, Native Advertising, Web Banners/Display Advertising, TV & Streaming TV (e.g., Hulu, Roku, YouTube TV), Audio Advertising (digital music streaming, podcasts, smart speakers, and traditional radio), Digital Cross-Channel (e.g. Google Performance Max, Microsoft Performance Max), Billboards (Static & Digital), Transit Signage Advertising, Retail Signage Advertising, Co-Branded Promotional Materials (e. g. Door hangers, Yard signs, Literature and Business Cards), Co-Branded Apparel/Swag & Promotional Items (e.g. Hats, Shirts / Polos, Jackets, Giveaways), Print (e.g. Newspapers, Magazines, Placemats), Vehicle Wraps, Sponsored Email Marketing (Third-Party Distribution), Co-Branded Rented List Email Campaign, Consumer Exhibitions / Home Shows</p>
+  <p><strong>programDealerType:</strong> Select Contractor Type, Contractor (Residential Roofing)</p>
+</div>
+<div class="section">
+  <strong>Step 3 — Media Type Tiles</strong>
+  <table>
+    <thead><tr><th>Field ID</th><th>Label</th><th>Type</th><th>Required</th><th>Visible</th><th>MaxLength</th></tr></thead>
+    <tbody>
+      
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      
+    </tbody>
+  </table>
+  <p><strong>Media Tiles:</strong> Facebook – Paid, Instagram – Paid, Meta (Facebook + Instagram) – Paid, YouTube – Paid, TikTok – Paid, Pinterest – Paid, LinkedIn – Paid, X (Twitter) – Paid, Snapchat – Paid, Reddit – Paid, Other Social Media Platforms, Google Ads - Paid Seach, Microsoft Ads (Bing Ads) - Paid Seach, Native Advertising, Web Banners/Display Advertising, TV & Streaming TV (e.g., Hulu, Roku, YouTube TV), Audio Advertising (digital music streaming, podcasts, smart speakers, and traditional radio), Digital Cross-Channel (e.g. Google Performance Max, Microsoft Performance Max), Billboards (Static & Digital), Transit Signage Advertising, Retail Signage Advertising, Co-Branded Promotional Materials (e. g. Door hangers, Yard signs, Literature and Business Cards), Co-Branded Apparel/Swag & Promotional Items (e.g. Hats, Shirts / Polos, Jackets, Giveaways), Print (e.g. Newspapers, Magazines, Placemats), Vehicle Wraps, Sponsored Email Marketing (Third-Party Distribution), Co-Branded Rented List Email Campaign, Consumer Exhibitions / Home Shows</p>
+  <p><strong>programDealerType:</strong> Select Contractor Type, Contractor (Residential Roofing)</p>
+</div>
+<div class="section">
+  <strong>After Media Type Selection</strong>
+  <table>
+    <thead><tr><th>Field ID</th><th>Label</th><th>Type</th><th>Required</th><th>Visible</th><th>MaxLength</th></tr></thead>
+    <tbody>
+      
+      <tr>
+        <td><code>drpProductCodes</code></td>
+        <td>—</td>
+        <td>select</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtProductMeasurement</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtReimbursement</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>15</td>
+      </tr>
+      <tr>
+        <td><code>txtInvoiceAmt</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>15</td>
+      </tr>
+      <tr>
+        <td><code>txtInvoiceNumber</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>20</td>
+      </tr>
+      <tr>
+        <td><code>hdtxtActivityDate</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtActivityDate</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtMediaName</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>100</td>
+      </tr>
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      
+    </tbody>
+  </table>
+  <p><strong>Media Tiles:</strong> Facebook – Paid, Instagram – Paid, Meta (Facebook + Instagram) – Paid, YouTube – Paid, TikTok – Paid, Pinterest – Paid, LinkedIn – Paid, X (Twitter) – Paid, Snapchat – Paid, Reddit – Paid, Other Social Media Platforms, Google Ads - Paid Seach, Microsoft Ads (Bing Ads) - Paid Seach, Native Advertising, Web Banners/Display Advertising, TV & Streaming TV (e.g., Hulu, Roku, YouTube TV), Audio Advertising (digital music streaming, podcasts, smart speakers, and traditional radio), Digital Cross-Channel (e.g. Google Performance Max, Microsoft Performance Max), Billboards (Static & Digital), Transit Signage Advertising, Retail Signage Advertising, Co-Branded Promotional Materials (e. g. Door hangers, Yard signs, Literature and Business Cards), Co-Branded Apparel/Swag & Promotional Items (e.g. Hats, Shirts / Polos, Jackets, Giveaways), Print (e.g. Newspapers, Magazines, Placemats), Vehicle Wraps, Sponsored Email Marketing (Third-Party Distribution), Co-Branded Rented List Email Campaign, Consumer Exhibitions / Home Shows</p>
+  <p><strong>programDealerType:</strong> Select Contractor Type, Contractor (Residential Roofing)</p>
+</div>
+<div class="section">
+  <strong>Step 4 — Activity Form</strong>
+  <table>
+    <thead><tr><th>Field ID</th><th>Label</th><th>Type</th><th>Required</th><th>Visible</th><th>MaxLength</th></tr></thead>
+    <tbody>
+      
+      <tr>
+        <td><code>drpProductCodes</code></td>
+        <td>—</td>
+        <td>select</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtProductMeasurement</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtReimbursement</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>15</td>
+      </tr>
+      <tr>
+        <td><code>txtInvoiceAmt</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>15</td>
+      </tr>
+      <tr>
+        <td><code>txtInvoiceNumber</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>20</td>
+      </tr>
+      <tr>
+        <td><code>hdtxtActivityDate</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtActivityDate</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtMediaName</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>100</td>
+      </tr>
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      
+    </tbody>
+  </table>
+  <p><strong>Media Tiles:</strong> Facebook – Paid, Instagram – Paid, Meta (Facebook + Instagram) – Paid, YouTube – Paid, TikTok – Paid, Pinterest – Paid, LinkedIn – Paid, X (Twitter) – Paid, Snapchat – Paid, Reddit – Paid, Other Social Media Platforms, Google Ads - Paid Seach, Microsoft Ads (Bing Ads) - Paid Seach, Native Advertising, Web Banners/Display Advertising, TV & Streaming TV (e.g., Hulu, Roku, YouTube TV), Audio Advertising (digital music streaming, podcasts, smart speakers, and traditional radio), Digital Cross-Channel (e.g. Google Performance Max, Microsoft Performance Max), Billboards (Static & Digital), Transit Signage Advertising, Retail Signage Advertising, Co-Branded Promotional Materials (e. g. Door hangers, Yard signs, Literature and Business Cards), Co-Branded Apparel/Swag & Promotional Items (e.g. Hats, Shirts / Polos, Jackets, Giveaways), Print (e.g. Newspapers, Magazines, Placemats), Vehicle Wraps, Sponsored Email Marketing (Third-Party Distribution), Co-Branded Rented List Email Campaign, Consumer Exhibitions / Home Shows</p>
+  <p><strong>programDealerType:</strong> Select Contractor Type, Contractor (Residential Roofing)</p>
+</div>
+<div class="section">
+  <strong>Step 4 — Activity Form (scrolled)</strong>
+  <table>
+    <thead><tr><th>Field ID</th><th>Label</th><th>Type</th><th>Required</th><th>Visible</th><th>MaxLength</th></tr></thead>
+    <tbody>
+      
+      <tr>
+        <td><code>drpProductCodes</code></td>
+        <td>—</td>
+        <td>select</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtProductMeasurement</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtReimbursement</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>15</td>
+      </tr>
+      <tr>
+        <td><code>txtInvoiceAmt</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>15</td>
+      </tr>
+      <tr>
+        <td><code>txtInvoiceNumber</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>20</td>
+      </tr>
+      <tr>
+        <td><code>hdtxtActivityDate</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtActivityDate</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtMediaName</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>100</td>
+      </tr>
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[search]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      
+    </tbody>
+  </table>
+  <p><strong>Media Tiles:</strong> Facebook – Paid, Instagram – Paid, Meta (Facebook + Instagram) – Paid, YouTube – Paid, TikTok – Paid, Pinterest – Paid, LinkedIn – Paid, X (Twitter) – Paid, Snapchat – Paid, Reddit – Paid, Other Social Media Platforms, Google Ads - Paid Seach, Microsoft Ads (Bing Ads) - Paid Seach, Native Advertising, Web Banners/Display Advertising, TV & Streaming TV (e.g., Hulu, Roku, YouTube TV), Audio Advertising (digital music streaming, podcasts, smart speakers, and traditional radio), Digital Cross-Channel (e.g. Google Performance Max, Microsoft Performance Max), Billboards (Static & Digital), Transit Signage Advertising, Retail Signage Advertising, Co-Branded Promotional Materials (e. g. Door hangers, Yard signs, Literature and Business Cards), Co-Branded Apparel/Swag & Promotional Items (e.g. Hats, Shirts / Polos, Jackets, Giveaways), Print (e.g. Newspapers, Magazines, Placemats), Vehicle Wraps, Sponsored Email Marketing (Third-Party Distribution), Co-Branded Rented List Email Campaign, Consumer Exhibitions / Home Shows</p>
+  <p><strong>programDealerType:</strong> Select Contractor Type, Contractor (Residential Roofing)</p>
+</div>
+
+<div class="session-header"><strong>DemoPortal — Dealer 2</strong> &nbsp;|&nbsp; https://certainteedportaluat.channel-fusion.com &nbsp;|&nbsp; 2026-07-01T06:40:50.076Z</div>
+
+
+<div class="section">
+  <strong>Step 1 — Claim Type & Contact</strong>
+  <table>
+    <thead><tr><th>Field ID</th><th>Label</th><th>Type</th><th>Required</th><th>Visible</th><th>MaxLength</th></tr></thead>
+    <tbody>
+      
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[radio]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[radio]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      
+    </tbody>
+  </table>
+  <p><strong>Media Tiles:</strong> Facebook – Paid, Instagram – Paid, Meta (Facebook + Instagram) – Paid, YouTube – Paid, TikTok – Paid, Pinterest – Paid, LinkedIn – Paid, X (Twitter) – Paid, Snapchat – Paid, Reddit – Paid, Other Social Media Platforms, Google Ads - Paid Seach, Microsoft Ads (Bing Ads) - Paid Seach, Native Advertising, Web Banners/Display Advertising, TV & Streaming TV (e.g., Hulu, Roku, YouTube TV), Audio Advertising (digital music streaming, podcasts, smart speakers, and traditional radio), Digital Cross-Channel (e.g. Google Performance Max, Microsoft Performance Max), Billboards (Static & Digital), Transit Signage Advertising, Retail Signage Advertising, Co-Branded Promotional Materials (e. g. Door hangers, Yard signs, Literature and Business Cards), Co-Branded Apparel/Swag & Promotional Items (e.g. Hats, Shirts / Polos, Jackets, Giveaways), Print (e.g. Newspapers, Magazines, Placemats), Vehicle Wraps, Sponsored Email Marketing (Third-Party Distribution), Co-Branded Rented List Email Campaign, Consumer Exhibitions / Home Shows</p>
+  
+</div>
+<div class="section">
+  <strong>After Step 1 Continue</strong>
+  <table>
+    <thead><tr><th>Field ID</th><th>Label</th><th>Type</th><th>Required</th><th>Visible</th><th>MaxLength</th></tr></thead>
+    <tbody>
+      
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      
+    </tbody>
+  </table>
+  <p><strong>Media Tiles:</strong> Facebook – Paid, Instagram – Paid, Meta (Facebook + Instagram) – Paid, YouTube – Paid, TikTok – Paid, Pinterest – Paid, LinkedIn – Paid, X (Twitter) – Paid, Snapchat – Paid, Reddit – Paid, Other Social Media Platforms, Google Ads - Paid Seach, Microsoft Ads (Bing Ads) - Paid Seach, Native Advertising, Web Banners/Display Advertising, TV & Streaming TV (e.g., Hulu, Roku, YouTube TV), Audio Advertising (digital music streaming, podcasts, smart speakers, and traditional radio), Digital Cross-Channel (e.g. Google Performance Max, Microsoft Performance Max), Billboards (Static & Digital), Transit Signage Advertising, Retail Signage Advertising, Co-Branded Promotional Materials (e. g. Door hangers, Yard signs, Literature and Business Cards), Co-Branded Apparel/Swag & Promotional Items (e.g. Hats, Shirts / Polos, Jackets, Giveaways), Print (e.g. Newspapers, Magazines, Placemats), Vehicle Wraps, Sponsored Email Marketing (Third-Party Distribution), Co-Branded Rented List Email Campaign, Consumer Exhibitions / Home Shows</p>
+  <p><strong>programDealerType:</strong> Select Contractor Type, Contractor (Residential Roofing)</p>
+</div>
+<div class="section">
+  <strong>Step 3 — Media Type Tiles</strong>
+  <table>
+    <thead><tr><th>Field ID</th><th>Label</th><th>Type</th><th>Required</th><th>Visible</th><th>MaxLength</th></tr></thead>
+    <tbody>
+      
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      
+    </tbody>
+  </table>
+  <p><strong>Media Tiles:</strong> Facebook – Paid, Instagram – Paid, Meta (Facebook + Instagram) – Paid, YouTube – Paid, TikTok – Paid, Pinterest – Paid, LinkedIn – Paid, X (Twitter) – Paid, Snapchat – Paid, Reddit – Paid, Other Social Media Platforms, Google Ads - Paid Seach, Microsoft Ads (Bing Ads) - Paid Seach, Native Advertising, Web Banners/Display Advertising, TV & Streaming TV (e.g., Hulu, Roku, YouTube TV), Audio Advertising (digital music streaming, podcasts, smart speakers, and traditional radio), Digital Cross-Channel (e.g. Google Performance Max, Microsoft Performance Max), Billboards (Static & Digital), Transit Signage Advertising, Retail Signage Advertising, Co-Branded Promotional Materials (e. g. Door hangers, Yard signs, Literature and Business Cards), Co-Branded Apparel/Swag & Promotional Items (e.g. Hats, Shirts / Polos, Jackets, Giveaways), Print (e.g. Newspapers, Magazines, Placemats), Vehicle Wraps, Sponsored Email Marketing (Third-Party Distribution), Co-Branded Rented List Email Campaign, Consumer Exhibitions / Home Shows</p>
+  <p><strong>programDealerType:</strong> Select Contractor Type, Contractor (Residential Roofing)</p>
+</div>
+<div class="section">
+  <strong>After Media Type Selection</strong>
+  <table>
+    <thead><tr><th>Field ID</th><th>Label</th><th>Type</th><th>Required</th><th>Visible</th><th>MaxLength</th></tr></thead>
+    <tbody>
+      
+      <tr>
+        <td><code>drpProductCodes</code></td>
+        <td>—</td>
+        <td>select</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtProductMeasurement</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtReimbursement</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>15</td>
+      </tr>
+      <tr>
+        <td><code>txtInvoiceAmt</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>15</td>
+      </tr>
+      <tr>
+        <td><code>txtInvoiceNumber</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>20</td>
+      </tr>
+      <tr>
+        <td><code>hdtxtActivityDate</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtActivityDate</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtMediaName</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>100</td>
+      </tr>
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      
+    </tbody>
+  </table>
+  <p><strong>Media Tiles:</strong> Facebook – Paid, Instagram – Paid, Meta (Facebook + Instagram) – Paid, YouTube – Paid, TikTok – Paid, Pinterest – Paid, LinkedIn – Paid, X (Twitter) – Paid, Snapchat – Paid, Reddit – Paid, Other Social Media Platforms, Google Ads - Paid Seach, Microsoft Ads (Bing Ads) - Paid Seach, Native Advertising, Web Banners/Display Advertising, TV & Streaming TV (e.g., Hulu, Roku, YouTube TV), Audio Advertising (digital music streaming, podcasts, smart speakers, and traditional radio), Digital Cross-Channel (e.g. Google Performance Max, Microsoft Performance Max), Billboards (Static & Digital), Transit Signage Advertising, Retail Signage Advertising, Co-Branded Promotional Materials (e. g. Door hangers, Yard signs, Literature and Business Cards), Co-Branded Apparel/Swag & Promotional Items (e.g. Hats, Shirts / Polos, Jackets, Giveaways), Print (e.g. Newspapers, Magazines, Placemats), Vehicle Wraps, Sponsored Email Marketing (Third-Party Distribution), Co-Branded Rented List Email Campaign, Consumer Exhibitions / Home Shows</p>
+  <p><strong>programDealerType:</strong> Select Contractor Type, Contractor (Residential Roofing)</p>
+</div>
+<div class="section">
+  <strong>Step 4 — Activity Form</strong>
+  <table>
+    <thead><tr><th>Field ID</th><th>Label</th><th>Type</th><th>Required</th><th>Visible</th><th>MaxLength</th></tr></thead>
+    <tbody>
+      
+      <tr>
+        <td><code>drpProductCodes</code></td>
+        <td>—</td>
+        <td>select</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtProductMeasurement</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtReimbursement</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>15</td>
+      </tr>
+      <tr>
+        <td><code>txtInvoiceAmt</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>15</td>
+      </tr>
+      <tr>
+        <td><code>txtInvoiceNumber</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>20</td>
+      </tr>
+      <tr>
+        <td><code>hdtxtActivityDate</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtActivityDate</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtMediaName</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>100</td>
+      </tr>
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      
+    </tbody>
+  </table>
+  <p><strong>Media Tiles:</strong> Facebook – Paid, Instagram – Paid, Meta (Facebook + Instagram) – Paid, YouTube – Paid, TikTok – Paid, Pinterest – Paid, LinkedIn – Paid, X (Twitter) – Paid, Snapchat – Paid, Reddit – Paid, Other Social Media Platforms, Google Ads - Paid Seach, Microsoft Ads (Bing Ads) - Paid Seach, Native Advertising, Web Banners/Display Advertising, TV & Streaming TV (e.g., Hulu, Roku, YouTube TV), Audio Advertising (digital music streaming, podcasts, smart speakers, and traditional radio), Digital Cross-Channel (e.g. Google Performance Max, Microsoft Performance Max), Billboards (Static & Digital), Transit Signage Advertising, Retail Signage Advertising, Co-Branded Promotional Materials (e. g. Door hangers, Yard signs, Literature and Business Cards), Co-Branded Apparel/Swag & Promotional Items (e.g. Hats, Shirts / Polos, Jackets, Giveaways), Print (e.g. Newspapers, Magazines, Placemats), Vehicle Wraps, Sponsored Email Marketing (Third-Party Distribution), Co-Branded Rented List Email Campaign, Consumer Exhibitions / Home Shows</p>
+  <p><strong>programDealerType:</strong> Select Contractor Type, Contractor (Residential Roofing)</p>
+</div>
+<div class="section">
+  <strong>Step 4 — Activity Form (scrolled)</strong>
+  <table>
+    <thead><tr><th>Field ID</th><th>Label</th><th>Type</th><th>Required</th><th>Visible</th><th>MaxLength</th></tr></thead>
+    <tbody>
+      
+      <tr>
+        <td><code>drpProductCodes</code></td>
+        <td>—</td>
+        <td>select</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtProductMeasurement</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtReimbursement</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>15</td>
+      </tr>
+      <tr>
+        <td><code>txtInvoiceAmt</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>15</td>
+      </tr>
+      <tr>
+        <td><code>txtInvoiceNumber</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>20</td>
+      </tr>
+      <tr>
+        <td><code>hdtxtActivityDate</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtActivityDate</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtMediaName</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>100</td>
+      </tr>
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      
+    </tbody>
+  </table>
+  <p><strong>Media Tiles:</strong> Facebook – Paid, Instagram – Paid, Meta (Facebook + Instagram) – Paid, YouTube – Paid, TikTok – Paid, Pinterest – Paid, LinkedIn – Paid, X (Twitter) – Paid, Snapchat – Paid, Reddit – Paid, Other Social Media Platforms, Google Ads - Paid Seach, Microsoft Ads (Bing Ads) - Paid Seach, Native Advertising, Web Banners/Display Advertising, TV & Streaming TV (e.g., Hulu, Roku, YouTube TV), Audio Advertising (digital music streaming, podcasts, smart speakers, and traditional radio), Digital Cross-Channel (e.g. Google Performance Max, Microsoft Performance Max), Billboards (Static & Digital), Transit Signage Advertising, Retail Signage Advertising, Co-Branded Promotional Materials (e. g. Door hangers, Yard signs, Literature and Business Cards), Co-Branded Apparel/Swag & Promotional Items (e.g. Hats, Shirts / Polos, Jackets, Giveaways), Print (e.g. Newspapers, Magazines, Placemats), Vehicle Wraps, Sponsored Email Marketing (Third-Party Distribution), Co-Branded Rented List Email Campaign, Consumer Exhibitions / Home Shows</p>
+  <p><strong>programDealerType:</strong> Select Contractor Type, Contractor (Residential Roofing)</p>
+</div>
+
+<div class="session-header"><strong>CertainTeed — Dealer 1</strong> &nbsp;|&nbsp; https://certainteedportaluat.channel-fusion.com &nbsp;|&nbsp; 2026-07-01T06:42:27.362Z</div>
+
+
+<div class="section">
+  <strong>Step 1 — Claim Type & Contact</strong>
+  <table>
+    <thead><tr><th>Field ID</th><th>Label</th><th>Type</th><th>Required</th><th>Visible</th><th>MaxLength</th></tr></thead>
+    <tbody>
+      
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[radio]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[radio]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      
+    </tbody>
+  </table>
+  <p><strong>Media Tiles:</strong> Facebook – Paid, Instagram – Paid, Meta (Facebook + Instagram) – Paid, YouTube – Paid, TikTok – Paid, Pinterest – Paid, LinkedIn – Paid, X (Twitter) – Paid, Snapchat – Paid, Reddit – Paid, Other Social Media Platforms, Google Ads - Paid Seach, Microsoft Ads (Bing Ads) - Paid Seach, Native Advertising, Web Banners/Display Advertising, TV & Streaming TV (e.g., Hulu, Roku, YouTube TV), Audio Advertising (digital music streaming, podcasts, smart speakers, and traditional radio), Digital Cross-Channel (e.g. Google Performance Max, Microsoft Performance Max), Billboards (Static & Digital), Transit Signage Advertising, Retail Signage Advertising, Co-Branded Promotional Materials (e. g. Door hangers, Yard signs, Literature and Business Cards), Co-Branded Apparel/Swag & Promotional Items (e.g. Hats, Shirts / Polos, Jackets, Giveaways), Print (e.g. Newspapers, Magazines, Placemats), Vehicle Wraps, Sponsored Email Marketing (Third-Party Distribution), Co-Branded Rented List Email Campaign, Consumer Exhibitions / Home Shows</p>
+  
+</div>
+<div class="section">
+  <strong>After Step 1 Continue</strong>
+  <table>
+    <thead><tr><th>Field ID</th><th>Label</th><th>Type</th><th>Required</th><th>Visible</th><th>MaxLength</th></tr></thead>
+    <tbody>
+      
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      
+    </tbody>
+  </table>
+  <p><strong>Media Tiles:</strong> Facebook – Paid, Instagram – Paid, Meta (Facebook + Instagram) – Paid, YouTube – Paid, TikTok – Paid, Pinterest – Paid, LinkedIn – Paid, X (Twitter) – Paid, Snapchat – Paid, Reddit – Paid, Other Social Media Platforms, Google Ads - Paid Seach, Microsoft Ads (Bing Ads) - Paid Seach, Native Advertising, Web Banners/Display Advertising, TV & Streaming TV (e.g., Hulu, Roku, YouTube TV), Audio Advertising (digital music streaming, podcasts, smart speakers, and traditional radio), Digital Cross-Channel (e.g. Google Performance Max, Microsoft Performance Max), Billboards (Static & Digital), Transit Signage Advertising, Retail Signage Advertising, Co-Branded Promotional Materials (e. g. Door hangers, Yard signs, Literature and Business Cards), Co-Branded Apparel/Swag & Promotional Items (e.g. Hats, Shirts / Polos, Jackets, Giveaways), Print (e.g. Newspapers, Magazines, Placemats), Vehicle Wraps, Sponsored Email Marketing (Third-Party Distribution), Co-Branded Rented List Email Campaign, Consumer Exhibitions / Home Shows</p>
+  <p><strong>programDealerType:</strong> Select Contractor Type, Contractor (Residential Roofing)</p>
+</div>
+<div class="section">
+  <strong>Step 3 — Media Type Tiles</strong>
+  <table>
+    <thead><tr><th>Field ID</th><th>Label</th><th>Type</th><th>Required</th><th>Visible</th><th>MaxLength</th></tr></thead>
+    <tbody>
+      
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      
+    </tbody>
+  </table>
+  <p><strong>Media Tiles:</strong> Facebook – Paid, Instagram – Paid, Meta (Facebook + Instagram) – Paid, YouTube – Paid, TikTok – Paid, Pinterest – Paid, LinkedIn – Paid, X (Twitter) – Paid, Snapchat – Paid, Reddit – Paid, Other Social Media Platforms, Google Ads - Paid Seach, Microsoft Ads (Bing Ads) - Paid Seach, Native Advertising, Web Banners/Display Advertising, TV & Streaming TV (e.g., Hulu, Roku, YouTube TV), Audio Advertising (digital music streaming, podcasts, smart speakers, and traditional radio), Digital Cross-Channel (e.g. Google Performance Max, Microsoft Performance Max), Billboards (Static & Digital), Transit Signage Advertising, Retail Signage Advertising, Co-Branded Promotional Materials (e. g. Door hangers, Yard signs, Literature and Business Cards), Co-Branded Apparel/Swag & Promotional Items (e.g. Hats, Shirts / Polos, Jackets, Giveaways), Print (e.g. Newspapers, Magazines, Placemats), Vehicle Wraps, Sponsored Email Marketing (Third-Party Distribution), Co-Branded Rented List Email Campaign, Consumer Exhibitions / Home Shows</p>
+  <p><strong>programDealerType:</strong> Select Contractor Type, Contractor (Residential Roofing)</p>
+</div>
+<div class="section">
+  <strong>After Media Type Selection</strong>
+  <table>
+    <thead><tr><th>Field ID</th><th>Label</th><th>Type</th><th>Required</th><th>Visible</th><th>MaxLength</th></tr></thead>
+    <tbody>
+      
+      <tr>
+        <td><code>drpProductCodes</code></td>
+        <td>—</td>
+        <td>select</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtProductMeasurement</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtReimbursement</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>15</td>
+      </tr>
+      <tr>
+        <td><code>txtInvoiceAmt</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>15</td>
+      </tr>
+      <tr>
+        <td><code>txtInvoiceNumber</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>20</td>
+      </tr>
+      <tr>
+        <td><code>hdtxtActivityDate</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtActivityDate</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtMediaName</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>100</td>
+      </tr>
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      
+    </tbody>
+  </table>
+  <p><strong>Media Tiles:</strong> Facebook – Paid, Instagram – Paid, Meta (Facebook + Instagram) – Paid, YouTube – Paid, TikTok – Paid, Pinterest – Paid, LinkedIn – Paid, X (Twitter) – Paid, Snapchat – Paid, Reddit – Paid, Other Social Media Platforms, Google Ads - Paid Seach, Microsoft Ads (Bing Ads) - Paid Seach, Native Advertising, Web Banners/Display Advertising, TV & Streaming TV (e.g., Hulu, Roku, YouTube TV), Audio Advertising (digital music streaming, podcasts, smart speakers, and traditional radio), Digital Cross-Channel (e.g. Google Performance Max, Microsoft Performance Max), Billboards (Static & Digital), Transit Signage Advertising, Retail Signage Advertising, Co-Branded Promotional Materials (e. g. Door hangers, Yard signs, Literature and Business Cards), Co-Branded Apparel/Swag & Promotional Items (e.g. Hats, Shirts / Polos, Jackets, Giveaways), Print (e.g. Newspapers, Magazines, Placemats), Vehicle Wraps, Sponsored Email Marketing (Third-Party Distribution), Co-Branded Rented List Email Campaign, Consumer Exhibitions / Home Shows</p>
+  <p><strong>programDealerType:</strong> Select Contractor Type, Contractor (Residential Roofing)</p>
+</div>
+<div class="section">
+  <strong>Step 4 — Activity Form</strong>
+  <table>
+    <thead><tr><th>Field ID</th><th>Label</th><th>Type</th><th>Required</th><th>Visible</th><th>MaxLength</th></tr></thead>
+    <tbody>
+      
+      <tr>
+        <td><code>drpProductCodes</code></td>
+        <td>—</td>
+        <td>select</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtProductMeasurement</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtReimbursement</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>15</td>
+      </tr>
+      <tr>
+        <td><code>txtInvoiceAmt</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>15</td>
+      </tr>
+      <tr>
+        <td><code>txtInvoiceNumber</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>20</td>
+      </tr>
+      <tr>
+        <td><code>hdtxtActivityDate</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtActivityDate</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtMediaName</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>100</td>
+      </tr>
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      
+    </tbody>
+  </table>
+  <p><strong>Media Tiles:</strong> Facebook – Paid, Instagram – Paid, Meta (Facebook + Instagram) – Paid, YouTube – Paid, TikTok – Paid, Pinterest – Paid, LinkedIn – Paid, X (Twitter) – Paid, Snapchat – Paid, Reddit – Paid, Other Social Media Platforms, Google Ads - Paid Seach, Microsoft Ads (Bing Ads) - Paid Seach, Native Advertising, Web Banners/Display Advertising, TV & Streaming TV (e.g., Hulu, Roku, YouTube TV), Audio Advertising (digital music streaming, podcasts, smart speakers, and traditional radio), Digital Cross-Channel (e.g. Google Performance Max, Microsoft Performance Max), Billboards (Static & Digital), Transit Signage Advertising, Retail Signage Advertising, Co-Branded Promotional Materials (e. g. Door hangers, Yard signs, Literature and Business Cards), Co-Branded Apparel/Swag & Promotional Items (e.g. Hats, Shirts / Polos, Jackets, Giveaways), Print (e.g. Newspapers, Magazines, Placemats), Vehicle Wraps, Sponsored Email Marketing (Third-Party Distribution), Co-Branded Rented List Email Campaign, Consumer Exhibitions / Home Shows</p>
+  <p><strong>programDealerType:</strong> Select Contractor Type, Contractor (Residential Roofing)</p>
+</div>
+<div class="section">
+  <strong>Step 4 — Activity Form (scrolled)</strong>
+  <table>
+    <thead><tr><th>Field ID</th><th>Label</th><th>Type</th><th>Required</th><th>Visible</th><th>MaxLength</th></tr></thead>
+    <tbody>
+      
+      <tr>
+        <td><code>drpProductCodes</code></td>
+        <td>—</td>
+        <td>select</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtProductMeasurement</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtReimbursement</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>15</td>
+      </tr>
+      <tr>
+        <td><code>txtInvoiceAmt</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>15</td>
+      </tr>
+      <tr>
+        <td><code>txtInvoiceNumber</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>20</td>
+      </tr>
+      <tr>
+        <td><code>hdtxtActivityDate</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtActivityDate</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtMediaName</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>100</td>
+      </tr>
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      
+    </tbody>
+  </table>
+  <p><strong>Media Tiles:</strong> Facebook – Paid, Instagram – Paid, Meta (Facebook + Instagram) – Paid, YouTube – Paid, TikTok – Paid, Pinterest – Paid, LinkedIn – Paid, X (Twitter) – Paid, Snapchat – Paid, Reddit – Paid, Other Social Media Platforms, Google Ads - Paid Seach, Microsoft Ads (Bing Ads) - Paid Seach, Native Advertising, Web Banners/Display Advertising, TV & Streaming TV (e.g., Hulu, Roku, YouTube TV), Audio Advertising (digital music streaming, podcasts, smart speakers, and traditional radio), Digital Cross-Channel (e.g. Google Performance Max, Microsoft Performance Max), Billboards (Static & Digital), Transit Signage Advertising, Retail Signage Advertising, Co-Branded Promotional Materials (e. g. Door hangers, Yard signs, Literature and Business Cards), Co-Branded Apparel/Swag & Promotional Items (e.g. Hats, Shirts / Polos, Jackets, Giveaways), Print (e.g. Newspapers, Magazines, Placemats), Vehicle Wraps, Sponsored Email Marketing (Third-Party Distribution), Co-Branded Rented List Email Campaign, Consumer Exhibitions / Home Shows</p>
+  <p><strong>programDealerType:</strong> Select Contractor Type, Contractor (Residential Roofing)</p>
+</div>
+
+<div class="session-header"><strong>CertainTeed — Dealer 2</strong> &nbsp;|&nbsp; https://certainteedportaluat.channel-fusion.com &nbsp;|&nbsp; 2026-07-01T06:37:04.465Z</div>
+
+
+<div class="section">
+  <strong>Step 1 — Claim Type & Contact</strong>
+  <table>
+    <thead><tr><th>Field ID</th><th>Label</th><th>Type</th><th>Required</th><th>Visible</th><th>MaxLength</th></tr></thead>
+    <tbody>
+      
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[radio]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[radio]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      
+    </tbody>
+  </table>
+  <p><strong>Media Tiles:</strong> Facebook – Paid, Instagram – Paid, Meta (Facebook + Instagram) – Paid, YouTube – Paid, TikTok – Paid, Pinterest – Paid, LinkedIn – Paid, X (Twitter) – Paid, Snapchat – Paid, Reddit – Paid, Other Social Media Platforms, Google Ads - Paid Seach, Microsoft Ads (Bing Ads) - Paid Seach, Native Advertising, Web Banners/Display Advertising, TV & Streaming TV (e.g., Hulu, Roku, YouTube TV), Audio Advertising (digital music streaming, podcasts, smart speakers, and traditional radio), Digital Cross-Channel (e.g. Google Performance Max, Microsoft Performance Max), Billboards (Static & Digital), Transit Signage Advertising, Retail Signage Advertising, Co-Branded Promotional Materials (e. g. Door hangers, Yard signs, Literature and Business Cards), Co-Branded Apparel/Swag & Promotional Items (e.g. Hats, Shirts / Polos, Jackets, Giveaways), Print (e.g. Newspapers, Magazines, Placemats), Vehicle Wraps, Sponsored Email Marketing (Third-Party Distribution), Co-Branded Rented List Email Campaign, Consumer Exhibitions / Home Shows</p>
+  
+</div>
+<div class="section">
+  <strong>After Step 1 Continue</strong>
+  <table>
+    <thead><tr><th>Field ID</th><th>Label</th><th>Type</th><th>Required</th><th>Visible</th><th>MaxLength</th></tr></thead>
+    <tbody>
+      
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      
+    </tbody>
+  </table>
+  <p><strong>Media Tiles:</strong> Facebook – Paid, Instagram – Paid, Meta (Facebook + Instagram) – Paid, YouTube – Paid, TikTok – Paid, Pinterest – Paid, LinkedIn – Paid, X (Twitter) – Paid, Snapchat – Paid, Reddit – Paid, Other Social Media Platforms, Google Ads - Paid Seach, Microsoft Ads (Bing Ads) - Paid Seach, Native Advertising, Web Banners/Display Advertising, TV & Streaming TV (e.g., Hulu, Roku, YouTube TV), Audio Advertising (digital music streaming, podcasts, smart speakers, and traditional radio), Digital Cross-Channel (e.g. Google Performance Max, Microsoft Performance Max), Billboards (Static & Digital), Transit Signage Advertising, Retail Signage Advertising, Co-Branded Promotional Materials (e. g. Door hangers, Yard signs, Literature and Business Cards), Co-Branded Apparel/Swag & Promotional Items (e.g. Hats, Shirts / Polos, Jackets, Giveaways), Print (e.g. Newspapers, Magazines, Placemats), Vehicle Wraps, Sponsored Email Marketing (Third-Party Distribution), Co-Branded Rented List Email Campaign, Consumer Exhibitions / Home Shows</p>
+  <p><strong>programDealerType:</strong> Select Contractor Type, Contractor (Residential Roofing)</p>
+</div>
+<div class="section">
+  <strong>Step 3 — Media Type Tiles</strong>
+  <table>
+    <thead><tr><th>Field ID</th><th>Label</th><th>Type</th><th>Required</th><th>Visible</th><th>MaxLength</th></tr></thead>
+    <tbody>
+      
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      
+    </tbody>
+  </table>
+  <p><strong>Media Tiles:</strong> Facebook – Paid, Instagram – Paid, Meta (Facebook + Instagram) – Paid, YouTube – Paid, TikTok – Paid, Pinterest – Paid, LinkedIn – Paid, X (Twitter) – Paid, Snapchat – Paid, Reddit – Paid, Other Social Media Platforms, Google Ads - Paid Seach, Microsoft Ads (Bing Ads) - Paid Seach, Native Advertising, Web Banners/Display Advertising, TV & Streaming TV (e.g., Hulu, Roku, YouTube TV), Audio Advertising (digital music streaming, podcasts, smart speakers, and traditional radio), Digital Cross-Channel (e.g. Google Performance Max, Microsoft Performance Max), Billboards (Static & Digital), Transit Signage Advertising, Retail Signage Advertising, Co-Branded Promotional Materials (e. g. Door hangers, Yard signs, Literature and Business Cards), Co-Branded Apparel/Swag & Promotional Items (e.g. Hats, Shirts / Polos, Jackets, Giveaways), Print (e.g. Newspapers, Magazines, Placemats), Vehicle Wraps, Sponsored Email Marketing (Third-Party Distribution), Co-Branded Rented List Email Campaign, Consumer Exhibitions / Home Shows</p>
+  <p><strong>programDealerType:</strong> Select Contractor Type, Contractor (Residential Roofing)</p>
+</div>
+<div class="section">
+  <strong>After Media Type Selection</strong>
+  <table>
+    <thead><tr><th>Field ID</th><th>Label</th><th>Type</th><th>Required</th><th>Visible</th><th>MaxLength</th></tr></thead>
+    <tbody>
+      
+      <tr>
+        <td><code>drpProductCodes</code></td>
+        <td>—</td>
+        <td>select</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtProductMeasurement</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtReimbursement</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>15</td>
+      </tr>
+      <tr>
+        <td><code>txtInvoiceAmt</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>15</td>
+      </tr>
+      <tr>
+        <td><code>txtInvoiceNumber</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>20</td>
+      </tr>
+      <tr>
+        <td><code>hdtxtActivityDate</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtActivityDate</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtMediaName</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>100</td>
+      </tr>
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      
+    </tbody>
+  </table>
+  <p><strong>Media Tiles:</strong> Facebook – Paid, Instagram – Paid, Meta (Facebook + Instagram) – Paid, YouTube – Paid, TikTok – Paid, Pinterest – Paid, LinkedIn – Paid, X (Twitter) – Paid, Snapchat – Paid, Reddit – Paid, Other Social Media Platforms, Google Ads - Paid Seach, Microsoft Ads (Bing Ads) - Paid Seach, Native Advertising, Web Banners/Display Advertising, TV & Streaming TV (e.g., Hulu, Roku, YouTube TV), Audio Advertising (digital music streaming, podcasts, smart speakers, and traditional radio), Digital Cross-Channel (e.g. Google Performance Max, Microsoft Performance Max), Billboards (Static & Digital), Transit Signage Advertising, Retail Signage Advertising, Co-Branded Promotional Materials (e. g. Door hangers, Yard signs, Literature and Business Cards), Co-Branded Apparel/Swag & Promotional Items (e.g. Hats, Shirts / Polos, Jackets, Giveaways), Print (e.g. Newspapers, Magazines, Placemats), Vehicle Wraps, Sponsored Email Marketing (Third-Party Distribution), Co-Branded Rented List Email Campaign, Consumer Exhibitions / Home Shows</p>
+  <p><strong>programDealerType:</strong> Select Contractor Type, Contractor (Residential Roofing)</p>
+</div>
+<div class="section">
+  <strong>Step 4 — Activity Form</strong>
+  <table>
+    <thead><tr><th>Field ID</th><th>Label</th><th>Type</th><th>Required</th><th>Visible</th><th>MaxLength</th></tr></thead>
+    <tbody>
+      
+      <tr>
+        <td><code>drpProductCodes</code></td>
+        <td>—</td>
+        <td>select</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtProductMeasurement</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtReimbursement</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>15</td>
+      </tr>
+      <tr>
+        <td><code>txtInvoiceAmt</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>15</td>
+      </tr>
+      <tr>
+        <td><code>txtInvoiceNumber</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>20</td>
+      </tr>
+      <tr>
+        <td><code>hdtxtActivityDate</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtActivityDate</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtMediaName</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>100</td>
+      </tr>
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      
+    </tbody>
+  </table>
+  <p><strong>Media Tiles:</strong> Facebook – Paid, Instagram – Paid, Meta (Facebook + Instagram) – Paid, YouTube – Paid, TikTok – Paid, Pinterest – Paid, LinkedIn – Paid, X (Twitter) – Paid, Snapchat – Paid, Reddit – Paid, Other Social Media Platforms, Google Ads - Paid Seach, Microsoft Ads (Bing Ads) - Paid Seach, Native Advertising, Web Banners/Display Advertising, TV & Streaming TV (e.g., Hulu, Roku, YouTube TV), Audio Advertising (digital music streaming, podcasts, smart speakers, and traditional radio), Digital Cross-Channel (e.g. Google Performance Max, Microsoft Performance Max), Billboards (Static & Digital), Transit Signage Advertising, Retail Signage Advertising, Co-Branded Promotional Materials (e. g. Door hangers, Yard signs, Literature and Business Cards), Co-Branded Apparel/Swag & Promotional Items (e.g. Hats, Shirts / Polos, Jackets, Giveaways), Print (e.g. Newspapers, Magazines, Placemats), Vehicle Wraps, Sponsored Email Marketing (Third-Party Distribution), Co-Branded Rented List Email Campaign, Consumer Exhibitions / Home Shows</p>
+  <p><strong>programDealerType:</strong> Select Contractor Type, Contractor (Residential Roofing)</p>
+</div>
+<div class="section">
+  <strong>Step 4 — Activity Form (scrolled)</strong>
+  <table>
+    <thead><tr><th>Field ID</th><th>Label</th><th>Type</th><th>Required</th><th>Visible</th><th>MaxLength</th></tr></thead>
+    <tbody>
+      
+      <tr>
+        <td><code>drpProductCodes</code></td>
+        <td>—</td>
+        <td>select</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtProductMeasurement</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtReimbursement</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>15</td>
+      </tr>
+      <tr>
+        <td><code>txtInvoiceAmt</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>15</td>
+      </tr>
+      <tr>
+        <td><code>txtInvoiceNumber</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>20</td>
+      </tr>
+      <tr>
+        <td><code>hdtxtActivityDate</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtActivityDate</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>txtMediaName</code></td>
+        <td>—</td>
+        <td>input[text]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>100</td>
+      </tr>
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><code>—</code></td>
+        <td>—</td>
+        <td>input[file]</td>
+        <td>No</td>
+        <td>✅</td>
+        <td>—</td>
+      </tr>
+      
+    </tbody>
+  </table>
+  <p><strong>Media Tiles:</strong> Facebook – Paid, Instagram – Paid, Meta (Facebook + Instagram) – Paid, YouTube – Paid, TikTok – Paid, Pinterest – Paid, LinkedIn – Paid, X (Twitter) – Paid, Snapchat – Paid, Reddit – Paid, Other Social Media Platforms, Google Ads - Paid Seach, Microsoft Ads (Bing Ads) - Paid Seach, Native Advertising, Web Banners/Display Advertising, TV & Streaming TV (e.g., Hulu, Roku, YouTube TV), Audio Advertising (digital music streaming, podcasts, smart speakers, and traditional radio), Digital Cross-Channel (e.g. Google Performance Max, Microsoft Performance Max), Billboards (Static & Digital), Transit Signage Advertising, Retail Signage Advertising, Co-Branded Promotional Materials (e. g. Door hangers, Yard signs, Literature and Business Cards), Co-Branded Apparel/Swag & Promotional Items (e.g. Hats, Shirts / Polos, Jackets, Giveaways), Print (e.g. Newspapers, Magazines, Placemats), Vehicle Wraps, Sponsored Email Marketing (Third-Party Distribution), Co-Branded Rented List Email Campaign, Consumer Exhibitions / Home Shows</p>
+  <p><strong>programDealerType:</strong> Select Contractor Type, Contractor (Residential Roofing)</p>
+</div>
+
+
+<h2>4 — ClientProfile Recommendations</h2>
+<p>Based on observed UI differences, add the following to <code>config/clients/{clientId}.json</code>:</p>
+<pre>{
+  "client": "demoportal",
+  "dealer": "Dealer 1",
+  "featureProfiles.coop.submitClaim": {
+    "mediaTypeStepRequired": true,
+    "dealerTypeDropdownVisible": false,
+    "productLinesEnabled": true
+  }
+}</pre><pre>{
+  "client": "demoportal",
+  "dealer": "Dealer 2",
+  "featureProfiles.coop.submitClaim": {
+    "mediaTypeStepRequired": true,
+    "dealerTypeDropdownVisible": false,
+    "productLinesEnabled": true
+  }
+}</pre><pre>{
+  "client": "certainteed",
+  "dealer": "Dealer 1",
+  "featureProfiles.coop.submitClaim": {
+    "mediaTypeStepRequired": true,
+    "dealerTypeDropdownVisible": false,
+    "productLinesEnabled": true
+  }
+}</pre><pre>{
+  "client": "certainteed",
+  "dealer": "Dealer 2",
+  "featureProfiles.coop.submitClaim": {
+    "mediaTypeStepRequired": true,
+    "dealerTypeDropdownVisible": false,
+    "productLinesEnabled": true
+  }
+}</pre>
+
+<h2>5 — Network Calls per Session</h2>
+
+<div class="session-header"><strong>DemoPortal — Dealer 1</strong></div>
+<table>
+  <thead><tr><th>Phase</th><th>Method</th><th>Path</th><th>Status</th></tr></thead>
+  <tbody>
+    <tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/Claim/jsSubmitClaim.js?v=ZAx5TaY93dJj1HSD7raY_zS_irDgyd-7oXGwEdrdjnc</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/DealerSearch/DealerSearch.js?v=NfyGy4wFwQ-x_lHgBiB9mFXlhNHDpRL50AUtTj5HdpE</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/Claim/jsSubmitClaim.js?v=ZAx5TaY93dJj1HSD7raY_zS_irDgyd-7oXGwEdrdjnc</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/DealerSearch/DealerSearch.js?v=NfyGy4wFwQ-x_lHgBiB9mFXlhNHDpRL50AUtTj5HdpE</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=DealerTypeList&dealer_number_seq=9759339</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/DealerBudgetInfo?fiscal_year=2026&dealer_number_seq=9759339&program_dealer_type_seq=ukVCivQMdPEEqual&_=1782887889657</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>After Step 1 Continue</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=ProductList&fiscal_year=2026&dealer_number_seq=ihfwNxoy5LcEqual&program_dealer_type_seq=ukVCivQMdPEEqual</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/Claim/jsSubmitClaim.js?v=ZAx5TaY93dJj1HSD7raY_zS_irDgyd-7oXGwEdrdjnc</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/DealerSearch/DealerSearch.js?v=NfyGy4wFwQ-x_lHgBiB9mFXlhNHDpRL50AUtTj5HdpE</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=DealerTypeList&dealer_number_seq=9759339</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/DealerBudgetInfo?fiscal_year=2026&dealer_number_seq=9759339&program_dealer_type_seq=ukVCivQMdPEEqual&_=1782887889657</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>After Step 1 Continue</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=ProductList&fiscal_year=2026&dealer_number_seq=ihfwNxoy5LcEqual&program_dealer_type_seq=ukVCivQMdPEEqual</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/Claim/jsSubmitClaim.js?v=ZAx5TaY93dJj1HSD7raY_zS_irDgyd-7oXGwEdrdjnc</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/DealerSearch/DealerSearch.js?v=NfyGy4wFwQ-x_lHgBiB9mFXlhNHDpRL50AUtTj5HdpE</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=DealerTypeList&dealer_number_seq=9759339</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/DealerBudgetInfo?fiscal_year=2026&dealer_number_seq=9759339&program_dealer_type_seq=ukVCivQMdPEEqual&_=1782887889657</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>After Step 1 Continue</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=ProductList&fiscal_year=2026&dealer_number_seq=ihfwNxoy5LcEqual&program_dealer_type_seq=ukVCivQMdPEEqual</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorList?media_type_seq=1626&_=1782887889658</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorInformation?contact_seq=0&_=1782887889659</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorInformation?contact_seq=0&_=1782887889660</code></td>
+        <td>—</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/StateList?country_seq=&_=1782887889661</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/Claim/jsSubmitClaim.js?v=ZAx5TaY93dJj1HSD7raY_zS_irDgyd-7oXGwEdrdjnc</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/DealerSearch/DealerSearch.js?v=NfyGy4wFwQ-x_lHgBiB9mFXlhNHDpRL50AUtTj5HdpE</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=DealerTypeList&dealer_number_seq=9759339</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/DealerBudgetInfo?fiscal_year=2026&dealer_number_seq=9759339&program_dealer_type_seq=ukVCivQMdPEEqual&_=1782887889657</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>After Step 1 Continue</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=ProductList&fiscal_year=2026&dealer_number_seq=ihfwNxoy5LcEqual&program_dealer_type_seq=ukVCivQMdPEEqual</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorList?media_type_seq=1626&_=1782887889658</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorInformation?contact_seq=0&_=1782887889659</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorInformation?contact_seq=0&_=1782887889660</code></td>
+        <td>—</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/StateList?country_seq=&_=1782887889661</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/Claim/jsSubmitClaim.js?v=ZAx5TaY93dJj1HSD7raY_zS_irDgyd-7oXGwEdrdjnc</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/DealerSearch/DealerSearch.js?v=NfyGy4wFwQ-x_lHgBiB9mFXlhNHDpRL50AUtTj5HdpE</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=DealerTypeList&dealer_number_seq=9759339</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/DealerBudgetInfo?fiscal_year=2026&dealer_number_seq=9759339&program_dealer_type_seq=ukVCivQMdPEEqual&_=1782887889657</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>After Step 1 Continue</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=ProductList&fiscal_year=2026&dealer_number_seq=ihfwNxoy5LcEqual&program_dealer_type_seq=ukVCivQMdPEEqual</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorList?media_type_seq=1626&_=1782887889658</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorInformation?contact_seq=0&_=1782887889659</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorInformation?contact_seq=0&_=1782887889660</code></td>
+        <td>—</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/StateList?country_seq=&_=1782887889661</code></td>
+        <td>200</td>
+      </tr>
+  </tbody>
+</table>
+<div class="session-header"><strong>DemoPortal — Dealer 2</strong></div>
+<table>
+  <thead><tr><th>Phase</th><th>Method</th><th>Path</th><th>Status</th></tr></thead>
+  <tbody>
+    <tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/Claim/jsSubmitClaim.js?v=ZAx5TaY93dJj1HSD7raY_zS_irDgyd-7oXGwEdrdjnc</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/DealerSearch/DealerSearch.js?v=NfyGy4wFwQ-x_lHgBiB9mFXlhNHDpRL50AUtTj5HdpE</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/Claim/jsSubmitClaim.js?v=ZAx5TaY93dJj1HSD7raY_zS_irDgyd-7oXGwEdrdjnc</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/DealerSearch/DealerSearch.js?v=NfyGy4wFwQ-x_lHgBiB9mFXlhNHDpRL50AUtTj5HdpE</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=DealerTypeList&dealer_number_seq=9759339</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/DealerBudgetInfo?fiscal_year=2026&dealer_number_seq=9759339&program_dealer_type_seq=ukVCivQMdPEEqual&_=1782887992851</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=ProductList&fiscal_year=2026&dealer_number_seq=ihfwNxoy5LcEqual&program_dealer_type_seq=ukVCivQMdPEEqual</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/Claim/jsSubmitClaim.js?v=ZAx5TaY93dJj1HSD7raY_zS_irDgyd-7oXGwEdrdjnc</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/DealerSearch/DealerSearch.js?v=NfyGy4wFwQ-x_lHgBiB9mFXlhNHDpRL50AUtTj5HdpE</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=DealerTypeList&dealer_number_seq=9759339</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/DealerBudgetInfo?fiscal_year=2026&dealer_number_seq=9759339&program_dealer_type_seq=ukVCivQMdPEEqual&_=1782887992851</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=ProductList&fiscal_year=2026&dealer_number_seq=ihfwNxoy5LcEqual&program_dealer_type_seq=ukVCivQMdPEEqual</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/Claim/jsSubmitClaim.js?v=ZAx5TaY93dJj1HSD7raY_zS_irDgyd-7oXGwEdrdjnc</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/DealerSearch/DealerSearch.js?v=NfyGy4wFwQ-x_lHgBiB9mFXlhNHDpRL50AUtTj5HdpE</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=DealerTypeList&dealer_number_seq=9759339</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/DealerBudgetInfo?fiscal_year=2026&dealer_number_seq=9759339&program_dealer_type_seq=ukVCivQMdPEEqual&_=1782887992851</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=ProductList&fiscal_year=2026&dealer_number_seq=ihfwNxoy5LcEqual&program_dealer_type_seq=ukVCivQMdPEEqual</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorList?media_type_seq=1626&_=1782887992852</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorInformation?contact_seq=0&_=1782887992853</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorInformation?contact_seq=0&_=1782887992854</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/StateList?country_seq=&_=1782887992855</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/StateList?country_seq=&_=1782887992856</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/Claim/jsSubmitClaim.js?v=ZAx5TaY93dJj1HSD7raY_zS_irDgyd-7oXGwEdrdjnc</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/DealerSearch/DealerSearch.js?v=NfyGy4wFwQ-x_lHgBiB9mFXlhNHDpRL50AUtTj5HdpE</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=DealerTypeList&dealer_number_seq=9759339</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/DealerBudgetInfo?fiscal_year=2026&dealer_number_seq=9759339&program_dealer_type_seq=ukVCivQMdPEEqual&_=1782887992851</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=ProductList&fiscal_year=2026&dealer_number_seq=ihfwNxoy5LcEqual&program_dealer_type_seq=ukVCivQMdPEEqual</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorList?media_type_seq=1626&_=1782887992852</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorInformation?contact_seq=0&_=1782887992853</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorInformation?contact_seq=0&_=1782887992854</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/StateList?country_seq=&_=1782887992855</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/StateList?country_seq=&_=1782887992856</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/Claim/jsSubmitClaim.js?v=ZAx5TaY93dJj1HSD7raY_zS_irDgyd-7oXGwEdrdjnc</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/DealerSearch/DealerSearch.js?v=NfyGy4wFwQ-x_lHgBiB9mFXlhNHDpRL50AUtTj5HdpE</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=DealerTypeList&dealer_number_seq=9759339</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/DealerBudgetInfo?fiscal_year=2026&dealer_number_seq=9759339&program_dealer_type_seq=ukVCivQMdPEEqual&_=1782887992851</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=ProductList&fiscal_year=2026&dealer_number_seq=ihfwNxoy5LcEqual&program_dealer_type_seq=ukVCivQMdPEEqual</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorList?media_type_seq=1626&_=1782887992852</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorInformation?contact_seq=0&_=1782887992853</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorInformation?contact_seq=0&_=1782887992854</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/StateList?country_seq=&_=1782887992855</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/StateList?country_seq=&_=1782887992856</code></td>
+        <td>200</td>
+      </tr>
+  </tbody>
+</table>
+<div class="session-header"><strong>CertainTeed — Dealer 1</strong></div>
+<table>
+  <thead><tr><th>Phase</th><th>Method</th><th>Path</th><th>Status</th></tr></thead>
+  <tbody>
+    <tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/Claim/jsSubmitClaim.js?v=ZAx5TaY93dJj1HSD7raY_zS_irDgyd-7oXGwEdrdjnc</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/DealerSearch/DealerSearch.js?v=NfyGy4wFwQ-x_lHgBiB9mFXlhNHDpRL50AUtTj5HdpE</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/Claim/jsSubmitClaim.js?v=ZAx5TaY93dJj1HSD7raY_zS_irDgyd-7oXGwEdrdjnc</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/DealerSearch/DealerSearch.js?v=NfyGy4wFwQ-x_lHgBiB9mFXlhNHDpRL50AUtTj5HdpE</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=DealerTypeList&dealer_number_seq=9759339</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/DealerBudgetInfo?fiscal_year=2026&dealer_number_seq=9759339&program_dealer_type_seq=ukVCivQMdPEEqual&_=1782888097089</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>After Step 1 Continue</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=ProductList&fiscal_year=2026&dealer_number_seq=ihfwNxoy5LcEqual&program_dealer_type_seq=ukVCivQMdPEEqual</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/Claim/jsSubmitClaim.js?v=ZAx5TaY93dJj1HSD7raY_zS_irDgyd-7oXGwEdrdjnc</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/DealerSearch/DealerSearch.js?v=NfyGy4wFwQ-x_lHgBiB9mFXlhNHDpRL50AUtTj5HdpE</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=DealerTypeList&dealer_number_seq=9759339</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/DealerBudgetInfo?fiscal_year=2026&dealer_number_seq=9759339&program_dealer_type_seq=ukVCivQMdPEEqual&_=1782888097089</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>After Step 1 Continue</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=ProductList&fiscal_year=2026&dealer_number_seq=ihfwNxoy5LcEqual&program_dealer_type_seq=ukVCivQMdPEEqual</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/Claim/jsSubmitClaim.js?v=ZAx5TaY93dJj1HSD7raY_zS_irDgyd-7oXGwEdrdjnc</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/DealerSearch/DealerSearch.js?v=NfyGy4wFwQ-x_lHgBiB9mFXlhNHDpRL50AUtTj5HdpE</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=DealerTypeList&dealer_number_seq=9759339</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/DealerBudgetInfo?fiscal_year=2026&dealer_number_seq=9759339&program_dealer_type_seq=ukVCivQMdPEEqual&_=1782888097089</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>After Step 1 Continue</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=ProductList&fiscal_year=2026&dealer_number_seq=ihfwNxoy5LcEqual&program_dealer_type_seq=ukVCivQMdPEEqual</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorList?media_type_seq=1626&_=1782888097090</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorInformation?contact_seq=0&_=1782888097091</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorInformation?contact_seq=0&_=1782888097092</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/StateList?country_seq=&_=1782888097093</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/StateList?country_seq=&_=1782888097094</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/Claim/jsSubmitClaim.js?v=ZAx5TaY93dJj1HSD7raY_zS_irDgyd-7oXGwEdrdjnc</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/DealerSearch/DealerSearch.js?v=NfyGy4wFwQ-x_lHgBiB9mFXlhNHDpRL50AUtTj5HdpE</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=DealerTypeList&dealer_number_seq=9759339</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/DealerBudgetInfo?fiscal_year=2026&dealer_number_seq=9759339&program_dealer_type_seq=ukVCivQMdPEEqual&_=1782888097089</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>After Step 1 Continue</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=ProductList&fiscal_year=2026&dealer_number_seq=ihfwNxoy5LcEqual&program_dealer_type_seq=ukVCivQMdPEEqual</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorList?media_type_seq=1626&_=1782888097090</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorInformation?contact_seq=0&_=1782888097091</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorInformation?contact_seq=0&_=1782888097092</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/StateList?country_seq=&_=1782888097093</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/StateList?country_seq=&_=1782888097094</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/Claim/jsSubmitClaim.js?v=ZAx5TaY93dJj1HSD7raY_zS_irDgyd-7oXGwEdrdjnc</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/DealerSearch/DealerSearch.js?v=NfyGy4wFwQ-x_lHgBiB9mFXlhNHDpRL50AUtTj5HdpE</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=DealerTypeList&dealer_number_seq=9759339</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/DealerBudgetInfo?fiscal_year=2026&dealer_number_seq=9759339&program_dealer_type_seq=ukVCivQMdPEEqual&_=1782888097089</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>After Step 1 Continue</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=ProductList&fiscal_year=2026&dealer_number_seq=ihfwNxoy5LcEqual&program_dealer_type_seq=ukVCivQMdPEEqual</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorList?media_type_seq=1626&_=1782888097090</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorInformation?contact_seq=0&_=1782888097091</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorInformation?contact_seq=0&_=1782888097092</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/StateList?country_seq=&_=1782888097093</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/StateList?country_seq=&_=1782888097094</code></td>
+        <td>200</td>
+      </tr>
+  </tbody>
+</table>
+<div class="session-header"><strong>CertainTeed — Dealer 2</strong></div>
+<table>
+  <thead><tr><th>Phase</th><th>Method</th><th>Path</th><th>Status</th></tr></thead>
+  <tbody>
+    <tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/Claim/jsSubmitClaim.js?v=ZAx5TaY93dJj1HSD7raY_zS_irDgyd-7oXGwEdrdjnc</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/DealerSearch/DealerSearch.js?v=NfyGy4wFwQ-x_lHgBiB9mFXlhNHDpRL50AUtTj5HdpE</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/Claim/jsSubmitClaim.js?v=ZAx5TaY93dJj1HSD7raY_zS_irDgyd-7oXGwEdrdjnc</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/DealerSearch/DealerSearch.js?v=NfyGy4wFwQ-x_lHgBiB9mFXlhNHDpRL50AUtTj5HdpE</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=DealerTypeList&dealer_number_seq=9759339</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/DealerBudgetInfo?fiscal_year=2026&dealer_number_seq=9759339&program_dealer_type_seq=ukVCivQMdPEEqual&_=1782887745285</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>After Step 1 Continue</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=ProductList&fiscal_year=2026&dealer_number_seq=ihfwNxoy5LcEqual&program_dealer_type_seq=ukVCivQMdPEEqual</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/Claim/jsSubmitClaim.js?v=ZAx5TaY93dJj1HSD7raY_zS_irDgyd-7oXGwEdrdjnc</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/DealerSearch/DealerSearch.js?v=NfyGy4wFwQ-x_lHgBiB9mFXlhNHDpRL50AUtTj5HdpE</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=DealerTypeList&dealer_number_seq=9759339</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/DealerBudgetInfo?fiscal_year=2026&dealer_number_seq=9759339&program_dealer_type_seq=ukVCivQMdPEEqual&_=1782887745285</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>After Step 1 Continue</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=ProductList&fiscal_year=2026&dealer_number_seq=ihfwNxoy5LcEqual&program_dealer_type_seq=ukVCivQMdPEEqual</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/Claim/jsSubmitClaim.js?v=ZAx5TaY93dJj1HSD7raY_zS_irDgyd-7oXGwEdrdjnc</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/DealerSearch/DealerSearch.js?v=NfyGy4wFwQ-x_lHgBiB9mFXlhNHDpRL50AUtTj5HdpE</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=DealerTypeList&dealer_number_seq=9759339</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/DealerBudgetInfo?fiscal_year=2026&dealer_number_seq=9759339&program_dealer_type_seq=ukVCivQMdPEEqual&_=1782887745285</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>After Step 1 Continue</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=ProductList&fiscal_year=2026&dealer_number_seq=ihfwNxoy5LcEqual&program_dealer_type_seq=ukVCivQMdPEEqual</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorList?media_type_seq=1626&_=1782887745286</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorInformation?contact_seq=0&_=1782887745287</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/StateList?country_seq=&_=1782887745288</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorInformation?contact_seq=0&_=1782887745289</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/StateList?country_seq=&_=1782887745290</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/Claim/jsSubmitClaim.js?v=ZAx5TaY93dJj1HSD7raY_zS_irDgyd-7oXGwEdrdjnc</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/DealerSearch/DealerSearch.js?v=NfyGy4wFwQ-x_lHgBiB9mFXlhNHDpRL50AUtTj5HdpE</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=DealerTypeList&dealer_number_seq=9759339</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/DealerBudgetInfo?fiscal_year=2026&dealer_number_seq=9759339&program_dealer_type_seq=ukVCivQMdPEEqual&_=1782887745285</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>After Step 1 Continue</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=ProductList&fiscal_year=2026&dealer_number_seq=ihfwNxoy5LcEqual&program_dealer_type_seq=ukVCivQMdPEEqual</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorList?media_type_seq=1626&_=1782887745286</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorInformation?contact_seq=0&_=1782887745287</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/StateList?country_seq=&_=1782887745288</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorInformation?contact_seq=0&_=1782887745289</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/StateList?country_seq=&_=1782887745290</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/Claim/jsSubmitClaim.js?v=ZAx5TaY93dJj1HSD7raY_zS_irDgyd-7oXGwEdrdjnc</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-claim-type</td>
+        <td>GET</td>
+        <td><code>/WebScripts/CoopManagement/DealerSearch/DealerSearch.js?v=NfyGy4wFwQ-x_lHgBiB9mFXlhNHDpRL50AUtTj5HdpE</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=DealerTypeList&dealer_number_seq=9759339</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>step1-advance</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/DealerBudgetInfo?fiscal_year=2026&dealer_number_seq=9759339&program_dealer_type_seq=ukVCivQMdPEEqual&_=1782887745285</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>After Step 1 Continue</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim?handler=ProductList&fiscal_year=2026&dealer_number_seq=ihfwNxoy5LcEqual&program_dealer_type_seq=ukVCivQMdPEEqual</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorList?media_type_seq=1626&_=1782887745286</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorInformation?contact_seq=0&_=1782887745287</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/StateList?country_seq=&_=1782887745288</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/VendorInformation?contact_seq=0&_=1782887745289</code></td>
+        <td>200</td>
+      </tr><tr>
+        <td>Step 3 — Media Type Tiles</td>
+        <td>GET</td>
+        <td><code>/CoopManagement/Claims/Submit/SubmitClaim/StateList?country_seq=&_=1782887745290</code></td>
+        <td>200</td>
+      </tr>
+  </tbody>
+</table>
+</body>
+</html>
