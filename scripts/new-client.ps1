@@ -430,36 +430,61 @@ function Get-ClientDetails {
     $roles    = @($rolesRaw -split ',' | ForEach-Object { $_.Trim().ToLower() } | Where-Object { $_ })
 
     # --- Modules ---
+    # Known built-ins shown as numbered shortcuts. Any kebab-case name is also accepted as a custom module.
     $availableModules = @('coop', 'engage-ads', 'popshop', 'rebate', 'admin')
     Write-Host ''
     Write-Host '    Which modules are enabled for this client?' -ForegroundColor White
-    Write-Host '    Enter numbers separated by commas (e.g. 1,2,4)' -ForegroundColor DarkGray
+    Write-Host '    Pick numbers, type custom names, or mix both (comma-separated).' -ForegroundColor DarkGray
+    Write-Host ''
     for ($i = 0; $i -lt $availableModules.Count; $i++) {
         Write-Host "      $($i + 1).  $($availableModules[$i])"
     }
+    Write-Host ''
+    Write-Host '    Custom module  — just type its name, e.g.  ad-builder' -ForegroundColor DarkGray
+    Write-Host '    Mix example    — 1,3,ad-builder,inventory-v2' -ForegroundColor DarkGray
+    Write-Host '    All built-ins  — type  all' -ForegroundColor DarkGray
+
     $selectedModules = @()
     while ($selectedModules.Count -eq 0) {
-        $raw = (Read-Host '    Modules (comma-separated numbers, or "all" for all)').Trim()
+        $raw    = (Read-Host '    Modules').Trim()
+        $chosen = [System.Collections.Generic.List[string]]::new()
+        $valid  = $true
+
         if ($raw -eq 'all') {
             $selectedModules = $availableModules
-        } else {
-            $nums = $raw -split ',' | ForEach-Object { $_.Trim() } | Where-Object { $_ }
-            $valid = $true
-            $chosen = @()
-            foreach ($n in $nums) {
-                [int]$idx = 0
-                if ([int]::TryParse($n, [ref]$idx) -and $idx -ge 1 -and $idx -le $availableModules.Count) {
-                    $chosen += $availableModules[$idx - 1]
+            continue
+        }
+
+        $tokens = $raw -split ',' | ForEach-Object { $_.Trim() } | Where-Object { $_ }
+        foreach ($token in $tokens) {
+            [int]$idx = 0
+            if ([int]::TryParse($token, [ref]$idx)) {
+                # Numeric shortcut → map to built-in
+                if ($idx -ge 1 -and $idx -le $availableModules.Count) {
+                    $chosen.Add($availableModules[$idx - 1])
                 } else {
-                    Write-Warn "Invalid choice '$n'. Enter numbers 1-$($availableModules.Count) or 'all'."
-                    $valid = $false
-                    break
+                    Write-Warn "  '$token' is out of range. Built-in modules are 1–$($availableModules.Count)."
+                    $valid = $false; break
                 }
+            } elseif ($token -match '^[a-z][a-z0-9]*(-[a-z0-9]+)*$') {
+                # Valid kebab-case — treat as custom module (new or existing)
+                $chosen.Add($token)
+            } else {
+                Write-Warn "  '$token' is not a valid module name."
+                Write-Warn '  Module names must be lowercase kebab-case, e.g. ad-builder, inventory-v2'
+                $valid = $false; break
             }
-            if ($valid -and $chosen.Count -gt 0) { $selectedModules = $chosen }
+        }
+
+        if ($valid -and $chosen.Count -gt 0) {
+            $selectedModules = $chosen | Select-Object -Unique
         }
     }
-    Write-Done "Selected modules: $($selectedModules -join ', ')"
+
+    $builtinChosen = @($selectedModules | Where-Object { $_ -in $availableModules })
+    $customModules = @($selectedModules | Where-Object { $_ -notin $availableModules })
+    if ($builtinChosen.Count -gt 0) { Write-Done "Built-in : $($builtinChosen -join ', ')" }
+    if ($customModules.Count  -gt 0) { Write-Done "Custom   : $($customModules -join ', ')" }
 
     # --- Credentials per role ---
     Write-Header 'Login Credentials'
