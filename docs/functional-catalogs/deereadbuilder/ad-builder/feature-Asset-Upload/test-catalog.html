@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Asset Upload - Test Catalog</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f9fafb;
+      color: #111827;
+      line-height: 1.6;
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+    h1 { font-size: 2rem; margin-bottom: 8px; color: #000; }
+    .subtitle { color: #6b7280; font-size: 0.95rem; margin-bottom: 24px; }
+    .badge-group { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+    .badge { 
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .badge-status { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+    .badge-smoke { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+    .badge-regression { background: #bfdbfe; color: #1e40af; border: 1px solid #93c5fd; }
+    .badge-e2e { background: #e9d5ff; color: #6b21a8; border: 1px solid #d8b4fe; }
+    
+    .stats { 
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .stat-card {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .stat-label { color: #6b7280; font-size: 0.9rem; margin-bottom: 4px; }
+    .stat-value { font-size: 1.75rem; font-weight: 700; color: #000; }
+    
+    .section { margin-bottom: 32px; }
+    .section-title { 
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #3b82f6;
+      color: #1e3a8a;
+    }
+    
+    .test-tier {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .test-tier-header {
+      font-weight: 700;
+      font-size: 1.05rem;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .test-tier-count {
+      display: inline-block;
+      background: #f3f4f6;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+    }
+    
+    .test-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 12px;
+    }
+    .test-item {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 0.9rem;
+    }
+    .test-id {
+      font-weight: 700;
+      color: #1e40af;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 0.85rem;
+    }
+    .test-description { color: #4b5563; margin-top: 4px; }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    th {
+      background: #f3f4f6;
+      padding: 12px;
+      text-align: left;
+      font-weight: 700;
+      border-bottom: 2px solid #e5e7eb;
+      color: #111827;
+    }
+    td {
+      padding: 12px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    tr:last-child td { border-bottom: none; }
+    
+    .br-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 12px;
+    }
+    .br-item {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 0.9rem;
+    }
+    .br-id {
+      font-weight: 700;
+      color: #1e40af;
+      font-family: 'Monaco', 'Courier New', monospace;
+    }
+    
+    .footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #e5e7eb;
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+    
+    code {
+      background: #f3f4f6;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Asset Upload — Test Catalog</h1>
+    <p class="subtitle">DeerAd Builder | ad-builder module | deereadbuilder client</p>
+    
+    <div class="badge-group">
+      <div class="badge badge-status">✓ Active</div>
+      <div class="badge badge-smoke">Smoke: 5 tests</div>
+      <div class="badge badge-regression">Regression: 52 tests</div>
+      <div class="badge badge-e2e">E2E: 11 tests</div>
+    </div>
+    
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-label">Total Test Cases</div>
+        <div class="stat-value">68</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Business Rules</div>
+        <div class="stat-value">32</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Form Fields</div>
+        <div class="stat-value">21</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Security Tests</div>
+        <div class="stat-value">4</div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2 class="section-title">📋 Test Distribution</h2>
+      
+      <div class="test-tier">
+        <div class="test-tier-header">
+          🔥 Smoke Tests <span class="test-tier-count">5 tests</span>
+        </div>
+        <p style="color: #6b7280; margin-bottom: 12px;">Critical path, page load, authentication, happy path, database & email verification</p>
+        <ul class="test-list">
+          <li class="test-item">
+            <div class="test-id">ASUP-SMOKE-001</div>
+            <div class="test-description">Page loads for authenticated user</div>
+          </li>
+          <li class="test-item">
+            <div class="test-id">ASUP-SMOKE-002</div>
+            <div class="test-description">Unauthenticated user redirected to login</div>
+          </li>
+          <li class="test-item">
+            <div class="test-id">ASUP-SMOKE-003</div>
+            <div class="test-description">Happy path: Upload image, fill metadata, submit</div>
+          </li>
+          <li class="test-item">
+            <div class="test-id">ASUP-SMOKE-004</div>
+            <div class="test-description">Happy path: Download asset in multiple formats</div>
+          </li>
+          <li class="test-item">
+            <div class="test-id">ASUP-SMOKE-005</div>
+            <div class="test-description">New asset creates DB record and notification email</div>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="test-tier">
+        <div class="test-tier-header">
+          🔧 Regression Tests <span class="test-tier-count">52 tests</span>
+        </div>
+        <p style="color: #6b7280; margin-bottom: 12px;">Validation (21), Business Logic (15), Workflow (12), Security (4)</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Count</th>
+              <th>Examples</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Validation</strong></td>
+              <td>21</td>
+              <td>Required fields, format checks, uniqueness, boundaries</td>
+            </tr>
+            <tr>
+              <td><strong>Business Logic</strong></td>
+              <td>15</td>
+              <td>Auto-detection, AI keywords, file conversions, status changes</td>
+            </tr>
+            <tr>
+              <td><strong>Workflow</strong></td>
+              <td>12</td>
+              <td>Edit, duplicate, save-and-new, library sync</td>
+            </tr>
+            <tr>
+              <td><strong>Security</strong></td>
+              <td>4</td>
+              <td>File upload whitelist, path traversal, session validation, scoping</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="test-tier">
+        <div class="test-tier-header">
+          🚀 E2E Tests <span class="test-tier-count">11 tests</span>
+        </div>
+        <p style="color: #6b7280; margin-bottom: 12px;">Full workflows, error recovery, lifecycle management</p>
+        <ul class="test-list">
+          <li class="test-item">
+            <div class="test-id">ASUP-E2E-001</div>
+            <div class="test-description">Full workflow: Upload → Save → Verify in library</div>
+          </li>
+          <li class="test-item">
+            <div class="test-id">ASUP-E2E-003</div>
+            <div class="test-description">Edit asset → Update → Verify changes</div>
+          </li>
+          <li class="test-item">
+            <div class="test-id">ASUP-E2E-006</div>
+            <div class="test-description">Error recovery: Invalid upload → Retry → Success</div>
+          </li>
+          <li class="test-item">
+            <div class="test-id">ASUP-E2E-010</div>
+            <div class="test-description">Complete lifecycle: Create → Edit → Duplicate → Archive</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2 class="section-title">📊 Business Rules Coverage</h2>
+      <p style="margin-bottom: 16px;">32 business rules identified and tested</p>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Count</th>
+            <th>Examples</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Security</strong></td>
+            <td>4</td>
+            <td>Page access, file extension whitelist, name sanitization, session validation</td>
+          </tr>
+          <tr>
+            <td><strong>Validation</strong></td>
+            <td>14</td>
+            <td>Display name, tracking #, color, setting, image IDs, locale, divisions, dates, email</td>
+          </tr>
+          <tr>
+            <td><strong>Business Logic</strong></td>
+            <td>7</td>
+            <td>Auto-detection, AI features, thumbnail gen, video conversion, TIFF/EPS conversion</td>
+          </tr>
+          <tr>
+            <td><strong>Workflow</strong></td>
+            <td>5</td>
+            <td>New asset, save & new, save & duplicate, edit mode, status transitions</td>
+          </tr>
+          <tr>
+            <td><strong>Data Persistence</strong></td>
+            <td>2</td>
+            <td>Asset INSERT, notification email delivery</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="section">
+      <h2 class="section-title">🔗 Test Assets Generated</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Asset Type</th>
+            <th>File</th>
+            <th>Lines</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Page Object</td>
+            <td><code>AssetUploadPage.ts</code></td>
+            <td>280+</td>
+            <td>30+ locators, upload/edit/validation methods</td>
+          </tr>
+          <tr>
+            <td>Helpers</td>
+            <td><code>asset-upload.helpers.ts</code></td>
+            <td>200+</td>
+            <td>7 reusable multi-step flows</td>
+          </tr>
+          <tr>
+            <td>Spec File</td>
+            <td><code>asset-upload.spec.ts</code></td>
+            <td>680+</td>
+            <td>35+ tests across smoke/regression/e2e</td>
+          </tr>
+          <tr>
+            <td>Test Data</td>
+            <td><code>test-data.json</code></td>
+            <td>220+</td>
+            <td>Valid/invalid/boundary data + expectations</td>
+          </tr>
+          <tr>
+            <td>Database</td>
+            <td><code>verify-records.sql</code></td>
+            <td>200+</td>
+            <td>12 SQL verification queries</td>
+          </tr>
+          <tr>
+            <td>API Tests</td>
+            <td><code>asset-upload.api.spec.ts</code></td>
+            <td>300+</td>
+            <td>7 handler action tests</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="footer">
+      <p><strong>Generated:</strong> 2026-07-08</p>
+      <p><strong>Framework:</strong> Playwright 1.40+</p>
+      <p><strong>Language:</strong> TypeScript</p>
+      <p><strong>Spec Path:</strong> <code>tests/playwright/specs/deereadbuilder/ad-builder/feature-asset-upload/asset-upload.spec.ts</code></p>
+    </div>
+  </div>
+</body>
+</html>

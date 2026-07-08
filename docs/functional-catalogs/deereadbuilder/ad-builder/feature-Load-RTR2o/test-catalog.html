@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Load RTR2o - Test Catalog</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f9fafb;
+      color: #111827;
+      line-height: 1.6;
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+    h1 { font-size: 2rem; margin-bottom: 8px; color: #000; }
+    .subtitle { color: #6b7280; font-size: 0.95rem; margin-bottom: 24px; }
+    .badge-group { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+    .badge { 
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .badge-status { background: #fecaca; color: #991b1b; border: 1px solid #fca5a5; }
+    .badge-smoke { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+    .badge-regression { background: #bfdbfe; color: #1e40af; border: 1px solid #93c5fd; }
+    .badge-e2e { background: #e9d5ff; color: #6b21a8; border: 1px solid #d8b4fe; }
+    
+    .stats { 
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .stat-card {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .stat-label { color: #6b7280; font-size: 0.9rem; margin-bottom: 4px; }
+    .stat-value { font-size: 1.75rem; font-weight: 700; color: #000; }
+    
+    .status-box {
+      background: #fef2f2;
+      border: 2px solid #fca5a5;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 32px;
+    }
+    .status-box h3 {
+      color: #991b1b;
+      margin-bottom: 8px;
+    }
+    .status-box p {
+      color: #7f1d1d;
+      margin-bottom: 12px;
+    }
+    
+    .section { margin-bottom: 32px; }
+    .section-title { 
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #3b82f6;
+      color: #1e3a8a;
+    }
+    
+    .test-matrix {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    
+    .test-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 12px;
+    }
+    .test-item {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 0.9rem;
+    }
+    .test-id {
+      font-weight: 700;
+      color: #1e40af;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 0.85rem;
+    }
+    .test-description { color: #4b5563; margin-top: 4px; }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    th {
+      background: #f3f4f6;
+      padding: 12px;
+      text-align: left;
+      font-weight: 700;
+      border-bottom: 2px solid #e5e7eb;
+      color: #111827;
+    }
+    td {
+      padding: 12px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    tr:last-child td { border-bottom: none; }
+    
+    code {
+      background: #f3f4f6;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 0.85rem;
+    }
+    
+    .footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #e5e7eb;
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Load RTR2o — Test Catalog</h1>
+    <p class="subtitle">DeerAd Builder | ad-builder module | deereadbuilder client</p>
+    
+    <div class="badge-group">
+      <div class="badge badge-status">🔄 In Progress</div>
+      <div class="badge badge-smoke">Smoke: 5 tests</div>
+      <div class="badge badge-regression">Regression: 63 tests</div>
+      <div class="badge badge-e2e">E2E: 14 tests</div>
+    </div>
+    
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-label">Total Test Cases (Planned)</div>
+        <div class="stat-value">82</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Business Rules</div>
+        <div class="stat-value">38</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Form Fields</div>
+        <div class="stat-value">28</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Data Sources</div>
+        <div class="stat-value">3</div>
+      </div>
+    </div>
+    
+    <div class="status-box">
+      <h3>⚠️ Implementation Status: In Progress</h3>
+      <p>Functional test catalog complete. Test asset generation in progress following Asset-Upload patterns:</p>
+      <ul style="margin-left: 20px; color: #7f1d1d;">
+        <li>1️⃣ LoadRTR2oPage.ts (Page Object with 25+ locators)</li>
+        <li>2️⃣ load-rtr2o.helpers.ts (7+ multi-step helper functions)</li>
+        <li>3️⃣ load-rtr2o.spec.ts (82 comprehensive test cases)</li>
+        <li>4️⃣ test-data-rtr2o.json (Complete test data sets)</li>
+        <li>5️⃣ verify-rtr2o-records.sql (Database verification)</li>
+        <li>6️⃣ load-rtr2o.api.spec.ts (API handler tests)</li>
+      </ul>
+      <p style="margin-top: 12px; font-style: italic;">Estimated implementation time: 2-3 hours</p>
+    </div>
+    
+    <div class="section">
+      <h2 class="section-title">📋 Test Distribution (Planned)</h2>
+      
+      <div class="test-matrix">
+        <h3 style="font-size: 1.05rem; margin-bottom: 12px;">Data Source Matrix (Primary)</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Data Source</th>
+              <th>Tests</th>
+              <th>Coverage</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Database Mapping</strong></td>
+              <td>22</td>
+              <td>RTR2o_ID, company, program, division, venue mappings</td>
+            </tr>
+            <tr>
+              <td><strong>Form Validation</strong></td>
+              <td>32</td>
+              <td>Load date range, default values, field constraints</td>
+            </tr>
+            <tr>
+              <td><strong>CSV/Import</strong></td>
+              <td>14</td>
+              <td>Format validation, duplicate handling, error recovery</td>
+            </tr>
+            <tr>
+              <td><strong>Complex Workflows</strong></td>
+              <td>14</td>
+              <td>Multi-load sequences, data refresh, edge cases</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="test-matrix">
+        <h3 style="font-size: 1.05rem; margin-bottom: 12px;">Coverage by Dimension</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Dimension</th>
+              <th>Test IDs</th>
+              <th>Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Data Mapping (DM)</strong></td>
+              <td>DM-001 to DM-022</td>
+              <td>22</td>
+            </tr>
+            <tr>
+              <td><strong>Load & Transform (LT)</strong></td>
+              <td>LT-001 to LT-032</td>
+              <td>32</td>
+            </tr>
+            <tr>
+              <td><strong>Validation & Conflict (VC)</strong></td>
+              <td>VC-001 to VC-014</td>
+              <td>14</td>
+            </tr>
+            <tr>
+              <td><strong>Complex Workflows (WF)</strong></td>
+              <td>WF-001 to WF-014</td>
+              <td>14</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2 class="section-title">🔗 Test Assets Generated</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Asset Type</th>
+            <th>File</th>
+            <th>Lines</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Design Spec</td>
+            <td><code>LOAD-RTR2O-IMPLEMENTATION.md</code></td>
+            <td>400+</td>
+            <td>Detailed implementation guide with locators & helper designs</td>
+          </tr>
+          <tr style="background: #f0fdf4;">
+            <td>Page Object</td>
+            <td><code>LoadRTR2oPage.ts</code></td>
+            <td>TBD</td>
+            <td>25+ locators, load/edit/validation methods</td>
+          </tr>
+          <tr style="background: #f0fdf4;">
+            <td>Helpers</td>
+            <td><code>load-rtr2o.helpers.ts</code></td>
+            <td>TBD</td>
+            <td>7+ reusable multi-step flows</td>
+          </tr>
+          <tr style="background: #f0fdf4;">
+            <td>Spec File</td>
+            <td><code>load-rtr2o.spec.ts</code></td>
+            <td>TBD</td>
+            <td>82 tests organized by dimension</td>
+          </tr>
+          <tr style="background: #f0fdf4;">
+            <td>Test Data</td>
+            <td><code>test-data-rtr2o.json</code></td>
+            <td>TBD</td>
+            <td>Valid/invalid/boundary data</td>
+          </tr>
+          <tr style="background: #f0fdf4;">
+            <td>Database</td>
+            <td><code>verify-rtr2o-records.sql</code></td>
+            <td>TBD</td>
+            <td>SQL verification queries</td>
+          </tr>
+          <tr style="background: #f0fdf4;">
+            <td>API Tests</td>
+            <td><code>load-rtr2o.api.spec.ts</code></td>
+            <td>TBD</td>
+            <td>Handler action tests</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="footer">
+      <p><strong>Catalog Generated:</strong> 2026-07-08</p>
+      <p><strong>Status:</strong> Functional test catalog complete, test implementation in progress</p>
+      <p><strong>Framework:</strong> Playwright 1.40+</p>
+    </div>
+  </div>
+</body>
+</html>

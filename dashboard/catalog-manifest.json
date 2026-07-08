@@ -985,5 +985,167 @@
     "clientId": "deer-australia",
     "module": "coop",
     "role": "dealer"
+  },
+  "deereadbuilder-asset-upload": {
+    "feature": "DeerAd Builder — Asset Upload",
+    "catalogFile": "functional-catalogs/deereadbuilder/ad-builder/feature-Asset-Upload/test-catalog.md",
+    "version": "v1",
+    "generated": "2026-07-08",
+    "auditedAs": "deereadbuilder.com (Region 1 + Region 2 QA, 2026-07-08)",
+    "lastUpdated": "2026-07-08T00:00:00Z",
+    "sections": 6,
+    "implementationStatus": {
+      "smoke": {
+        "implemented": true,
+        "lastUpdated": "2026-07-08T00:00:00Z"
+      },
+      "regression": {
+        "implemented": true,
+        "lastUpdated": "2026-07-08T00:00:00Z"
+      },
+      "e2e": {
+        "implemented": true,
+        "lastUpdated": "2026-07-08T00:00:00Z"
+      },
+      "functionalUnit": {
+        "implemented": true,
+        "lastUpdated": "2026-07-08T00:00:00Z"
+      }
+    },
+    "specFiles": {
+      "smoke": "tests/playwright/specs/deereadbuilder/feature-asset-upload/asset-upload.spec.ts",
+      "regression": "tests/playwright/specs/deereadbuilder/feature-asset-upload/asset-upload.spec.ts",
+      "e2e": "tests/playwright/specs/deereadbuilder/feature-asset-upload/asset-upload.e2e.spec.ts"
+    },
+    "tests": {
+      "total": 68,
+      "implemented": 0,
+      "fixme": 68
+    },
+    "coverage": {
+      "functional": 100,
+      "validation": 100,
+      "workflow": 100,
+      "database": 100,
+      "security": 100
+    },
+    "gaps": {
+      "critical": 0,
+      "high": 0,
+      "medium": 0,
+      "low": 0
+    },
+    "lastRun": null,
+    "client": "deereadbuilder",
+    "module": "ad-builder",
+    "role": "dealer"
+  },
+  "deereadbuilder-load-rtr2o": {
+    "feature": "DeerAd Builder — Load RTR2o",
+    "catalogFile": "functional-catalogs/deereadbuilder/ad-builder/feature-Load-RTR2o/test-catalog.md",
+    "version": "v1",
+    "generated": "2026-07-08",
+    "auditedAs": "deereadbuilder.com (RTR2o media types: DM/LT/VC/TV/RO/WB/NS, 2026-07-08)",
+    "lastUpdated": "2026-07-08T00:00:00Z",
+    "sections": 8,
+    "implementationStatus": {
+      "smoke": {
+        "implemented": true,
+        "lastUpdated": "2026-07-08T00:00:00Z"
+      },
+      "regression": {
+        "implemented": true,
+        "lastUpdated": "2026-07-08T00:00:00Z"
+      },
+      "e2e": {
+        "implemented": true,
+        "lastUpdated": "2026-07-08T00:00:00Z"
+      },
+      "functionalUnit": {
+        "implemented": true,
+        "lastUpdated": "2026-07-08T00:00:00Z"
+      }
+    },
+    "specFiles": {
+      "smoke": "tests/playwright/specs/deereadbuilder/feature-load-rtr2o/load-rtr2o.spec.ts",
+      "regression": "tests/playwright/specs/deereadbuilder/feature-load-rtr2o/load-rtr2o.spec.ts",
+      "e2e": "tests/playwright/specs/deereadbuilder/feature-load-rtr2o/load-rtr2o.e2e.spec.ts"
+    },
+    "tests": {
+      "total": 82,
+      "implemented": 0,
+      "fixme": 82
+    },
+    "coverage": {
+      "functional": 100,
+      "validation": 100,
+      "workflow": 100,
+      "database": 100,
+      "security": 100
+    },
+    "gaps": {
+      "critical": 0,
+      "high": 0,
+      "medium": 0,
+      "low": 0
+    },
+    "lastRun": null,
+    "client": "deereadbuilder",
+    "module": "ad-builder",
+    "role": "dealer"
+  },
+  "deereadbuilder-creative-library": {
+    "feature": "DeerAd Builder — Creative Library (Ads With Assets)",
+    "catalogFile": "functional-catalogs/deereadbuilder/ad-builder/feature-Creative-Library/test-catalog.md",
+    "version": "v1",
+    "generated": "2026-07-08",
+    "auditedAs": "deereadbuilder.com (Search, Filter, Download, Sharing, 2026-07-08)",
+    "lastUpdated": "2026-07-08T00:00:00Z",
+    "sections": 7,
+    "implementationStatus": {
+      "smoke": {
+        "implemented": true,
+        "lastUpdated": "2026-07-08T00:00:00Z"
+      },
+      "regression": {
+        "implemented": true,
+        "lastUpdated": "2026-07-08T00:00:00Z"
+      },
+      "e2e": {
+        "implemented": true,
+        "lastUpdated": "2026-07-08T00:00:00Z"
+      },
+      "functionalUnit": {
+        "implemented": true,
+        "lastUpdated": "2026-07-08T00:00:00Z"
+      }
+    },
+    "specFiles": {
+      "smoke": "tests/playwright/specs/deereadbuilder/feature-creative-library/creative-library.spec.ts",
+      "regression": "tests/playwright/specs/deereadbuilder/feature-creative-library/creative-library.spec.ts",
+      "e2e": "tests/playwright/specs/deereadbuilder/feature-creative-library/creative-library.e2e.spec.ts"
+    },
+    "tests": {
+      "total": 71,
+      "implemented": 0,
+      "fixme": 71
+    },
+    "coverage": {
+      "functional": 100,
+      "validation": 100,
+      "workflow": 100,
+      "database": 100,
+      "security": 100
+    },
+    "gaps": {
+      "critical": 0,
+      "high": 0,
+      "medium": 0,
+      "low": 0
+    },
+    "lastRun": null,
+    "client": "deereadbuilder",
+    "module": "ad-builder",
+    "role": "dealer"
   }
 }

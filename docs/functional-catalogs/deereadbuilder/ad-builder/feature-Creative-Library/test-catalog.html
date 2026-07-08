@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Creative Library - Test Catalog</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f9fafb;
+      color: #111827;
+      line-height: 1.6;
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+    h1 { font-size: 2rem; margin-bottom: 8px; color: #000; }
+    .subtitle { color: #6b7280; font-size: 0.95rem; margin-bottom: 24px; }
+    .badge-group { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+    .badge { 
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .badge-status { background: #fecaca; color: #991b1b; border: 1px solid #fca5a5; }
+    .badge-smoke { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+    .badge-regression { background: #bfdbfe; color: #1e40af; border: 1px solid #93c5fd; }
+    .badge-e2e { background: #e9d5ff; color: #6b21a8; border: 1px solid #d8b4fe; }
+    
+    .stats { 
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .stat-card {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .stat-label { color: #6b7280; font-size: 0.9rem; margin-bottom: 4px; }
+    .stat-value { font-size: 1.75rem; font-weight: 700; color: #000; }
+    
+    .status-box {
+      background: #fef2f2;
+      border: 2px solid #fca5a5;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 32px;
+    }
+    .status-box h3 {
+      color: #991b1b;
+      margin-bottom: 8px;
+    }
+    .status-box p {
+      color: #7f1d1d;
+      margin-bottom: 12px;
+    }
+    
+    .section { margin-bottom: 32px; }
+    .section-title { 
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #3b82f6;
+      color: #1e3a8a;
+    }
+    
+    .test-matrix {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    
+    .test-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 12px;
+    }
+    .test-item {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 0.9rem;
+    }
+    .test-id {
+      font-weight: 700;
+      color: #1e40af;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 0.85rem;
+    }
+    .test-description { color: #4b5563; margin-top: 4px; }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    th {
+      background: #f3f4f6;
+      padding: 12px;
+      text-align: left;
+      font-weight: 700;
+      border-bottom: 2px solid #e5e7eb;
+      color: #111827;
+    }
+    td {
+      padding: 12px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    tr:last-child td { border-bottom: none; }
+    
+    code {
+      background: #f3f4f6;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 0.85rem;
+    }
+    
+    .footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #e5e7eb;
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Creative Library — Test Catalog</h1>
+    <p class="subtitle">DeerAd Builder | ad-builder module | deereadbuilder client</p>
+    
+    <div class="badge-group">
+      <div class="badge badge-status">🔄 In Progress</div>
+      <div class="badge badge-smoke">Smoke: 5 tests</div>
+      <div class="badge badge-regression">Regression: 54 tests</div>
+      <div class="badge badge-e2e">E2E: 12 tests</div>
+    </div>
+    
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-label">Total Test Cases (Planned)</div>
+        <div class="stat-value">71</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Business Rules</div>
+        <div class="stat-value">35</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Filter Dimensions</div>
+        <div class="stat-value">8</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Download Formats</div>
+        <div class="stat-value">7</div>
+      </div>
+    </div>
+    
+    <div class="status-box">
+      <h3>⚠️ Implementation Status: In Progress</h3>
+      <p>Functional test catalog complete. Test asset generation in progress following Asset-Upload patterns:</p>
+      <ul style="margin-left: 20px; color: #7f1d1d;">
+        <li>1️⃣ CreativeLibraryPage.ts (Page Object with 32+ locators)</li>
+        <li>2️⃣ creative-library.helpers.ts (8+ multi-step helper functions)</li>
+        <li>3️⃣ creative-library.spec.ts (71 comprehensive test cases)</li>
+        <li>4️⃣ test-data-creative-library.json (Complete test data sets)</li>
+        <li>5️⃣ verify-creative-library-records.sql (Database verification)</li>
+        <li>6️⃣ creative-library.api.spec.ts (API handler tests)</li>
+      </ul>
+      <p style="margin-top: 12px; font-style: italic;">Estimated implementation time: 2-2.5 hours</p>
+    </div>
+    
+    <div class="section">
+      <h2 class="section-title">📋 Test Coverage (Planned)</h2>
+      
+      <div class="test-matrix">
+        <h3 style="font-size: 1.05rem; margin-bottom: 12px;">Filter Matrix Tests (Core)</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Filter Dimension</th>
+              <th>Tests</th>
+              <th>Coverage</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Search</strong></td>
+              <td>8</td>
+              <td>Text search, multi-select, case-insensitive, partial match</td>
+            </tr>
+            <tr>
+              <td><strong>Asset Type</strong></td>
+              <td>6</td>
+              <td>Filter by: image, video, document, multi-select, clear</td>
+            </tr>
+            <tr>
+              <td><strong>Status</strong></td>
+              <td>6</td>
+              <td>Active, inactive, scheduled, archive, multi-select</td>
+            </tr>
+            <tr>
+              <td><strong>Divisions</strong></td>
+              <td>6</td>
+              <td>Multiple division selection, cross-product filtering</td>
+            </tr>
+            <tr>
+              <td><strong>Date Range</strong></td>
+              <td>8</td>
+              <td>Custom dates, preset ranges, boundary dates</td>
+            </tr>
+            <tr>
+              <td><strong>Locales</strong></td>
+              <td>6</td>
+              <td>Single/multi-locale, region-specific</td>
+            </tr>
+            <tr>
+              <td><strong>DPI Threshold</strong></td>
+              <td>5</td>
+              <td>Low/medium/high quality, threshold validation</td>
+            </tr>
+            <tr>
+              <td><strong>Dimensions</strong></td>
+              <td>5</td>
+              <td>Width/height ranges, aspect ratio validation</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="test-matrix">
+        <h3 style="font-size: 1.05rem; margin-bottom: 12px;">Core Feature Coverage</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Tests</th>
+              <th>Scenarios</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Grid Display & Pagination</strong></td>
+              <td>6</td>
+              <td>12 per page default, sorting, grid refresh</td>
+            </tr>
+            <tr>
+              <td><strong>Download & Format</strong></td>
+              <td>10</td>
+              <td>JPG, PNG, PDF, MP4, HD/LD, batch download, ZIP</td>
+            </tr>
+            <tr>
+              <td><strong>Bulk Operations</strong></td>
+              <td>8</td>
+              <td>Edit metadata, delete, status change, select all/deselect</td>
+            </tr>
+            <tr>
+              <td><strong>Sharing & Access</strong></td>
+              <td>8</td>
+              <td>Dealer-to-dealer sharing, read-only, permission checks</td>
+            </tr>
+            <tr>
+              <td><strong>UI Interactions</strong></td>
+              <td>10</td>
+              <td>Tree navigation, favorites, asset preview, modal interactions</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2 class="section-title">🔗 Test Assets Generated</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Asset Type</th>
+            <th>File</th>
+            <th>Lines</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Design Spec</td>
+            <td><code>CREATIVE-LIBRARY-IMPLEMENTATION.md</code></td>
+            <td>450+</td>
+            <td>Detailed implementation guide with filter matrix design</td>
+          </tr>
+          <tr style="background: #f0fdf4;">
+            <td>Page Object</td>
+            <td><code>CreativeLibraryPage.ts</code></td>
+            <td>TBD</td>
+            <td>32+ locators, search/filter/download methods</td>
+          </tr>
+          <tr style="background: #f0fdf4;">
+            <td>Helpers</td>
+            <td><code>creative-library.helpers.ts</code></td>
+            <td>TBD</td>
+            <td>8+ reusable multi-step flows</td>
+          </tr>
+          <tr style="background: #f0fdf4;">
+            <td>Spec File</td>
+            <td><code>creative-library.spec.ts</code></td>
+            <td>TBD</td>
+            <td>71 tests organized by filter dimension</td>
+          </tr>
+          <tr style="background: #f0fdf4;">
+            <td>Test Data</td>
+            <td><code>test-data-creative-library.json</code></td>
+            <td>TBD</td>
+            <td>Filter combinations, test assets, expected results</td>
+          </tr>
+          <tr style="background: #f0fdf4;">
+            <td>Database</td>
+            <td><code>verify-creative-library-records.sql</code></td>
+            <td>TBD</td>
+            <td>Asset status, metadata, sharing verification</td>
+          </tr>
+          <tr style="background: #f0fdf4;">
+            <td>API Tests</td>
+            <td><code>creative-library.api.spec.ts</code></td>
+            <td>TBD</td>
+            <td>Search, filter, download, bulk operation APIs</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="footer">
+      <p><strong>Catalog Generated:</strong> 2026-07-08</p>
+      <p><strong>Status:</strong> Functional test catalog complete, test implementation in progress</p>
+      <p><strong>Framework:</strong> Playwright 1.40+</p>
+    </div>
+  </div>
+</body>
+</html>

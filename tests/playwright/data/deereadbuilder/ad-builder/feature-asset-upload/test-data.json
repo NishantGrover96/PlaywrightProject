@@ -1,0 +1,206 @@
+{
+  "region": 1,
+  "users": {
+    "dealer": {
+      "email": "dealer01@deeradbuilder.com",
+      "password": "Test@123456",
+      "dealerId": "DEALER001"
+    },
+    "dealerB": {
+      "email": "dealer02@deeradbuilder.com",
+      "dealerId": "DEALER002"
+    },
+    "admin": {
+      "email": "admin@deeradbuilder.com",
+      "password": "AdminTest@123456"
+    }
+  },
+  "valid": {
+    "displayName": "Summer Campaign Banner 2026",
+    "displayNameBoundary": "12345678901234567890",
+    "assetType": "Image",
+    "trackingNumber": "TRACK00001",
+    "trackingNumberMax": "12345678901234567890",
+    "color": "Red",
+    "setting": "Studio",
+    "customerSegment": "Residential",
+    "productSegment": "Home Improvement",
+    "imageIds": ["IMG001", "IMG002"],
+    "locale": ["en-US"],
+    "divisions": ["Division1"],
+    "status": "Active",
+    "folder": "Marketing",
+    "keywords": ["summer", "campaign", "2026"],
+    "releaseDate": "07/20/2026",
+    "endDate": "08/20/2026",
+    "manualEmails": "admin@example.com;marketing@example.com",
+    "thumbnailHeight": 150,
+    "thumbnailWidth": 150
+  },
+  "invalid": {
+    "displayName": "",
+    "displayNameSpecialChars": "Banner@#$%^&*()",
+    "displayNameTooLong": "This is a very long display name that exceeds the maximum character limit allowed by the system and should be rejected",
+    "trackingNumber": "ABC",
+    "trackingNumberSpecialChars": "ABC@123",
+    "trackingNumberTooLong": "123456789012345678901",
+    "imageIdEmpty": "",
+    "imageIdTooLong": "X".repeat(1001),
+    "emailFormat": "invalid-email;user@;notanemail",
+    "keywordTooShort": "A",
+    "keywordDuplicate": "summer",
+    "futureDate": "12/31/2050",
+    "endDateBeforeRelease": "07/15/2026",
+    "xssPayload": "<script>alert('xss')</script>",
+    "pathTraversal": "../../../etc/passwd.jpg",
+    "invalidFileExtension": "malware.exe"
+  },
+  "boundary": {
+    "trackingNumberMin": "ABCDE",
+    "trackingNumberMax": "12345678901234567890",
+    "sameDayReleaseAndEnd": {
+      "releaseDate": "07/20/2026",
+      "endDate": "07/20/2026"
+    },
+    "oneYearLater": "07/20/2027",
+    "keywordMaxLength": "X".repeat(1000),
+    "displayNameMaxSafeLength": "Summer Banner".repeat(5),
+    "maxImageIds": 5
+  },
+  "expectedStatuses": {
+    "active": "Active",
+    "inactive": "Inactive",
+    "dateRange": "Date Range"
+  },
+  "expectedErrors": {
+    "displayNameRequired": "Please enter display name.",
+    "displayNameInvalidChars": "Display name contains invalid characters.",
+    "trackingNumberRequired": "Please enter tracking# from 5 to 20 characters.",
+    "trackingNumberFormat": "Tracking # must be alphanumeric.",
+    "trackingNumberLength": "Tracking # must be 5 to 20 characters.",
+    "colorRequired": "Please select color.",
+    "settingRequired": "Please select setting.",
+    "imageIdRequired": "Please enter image id.",
+    "imageIdNotUnique": "Please enter unique image id.",
+    "localeRequired": "Please select locale.",
+    "divisionRequired": "Please select division.",
+    "categoryRequired": "Please select category.",
+    "endDateInvalid": "End date should be greater than release date.",
+    "emailFormatInvalid": "Please enter email(s) (separated with semicolon).",
+    "keywordTooShort": "Tags must be at least 2 characters.",
+    "keywordTooLong": "Tags must not exceed 1000 characters.",
+    "keywordNotUnique": "This tag already exists.",
+    "uploadRequired": "Please upload an asset file.",
+    "fileExtensionNotAllowed": "File type not allowed. Allowed types: .jpg, .png, .gif, .mp4, .wmv, .avi, .mov, .tiff, .eps, .pdf"
+  },
+  "expectedSuccessMessages": {
+    "saved": "Saved successfully",
+    "updated": "Updated successfully",
+    "assetCreated": "Asset uploaded and saved."
+  },
+  "databaseExpectations": {
+    "assetInsertFields": [
+      "asset_id",
+      "title",
+      "description",
+      "asset_type",
+      "status",
+      "created_by",
+      "created_date",
+      "uploaded_file_name",
+      "thumbnail_file_name",
+      "low_res_file_name"
+    ],
+    "statusMap": {
+      "Active": 1,
+      "Inactive": 0,
+      "Date Range": 2
+    }
+  },
+  "emailNotificationTemplateVariables": {
+    "title": "<<title>>",
+    "division": "<<Division>>",
+    "thumbnail": "<<img_thumbnail>>",
+    "uploadedBy": "<<Uploaded_By>>",
+    "trackingNumber": "<<Tracking#>>"
+  },
+  "fileConversions": {
+    "jpgToJpg": { "input": ".jpg", "output": ".jpg", "formats": ["high-res", "low-res"] },
+    "pngToPng": { "input": ".png", "output": ".png", "formats": ["high-res"] },
+    "gifToJpg": { "input": ".gif", "output": ".jpg", "formats": ["high-res"] },
+    "tiffToPng": { "input": ".tiff", "output": ".png", "formats": ["high-res"] },
+    "epsTJpg": { "input": ".eps", "output": ".jpg", "formats": ["high-res", "preview"] },
+    "mp4ToMp4": { "input": ".mp4", "output": ".mp4", "formats": ["high-res", "low-res-640x480"] },
+    "lowResVideo": { "width": 640, "height": 480, "codec": "h264", "bitrate": "1000k" }
+  },
+  "aiFeatures": {
+    "region1Only": true,
+    "keywordMinConfidence": 0.60,
+    "customerSegmentMinConfidence": 0.75,
+    "divisionMinConfidence": 0.50,
+    "grayedOutImageTypes": ["GIF"]
+  },
+  "validationRules": {
+    "displayNameMinLength": 1,
+    "displayNameMaxLength": 255,
+    "trackingNumberMinLength": 5,
+    "trackingNumberMaxLength": 20,
+    "trackingNumberPattern": "^[a-zA-Z0-9]+$",
+    "keywordMinLength": 2,
+    "keywordMaxLength": 1000,
+    "emailPattern": "^[^@]+@[^@]+\\.[^@]+$",
+    "imageDimensionsMin": { "width": 100, "height": 100 },
+    "imageDimensionsMax": { "width": 10000, "height": 10000 },
+    "videoMaxSizeGB": 9999,
+    "allowedFileExtensions": [
+      ".jpg",
+      ".jpeg",
+      ".png",
+      ".gif",
+      ".bmp",
+      ".tiff",
+      ".eps",
+      ".mp4",
+      ".wmv",
+      ".avi",
+      ".mov",
+      ".mpg",
+      ".pdf"
+    ],
+    "blockedFileExtensions": [
+      ".exe",
+      ".bat",
+      ".cmd",
+      ".com",
+      ".scr",
+      ".vbs",
+      ".js",
+      ".jar",
+      ".zip",
+      ".rar"
+    ]
+  },
+  "region2Adjustments": {
+    "trackingNumberVisible": false,
+    "colorFieldVisible": false,
+    "settingFieldVisible": false,
+    "customerSegmentVisible": false,
+    "productSegmentVisible": false,
+    "aiIconsVisible": false,
+    "aiKeywordsPopulated": false,
+    "terminology": {
+      ""MediaBin": "Media Bin #",
+      "imageId": "Media ID"
+    }
+  },
+  "concurrencyTestData": {
+    "dealer1Assets": [
+      { "displayName": "Asset by Dealer 1 — 1", "divisions": ["Division1"] },
+      { "displayName": "Asset by Dealer 1 — 2", "divisions": ["Division2"] }
+    ],
+    "dealer2Assets": [
+      { "displayName": "Asset by Dealer 2 — 1", "divisions": ["Division1"] },
+      { "displayName": "Asset by Dealer 2 — 2", "divisions": ["Division3"] }
+    ]
+  }
+}
