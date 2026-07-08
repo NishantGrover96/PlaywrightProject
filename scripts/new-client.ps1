@@ -241,7 +241,9 @@ function New-JsonFile {
         [Parameter(Mandatory)][object]$Content
     )
     New-Dir (Split-Path $Path)
-    $Content | ConvertTo-Json -Depth 10 | Set-Content -Path $Path -Encoding utf8
+    $json = $Content | ConvertTo-Json -Depth 10
+    $utf8NoBom = New-Object System.Text.UTF8Encoding $false
+    [System.IO.File]::WriteAllText($Path, $json, $utf8NoBom)
     Write-Done "Created  $($Path.Replace($script:Root, ''))"
 }
 
@@ -645,7 +647,9 @@ function Update-RepoRegistry {
                -NotePropertyValue $entry `
                -Force
 
-    $registryObj | ConvertTo-Json -Depth 10 | Set-Content -Path $script:ReposLocalJson -Encoding utf8
+    $json = $registryObj | ConvertTo-Json -Depth 10
+    $utf8NoBom = New-Object System.Text.UTF8Encoding $false
+    [System.IO.File]::WriteAllText($script:ReposLocalJson, $json, $utf8NoBom)
     Write-Done "Updated $($script:ReposLocalJson.Replace($script:Root, ''))"
 }
 

@@ -613,6 +613,7 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
       <label class="field-label" for="sel-client">Select Client</label>
       <select id="sel-client" onchange="onClientChange()">
         <option value="demoportal">Demo Portal</option>
+        <option value="deer-australia">Deer Australia</option>
       </select>
     </div>
 
@@ -1622,16 +1623,18 @@ function getSelectedValues(groupId) {
 }
 
 const FEATURE_FOLDERS = {
-  "coop-submit-claim":            "tests/playwright/specs/coop/feature-submit-claim",
-  "coop-submit-preapproval":      "tests/playwright/specs/coop/feature-submit-preapproval",
-  "coop-dealer-dashboard":        "tests/playwright/specs/coop/feature-dealer-dashboard",
-  "coop-admin-reports":           "tests/playwright/specs/coop/feature-admin-reports",
-  "coop-api-submit-claim":        "tests/api/coop/feature-submit-claim",
-  "coop-api-submit-preapproval":  "tests/api/coop/feature-submit-preapproval",
-  "popshop-new-order":            "tests/playwright/specs/popshop/feature-new-order",
-  "engage-ads-view-package":      "tests/playwright/specs/engage-ads/feature-view-package",
-  "engage-ads-campaign-setup":    "tests/playwright/specs/engage-ads/feature-campaign-setup",
-  "engage-ads-order-history":      "tests/playwright/specs/engage-ads/feature-order-history",
+  "coop-submit-claim":                          "tests/playwright/specs/coop/feature-submit-claim",
+  "coop-submit-preapproval":                    "tests/playwright/specs/coop/feature-submit-preapproval",
+  "coop-dealer-dashboard":                      "tests/playwright/specs/coop/feature-dealer-dashboard",
+  "coop-admin-reports":                         "tests/playwright/specs/coop/feature-admin-reports",
+  "coop-api-submit-claim":                      "tests/api/coop/feature-submit-claim",
+  "coop-api-submit-preapproval":                "tests/api/coop/feature-submit-preapproval",
+  "popshop-new-order":                          "tests/playwright/specs/popshop/feature-new-order",
+  "engage-ads-view-package":                    "tests/playwright/specs/engage-ads/feature-view-package",
+  "engage-ads-campaign-setup":                  "tests/playwright/specs/engage-ads/feature-campaign-setup",
+  "engage-ads-order-history":                   "tests/playwright/specs/engage-ads/feature-order-history",
+  "deer-australia-coop-submit-claim":           "tests/playwright/specs/deer-australia/coop/feature-submit-claim",
+  "deer-australia-coop-submit-preapproval":     "tests/playwright/specs/deer-australia/coop/feature-submit-preapproval",
 };
 const TIER_TAGS = { smoke: "@smoke", regression: "@regression", e2e: "@e2e" };
 

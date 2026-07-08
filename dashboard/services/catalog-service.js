@@ -236,7 +236,7 @@ function _loadLegacyManifest() {
     const enriched = {
       ...entry,
       featureId,
-      clientId:   entry.clientId || 'demoportal',
+      clientId:   entry.clientId || entry.client || 'demoportal',
       module:     entry.module   || _inferModuleFromId(featureId),
       status:     entry.status   || 'Approved',  // existing catalog entries are all live/approved
       _source:    'legacy-manifest',

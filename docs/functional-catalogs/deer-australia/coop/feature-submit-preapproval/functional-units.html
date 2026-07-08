@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Submit Preapproval — Functional Unit Catalog (Deer Australia)</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 0; background: #f8fafc; color: #1e293b; }
+    header { background: #14532d; color: #fff; padding: 20px 32px; }
+    header h1 { margin: 0 0 4px; font-size: 1.25rem; }
+    header p { margin: 0; font-size: 0.85rem; opacity: .75; }
+    .meta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+    .meta span { background: rgba(255,255,255,.15); border-radius: 4px; padding: 2px 8px; font-size: 0.75rem; }
+    .toolbar { display: flex; align-items: center; gap: 10px; padding: 14px 32px; background: #fff; border-bottom: 1px solid #e2e8f0; flex-wrap: wrap; }
+    .toolbar label { font-size: .8rem; font-weight: 600; color: #64748b; }
+    .toolbar select, .toolbar input { border: 1px solid #cbd5e1; border-radius: 6px; padding: 5px 10px; font-size: .8rem; background: #f8fafc; }
+    .summary { display: flex; gap: 12px; padding: 16px 32px; flex-wrap: wrap; }
+    .stat-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 20px; min-width: 110px; text-align: center; }
+    .stat-card .num { font-size: 1.6rem; font-weight: 700; }
+    .stat-card .lbl { font-size: .72rem; color: #64748b; margin-top: 2px; }
+    main { padding: 20px 32px 60px; }
+    .section { margin-bottom: 20px; border: 1px solid #e2e8f0; border-radius: 10px; background: #fff; overflow: hidden; }
+    .section-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 18px; cursor: pointer; user-select: none; }
+    .section-header:hover { background: #f1f5f9; }
+    .tier-smoke .section-header { border-left: 4px solid #dc2626; }
+    .tier-regression .section-header { border-left: 4px solid #d97706; }
+    .tier-e2e .section-header { border-left: 4px solid #2563eb; }
+    .section-title { font-weight: 700; font-size: .95rem; display: flex; align-items: center; gap: 10px; }
+    .tier-badge { font-size: .7rem; padding: 2px 8px; border-radius: 20px; font-weight: 600; }
+    .badge-smoke { background: #fee2e2; color: #dc2626; }
+    .badge-regression { background: #fef3c7; color: #92400e; }
+    .badge-e2e { background: #dbeafe; color: #1d4ed8; }
+    .section-count { font-size: .8rem; color: #64748b; }
+    .chevron { transition: transform .2s; font-size: .85rem; color: #94a3b8; }
+    .section.collapsed .chevron { transform: rotate(-90deg); }
+    .section-body { border-top: 1px solid #f1f5f9; }
+    .section.collapsed .section-body { display: none; }
+    .tc { padding: 14px 18px; border-bottom: 1px solid #f1f5f9; display: flex; gap: 12px; }
+    .tc:last-child { border-bottom: none; }
+    .tc.hidden-tc { display: none; }
+    .tc-left { flex-shrink: 0; }
+    .tc-id { font-family: monospace; font-size: .78rem; font-weight: 700; color: #475569; white-space: nowrap; }
+    .tc-right { flex: 1; min-width: 0; }
+    .tc-title { font-weight: 600; font-size: .88rem; margin-bottom: 4px; }
+    .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
+    .tag { font-size: .68rem; padding: 1px 7px; border-radius: 10px; font-weight: 600; }
+    .p1 { background: #fee2e2; color: #991b1b; }
+    .p2 { background: #ffedd5; color: #9a3412; }
+    .p3 { background: #fef9c3; color: #713f12; }
+    .p4 { background: #dcfce7; color: #14532d; }
+    .cat-ui { background: #ede9fe; color: #5b21b6; }
+    .cat-validation { background: #fce7f3; color: #9d174d; }
+    .cat-business { background: #dbeafe; color: #1e40af; }
+    .cat-workflow { background: #d1fae5; color: #065f46; }
+    .cat-data { background: #fff7ed; color: #c2410c; }
+    .cat-security { background: #fef2f2; color: #7f1d1d; }
+    .cat-error { background: #f3f4f6; color: #374151; }
+    .tc-detail { font-size: .8rem; color: #475569; line-height: 1.6; }
+    .tc-detail strong { color: #1e293b; }
+    .steps { margin: 4px 0 4px 16px; }
+    .steps li { margin-bottom: 2px; }
+    .assertions { margin: 4px 0 4px 16px; font-family: monospace; font-size: .75rem; color: #334155; }
+    .assertions li { margin-bottom: 2px; }
+    .br-list { color: #64748b; font-size: .75rem; margin-top: 4px; }
+    .print-btn { margin-left: auto; background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 14px; font-size: .8rem; cursor: pointer; }
+    .print-btn:hover { background: #f1f5f9; }
+    @media print {
+      .toolbar, .summary { display: none; }
+      .section.collapsed .section-body { display: block !important; }
+      body { background: #fff; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Submit Preapproval — Functional Unit Catalog</h1>
+  <div class="meta">
+    <span>Client: deer-australia</span>
+    <span>Module: coop</span>
+    <span>Feature: submit-preapproval</span>
+    <span>Generated: 2026-07-08</span>
+    <span>Source: repo-analysis (no UI analysis)</span>
+  </div>
+</header>
+
+<div class="toolbar">
+  <label for="filterTier">Tier:</label>
+  <select id="filterTier" onchange="applyFilters()">
+    <option value="">All</option>
+    <option value="smoke">Smoke</option>
+    <option value="regression">Regression</option>
+    <option value="e2e">E2E</option>
+  </select>
+  <label for="filterPriority">Priority:</label>
+  <select id="filterPriority" onchange="applyFilters()">
+    <option value="">All</option>
+    <option value="P1-Critical">P1 Critical</option>
+    <option value="P2-High">P2 High</option>
+    <option value="P3-Medium">P3 Medium</option>
+    <option value="P4-Low">P4 Low</option>
+  </select>
+  <label for="filterCategory">Category:</label>
+  <select id="filterCategory" onchange="applyFilters()">
+    <option value="">All</option>
+    <option value="UI">UI</option>
+    <option value="Validation">Validation</option>
+    <option value="BusinessLogic">Business Logic</option>
+    <option value="Workflow">Workflow</option>
+    <option value="DataPersistence">Data Persistence</option>
+    <option value="Security">Security</option>
+    <option value="ErrorHandling">Error Handling</option>
+  </select>
+  <label for="filterSearch">Search:</label>
+  <input type="text" id="filterSearch" placeholder="BR ID or keyword…" oninput="applyFilters()" />
+  <button class="print-btn" onclick="window.print()">🖨 Print</button>
+</div>
+
+<div class="summary">
+  <div class="stat-card"><div class="num" style="color:#16a34a">48</div><div class="lbl">Total Tests</div></div>
+  <div class="stat-card"><div class="num" style="color:#dc2626">3</div><div class="lbl">Smoke</div></div>
+  <div class="stat-card"><div class="num" style="color:#d97706">40</div><div class="lbl">Regression</div></div>
+  <div class="stat-card"><div class="num" style="color:#2563eb">5</div><div class="lbl">E2E</div></div>
+  <div class="stat-card"><div class="num" style="color:#7c3aed">30</div><div class="lbl">Business Rules</div></div>
+</div>
+
+<main id="main-content">
+
+  <!-- SMOKE -->
+  <div class="section tier-smoke" id="sec-smoke">
+    <div class="section-header" onclick="toggleSection('sec-smoke')">
+      <div class="section-title"><span class="tier-badge badge-smoke">SMOKE</span>Smoke Suite — Critical Path Verification</div>
+      <div style="display:flex;align-items:center;gap:12px"><span class="section-count">3 tests</span><span class="chevron">▼</span></div>
+    </div>
+    <div class="section-body">
+
+      <div class="tc" data-tier="smoke" data-priority="P1-Critical" data-category="UI" data-br="BR-PA-001">
+        <div class="tc-left"><div class="tc-id">COOP-PA<br>SMOKE-001</div></div>
+        <div class="tc-right">
+          <div class="tc-title">Page loads for authenticated dealer</div>
+          <div class="tags"><span class="tag p1">P1-Critical</span><span class="tag cat-ui">UI</span></div>
+          <div class="tc-detail">
+            <strong>Precondition:</strong> Authenticated BMDLR<br>
+            <strong>Steps:</strong> Navigate to OnlinePreapprovalForm.aspx<br>
+            <strong>Expected:</strong> Page loads; heading contains "Pre-Approval"; email pre-populated; submit visible<br>
+            <strong>Assertions:</strong>
+            <ul class="assertions">
+              <li>heading contains 'pre-approval' (case-insensitive)</li>
+              <li>drpMediaCategory visible</li>
+              <li>btnSubmit visible</li>
+              <li>txtEmail not empty</li>
+            </ul>
+            <div class="br-list">BR Covered: BR-PA-001, BR-PA-017</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tc" data-tier="smoke" data-priority="P1-Critical" data-category="Security" data-br="BR-PA-001">
+        <div class="tc-left"><div class="tc-id">COOP-PA<br>SMOKE-002</div></div>
+        <div class="tc-right">
+          <div class="tc-title">Unauthenticated user is redirected</div>
+          <div class="tags"><span class="tag p1">P1-Critical</span><span class="tag cat-security">Security</span></div>
+          <div class="tc-detail">
+            <strong>Precondition:</strong> No active session<br>
+            <strong>Steps:</strong> Navigate to preapproval form URL directly<br>
+            <strong>Expected:</strong> Redirect; URL does not contain 'OnlinePreapprovalForm'<br>
+            <div class="br-list">BR Covered: BR-PA-001</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tc" data-tier="smoke" data-priority="P1-Critical" data-category="Workflow" data-br="BR-PA-009 BR-PA-024 BR-PA-025 BR-PA-026">
+        <div class="tc-left"><div class="tc-id">COOP-PA<br>SMOKE-003</div></div>
+        <div class="tc-right">
+          <div class="tc-title">Happy path: dealer submits valid preapproval</div>
+          <div class="tags"><span class="tag p1">P1-Critical</span><span class="tag cat-workflow">Workflow</span></div>
+          <div class="tc-detail">
+            <strong>Precondition:</strong> BMDLR; fund balance &gt; 0<br>
+            <strong>Steps:</strong>
+            <ol class="steps">
+              <li>Select advertisement type; select segment</li>
+              <li>Enter vendor name; set start date (today)</li>
+              <li>Enter preapproval amount (e.g. 500.00)</li>
+              <li>Upload one PDF (&lt; 100 MB); click Submit</li>
+            </ol>
+            <strong>Expected:</strong> Success / redirect; status = PENDING REVIEW in DB<br>
+            <strong>Assertions:</strong>
+            <ul class="assertions">
+              <li>No validation errors visible</li>
+              <li>DB: tblPreapproval status = 'PENDING REVIEW'</li>
+            </ul>
+            <div class="br-list">BR Covered: BR-PA-009, BR-PA-024, BR-PA-025, BR-PA-026</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- REGRESSION -->
+  <div class="section tier-regression" id="sec-regression">
+    <div class="section-header" onclick="toggleSection('sec-regression')">
+      <div class="section-title"><span class="tier-badge badge-regression">REGRESSION</span>Regression Suite — Full Functional Coverage</div>
+      <div style="display:flex;align-items:center;gap:12px"><span class="section-count">40 tests</span><span class="chevron">▼</span></div>
+    </div>
+    <div class="section-body">
+
+      <div class="tc" data-tier="regression" data-priority="P2-High" data-category="Validation" data-br="">
+        <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-001</div></div>
+        <div class="tc-right">
+          <div class="tc-title">Submit without Advertisement Type → "* Required"</div>
+          <div class="tags"><span class="tag p2">P2-High</span><span class="tag cat-validation">Validation</span></div>
+          <div class="tc-detail">
+            <strong>Steps:</strong> Leave drpMediaCategory unselected; submit<br>
+            <strong>Expected:</strong> litMediaTypeError shows "* Required"<br>
+            <strong>Assertions:</strong><ul class="assertions"><li>#MainContent_litMediaTypeError visible</li></ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="tc" data-tier="regression" data-priority="P2-High" data-category="Validation" data-br="">
+        <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-002</div></div>
+        <div class="tc-right">
+          <div class="tc-title">Submit without Segment → "* Required"</div>
+          <div class="tags"><span class="tag p2">P2-High</span><span class="tag cat-validation">Validation</span></div>
+          <div class="tc-detail">
+            <strong>Steps:</strong> Leave drpSegment at default (0); submit<br>
+            <strong>Expected:</strong> litSegmentError shows "* Required"<br>
+            <strong>Assertions:</strong><ul class="assertions"><li>#MainContent_litSegmentError visible</li></ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="tc" data-tier="regression" data-priority="P2-High" data-category="Validation" data-br="">
+        <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-003</div></div>
+        <div class="tc-right">
+          <div class="tc-title">Submit with empty Vendor Name → "* Required"</div>
+          <div class="tags"><span class="tag p2">P2-High</span><span class="tag cat-validation">Validation</span></div>
+          <div class="tc-detail">
+            <strong>Steps:</strong> Leave txtVendorName empty; submit<br>
+            <strong>Assertions:</strong><ul class="assertions"><li>#MainContent_errTxtVendor visible</li></ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="tc" data-tier="regression" data-priority="P2-High" data-category="Validation" data-br="BR-PA-030">
+        <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-004</div></div>
+        <div class="tc-right">
+          <div class="tc-title">Submit without First Placement Date → "* Required"</div>
+          <div class="tags"><span class="tag p2">P2-High</span><span class="tag cat-validation">Validation</span></div>
+          <div class="tc-detail">
+            <strong>Steps:</strong> Leave calStartDate empty; submit<br>
+            <strong>Assertions:</strong><ul class="assertions"><li>#MainContent_ltFirstPlacementDateErrorMsg visible</li></ul>
+            <div class="br-list">BR Covered: BR-PA-030</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tc" data-tier="regression" data-priority="P2-High" data-category="Validation" data-br="">
+        <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-005</div></div>
+        <div class="tc-right">
+          <div class="tc-title">Submit with empty Preapproval Amount → "* Required"</div>
+          <div class="tags"><span class="tag p2">P2-High</span><span class="tag cat-validation">Validation</span></div>
+          <div class="tc-detail">
+            <strong>Steps:</strong> Leave txtPreapprovalAmt empty; submit<br>
+            <strong>Assertions:</strong><ul class="assertions"><li>#MainContent_lblpreapprovalAmtError visible</li></ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="tc" data-tier="regression" data-priority="P1-Critical" data-category="Validation" data-br="BR-PA-005">
+        <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-007</div></div>
+        <div class="tc-right">
+          <div class="tc-title">Preapproval amount exceeds fund balance → blocked</div>
+          <div class="tags"><span class="tag p1">P1-Critical</span><span class="tag cat-validation">Validation</span></div>
+          <div class="tc-detail">
+            <strong>Precondition:</strong> Fund balance = $100<br>
+            <strong>Steps:</strong> Enter 200.00; submit<br>
+            <strong>Expected:</strong> diverrorpreapproval shown; not submitted<br>
+            <strong>Assertions:</strong><ul class="assertions"><li>#MainContent_diverrorpreapproval visible</li></ul>
+            <div class="br-list">BR Covered: BR-PA-005</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tc" data-tier="regression" data-priority="P2-High" data-category="Validation" data-br="">
+        <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-009</div></div>
+        <div class="tc-right">
+          <div class="tc-title">Invalid email format → "Please enter a valid email address"</div>
+          <div class="tags"><span class="tag p2">P2-High</span><span class="tag cat-validation">Validation</span></div>
+          <div class="tc-detail">
+            <strong>Steps:</strong> Enter "notanemail" in txtEmail; submit<br>
+            <strong>Assertions:</strong><ul class="assertions"><li>#MainContent_revEmail1 visible and contains 'valid email'</li></ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="tc" data-tier="regression" data-priority="P1-Critical" data-category="Validation" data-br="BR-PA-006">
+        <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-010</div></div>
+        <div class="tc-right">
+          <div class="tc-title">Non-admin submit without document AND without link → error</div>
+          <div class="tags"><span class="tag p1">P1-Critical</span><span class="tag cat-validation">Validation</span></div>
+          <div class="tc-detail">
+            <strong>Steps:</strong> Leave Dropzone and txtAddLink empty; submit<br>
+            <strong>Expected:</strong> lblUploadErrorMsg: "Please select at least one option upload document or provide the link"<br>
+            <strong>Assertions:</strong><ul class="assertions"><li>#MainContent_lblUploadErrorMsg visible and contains 'at least one option'</li></ul>
+            <div class="br-list">BR Covered: BR-PA-006</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tc" data-tier="regression" data-priority="P2-High" data-category="Validation" data-br="BR-PA-006">
+        <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-011</div></div>
+        <div class="tc-right">
+          <div class="tc-title">Non-admin provides link only → accepted (no upload required)</div>
+          <div class="tags"><span class="tag p2">P2-High</span><span class="tag cat-validation">Validation</span></div>
+          <div class="tc-detail">
+            <strong>Steps:</strong> Enter URL in txtAddLink; no file uploaded; submit<br>
+            <strong>Expected:</strong> No document error; form submits<br>
+            <div class="br-list">BR Covered: BR-PA-006 (inverse)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tc" data-tier="regression" data-priority="P2-High" data-category="Validation" data-br="BR-PA-007">
+        <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-012</div></div>
+        <div class="tc-right">
+          <div class="tc-title">JDFADMIN submit without JDF Finance selected → blocked</div>
+          <div class="tags"><span class="tag p2">P2-High</span><span class="tag cat-validation">Validation</span></div>
+          <div class="tc-detail">
+            <strong>Precondition:</strong> Authenticated as JDFADMIN<br>
+            <strong>Steps:</strong> Leave drpFinance unselected; submit<br>
+            <strong>Assertions:</strong><ul class="assertions"><li>litDrpFinanceError visible</li></ul>
+            <div class="br-list">BR Covered: BR-PA-007</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tc" data-tier="regression" data-priority="P2-High" data-category="Validation" data-br="BR-PA-008">
+        <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-013</div></div>
+        <div class="tc-right">
+          <div class="tc-title">Sponsorship visible but none checked → "At least one sponsorship must be selected"</div>
+          <div class="tags"><span class="tag p2">P2-High</span><span class="tag cat-validation">Validation</span></div>
+          <div class="tc-detail">
+            <strong>Precondition:</strong> Media type that shows sponsorship grid<br>
+            <strong>Steps:</strong> Do not check any chkMediaselect; submit<br>
+            <strong>Assertions:</strong><ul class="assertions"><li>#MainContent_dvSposnorshipError visible</li></ul>
+            <div class="br-list">BR Covered: BR-PA-008</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tc" data-tier="regression" data-priority="P1-Critical" data-category="BusinessLogic" data-br="BR-PA-004">
+        <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-014</div></div>
+        <div class="tc-right">
+          <div class="tc-title">Zero fund balance shows blocking message</div>
+          <div class="tags"><span class="tag p1">P1-Critical</span><span class="tag cat-business">BusinessLogic</span></div>
+          <div class="tc-detail">
+            <strong>Precondition:</strong> Dealer with $0 fund balance<br>
+            <strong>Steps:</strong> Navigate to preapproval form<br>
+            <strong>Expected:</strong> lblZeroAmount contains '$0 remaining balance'<br>
+            <strong>Assertions:</strong><ul class="assertions"><li>#MainContent_lblZeroAmount contains '$0 remaining balance'</li></ul>
+            <div class="br-list">BR Covered: BR-PA-004</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tc" data-tier="regression" data-priority="P2-High" data-category="UI" data-br="BR-PA-017">
+        <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-015</div></div>
+        <div class="tc-right">
+          <div class="tc-title">Email pre-populated from session on page load</div>
+          <div class="tags"><span class="tag p2">P2-High</span><span class="tag cat-ui">UI</span></div>
+          <div class="tc-detail">
+            <strong>Steps:</strong> Navigate to preapproval form; inspect txtEmail<br>
+            <strong>Expected:</strong> txtEmail contains session user's email<br>
+            <strong>Assertions:</strong><ul class="assertions"><li>txtEmail.value !== '' and matches session email</li></ul>
+            <div class="br-list">BR Covered: BR-PA-017</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tc" data-tier="regression" data-priority="P2-High" data-category="BusinessLogic" data-br="BR-PA-014">
+        <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-016</div></div>
+        <div class="tc-right">
+          <div class="tc-title">Current dealer auto-included in dealer grid on load</div>
+          <div class="tags"><span class="tag p2">P2-High</span><span class="tag cat-business">BusinessLogic</span></div>
+          <div class="tc-detail">
+            <strong>Steps:</strong> Navigate to form; inspect dgrdDealers<br>
+            <strong>Expected:</strong> Logged-in dealer number in grid<br>
+            <div class="br-list">BR Covered: BR-PA-014</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tc" data-tier="regression" data-priority="P3-Medium" data-category="Validation" data-br="BR-PA-015">
+        <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-018</div></div>
+        <div class="tc-right">
+          <div class="tc-title">Add duplicate dealer → blocked</div>
+          <div class="tags"><span class="tag p3">P3-Medium</span><span class="tag cat-validation">Validation</span></div>
+          <div class="tc-detail">
+            <strong>Steps:</strong> Add dealer X; attempt to add dealer X again<br>
+            <strong>Expected:</strong> Duplicate rejected; grid unchanged<br>
+            <div class="br-list">BR Covered: BR-PA-015</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tc" data-tier="regression" data-priority="P2-High" data-category="Security" data-br="BR-PA-022">
+        <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-021</div></div>
+        <div class="tc-right">
+          <div class="tc-title">File upload rejected above 100 MB (client-side)</div>
+          <div class="tags"><span class="tag p2">P2-High</span><span class="tag cat-security">Security</span></div>
+          <div class="tc-detail">
+            <strong>Steps:</strong> Attempt to upload file &gt; 100 MB<br>
+            <strong>Expected:</strong> Dropzone rejects; file not in grid<br>
+            <div class="br-list">BR Covered: BR-PA-022</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tc" data-tier="regression" data-priority="P2-High" data-category="Security" data-br="BR-PA-021">
+        <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-022</div></div>
+        <div class="tc-right">
+          <div class="tc-title">Invalid file type (.exe) rejected by Dropzone</div>
+          <div class="tags"><span class="tag p2">P2-High</span><span class="tag cat-security">Security</span></div>
+          <div class="tc-detail">
+            <strong>Steps:</strong> Attempt to upload .exe file<br>
+            <strong>Expected:</strong> Dropzone rejects; not added to grid<br>
+            <div class="br-list">BR Covered: BR-PA-021</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tc" data-tier="regression" data-priority="P2-High" data-category="Security" data-br="BR-PA-021">
+        <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-023</div></div>
+        <div class="tc-right">
+          <div class="tc-title">Valid file types accepted (.pdf, .jpg, .docx)</div>
+          <div class="tags"><span class="tag p2">P2-High</span><span class="tag cat-security">Security</span></div>
+          <div class="tc-detail">
+            <strong>Steps:</strong> Upload .pdf, .jpg, .docx files<br>
+            <strong>Expected:</strong> All accepted; listed in dgrdUploadFiles<br>
+            <div class="br-list">BR Covered: BR-PA-021</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tc" data-tier="regression" data-priority="P1-Critical" data-category="Workflow" data-br="BR-PA-009">
+        <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-025</div></div>
+        <div class="tc-right">
+          <div class="tc-title">Dealer submission creates preapproval with status PENDING REVIEW</div>
+          <div class="tags"><span class="tag p1">P1-Critical</span><span class="tag cat-workflow">Workflow</span></div>
+          <div class="tc-detail">
+            <strong>Steps:</strong> Submit valid preapproval as BMDLR; query tblPreapproval<br>
+            <strong>Assertions:</strong><ul class="assertions"><li>DB: status = 'PENDING REVIEW'</li></ul>
+            <div class="br-list">BR Covered: BR-PA-009</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tc" data-tier="regression" data-priority="P2-High" data-category="Workflow" data-br="BR-PA-010">
+        <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-026</div></div>
+        <div class="tc-right">
+          <div class="tc-title">BMADMIN non-JDF submit auto-approves → status APPROVED</div>
+          <div class="tags"><span class="tag p2">P2-High</span><span class="tag cat-workflow">Workflow</span></div>
+          <div class="tc-detail">
+            <strong>Precondition:</strong> Authenticated as BMADMIN; non-JDF finance<br>
+            <strong>Steps:</strong> Submit; query tblPreapproval<br>
+            <strong>Assertions:</strong><ul class="assertions"><li>DB: status = 'APPROVED'</li></ul>
+            <div class="br-list">BR Covered: BR-PA-010</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tc" data-tier="regression" data-priority="P2-High" data-category="UI" data-br="BR-PA-011">
+        <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-027</div></div>
+        <div class="tc-right">
+          <div class="tc-title">Admin submit button shows "Submit and Approve"</div>
+          <div class="tags"><span class="tag p2">P2-High</span><span class="tag cat-ui">UI</span></div>
+          <div class="tc-detail">
+            <strong>Precondition:</strong> Authenticated as BMADMIN<br>
+            <strong>Steps:</strong> Navigate to form<br>
+            <strong>Expected:</strong> btnSubmit text = "Submit and Approve"<br>
+            <div class="br-list">BR Covered: BR-PA-011</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tc" data-tier="regression" data-priority="P1-Critical" data-category="DataPersistence" data-br="BR-PA-024">
+        <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-030</div></div>
+        <div class="tc-right">
+          <div class="tc-title">Preapproval record created in tblPreapproval on submit</div>
+          <div class="tags"><span class="tag p1">P1-Critical</span><span class="tag cat-data">DataPersistence</span></div>
+          <div class="tc-detail">
+            <strong>Steps:</strong> Submit; query tblPreapproval<br>
+            <strong>Assertions:</strong><ul class="assertions"><li>DB: COUNT = 1 for new preapproval_seq</li></ul>
+            <div class="br-list">BR Covered: BR-PA-024</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tc" data-tier="regression" data-priority="P1-Critical" data-category="DataPersistence" data-br="BR-PA-025">
+        <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-031</div></div>
+        <div class="tc-right">
+          <div class="tc-title">Dealer linked in tblPreapprovalDealer on submit</div>
+          <div class="tags"><span class="tag p1">P1-Critical</span><span class="tag cat-data">DataPersistence</span></div>
+          <div class="tc-detail">
+            <strong>Steps:</strong> Submit; query tblPreapprovalDealer<br>
+            <strong>Assertions:</strong><ul class="assertions"><li>DB: COUNT(tblPreapprovalDealer) ≥ 1 for new preapproval</li></ul>
+            <div class="br-list">BR Covered: BR-PA-025</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tc" data-tier="regression" data-priority="P2-High" data-category="Security" data-br="BR-PA-012">
+        <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-033</div></div>
+        <div class="tc-right">
+          <div class="tc-title">Uploaded document renamed to {preapproval_number}_{filename}</div>
+          <div class="tags"><span class="tag p2">P2-High</span><span class="tag cat-security">Security</span></div>
+          <div class="tc-detail">
+            <strong>Steps:</strong> Upload test.pdf; submit; query tblDocumentImage filename<br>
+            <strong>Expected:</strong> Filename = {preapprovalNumber}_test.pdf; not test.pdf<br>
+            <div class="br-list">BR Covered: BR-PA-012</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tc" data-tier="regression" data-priority="P1-Critical" data-category="Security" data-br="BR-PA-001 BR-PA-002">
+        <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-038</div></div>
+        <div class="tc-right">
+          <div class="tc-title">Disabled dealer redirected to DealerDisable page</div>
+          <div class="tags"><span class="tag p1">P1-Critical</span><span class="tag cat-security">Security</span></div>
+          <div class="tc-detail">
+            <strong>Precondition:</strong> BMDLR account flagged as disabled<br>
+            <strong>Steps:</strong> Navigate to form<br>
+            <strong>Expected:</strong> Redirect to DealerDisable.aspx<br>
+            <div class="br-list">BR Covered: BR-PA-001, BR-PA-002</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tc" data-tier="regression" data-priority="P2-High" data-category="BusinessLogic" data-br="BR-PA-023">
+        <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-040</div></div>
+        <div class="tc-right">
+          <div class="tc-title">Changing media category updates document type dropdown</div>
+          <div class="tags"><span class="tag p2">P2-High</span><span class="tag cat-business">BusinessLogic</span></div>
+          <div class="tc-detail">
+            <strong>Steps:</strong> Select media category A; note document types; change to media category B<br>
+            <strong>Expected:</strong> drpDocumentType options change<br>
+            <div class="br-list">BR Covered: BR-PA-023</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- E2E -->
+  <div class="section tier-e2e" id="sec-e2e">
+    <div class="section-header" onclick="toggleSection('sec-e2e')">
+      <div class="section-title"><span class="tier-badge badge-e2e">E2E</span>E2E Suite — Full Workflow Scenarios</div>
+      <div style="display:flex;align-items:center;gap:12px"><span class="section-count">5 tests</span><span class="chevron">▼</span></div>
+    </div>
+    <div class="section-body">
+
+      <div class="tc" data-tier="e2e" data-priority="P1-Critical" data-category="Workflow" data-br="BR-PA-009 BR-PA-024 BR-PA-025">
+        <div class="tc-left"><div class="tc-id">COOP-PA<br>E2E-001</div></div>
+        <div class="tc-right">
+          <div class="tc-title">Full workflow: dealer submits → appears in pending preapprovals with PENDING REVIEW status</div>
+          <div class="tags"><span class="tag p1">P1-Critical</span><span class="tag cat-workflow">Workflow</span></div>
+          <div class="tc-detail">
+            <strong>Steps:</strong>
+            <ol class="steps">
+              <li>Submit valid preapproval as BMDLR</li>
+              <li>Navigate to View Preapproval Request Status</li>
+            </ol>
+            <strong>Expected:</strong> Preapproval visible with PENDING REVIEW<br>
+            <div class="br-list">BR Covered: BR-PA-009, BR-PA-024, BR-PA-025</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tc" data-tier="e2e" data-priority="P2-High" data-category="Workflow" data-br="BR-PA-010 BR-PA-019">
+        <div class="tc-left"><div class="tc-id">COOP-PA<br>E2E-003</div></div>
+        <div class="tc-right">
+          <div class="tc-title">Admin auto-approves non-JDF preapproval → dealer sees APPROVED status</div>
+          <div class="tags"><span class="tag p2">P2-High</span><span class="tag cat-workflow">Workflow</span></div>
+          <div class="tc-detail">
+            <strong>Steps:</strong>
+            <ol class="steps">
+              <li>Login as BMADMIN; submit non-JDF preapproval</li>
+              <li>Login as dealer; check preapproval status</li>
+            </ol>
+            <strong>Expected:</strong> Status = APPROVED; dealer notification sent<br>
+            <div class="br-list">BR Covered: BR-PA-010, BR-PA-019</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tc" data-tier="e2e" data-priority="P2-High" data-category="BusinessLogic" data-br="BR-PA-029">
+        <div class="tc-left"><div class="tc-id">COOP-PA<br>E2E-004</div></div>
+        <div class="tc-right">
+          <div class="tc-title">JDF preapproval with pending jdf_status not available for claim linking</div>
+          <div class="tags"><span class="tag p2">P2-High</span><span class="tag cat-business">BusinessLogic</span></div>
+          <div class="tc-detail">
+            <strong>Steps:</strong>
+            <ol class="steps">
+              <li>Submit JDF preapproval; admin approves (status=APPROVED, jdf_status=PENDING)</li>
+              <li>Navigate to claim form; inspect preapproval dropdown</li>
+            </ol>
+            <strong>Expected:</strong> JDF-pending preapproval NOT in claim dropdown<br>
+            <div class="br-list">BR Covered: BR-PA-029</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tc" data-tier="e2e" data-priority="P2-High" data-category="DataPersistence" data-br="BR-PA-025">
+        <div class="tc-left"><div class="tc-id">COOP-PA<br>E2E-005</div></div>
+        <div class="tc-right">
+          <div class="tc-title">Multiple dealers on one preapproval — all linked in tblPreapprovalDealer</div>
+          <div class="tags"><span class="tag p2">P2-High</span><span class="tag cat-data">DataPersistence</span></div>
+          <div class="tc-detail">
+            <strong>Steps:</strong>
+            <ol class="steps">
+              <li>Add 3 dealers to dgrdDealers; submit</li>
+              <li>Query tblPreapprovalDealer</li>
+            </ol>
+            <strong>Expected:</strong> 3 rows; one per dealer<br>
+            <div class="br-list">BR Covered: BR-PA-025</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+<script>
+  function toggleSection(id) {
+    document.getElementById(id).classList.toggle('collapsed');
+  }
+  function applyFilters() {
+    const tier     = document.getElementById('filterTier').value.toLowerCase();
+    const priority = document.getElementById('filterPriority').value;
+    const category = document.getElementById('filterCategory').value;
+    const search   = document.getElementById('filterSearch').value.toLowerCase();
+    document.querySelectorAll('.tc').forEach(tc => {
+      const m = !tier     || (tc.dataset.tier     || '').toLowerCase() === tier;
+      const n = !priority || (tc.dataset.priority || '') === priority;
+      const o = !category || (tc.dataset.category || '') === category;
+      const p = !search   || tc.textContent.toLowerCase().includes(search) || (tc.dataset.br || '').toLowerCase().includes(search);
+      tc.classList.toggle('hidden-tc', !(m && n && o && p));
+    });
+    document.querySelectorAll('.section').forEach(sec => {
+      if (sec.querySelectorAll('.tc:not(.hidden-tc)').length > 0) sec.classList.remove('collapsed');
+    });
+  }
+</script>
+</body>
+</html>

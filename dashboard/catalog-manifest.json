@@ -875,5 +875,115 @@
     "lastRun": null,
     "module": "rebate",
     "role": "admin"
+  },
+  "deer-australia-coop-submit-claim": {
+    "feature": "Coop — Submit Claim",
+    "catalogFile": "functional-catalogs/deer-australia/coop/feature-submit-claim/functional-units.html",
+    "version": "v1",
+    "generated": "2026-07-08",
+    "auditedAs": "repo-analysis only (no UI analysis)",
+    "lastUpdated": "2026-07-08T00:00:00Z",
+    "sections": 3,
+    "pipeline": "functional-qa",
+    "implementationStatus": {
+      "smoke": {
+        "implemented": false,
+        "lastUpdated": null
+      },
+      "regression": {
+        "implemented": false,
+        "lastUpdated": null
+      },
+      "e2e": {
+        "implemented": false,
+        "lastUpdated": null
+      },
+      "functionalUnit": {
+        "implemented": true,
+        "lastUpdated": "2026-07-08T00:00:00Z"
+      }
+    },
+    "specFiles": {
+      "smoke": "tests/playwright/specs/deer-australia/coop/feature-submit-claim/submit-claim.spec.ts",
+      "regression": "tests/playwright/specs/deer-australia/coop/feature-submit-claim/submit-claim.spec.ts",
+      "e2e": "tests/playwright/specs/deer-australia/coop/feature-submit-claim/submit-claim.spec.ts"
+    },
+    "tests": {
+      "total": 52,
+      "implemented": 0,
+      "fixme": 0
+    },
+    "coverage": {
+      "functional": 0,
+      "validation": 0,
+      "workflow": 0,
+      "database": 0,
+      "security": 0
+    },
+    "gaps": {
+      "critical": 0,
+      "high": 0,
+      "medium": 0,
+      "low": 0
+    },
+    "lastRun": null,
+    "clientId": "deer-australia",
+    "module": "coop",
+    "role": "dealer"
+  },
+  "deer-australia-coop-submit-preapproval": {
+    "feature": "Coop — Submit Preapproval",
+    "catalogFile": "functional-catalogs/deer-australia/coop/feature-submit-preapproval/functional-units.html",
+    "version": "v1",
+    "generated": "2026-07-08",
+    "auditedAs": "repo-analysis only (no UI analysis)",
+    "lastUpdated": "2026-07-08T00:00:00Z",
+    "sections": 3,
+    "pipeline": "functional-qa",
+    "implementationStatus": {
+      "smoke": {
+        "implemented": false,
+        "lastUpdated": null
+      },
+      "regression": {
+        "implemented": false,
+        "lastUpdated": null
+      },
+      "e2e": {
+        "implemented": false,
+        "lastUpdated": null
+      },
+      "functionalUnit": {
+        "implemented": true,
+        "lastUpdated": "2026-07-08T00:00:00Z"
+      }
+    },
+    "specFiles": {
+      "smoke": "tests/playwright/specs/deer-australia/coop/feature-submit-preapproval/submit-preapproval.spec.ts",
+      "regression": "tests/playwright/specs/deer-australia/coop/feature-submit-preapproval/submit-preapproval.spec.ts",
+      "e2e": "tests/playwright/specs/deer-australia/coop/feature-submit-preapproval/submit-preapproval.spec.ts"
+    },
+    "tests": {
+      "total": 48,
+      "implemented": 0,
+      "fixme": 0
+    },
+    "coverage": {
+      "functional": 0,
+      "validation": 0,
+      "workflow": 0,
+      "database": 0,
+      "security": 0
+    },
+    "gaps": {
+      "critical": 0,
+      "high": 0,
+      "medium": 0,
+      "low": 0
+    },
+    "lastRun": null,
+    "clientId": "deer-australia",
+    "module": "coop",
+    "role": "dealer"
   }
 }

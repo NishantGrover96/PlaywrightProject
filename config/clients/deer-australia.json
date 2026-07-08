@@ -1,0 +1,60 @@
+{
+    "clientId":  "deer-australia",
+    "displayName":  "Deer Australia",
+    "platform":  "independent",
+    "defaultEnvironment":  "production",
+    "authentication":  {
+                           "loginPath":  "/account/internallogin.aspx?code=aucoopcf",
+                           "roles":  [
+                                         "dealer",
+                                         "admin"
+                                     ],
+                           "roleProjects":  {
+                                                "dealer":        ["setup-deer-australia", "chromium-deer-australia"],
+                                                "dealer-custom": ["setup-deer-australia", "chromium-deer-australia"],
+                                                "admin":         ["setup-deer-australia-admin", "chromium-deer-australia-admin"],
+                                                "admin-custom":  ["setup-deer-australia-admin", "chromium-deer-australia-admin"]
+                                            }
+                       },
+    "environments":  {
+                         "dev":  {
+                                     "label":  "Dev",
+                                     "baseUrl":  "http://deereaustraliadev.channel-fusion.com",
+                                     "apiUrl":  "http://deereaustraliadev.channel-fusion.com",
+                                     "envFile":  "dev"
+                                 },
+                         "testing":  {
+                                         "label":  "Testing",
+                                         "baseUrl":  "http://deereaustraliauat.channel-fusion.com",
+                                         "apiUrl":  "http://deereaustraliauat.channel-fusion.com",
+                                         "envFile":  "testing"
+                                     },
+                         "uat":  {
+                                     "label":  "UAT",
+                                     "baseUrl":  "http://deereaustraliauat.channel-fusion.com",
+                                     "apiUrl":  "http://deereaustraliauat.channel-fusion.com",
+                                     "envFile":  "uat"
+                                 },
+                         "production":  {
+                                            "label":  "Production",
+                                            "baseUrl":  "http://deereaustraliauat.channel-fusion.com",
+                                            "apiUrl":  "http://deereaustraliauat.channel-fusion.com",
+                                            "envFile":  "production"
+                                        }
+                     },
+    "featureFlags":  {
+
+                     },
+    "modules":  [
+                    "coop"
+                ],
+    "repo":  {
+                 "url":  "",
+                 "branch":  "development",
+                 "localPath":  "D:\\Projects\\DEER AUSTRALIA",
+                 "lastSync":  "",
+                 "lastCommit":  ""
+             },
+    "_generated":  "2026-07-08T10:02:18Z",
+    "_note":  "Modules were selected during onboarding. Run repo-analysis skill to populate featureFlags and generate test catalogs."
+}
