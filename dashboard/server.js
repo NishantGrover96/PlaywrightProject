@@ -744,6 +744,20 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // ── /api/admin/reload — force-reload catalog + client caches from disk ────
+  if (method === "POST" && url === "/api/admin/reload") {
+    try {
+      catalogService.reload();
+      clientService.reload();
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ ok: true, message: "Catalog and client cache reloaded." }));
+    } catch (err) {
+      res.writeHead(500, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ ok: false, message: err.message }));
+    }
+    return;
+  }
+
   // ── Serve test-results screenshots ────────────────────────────────────────
   if (method === "GET" && url.startsWith("/test-results/")) {
     const relativePath = url.replace(/^\/test-results\//, "").split("?")[0];

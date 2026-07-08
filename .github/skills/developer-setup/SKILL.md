@@ -4,12 +4,13 @@ description: Complete first-time environment setup for a new developer joining t
 applyTo: '**'
 ---
 
-# Developer Setup — Complete First-Time Environment Setup
+# Developer Setup — 9-Phase Self-Healing Orchestrator
 
 ## Purpose
 
-Guide a brand-new developer from zero to a fully working local QA environment in one session.
-Covers every step: tools → repo → config → credentials → auth → first test run → dashboard.
+Take a brand-new developer from zero to a verified, running local QA environment in **one session**,
+with no manual intervention. Every phase validates its own output and self-heals common failures
+before moving to the next phase.
 
 ## When to Use
 
@@ -19,15 +20,412 @@ Covers every step: tools → repo → config → credentials → auth → first 
 
 ---
 
-## Step 1 — Ask Clarifying Questions
+## Phase 0 — Collect All Inputs Once
 
-Ask the user these questions **before doing anything**. All are required.
+Ask ALL of the following questions before doing anything else.
+Do not revisit these questions. Store answers as variables used throughout all phases.
 
 ```
-Q1. What is your operating system?
-    Options: Windows (recommended) | macOS | Linux
+Q1. What is the client ID you are onboarding? (e.g. acmecorp — lowercase, letters/hyphens only)
 
-Q2. Do you already have Node.js 20.x LTS installed?
+Q2. What is the client's display name? (e.g. "Acme Corporation")
+
+Q3. Which environment are you testing? (dev / testing / uat / production)
+
+Q4. What is the base URL for that environment? (e.g. https://acmecorp-uat.example.com)
+
+Q5. Does a local source repo exist for this client? If yes, provide the local folder path.
+    (Used for repo-analysis. Press Enter to skip if unknown.)
+
+Q6. Which modules exist in this client? (comma-separated, e.g. coop,engage-ads,inventory)
+    If you don't know yet, type "unknown" — we will discover them via repo-analysis.
+```
+
+Store answers as:
+- `CLIENT_ID` — lowercase, letters/hyphens only
+- `DISPLAY_NAME`
+- `TARGET_ENV`
+- `BASE_URL`
+- `REPO_PATH` (may be empty)
+- `MODULES` (list, may be ["unknown"])
+
+---
+
+## Phase 1 — Prerequisites
+
+### 1.1 PowerShell Execution Policy
+
+Check that scripts can run. Run in terminal:
+
+```powershell
+Get-ExecutionPolicy -Scope CurrentUser
+```
+
+If result is `Restricted` or `Undefined`, self-heal automatically:
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force
+Write-Host "Execution policy set to RemoteSigned"
+```
+
+### 1.2 Node.js Version
+
+```powershell
+node --version
+```
+
+- Required: `v20.x` or higher.
+- If missing or older: tell the user to install Node.js 20 LTS from https://nodejs.org and re-run this skill.
+
+### 1.3 npm Install
+
+```powershell
+cd "d:\Leads\PlayWright"
+npm install
+```
+
+- If install fails due to network/proxy errors, run: `npm install --prefer-offline`
+- Verify: `node_modules` folder exists after install.
+
+### 1.4 Playwright Browsers
+
+```powershell
+npx playwright install chromium
+```
+
+- Only chromium is required for smoke tests.
+- If disk-space warning appears, confirm with the user before proceeding.
+
+### Phase 1 Validation Gate
+
+```powershell
+$nodeVer = (node --version) -replace '^v',''
+$major   = [int]($nodeVer.Split('.')[0])
+if ($major -lt 20) { Write-Error "Node.js 20+ required. Found: v$nodeVer" }
+if (-not (Test-Path "node_modules")) { Write-Error "npm install may have failed — node_modules missing" }
+Write-Host "[Phase 1] Prerequisites OK"
+```
+
+---
+
+## Phase 2 — Environment Files
+
+Create `.env.{TARGET_ENV}` with the client's base URL.
+
+```powershell
+$envFile = ".env.$TARGET_ENV"
+if (-not (Test-Path $envFile)) {
+    Set-Content -Path $envFile -Encoding UTF8 -Value "BASE_URL=$BASE_URL"
+    Write-Host "Created $envFile"
+} else {
+    Write-Host "$envFile already exists — not overwritten"
+}
+```
+
+Also verify `.env.production` exists with `MASTER_KEY` set (needed for encryption):
+
+```powershell
+$prodEnvFile = ".env.production"
+if (Test-Path $prodEnvFile) {
+    $content = Get-Content $prodEnvFile -Raw
+    if ($content -match 'MASTER_KEY=') {
+        Write-Host "[Phase 2] MASTER_KEY found in .env.production"
+    } else {
+        Write-Warn "[Phase 2] MASTER_KEY missing from .env.production — passwords won't encrypt"
+    }
+} else {
+    Write-Warn "[Phase 2] .env.production not found — credentials won't encrypt until created"
+}
+```
+
+---
+
+## Phase 3 — Client Configuration (new-client.ps1)
+
+### 3.1 Check if Client Already Configured
+
+```powershell
+$configFile = "config/clients/$CLIENT_ID.json"
+if (Test-Path $configFile) {
+    Write-Host "[Phase 3] Client '$CLIENT_ID' already configured — skipping wizard"
+} else {
+    Write-Host "[Phase 3] Running new-client.ps1 for '$CLIENT_ID'..."
+    powershell -File "scripts/new-client.ps1"
+}
+```
+
+### 3.2 Validate All 5 Required Artifacts
+
+After the wizard completes (or if config already existed), validate every artifact:
+
+| Artifact | Expected Path | Action if Missing |
+|---|---|---|
+| Client config | `config/clients/{CLIENT_ID}.json` | Re-run `new-client.ps1` |
+| User config | `config/users/{CLIENT_ID}/users.json` | Re-run `new-client.ps1` |
+| Catalog manifest | `dashboard/catalogs/{CLIENT_ID}-manifest.json` | Re-run `new-client.ps1` |
+| Repo registry | `config/repos.local.json` | Re-run `new-client.ps1` |
+| Functional catalog dir | `docs/functional-catalogs/{CLIENT_ID}/` | `New-Item -ItemType Directory` |
+
+```powershell
+$artifacts = @(
+    "config/clients/$CLIENT_ID.json",
+    "config/users/$CLIENT_ID/users.json",
+    "dashboard/catalogs/$CLIENT_ID-manifest.json",
+    "config/repos.local.json",
+    "docs/functional-catalogs/$CLIENT_ID"
+)
+$errors = 0
+foreach ($a in $artifacts) {
+    if (Test-Path $a) { Write-Host "  [OK] $a" }
+    else { Write-Error "  [MISSING] $a"; $errors++ }
+}
+if ($errors -gt 0) {
+    Write-Error "[Phase 3] $errors artifact(s) missing. Re-run scripts/new-client.ps1."
+}
+```
+
+### 3.3 Validate clientId Field (no typo)
+
+```powershell
+$cfg = Get-Content "config/clients/$CLIENT_ID.json" -Raw | ConvertFrom-Json
+if ($cfg.clientId -ne $CLIENT_ID) {
+    Write-Error "[Phase 3] clientId mismatch: file has '$($cfg.clientId)', expected '$CLIENT_ID'"
+    Write-Host "  Fix: edit config/clients/$CLIENT_ID.json and set `"clientId`": `"$CLIENT_ID`""
+} else {
+    Write-Host "[Phase 3] clientId field verified: $CLIENT_ID"
+}
+```
+
+### 3.4 MASTER_KEY Check / Re-Encrypt Placeholder Passwords
+
+```powershell
+$usersJson = Get-Content "config/users/$CLIENT_ID/users.json" -Raw | ConvertFrom-Json
+$usersJson.PSObject.Properties | ForEach-Object {
+    if ($_.Value.password -eq 'REPLACE_WITH_ENCRYPTED_PASSWORD') {
+        Write-Warn "Role '$($_.Name)' has an unencrypted placeholder password."
+        Write-Warn "Encrypt: node utils/encrypt-credential.js ""your-password"""
+    }
+}
+```
+
+---
+
+## Phase 4 — Repository Analysis (if REPO_PATH provided)
+
+If the user provided a local repo path in Phase 0, run the repo-analysis skill inline.
+
+```
+If REPO_PATH is not empty:
+  → Read and follow: .github/skills/repo-analysis/SKILL.md
+  → Pass in: clientId = CLIENT_ID, repoPath = REPO_PATH
+  → Store discovered modules, endpoints, and field definitions for Phase 5
+
+If REPO_PATH is empty:
+  → Skip Phase 4
+  → Use MODULE list from Phase 0 inputs
+  → If MODULES = ["unknown"], prompt: "Provide at least one module name to proceed with catalog generation."
+```
+
+---
+
+## Phase 5 — Functional Test Catalog Generation
+
+Run the functional-test-catalog skill for each module.
+
+```
+For each MODULE in MODULES:
+  → Read and follow: .github/skills/functional-test-catalog/SKILL.md
+  → Pass in: clientId = CLIENT_ID, moduleId = MODULE, repoAnalysis = (Phase 4 output or empty)
+  → Write generated tests into: docs/functional-catalogs/{CLIENT_ID}/{MODULE}/
+  → Update dashboard/catalogs/{CLIENT_ID}-manifest.json with all feature entries
+```
+
+### Manifest Entry Template
+
+Each feature entry in `dashboard/catalogs/{CLIENT_ID}-manifest.json` must follow this format:
+
+```json
+{
+  "clientId": "{CLIENT_ID}",
+  "moduleId": "{MODULE}",
+  "featureId": "{CLIENT_ID}-{MODULE}-{feature-name}",
+  "featureName": "{Human Readable Feature Name}",
+  "tier": "smoke|regression|e2e",
+  "status": "not-started",
+  "file": "docs/functional-catalogs/{CLIENT_ID}/{MODULE}/functional-units.html"
+}
+```
+
+If `MODULES = ["unknown"]`, skip Phase 5 and tell the user:
+> "Provide module names so catalog generation can proceed. Re-run this skill with the module list."
+
+---
+
+## Phase 6 — Auth Setup
+
+Playwright requires authenticated state files before tests can run.
+
+### 6.1 Identify the Correct Setup Project Name
+
+- Legacy clients (demoportal, certainteed, samsung): use `setup` / `setup-admin`
+- New clients: automatically get `setup-{CLIENT_ID}` via auth-resolver.ts
+
+Verify the project name exists in `playwright.config.ts`:
+
+```powershell
+$configContent = Get-Content playwright.config.ts -Raw
+if ($configContent -match "setup-$CLIENT_ID") {
+    Write-Host "[Phase 6] Playwright project 'setup-$CLIENT_ID' found"
+} else {
+    Write-Warn "[Phase 6] No setup project for '$CLIENT_ID' in playwright.config.ts"
+    Write-Host "  This is auto-generated by auth-resolver.ts when CLIENT env var is set."
+}
+```
+
+### 6.2 Run Auth Setup
+
+```powershell
+$env:CLIENT = $CLIENT_ID
+npx playwright test --project="setup-$CLIENT_ID"
+```
+
+### 6.3 Verify Auth State Files Exist
+
+```powershell
+$authFiles = Get-ChildItem "tests/playwright/.auth/$CLIENT_ID" -Filter "*.json" -ErrorAction SilentlyContinue
+if ($authFiles.Count -gt 0) {
+    Write-Host "[Phase 6] Auth state files: $($authFiles.Count) found"
+} else {
+    Write-Warn "[Phase 6] No auth state files in tests/playwright/.auth/$CLIENT_ID"
+    Write-Host "  Possible causes: wrong BASE_URL, wrong credentials in users.json, login page changed"
+    Write-Host "  Debug: npx playwright test --project=setup-$CLIENT_ID --debug"
+}
+```
+
+---
+
+## Phase 7 — Dashboard Verification
+
+### 7.1 Start Dashboard if Not Running
+
+```powershell
+$response = try { Invoke-WebRequest -Uri "http://localhost:3333/api/clients" -UseBasicParsing } catch { $null }
+if (-not $response) {
+    Write-Host "[Phase 7] Dashboard not running — starting..."
+    Start-Process -FilePath "node" -ArgumentList "dashboard/server.js" -NoNewWindow
+    Start-Sleep -Seconds 3
+    $response = try { Invoke-WebRequest -Uri "http://localhost:3333/api/clients" -UseBasicParsing } catch { $null }
+    if (-not $response) { Write-Error "[Phase 7] Dashboard failed to start. Check for port conflicts." }
+}
+```
+
+### 7.2 Reload Cache After New Client
+
+```powershell
+Invoke-RestMethod -Method POST -Uri "http://localhost:3333/api/admin/reload"
+Write-Host "[Phase 7] Dashboard cache reloaded"
+```
+
+### 7.3 Verify Client Appears in Dashboard
+
+```powershell
+$clients = Invoke-RestMethod -Uri "http://localhost:3333/api/clients" | ConvertTo-Json | ConvertFrom-Json
+$found = $clients | Where-Object { $_.clientId -eq $CLIENT_ID }
+if ($found) {
+    Write-Host "[Phase 7] Client '$CLIENT_ID' visible in dashboard API"
+} else {
+    Write-Error "[Phase 7] Client '$CLIENT_ID' NOT found in /api/clients"
+    Write-Host "  Check: config/clients/$CLIENT_ID.json has correct clientId field"
+}
+```
+
+### 7.4 Verify Modules Appear
+
+```powershell
+$modules = Invoke-RestMethod -Uri "http://localhost:3333/api/modules?clientId=$CLIENT_ID"
+Write-Host "[Phase 7] Modules returned: $($modules.modules.Count)"
+if ($modules.modules.Count -eq 0) {
+    Write-Warn "[Phase 7] No modules found. Check dashboard/catalogs/$CLIENT_ID-manifest.json is populated."
+}
+```
+
+---
+
+## Phase 8 — Smoke Test
+
+Run the first available smoke test to confirm end-to-end connectivity.
+
+```powershell
+$env:CLIENT = $CLIENT_ID
+npx playwright test --project="chromium-$CLIENT_ID" --grep "@smoke" --reporter=list
+```
+
+Expected outcome: at least 1 test passes.
+
+If no `@smoke` tests exist yet:
+> "No smoke tests found for '$CLIENT_ID'. This is expected for a brand-new client.
+>  Run the playwright-test-generation skill to create the first tests."
+
+If tests fail due to auth:
+> "Auth state may be expired. Re-run Phase 6 (auth setup) and try again."
+
+---
+
+## Phase 9 — Final Checklist
+
+Print a final status summary:
+
+```
+[ ] Phase 1 — Prerequisites: Node 20+, npm install, Playwright browsers
+[ ] Phase 2 — .env.{TARGET_ENV} created with BASE_URL
+[ ] Phase 3 — config/clients/{CLIENT_ID}.json with correct clientId field
+[ ] Phase 3 — config/users/{CLIENT_ID}/users.json with encrypted passwords
+[ ] Phase 3 — dashboard/catalogs/{CLIENT_ID}-manifest.json exists
+[ ] Phase 4 — Repo analysis complete (or skipped — no repo path)
+[ ] Phase 5 — Functional catalog generated (or skipped — no modules known)
+[ ] Phase 6 — Auth state files present in tests/playwright/.auth/{CLIENT_ID}/
+[ ] Phase 7 — Dashboard running, client visible, modules loaded
+[ ] Phase 8 — Smoke test passes (or skipped — no tests yet)
+```
+
+Mark each item [OK] / [WARN] / [FAIL] based on verification results.
+
+---
+
+## Self-Healing Rules
+
+| Symptom | Root Cause | Auto-Fix |
+|---|---|---|
+| `cannot be loaded because running scripts is disabled` | PowerShell execution policy | `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser` |
+| `MASTER_KEY not set` | Missing environment variable | Prompt user to generate + save to `.env.production` |
+| Dashboard shows wrong client data | Duplicate featureId key in catalog cache | `POST /api/admin/reload` — fixed in catalog-service.js |
+| Client not in dashboard after wizard | `clientId` field typo or casing mismatch | Verify `clientId` field in `config/clients/{id}.json` |
+| Auth state file missing | Setup project not run | `npx playwright test --project=setup-{CLIENT_ID}` |
+| `enc:` prefix missing in users.json | Encryption skipped (MASTER_KEY absent) | Set MASTER_KEY, re-run `node utils/encrypt-credential.js` |
+| Catalog entries showing for wrong client | Duplicate plain featureId key (old bug) | Already fixed in catalog-service.js |
+| `npm install` fails offline | No network / proxy | `npm install --prefer-offline` |
+| No modules in dashboard | Catalog manifest is empty `{}` | Run functional-test-catalog skill, then `POST /api/admin/reload` |
+
+---
+
+## Execution Order
+
+```
+Phase 0  →  Collect all inputs ONCE
+Phase 1  →  Prerequisites (Node, npm, Playwright)
+Phase 2  →  .env files
+Phase 3  →  new-client.ps1 + artifact validation + clientId check + credential check
+Phase 4  →  Repo analysis (conditional: only if REPO_PATH provided)
+Phase 5  →  Functional test catalog (conditional: only if modules known)
+Phase 6  →  Auth setup (Playwright setup project)
+Phase 7  →  Dashboard start + cache reload + API verification
+Phase 8  →  Smoke test
+Phase 9  →  Final checklist
+```
+
+Each phase must fully succeed (or be deliberately skipped) before the next phase begins.
+On failure, apply self-healing rule, retry once, then report the failure clearly without proceeding.
+
     Options: Yes | No — I'll install it now
 
 Q3. Which client are you setting up for?

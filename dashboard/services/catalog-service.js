@@ -283,9 +283,6 @@ function _loadClientCatalogs() {
 
         const cacheKey = `${enriched.clientId}::${enriched.featureId}`;
         _featureCache.set(cacheKey, enriched);
-
-        // Keyed by featureId alone (last writer wins for cross-client lookups)
-        _featureCache.set(enriched.featureId, enriched);
       }
     } catch (err) {
       console.warn(`[catalog-service] Cannot load catalog ${file}: ${err.message} — skipping.`);
