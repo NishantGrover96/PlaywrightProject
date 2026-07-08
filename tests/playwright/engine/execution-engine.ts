@@ -196,6 +196,7 @@ function buildExtraEnvVars(
   const extras: Record<string, string> = {
     ROLE:         req.role,
     AUTH_PROJECT: auth.setupProject,
+    AUTH_TYPE:    auth.authType,
     LOGIN_PATH:   auth.loginPath,
   };
 

@@ -116,6 +116,36 @@ class SSOAuthProvider implements AuthProvider {
   }
 }
 
+// ── Provider: Email + Password (alias for Forms) ─────────────────────────
+
+class EmailPasswordAuthProvider extends FormsAuthProvider {
+  readonly type: AuthType = 'email-password';
+  resolve(clientId: string, role: string, env: string): ResolvedAuth {
+    return { ...super.resolve(clientId, role, env), authType: 'email-password' };
+  }
+}
+
+// ── Provider: Username + Password ─────────────────────────────────────────
+// Same login flow as Forms but the username field is a username, not email.
+// auth.setup.generic.ts already tries username selectors first.
+
+class UsernamePasswordAuthProvider extends FormsAuthProvider {
+  readonly type: AuthType = 'username-password';
+  resolve(clientId: string, role: string, env: string): ResolvedAuth {
+    return { ...super.resolve(clientId, role, env), authType: 'username-password' };
+  }
+}
+
+// ── Provider: Username Only (no password) ─────────────────────────────────
+// e.g. dealer code login — just a username/code, no password field.
+
+class UsernameOnlyAuthProvider extends FormsAuthProvider {
+  readonly type: AuthType = 'username-only';
+  resolve(clientId: string, role: string, env: string): ResolvedAuth {
+    return { ...super.resolve(clientId, role, env), authType: 'username-only' };
+  }
+}
+
 // ── Provider: No Auth ──────────────────────────────────────────────────────
 
 class NoAuthProvider implements AuthProvider {
@@ -135,11 +165,14 @@ class NoAuthProvider implements AuthProvider {
 // ── Registry ───────────────────────────────────────────────────────────────
 
 const AUTH_PROVIDERS: Record<AuthType, AuthProvider> = {
-  'forms':    new FormsAuthProvider(),
-  'azure-ad': new AzureADAuthProvider(),
-  'oauth':    new OAuthProvider(),
-  'sso':      new SSOAuthProvider(),
-  'none':     new NoAuthProvider(),
+  'forms':             new FormsAuthProvider(),
+  'email-password':    new EmailPasswordAuthProvider(),
+  'username-password': new UsernamePasswordAuthProvider(),
+  'username-only':     new UsernameOnlyAuthProvider(),
+  'azure-ad':          new AzureADAuthProvider(),
+  'oauth':             new OAuthProvider(),
+  'sso':               new SSOAuthProvider(),
+  'none':              new NoAuthProvider(),
 };
 
 // ── Helpers ────────────────────────────────────────────────────────────────
@@ -175,7 +208,8 @@ function getClientAuthType(clientId: string): AuthType {
   try {
     const cfg = loadClientConfig(clientId);
     if (!cfg) return 'forms';
-    const type = cfg.authentication?.type ?? cfg.authType;
+    // Check authentication.authType (wizard), then authentication.type (legacy), then root authType
+    const type = cfg.authentication?.authType ?? cfg.authentication?.type ?? cfg.authType;
     return (type && type in AUTH_PROVIDERS) ? (type as AuthType) : 'forms';
   } catch {
     return 'forms';

@@ -31,17 +31,28 @@ setup('generic authentication', async ({ page }) => {
 
   // ── Resolve env vars ────────────────────────────────────────────────────
   const storagePath = process.env.AUTH_STORAGE_PATH;
-  const loginPath   = process.env.LOGIN_PATH         || '/account/login';
-  const email       = process.env.TEST_USER_EMAIL    || process.env.ADMIN_EMAIL    || '';
-  const password    = process.env.TEST_USER_PASSWORD || process.env.ADMIN_PASSWORD || '';
-  const clientId    = process.env.CLIENT_ID  || 'unknown';
-  const role        = process.env.ROLE       || 'dealer';
-  const testEnv     = process.env.TEST_ENV   || 'production';
+  // Use ?? so that an explicitly empty LOGIN_PATH ("") means "base URL IS the login page"
+  const rawLoginPath = process.env.LOGIN_PATH;
+  const loginPath    = rawLoginPath !== undefined ? rawLoginPath : '/account/login';
+  const loginUrl     = loginPath || '/';  // empty string → navigate to site root
+  const authType     = process.env.AUTH_TYPE || 'forms';
+  const email        = process.env.TEST_USER_EMAIL    || process.env.ADMIN_EMAIL    || '';
+  const password     = process.env.TEST_USER_PASSWORD || process.env.ADMIN_PASSWORD || '';
+  const clientId     = process.env.CLIENT_ID  || 'unknown';
+  const role         = process.env.ROLE       || 'dealer';
+  const testEnv      = process.env.TEST_ENV   || 'production';
 
-  if (!email || !password) {
+  // username-only clients have no password — only require email/username
+  if (!email) {
     throw new Error(
-      `[auth] Credentials not set for client '${clientId}' / role '${role}'. ` +
-      `Set TEST_USER_EMAIL and TEST_USER_PASSWORD in .env.${testEnv} or via the dashboard.`,
+      `[auth] Username/email not set for client '${clientId}' / role '${role}'. ` +
+      `Set TEST_USER_EMAIL in .env.${testEnv} or via the dashboard.`,
+    );
+  }
+  if (!password && authType !== 'username-only') {
+    throw new Error(
+      `[auth] Password not set for client '${clientId}' / role '${role}'. ` +
+      `Set TEST_USER_PASSWORD in .env.${testEnv} or via the dashboard.`,
     );
   }
 
@@ -59,17 +70,49 @@ setup('generic authentication', async ({ page }) => {
   }
 
   // ── Navigate to login ───────────────────────────────────────────────────
-  await page.goto(loginPath);
+  // loginUrl is '/' when loginPath is '' (base URL is the login page)
+  await page.goto(loginUrl);
   await page.waitForLoadState('domcontentloaded', { timeout: 20_000 });
 
   // ── Fill credentials ────────────────────────────────────────────────────
   // Tries multiple common selector patterns, falling back gracefully.
   const usernameSelectors = [
+    // Explicit IDs used by known platforms
     '#UserLogin_Username',
+    '#username',
+    '#userName',
+    '#racfid',
+    '#RACFId',
+    '#loginId',
+    '#userId',
+    // Common name attributes
     'input[name="username"]',
+    'input[name="userName"]',
+    'input[name="racfid"]',
+    'input[name="RACFId"]',
+    'input[name="loginId"]',
+    'input[name="userId"]',
+    'input[name="login"]',
+    // Email-type input (email+password platforms)
     'input[type="email"]',
+    // Aria / test IDs
+    '[aria-label="Username"]',
+    '[aria-label="username"]',
+    '[aria-label="User Login"]',
+    '[aria-label="RACF ID"]',
+    '[aria-label="RACFId"]',
+    '[aria-label="Login"]',
+    '[aria-label="Email"]',
     '[data-testid="username"]',
     '[data-testid="email"]',
+    '[data-testid="login"]',
+    // Label text fallback — matches any input labelled with these words
+    'input[placeholder*="username" i]',
+    'input[placeholder*="user id" i]',
+    'input[placeholder*="racf" i]',
+    'input[placeholder*="login" i]',
+    'input[placeholder*="email" i]',
+    'input[placeholder*="dealer" i]',
   ];
   const passwordSelectors = [
     '#UserLogin_Password',
@@ -83,9 +126,16 @@ setup('generic authentication', async ({ page }) => {
     'input[type="submit"]',
     'button:has-text("Sign In")',
     'button:has-text("Login")',
+    'button:has-text("Log In")',
+    'button:has-text("Next")',
+    'button:has-text("Continue")',
+    'button:has-text("Submit")',
+    '[type="submit"]',            // broad fallback — any element with type=submit
   ];
 
-  // Fill username
+  console.log(`[auth] Starting login — client: '${clientId}', role: '${role}', authType: '${authType}', loginUrl: '${loginUrl}'`);
+
+  // Fill username / email / dealer code
   let filledEmail = false;
   for (const sel of usernameSelectors) {
     const el = page.locator(sel).first();
@@ -99,29 +149,41 @@ setup('generic authentication', async ({ page }) => {
     throw new Error(`[auth] Could not find username/email field on login page: ${page.url()}`);
   }
 
-  // Fill password
-  let filledPassword = false;
-  for (const sel of passwordSelectors) {
-    const el = page.locator(sel).first();
-    if (await el.isVisible({ timeout: 2_000 }).catch(() => false)) {
-      await el.fill(password);
-      filledPassword = true;
-      break;
+  // Fill password — skipped for username-only (dealer code, no password field)
+  if (authType !== 'username-only') {
+    let filledPassword = false;
+    for (const sel of passwordSelectors) {
+      const el = page.locator(sel).first();
+      if (await el.isVisible({ timeout: 2_000 }).catch(() => false)) {
+        await el.fill(password);
+        filledPassword = true;
+        break;
+      }
     }
-  }
-  if (!filledPassword) {
-    throw new Error(`[auth] Could not find password field on login page: ${page.url()}`);
+    if (!filledPassword) {
+      throw new Error(`[auth] Could not find password field on login page: ${page.url()}`);
+    }
   }
 
   // Submit
+  // When loginPath is set ('/login', etc.) wait for URL to leave the login path.
+  // When base URL is the login page (loginPath=''), wait for network idle instead
+  // because the current URL already doesn't match '/login'.
+  const hasExplicitLoginPath = !!loginPath;
   let submitted = false;
   for (const sel of submitSelectors) {
     const el = page.locator(sel).first();
     if (await el.isVisible({ timeout: 2_000 }).catch(() => false)) {
-      await Promise.all([
-        page.waitForURL(url => !/\/login/i.test(url.pathname), { timeout: 90_000 }),
-        el.click(),
-      ]).catch(() => { /* URL check below will surface a meaningful error */ });
+      if (hasExplicitLoginPath) {
+        await Promise.all([
+          page.waitForURL(url => !/\/login/i.test(url.pathname), { timeout: 90_000 }),
+          el.click(),
+        ]).catch(() => { /* URL check below will surface a meaningful error */ });
+      } else {
+        // Base URL login — click and wait for network to settle after redirect
+        await el.click();
+        await page.waitForLoadState('networkidle', { timeout: 90_000 }).catch(() => {});
+      }
       submitted = true;
       break;
     }
@@ -133,13 +195,17 @@ setup('generic authentication', async ({ page }) => {
   await page.waitForLoadState('domcontentloaded', { timeout: 60_000 }).catch(() => {});
 
   // ── Verify success ──────────────────────────────────────────────────────
-  const currentURL = page.url();
-  if (/\/login/i.test(new URL(currentURL).pathname)) {
-    throw new Error(
-      `[auth] Still on login page after submit. ` +
-      `Client: ${clientId}, Role: ${role}, URL: ${currentURL}. ` +
-      `Check credentials in .env.${testEnv}`,
-    );
+  // Only do the /login path check when we navigated to an explicit login path.
+  // For base-URL logins the app may never have a /login segment to check.
+  if (hasExplicitLoginPath) {
+    const currentURL = page.url();
+    if (/\/login/i.test(new URL(currentURL).pathname)) {
+      throw new Error(
+        `[auth] Still on login page after submit. ` +
+        `Client: ${clientId}, Role: ${role}, URL: ${currentURL}. ` +
+        `Check credentials in .env.${testEnv}`,
+      );
+    }
   }
 
   // ── Dismiss common overlays ─────────────────────────────────────────────

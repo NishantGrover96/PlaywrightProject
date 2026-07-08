@@ -423,7 +423,30 @@ function Get-ClientDetails {
     # --- Auth ---
     Write-Header 'Authentication'
 
-    $loginPath = Read-RequiredInput -Prompt 'Login path (e.g. /login, /Account/Login)' -Default '/login'
+    $loginPath = Read-OptionalInput -Prompt 'Login path (e.g. /login, /Account/Login) — press Enter if the base URL IS the login page'
+    if (-not $loginPath) {
+        $loginPath = ''
+        Write-Done 'Login path: (none) — base URL is the login page'
+    } else {
+        # Ensure it starts with /
+        if ($loginPath -notmatch '^/') { $loginPath = "/$loginPath" }
+        Write-Done "Login path: $loginPath"
+    }
+
+    # Auth type — determines what fields the login form requires
+    $authTypeChoice = Read-MenuChoice `
+        -Prompt 'What does the login form require?' `
+        -Options @(
+            'Email + Password  (standard — most platforms)',
+            'Username only     (no password — e.g. dealer code like X1A0449)',
+            'Username + Password  (non-email username field)'
+        )
+    $authType = switch ($authTypeChoice) {
+        1 { 'email-password'    }
+        2 { 'username-only'     }
+        3 { 'username-password' }
+    }
+    Write-Done "Auth type: $authType"
 
     # --- Roles ---
     $rolesRaw = Read-RequiredInput -Prompt 'Roles, comma-separated (e.g. dealer,admin)' -Default 'dealer,admin'
@@ -486,86 +509,159 @@ function Get-ClientDetails {
     if ($builtinChosen.Count -gt 0) { Write-Done "Built-in : $($builtinChosen -join ', ')" }
     if ($customModules.Count  -gt 0) { Write-Done "Custom   : $($customModules -join ', ')" }
 
+    # --- Starter features per module ---
+    Write-Host ''
+    Write-Host '    For each module, enter at least one starter feature to scaffold.' -ForegroundColor White
+    Write-Host '    Feature ID : lowercase kebab-case,  e.g. submit-claim, view-dashboard' -ForegroundColor DarkGray
+    Write-Host '    Feature Label: human-readable,       e.g. "Submit Claim"' -ForegroundColor DarkGray
+    Write-Host '    (You can add more features later with: .\scripts\new-module.ps1)' -ForegroundColor DarkGray
+    Write-Host ''
+
+    $moduleFeatures = [ordered]@{}   # moduleId → @( @{id=...; label=...}, ... )
+    foreach ($mod in $selectedModules) {
+        Write-Host "  Module: $mod" -ForegroundColor Cyan
+        $featList = [System.Collections.Generic.List[hashtable]]::new()
+
+        $addMore = $true
+        while ($addMore) {
+            $featId = ''
+            while (-not $featId) {
+                $raw = (Read-Host "    Feature ID  (e.g. view-$mod)").Trim().ToLower()
+                if ($raw -match '^[a-z][a-z0-9]*(-[a-z0-9]+)*$') {
+                    $featId = $raw
+                } else {
+                    Write-Warn "    '$raw' is not valid kebab-case. Use only lowercase letters, numbers, and hyphens."
+                }
+            }
+            $featLabel = (Read-Host "    Feature Label (e.g. `"View $((Get-Culture).TextInfo.ToTitleCase($mod))`")").Trim()
+            if (-not $featLabel) { $featLabel = (Get-Culture).TextInfo.ToTitleCase($featId -replace '-', ' ') }
+
+            $featList.Add(@{ id = $featId; label = $featLabel })
+            Write-Done "  Queued: $mod / $featId — $featLabel"
+
+            $another = (Read-Host "    Add another feature for '$mod'? (y/N)").Trim().ToLower()
+            $addMore  = ($another -eq 'y' -or $another -eq 'yes')
+        }
+        $moduleFeatures[$mod] = $featList.ToArray()
+        Write-Host ''
+    }
+
     # --- Credentials per role ---
     Write-Header 'Login Credentials'
-    Write-Host '    Passwords are encrypted with AES-256-GCM using MASTER_KEY.' -ForegroundColor DarkGray
-    Write-Host '    Plaintext passwords are never written to disk.' -ForegroundColor DarkGray
-    Write-Host ''
 
-    # --- Ensure MASTER_KEY is available before collecting passwords ---
-    $masterKey = [System.Environment]::GetEnvironmentVariable('MASTER_KEY')
-    if (-not $masterKey) {
-        # Try to load from .env.production
-        $envProdFile = Join-Path $script:Root '.env.production'
-        if (Test-Path $envProdFile) {
-            Get-Content $envProdFile | ForEach-Object {
-                if ($_ -match '^MASTER_KEY=(.+)') {
-                    [System.Environment]::SetEnvironmentVariable('MASTER_KEY', $Matches[1].Trim())
-                }
-            }
-            $masterKey = [System.Environment]::GetEnvironmentVariable('MASTER_KEY')
-        }
-    }
-
-    if (-not $masterKey) {
-        Write-Warn 'MASTER_KEY is not set in your environment or .env.production.'
+    if ($authType -eq 'username-only') {
+        Write-Host '    Auth type: Username only — no password, no encryption needed.' -ForegroundColor DarkGray
         Write-Host ''
-        $setKeyNow = Read-YesNo 'Set MASTER_KEY now? (required for encryption)' -DefaultYes $true
-        if ($setKeyNow) {
-            Write-Host ''
-            Write-Host '    Generate a secure key by running this command in a separate terminal:' -ForegroundColor DarkGray
-            Write-Host '      node -e "console.log(require(''crypto'').randomBytes(32).toString(''hex''))"' -ForegroundColor Cyan
-            Write-Host ''
-            $newKey = Read-RequiredInput -Prompt '    Paste MASTER_KEY here (64 hex chars recommended)'
-            [System.Environment]::SetEnvironmentVariable('MASTER_KEY', $newKey)
-
-            # Persist to .env.production
-            $envProdFile = Join-Path $script:Root '.env.production'
-            $utf8NoBom   = New-Object System.Text.UTF8Encoding $false
-            if (Test-Path $envProdFile) {
-                $existing = Get-Content $envProdFile -Raw
-                if ($existing -notmatch 'MASTER_KEY=') {
-                    [System.IO.File]::AppendAllText($envProdFile, "`nMASTER_KEY=$newKey`n", $utf8NoBom)
-                    Write-Done 'MASTER_KEY appended to .env.production'
-                } else {
-                    Write-Warn 'MASTER_KEY already in .env.production — not overwritten. Update manually if needed.'
-                }
-            } else {
-                [System.IO.File]::WriteAllText($envProdFile, "MASTER_KEY=$newKey`n", $utf8NoBom)
-                Write-Done 'Created .env.production with MASTER_KEY'
-            }
-            $masterKey = $newKey
-        } else {
-            Write-Warn 'Continuing without encryption.'
-            Write-Warn 'Passwords will be stored as placeholders. Encrypt them later with:'
-            Write-Warn '  node utils/encrypt-credential.js "your-password"'
-        }
     } else {
-        Write-Done 'MASTER_KEY is set — passwords will be encrypted.'
+        Write-Host '    Passwords are encrypted with AES-256-GCM using MASTER_KEY.' -ForegroundColor DarkGray
+        Write-Host '    Plaintext passwords are never written to disk.' -ForegroundColor DarkGray
+        Write-Host ''
+
+        # --- Ensure MASTER_KEY is available before collecting passwords ---
+        $masterKey = [System.Environment]::GetEnvironmentVariable('MASTER_KEY')
+        if (-not $masterKey) {
+            # Try to load from .env.production
+            $envProdFile = Join-Path $script:Root '.env.production'
+            if (Test-Path $envProdFile) {
+                Get-Content $envProdFile | ForEach-Object {
+                    if ($_ -match '^MASTER_KEY=(.+)') {
+                        [System.Environment]::SetEnvironmentVariable('MASTER_KEY', $Matches[1].Trim())
+                    }
+                }
+                $masterKey = [System.Environment]::GetEnvironmentVariable('MASTER_KEY')
+            }
+        }
+
+        if (-not $masterKey) {
+            Write-Warn 'MASTER_KEY is not set in your environment or .env.production.'
+            Write-Host ''
+            $setKeyNow = Read-YesNo 'Set MASTER_KEY now? (required for encryption)' -DefaultYes $true
+            if ($setKeyNow) {
+                Write-Host ''
+                Write-Host '    Generate a secure key by running this command in a separate terminal:' -ForegroundColor DarkGray
+                Write-Host '      node -e "console.log(require(''crypto'').randomBytes(32).toString(''hex''))"' -ForegroundColor Cyan
+                Write-Host ''
+                $newKey = Read-RequiredInput -Prompt '    Paste MASTER_KEY here (64 hex chars recommended)'
+                [System.Environment]::SetEnvironmentVariable('MASTER_KEY', $newKey)
+
+                # Persist to .env.production
+                $envProdFile = Join-Path $script:Root '.env.production'
+                $utf8NoBom   = New-Object System.Text.UTF8Encoding $false
+                if (Test-Path $envProdFile) {
+                    $existing = Get-Content $envProdFile -Raw
+                    if ($existing -notmatch 'MASTER_KEY=') {
+                        [System.IO.File]::AppendAllText($envProdFile, "`nMASTER_KEY=$newKey`n", $utf8NoBom)
+                        Write-Done 'MASTER_KEY appended to .env.production'
+                    } else {
+                        Write-Warn 'MASTER_KEY already in .env.production — not overwritten. Update manually if needed.'
+                    }
+                } else {
+                    [System.IO.File]::WriteAllText($envProdFile, "MASTER_KEY=$newKey`n", $utf8NoBom)
+                    Write-Done 'Created .env.production with MASTER_KEY'
+                }
+                $masterKey = $newKey
+            } else {
+                Write-Warn 'Continuing without encryption.'
+                Write-Warn 'Passwords will be stored as placeholders. Encrypt them later with:'
+                Write-Warn '  node utils/encrypt-credential.js "your-password"'
+            }
+        } else {
+            Write-Done 'MASTER_KEY is set — passwords will be encrypted.'
+        }
+        Write-Host ''
     }
-    Write-Host ''
 
     $credentials = [ordered]@{}
     foreach ($role in $roles) {
         Write-Host "    Role: $role" -ForegroundColor White
-        $email    = Read-RequiredInput -Prompt "      Email for '$role' (e.g. dealer@samsung.com)"
-        $password = Read-RequiredInput -Prompt "      Password for '$role'"
 
-        Write-Step "Encrypting password for '$role'..."
-        $encryptScript = Join-Path $script:Root 'utils\encrypt-credential.js'
-        $encResult = (node $encryptScript $password 2>&1) | Select-Object -Last 1
-        if ($LASTEXITCODE -ne 0 -or ($encResult -notmatch '^enc:')) {
-            Write-Warn "Encryption failed for '$role' (is MASTER_KEY set?): $encResult"
-            Write-Warn "Password stored as plaintext placeholder - replace manually."
-            $encPassword = 'REPLACE_WITH_ENCRYPTED_PASSWORD'
+        if ($authType -eq 'username-only') {
+            # No password field — just a username/dealer-code
+            $username = Read-RequiredInput -Prompt "      Username for '$role' (e.g. X1A0449)"
+            $credentials[$role] = [ordered]@{
+                username = $username
+                password = ''
+            }
+            Write-Done "Username stored for '$role' (no password required)."
+
+        } elseif ($authType -eq 'username-password') {
+            $username = Read-RequiredInput -Prompt "      Username for '$role'"
+            $password = Read-RequiredInput -Prompt "      Password for '$role'"
+
+            Write-Step "Encrypting password for '$role'..."
+            $encryptScript = Join-Path $script:Root 'utils\encrypt-credential.js'
+            $encResult     = (node $encryptScript $password 2>&1) | Select-Object -Last 1
+            if ($LASTEXITCODE -ne 0 -or ($encResult -notmatch '^enc:')) {
+                Write-Warn "Encryption failed for '$role': $encResult"
+                $encPassword = 'REPLACE_WITH_ENCRYPTED_PASSWORD'
+            } else {
+                $encPassword = $encResult.Trim()
+                Write-Done "Password encrypted for '$role'."
+            }
+            $credentials[$role] = [ordered]@{
+                username = $username
+                password = $encPassword
+            }
+
         } else {
-            $encPassword = $encResult.Trim()
-            Write-Done "Password encrypted for '$role'."
-        }
+            # email-password (default)
+            $email    = Read-RequiredInput -Prompt "      Email for '$role' (e.g. dealer@samsung.com)"
+            $password = Read-RequiredInput -Prompt "      Password for '$role'"
 
-        $credentials[$role] = [ordered]@{
-            email    = $email
-            password = $encPassword
+            Write-Step "Encrypting password for '$role'..."
+            $encryptScript = Join-Path $script:Root 'utils\encrypt-credential.js'
+            $encResult     = (node $encryptScript $password 2>&1) | Select-Object -Last 1
+            if ($LASTEXITCODE -ne 0 -or ($encResult -notmatch '^enc:')) {
+                Write-Warn "Encryption failed for '$role': $encResult"
+                $encPassword = 'REPLACE_WITH_ENCRYPTED_PASSWORD'
+            } else {
+                $encPassword = $encResult.Trim()
+                Write-Done "Password encrypted for '$role'."
+            }
+            $credentials[$role] = [ordered]@{
+                email    = $email
+                password = $encPassword
+            }
         }
         Write-Host ''
     }
@@ -582,7 +678,12 @@ function Get-ClientDetails {
     Write-Host "  Client ID      : $clientId"                          -ForegroundColor White
     Write-Host "  Display Name   : $displayName"                       -ForegroundColor White
     Write-Host "  Type           : $clientType"                        -ForegroundColor White
+    Write-Host "  Auth Type      : $authType"                          -ForegroundColor White
     Write-Host "  Modules        : $($selectedModules -join ', ')"     -ForegroundColor White
+    foreach ($mod in $selectedModules) {
+        $featSummary = ($moduleFeatures[$mod] | ForEach-Object { $_.id }) -join ', '
+        Write-Host "    $mod : $featSummary"                             -ForegroundColor DarkGray
+    }
     Write-Host "  Roles          : $($roles -join ', ')"               -ForegroundColor White
     Write-Host "  Default Env    : $defaultEnv"                        -ForegroundColor White
     Write-Host "  Dev URL        : $(if ($envDev)     { $envDev }     else { '(not set)' })" -ForegroundColor DarkGray
@@ -602,10 +703,12 @@ function Get-ClientDetails {
         displayName  = $displayName
         clientType   = $clientType
         loginPath    = $loginPath
+        authType     = $authType
         roles        = $roles
         credentials  = $credentials
-        modules      = $selectedModules
-        repoUrl      = $RepoInfo.url
+        modules        = $selectedModules
+        moduleFeatures = $moduleFeatures
+        repoUrl        = $RepoInfo.url
         branch       = $RepoInfo.branch
         localPath    = $RepoInfo.localPath
         defaultEnv   = $defaultEnv
@@ -672,6 +775,7 @@ function New-ClientConfig {
         defaultEnvironment = $Details.defaultEnv
         authentication     = [ordered]@{
             loginPath = $Details.loginPath
+            authType  = $Details.authType
             roles     = @($Details.roles)
         }
         environments       = $envs
@@ -880,25 +984,31 @@ function Test-OnboardingArtifacts {
         }
     }
 
-    # Verify passwords are encrypted (not plaintext placeholders)
+    # Verify passwords are encrypted (skip check for username-only auth)
     $usersFile = Join-Path $script:UsersDir "$id\users.json"
     if (Test-Path $usersFile) {
         try {
-            $usersJson = Get-Content $usersFile -Raw | ConvertFrom-Json
-            $unencrypted = $usersJson.PSObject.Properties |
-                Where-Object { $_.Value.password -and $_.Value.password -notmatch '^enc:' -and $_.Value.password -ne 'REPLACE_WITH_ENCRYPTED_PASSWORD' }
-            if ($unencrypted) {
-                Write-Warn "Plaintext password detected for role(s): $($unencrypted.Name -join ', ')"
-                Write-Warn "Run: node utils/encrypt-credential.js ""your-password"" and update users.json"
-                $errors++
+            $usersJson  = Get-Content $usersFile -Raw | ConvertFrom-Json
+            $authType   = if ($Details.authType) { $Details.authType } else { 'email-password' }
+
+            if ($authType -eq 'username-only') {
+                Write-Done "Auth type is username-only — password encryption check skipped"
             } else {
-                $placeholders = $usersJson.PSObject.Properties |
-                    Where-Object { $_.Value.password -eq 'REPLACE_WITH_ENCRYPTED_PASSWORD' }
-                if ($placeholders) {
-                    Write-Warn "Unencrypted placeholder found for role(s): $($placeholders.Name -join ', ')"
-                    Write-Warn "Encrypt with: node utils/encrypt-credential.js ""your-password"""
+                $unencrypted = $usersJson.PSObject.Properties |
+                    Where-Object { $_.Value.password -and $_.Value.password -notmatch '^enc:' -and $_.Value.password -ne 'REPLACE_WITH_ENCRYPTED_PASSWORD' }
+                if ($unencrypted) {
+                    Write-Warn "Plaintext password detected for role(s): $($unencrypted.Name -join ', ')"
+                    Write-Warn "Run: node utils/encrypt-credential.js ""your-password"" and update users.json"
+                    $errors++
                 } else {
-                    Write-Done 'All passwords are encrypted'
+                    $placeholders = $usersJson.PSObject.Properties |
+                        Where-Object { $_.Value.password -eq 'REPLACE_WITH_ENCRYPTED_PASSWORD' }
+                    if ($placeholders) {
+                        Write-Warn "Unencrypted placeholder found for role(s): $($placeholders.Name -join ', ')"
+                        Write-Warn "Encrypt with: node utils/encrypt-credential.js ""your-password"""
+                    } else {
+                        Write-Done 'All passwords are encrypted'
+                    }
                 }
             }
         } catch {
@@ -1428,6 +1538,27 @@ Update-RepoRegistry          -Details $details
 New-CatalogManifest          -Details $details
 New-FunctionalCatalogFolder  -Details $details
 New-PlaywrightClientStructure -Details $details
+
+# Scaffold starter features for every module via new-module.ps1
+Write-Step 'Scaffolding features for each module...'
+$newModuleScript = Join-Path $script:Root 'scripts\new-module.ps1'
+foreach ($mod in $details.modules) {
+    $features = $details.moduleFeatures[$mod]
+    if (-not $features) { continue }
+    foreach ($feat in $features) {
+        Write-Host "  → $mod / $($feat.id) ($($feat.label))" -ForegroundColor DarkGray
+        & $newModuleScript `
+            -Client $details.clientId `
+            -Module $mod `
+            -Feature $feat.id `
+            -Label   $feat.label
+        if ($LASTEXITCODE -ne 0) {
+            Write-Warn "  Scaffold failed for $mod/$($feat.id) — run manually:"
+            Write-Warn "  .\scripts\new-module.ps1 -Client $($details.clientId) -Module $mod -Feature $($feat.id) -Label `"$($feat.label)`""
+        }
+    }
+}
+Write-Done 'Feature scaffold complete.'
 
 # 1c: Self-validate all artifacts
 Test-OnboardingArtifacts -Details $details

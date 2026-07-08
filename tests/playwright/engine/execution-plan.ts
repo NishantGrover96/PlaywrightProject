@@ -19,6 +19,9 @@
 
 export type AuthType =
   | 'forms'
+  | 'email-password'
+  | 'username-password'
+  | 'username-only'
   | 'azure-ad'
   | 'oauth'
   | 'sso'
