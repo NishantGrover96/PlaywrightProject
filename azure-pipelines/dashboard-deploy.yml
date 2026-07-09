@@ -1,0 +1,52 @@
+name: $(date:yyyyMMdd)$(rev:.r)
+
+# ── QA Dashboard — CI Pipeline ───────────────────────────────────────────────
+#
+# Packages the DealerPlatform.QA repo (this repo) and publishes it as a ZIP
+# artifact. The classic release pipeline (DemoPortalV2-Test-Dashboard-CD)
+# picks up the artifact and deploys it to the IIS web server, installing/
+# restarting the NSSM service running dashboard/server.js.
+#
+# Artifact published: coop-qa-dashboard-drop
+#   └── coop-qa-dashboard-$(Build.BuildNumber).zip
+# ─────────────────────────────────────────────────────────────────────────────
+
+trigger: none   # triggered by classic release or manually
+
+jobs:
+- job: BuildDashboard
+  displayName: 'Build & Publish QA Dashboard Artifact'
+  pool:
+    vmImage: 'windows-latest'
+  timeoutInMinutes: 20
+
+  steps:
+
+  # ── 1. Stage repo contents (exclude .git) ───────────────────────────────────
+  - task: CopyFiles@2
+    displayName: 'Stage dashboard files'
+    inputs:
+      SourceFolder: '$(Build.SourcesDirectory)'
+      Contents: |
+        **
+        !.git/**
+      TargetFolder: '$(Build.BinariesDirectory)/dashboard-stage'
+      CleanTargetFolder: true
+
+  # ── 2. Zip artifact ──────────────────────────────────────────────────────────
+  - task: ArchiveFiles@2
+    displayName: 'Zip dashboard package'
+    inputs:
+      rootFolderOrFile: '$(Build.BinariesDirectory)/dashboard-stage'
+      includeRootFolder: false
+      archiveType: zip
+      archiveFile: '$(Build.ArtifactStagingDirectory)/coop-qa-dashboard-$(Build.BuildNumber).zip'
+      replaceExistingArchive: true
+
+  # ── 3. Publish artifact ──────────────────────────────────────────────────────
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish coop-qa-dashboard-drop'
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      artifactName: coop-qa-dashboard-drop
+      Parallel: true
