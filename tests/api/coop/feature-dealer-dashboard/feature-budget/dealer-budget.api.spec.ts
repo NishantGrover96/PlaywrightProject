@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import testData from '../../../../data/coop/feature-dealer-dashboard/feature-budget/test-data.json';
+import testData from '../../../../playwright/data/coop/feature-dealer-dashboard/feature-budget/test-data.json';
 
 /**
  * API Tests — Dealer Budget Tab (Backend Gateway)

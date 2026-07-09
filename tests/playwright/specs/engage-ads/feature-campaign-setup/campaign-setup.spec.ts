@@ -28,19 +28,12 @@ import {
 } from '../../../helpers/engage-ads/feature-campaign-setup/campaign-setup.helpers';
 import testData from '../../../data/engage-ads/feature-campaign-setup/test-data.json';
 
-/** Shim for browser-evaluated HTMLInputElement properties (no DOM lib in tsconfig). */
-interface InputEl {
-  required: boolean;
-  maxLength: number;
-  type: string;
-  checkValidity: () => boolean;
-}
-/** Shim for browser-evaluated HTMLTextAreaElement properties. */
-interface TextareaEl {
-  required: boolean;
-  maxLength: number;
-  checkValidity: () => boolean;
-}
+/** Extends HTMLInputElement for browser-evaluated property access. */
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface InputEl extends HTMLInputElement {}
+/** Extends HTMLTextAreaElement for browser-evaluated property access. */
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface TextareaEl extends HTMLTextAreaElement {}
 
 const IS_PROD = (process.env.TEST_ENV ?? 'production') === 'production';
 const BASE_URL = process.env.BASE_URL ?? '';
@@ -105,7 +98,7 @@ test.describe('EngageAds — Campaign Setup — Smoke', () => {
     await cs.contactPhoneNumberInput.fill('');
     await cs.clickNext();
     const firstNameInvalid = await cs.firstNameInput.evaluate((el) => {
-      return !(el as { checkValidity: () => boolean }).checkValidity();
+      return !(el as unknown as { checkValidity: () => boolean }).checkValidity();
     });
     expect(firstNameInvalid).toBeTruthy();
   });
@@ -210,7 +203,7 @@ test.describe('EngageAds — Campaign Setup — Step 1 Validation', () => {
     requireOrderSeq(activeOrderSeq, 'CAMPAIGN_ORDER_SEQ');
     const cs = await goToCampaignSetup(page, activeOrderSeq);
     await cs.expectWizardVisible();
-    expect(await cs.firstNameInput.evaluate((el) => (el as InputEl).required)).toBeTruthy();
+    expect(await cs.firstNameInput.evaluate((el) => (el as unknown as InputEl).required)).toBeTruthy();
     expect(await cs.firstNameInput.getAttribute('maxlength')).toBe('50');
   });
 
@@ -218,7 +211,7 @@ test.describe('EngageAds — Campaign Setup — Step 1 Validation', () => {
     requireOrderSeq(activeOrderSeq, 'CAMPAIGN_ORDER_SEQ');
     const cs = await goToCampaignSetup(page, activeOrderSeq);
     await cs.expectWizardVisible();
-    expect(await cs.lastNameInput.evaluate((el) => (el as InputEl).required)).toBeTruthy();
+    expect(await cs.lastNameInput.evaluate((el) => (el as unknown as InputEl).required)).toBeTruthy();
     expect(await cs.lastNameInput.getAttribute('maxlength')).toBe('50');
   });
 
@@ -226,7 +219,7 @@ test.describe('EngageAds — Campaign Setup — Step 1 Validation', () => {
     requireOrderSeq(activeOrderSeq, 'CAMPAIGN_ORDER_SEQ');
     const cs = await goToCampaignSetup(page, activeOrderSeq);
     await cs.expectWizardVisible();
-    expect(await cs.primaryContactEmailInput.evaluate((el) => (el as InputEl).required)).toBeTruthy();
+    expect(await cs.primaryContactEmailInput.evaluate((el) => (el as unknown as InputEl).required)).toBeTruthy();
     expect(await cs.primaryContactEmailInput.getAttribute('type')).toBe('email');
   });
 
@@ -234,7 +227,7 @@ test.describe('EngageAds — Campaign Setup — Step 1 Validation', () => {
     requireOrderSeq(activeOrderSeq, 'CAMPAIGN_ORDER_SEQ');
     const cs = await goToCampaignSetup(page, activeOrderSeq);
     await cs.expectWizardVisible();
-    expect(await cs.contactPhoneNumberInput.evaluate((el) => (el as InputEl).required)).toBeTruthy();
+    expect(await cs.contactPhoneNumberInput.evaluate((el) => (el as unknown as InputEl).required)).toBeTruthy();
     expect(await cs.contactPhoneNumberInput.getAttribute('maxlength')).toBe('15');
   });
 
@@ -242,7 +235,7 @@ test.describe('EngageAds — Campaign Setup — Step 1 Validation', () => {
     requireOrderSeq(activeOrderSeq, 'CAMPAIGN_ORDER_SEQ');
     const cs = await goToCampaignSetup(page, activeOrderSeq);
     await cs.expectWizardVisible();
-    expect(await cs.leadDestinationEmailInput.evaluate((el) => (el as InputEl).required)).toBeFalsy();
+    expect(await cs.leadDestinationEmailInput.evaluate((el) => (el as unknown as InputEl).required)).toBeFalsy();
     expect(await cs.leadDestinationEmailInput.getAttribute('type')).toBe('email');
   });
 
@@ -268,7 +261,7 @@ test.describe('EngageAds — Campaign Setup — Step 1 Validation', () => {
     await cs.expectWizardVisible();
     await cs.primaryContactEmailInput.fill(testData.step1.invalid.emailMalformed);
     const isInvalid = await cs.primaryContactEmailInput.evaluate((el) => {
-      return !(el as InputEl).checkValidity();
+      return !(el as unknown as InputEl).checkValidity();
     });
     expect(isInvalid).toBeTruthy();
   });
@@ -315,14 +308,14 @@ test.describe('EngageAds — Campaign Setup — Step 2 Validation', () => {
   test('CS-TC-030 @regression — BusinessName is required with maxlength 100', async ({ page }) => {
     requireOrderSeq(activeOrderSeq, 'CAMPAIGN_ORDER_SEQ');
     const cs = await advanceToStep2(page, activeOrderSeq);
-    expect(await cs.businessNameInput.evaluate((el) => (el as InputEl).required)).toBeTruthy();
+    expect(await cs.businessNameInput.evaluate((el) => (el as unknown as InputEl).required)).toBeTruthy();
     expect(await cs.businessNameInput.getAttribute('maxlength')).toBe('100');
   });
 
   test('CS-TC-031 @regression — WebsiteUrl is required with type=url (confirmed from DOM)', async ({ page }) => {
     requireOrderSeq(activeOrderSeq, 'CAMPAIGN_ORDER_SEQ');
     const cs = await advanceToStep2(page, activeOrderSeq);
-    expect(await cs.websiteUrlInput.evaluate((el) => (el as InputEl).required)).toBeTruthy();
+    expect(await cs.websiteUrlInput.evaluate((el) => (el as unknown as InputEl).required)).toBeTruthy();
     expect(await cs.websiteUrlInput.getAttribute('type')).toBe('url');
   });
 
@@ -330,7 +323,7 @@ test.describe('EngageAds — Campaign Setup — Step 2 Validation', () => {
     requireOrderSeq(activeOrderSeq, 'CAMPAIGN_ORDER_SEQ');
     const cs = await advanceToStep2(page, activeOrderSeq);
     await cs.websiteUrlInput.fill(testData.step2.invalid.websiteUrlNoProtocol);
-    const isInvalid = await cs.websiteUrlInput.evaluate((el) => !(el as InputEl).checkValidity());
+    const isInvalid = await cs.websiteUrlInput.evaluate((el) => !(el as unknown as InputEl).checkValidity());
     expect(isInvalid).toBeTruthy();
   });
 
@@ -338,7 +331,7 @@ test.describe('EngageAds — Campaign Setup — Step 2 Validation', () => {
     requireOrderSeq(activeOrderSeq, 'CAMPAIGN_ORDER_SEQ');
     const cs = await advanceToStep2(page, activeOrderSeq);
     for (const loc of [cs.cityInput, cs.stateProvinceInput, cs.zipCodeInput, cs.businessEmailInput]) {
-      expect(await loc.evaluate((el) => (el as InputEl).required)).toBeTruthy();
+      expect(await loc.evaluate((el) => (el as unknown as InputEl).required)).toBeTruthy();
     }
   });
 
@@ -352,7 +345,7 @@ test.describe('EngageAds — Campaign Setup — Step 2 Validation', () => {
   test('CS-TC-035 @regression — AddressLine2 is optional', async ({ page }) => {
     requireOrderSeq(activeOrderSeq, 'CAMPAIGN_ORDER_SEQ');
     const cs = await advanceToStep2(page, activeOrderSeq);
-    expect(await cs.addressLine2Input.evaluate((el) => (el as InputEl).required)).toBeFalsy();
+    expect(await cs.addressLine2Input.evaluate((el) => (el as unknown as InputEl).required)).toBeFalsy();
   });
 
   test('CS-TC-036 @regression — required fields show red asterisk on Step 2 labels', async ({ page }) => {
@@ -377,20 +370,20 @@ test.describe('EngageAds — Campaign Setup — Step 3 Validation', () => {
   test('CS-TC-040 @regression — ServiceArea is required with maxlength 2400', async ({ page }) => {
     requireOrderSeq(activeOrderSeq, 'CAMPAIGN_ORDER_SEQ');
     const cs = await advanceToStep3(page, activeOrderSeq);
-    expect(await cs.serviceAreaTextarea.evaluate((el) => (el as TextareaEl).required)).toBeTruthy();
+    expect(await cs.serviceAreaTextarea.evaluate((el) => (el as unknown as TextareaEl).required)).toBeTruthy();
     expect(await cs.serviceAreaTextarea.getAttribute('maxlength')).toBe('2400');
   });
 
   test('CS-TC-041 @regression — WebsiteAccuracyConfirmed checkbox is required', async ({ page }) => {
     requireOrderSeq(activeOrderSeq, 'CAMPAIGN_ORDER_SEQ');
     const cs = await advanceToStep3(page, activeOrderSeq);
-    expect(await cs.websiteAccuracyConfirmedCheckbox.evaluate((el) => (el as InputEl).required)).toBeTruthy();
+    expect(await cs.websiteAccuracyConfirmedCheckbox.evaluate((el) => (el as unknown as InputEl).required)).toBeTruthy();
   });
 
   test('CS-TC-042 @regression — AdditionalNotes is optional with maxlength 2000', async ({ page }) => {
     requireOrderSeq(activeOrderSeq, 'CAMPAIGN_ORDER_SEQ');
     const cs = await advanceToStep3(page, activeOrderSeq);
-    expect(await cs.additionalNotesTextarea.evaluate((el) => (el as TextareaEl).required)).toBeFalsy();
+    expect(await cs.additionalNotesTextarea.evaluate((el) => (el as unknown as TextareaEl).required)).toBeFalsy();
     expect(await cs.additionalNotesTextarea.getAttribute('maxlength')).toBe('2000');
   });
 
@@ -434,7 +427,7 @@ test.describe('EngageAds — Campaign Setup — Step 3 Validation', () => {
   test('CS-TC-048 @dates — DesiredCampaignStartDate is optional (not required)', async ({ page }) => {
     requireOrderSeq(activeOrderSeq, 'CAMPAIGN_ORDER_SEQ');
     const cs = await advanceToStep3(page, activeOrderSeq);
-    expect(await cs.desiredCampaignStartDateInput.evaluate((el) => (el as InputEl).required)).toBeFalsy();
+    expect(await cs.desiredCampaignStartDateInput.evaluate((el) => (el as unknown as InputEl).required)).toBeFalsy();
   });
 });
 

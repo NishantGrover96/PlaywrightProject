@@ -1,6 +1,6 @@
 import { Page, expect } from '@playwright/test';
-import { AssetUploadPage } from '../../pages/deereadbuilder/ad-builder/feature-asset-upload/AssetUploadPage';
-import testData from '../../data/deereadbuilder/ad-builder/feature-asset-upload/test-data.json';
+import { AssetUploadPage } from '../../../../pages/deereadbuilder/ad-builder/feature-asset-upload/AssetUploadPage';
+import testData from '../../../../data/deereadbuilder/ad-builder/feature-asset-upload/test-data.json';
 
 /**
  * Asset Upload Helpers — Reusable multi-step flows
@@ -198,7 +198,7 @@ export async function verifyUploadRejected(
     await assetPage.uploadFile(filePath);
     throw new Error('Upload should have been rejected');
   } catch (err) {
-    if (!expectedErrorPattern.test(err.message)) {
+    if (!expectedErrorPattern.test(err instanceof Error ? err.message : String(err))) {
       throw err;
     }
   }

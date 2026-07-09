@@ -805,14 +805,28 @@ function New-UserConfig {
 
     $users = [ordered]@{}
     foreach ($role in $Details.roles) {
-        $cred     = if ($Details.credentials) { $Details.credentials[$role] } else { $null }
-        $email    = if ($cred -and $cred.email)    { $cred.email }    else { "REPLACE_WITH_$($role.ToUpper())_EMAIL" }
-        $password = if ($cred -and $cred.password) { $cred.password } else { 'REPLACE_WITH_ENCRYPTED_PASSWORD' }
-        $users[$role] = [ordered]@{
-            role        = $role
-            displayName = (Get-Culture).TextInfo.ToTitleCase($role)
-            email       = $email
-            password    = $password
+        $cred = if ($Details.credentials) { $Details.credentials[$role] } else { $null }
+
+        if ($Details.authType -eq 'username-only') {
+            $usernameVal = if ($cred -and $cred.username) { $cred.username } else { "REPLACE_WITH_$($role.ToUpper())_USERNAME" }
+            $users[$role] = [ordered]@{
+                role        = $role
+                displayName = (Get-Culture).TextInfo.ToTitleCase($role)
+                username    = $usernameVal
+                email       = $usernameVal   # server.js reads .email as the login value
+                password    = ''             # no password for username-only
+                _note       = "Auth type: username-only. Set 'username' and 'email' to the login username/dealer code. Password must be empty string."
+            }
+        } else {
+            $email    = if ($cred -and $cred.email)    { $cred.email }    else { "REPLACE_WITH_$($role.ToUpper())_EMAIL" }
+            $password = if ($cred -and $cred.password) { $cred.password } else { 'REPLACE_WITH_ENCRYPTED_PASSWORD' }
+            $users[$role] = [ordered]@{
+                role        = $role
+                displayName = (Get-Culture).TextInfo.ToTitleCase($role)
+                email       = $email
+                password    = $password
+                _note       = 'Run: node utils/encrypt-credential.js  to generate an encrypted password value (enc:...).'
+            }
         }
     }
 
@@ -933,6 +947,68 @@ function New-PlaywrightClientStructure {
         New-Dir $dir
         New-GitKeep $dir
         Write-Done "Created  \tests\playwright\clients\$($Details.clientId)\$sub\"
+    }
+}
+
+function Update-DashboardHtml {
+    <#
+    .SYNOPSIS Patches dashboard/index.html to add the new client to the static
+              sel-client dropdown and any new module to MODULE_LABELS.
+              Idempotent — skips if already present.
+    #>
+    param([Parameter(Mandatory)][hashtable]$Details)
+
+    $htmlFile = Join-Path $script:Root 'dashboard\index.html'
+    if (-not (Test-Path $htmlFile)) {
+        Write-Warn 'dashboard/index.html not found — skipping UI patch.'
+        return
+    }
+
+    $html    = Get-Content $htmlFile -Raw
+    $changed = $false
+
+    # ── 1. Add client option to sel-client dropdown (if not already present) ──
+    $clientId    = $Details.clientId
+    $displayName = $Details.displayName
+    $optionTag   = "<option value=`"$clientId`">$displayName</option>"
+
+    if ($html -notmatch [regex]::Escape("value=`"$clientId`"")) {
+        # Insert before the closing </select> of sel-client
+        $html    = $html -replace '(id="sel-client"[^>]*>[\s\S]*?)(</select>)', "`$1        $optionTag`n      `$2"
+        $changed = $true
+        Write-Done "dashboard/index.html — added client option: $clientId"
+    } else {
+        Write-Done "dashboard/index.html — client '$clientId' already present in dropdown"
+    }
+
+    # ── 2. Add any new module to MODULE_LABELS (if not already present) ────────
+    $knownModuleLabels = @{
+        'coop'        = 'Coop'
+        'engage-ads'  = 'EngageAds'
+        'popshop'     = 'PopShop'
+        'rebate'      = 'Rebate'
+        'admin'       = 'Admin'
+        'ad-builder'  = 'Ad Builder'
+    }
+
+    foreach ($mod in $Details.modules) {
+        if ($html -notmatch "'$mod'") {
+            # Derive a readable label: title-case, replace hyphens with spaces
+            $label = if ($knownModuleLabels[$mod]) {
+                $knownModuleLabels[$mod]
+            } else {
+                (Get-Culture).TextInfo.ToTitleCase($mod -replace '-', ' ')
+            }
+            # Insert before the closing }; of MODULE_LABELS
+            $html    = $html -replace "(const MODULE_LABELS = \{[^}]*)(\};)", "`$1  '$mod':  '$label',`n`$2"
+            $changed = $true
+            Write-Done "dashboard/index.html — added module label: $mod = '$label'"
+        }
+    }
+
+    if ($changed) {
+        $utf8NoBom = New-Object System.Text.UTF8Encoding $false
+        [System.IO.File]::WriteAllText($htmlFile, $html, $utf8NoBom)
     }
 }
 
@@ -1321,6 +1397,52 @@ function Invoke-DashboardHealthCheck {
         Print-Row "0 catalog entries" 'Expected — run functional-test-catalog skill' 'WARN'; $warn++
     }
 
+    # ── Catalog .md extension guard — auto-fix .md → .html where .html exists ──
+    Write-Host ''
+    Write-Host '  ── Catalog File Extension Check ─────────────────────' -ForegroundColor DarkGray
+
+    $globalManifestPath = Join-Path $script:Root 'dashboard\catalog-manifest.json'
+    $perClientManifestPath = Join-Path $script:CatalogsDir "$id-manifest.json"
+
+    foreach ($manifestPath in @($globalManifestPath, $perClientManifestPath)) {
+        if (-not (Test-Path $manifestPath)) { continue }
+        $manifestRaw  = Get-Content $manifestPath -Raw
+        $manifestJson = $manifestRaw | ConvertFrom-Json
+        $fixedCount   = 0
+
+        # Collect all catalogFile values — handle both flat object and nested under "features"
+        $entries = if ($manifestJson.PSObject.Properties['features']) {
+            $manifestJson.features.PSObject.Properties
+        } else {
+            $manifestJson.PSObject.Properties | Where-Object { $_.Value -is [PSCustomObject] -and $_.Value.PSObject.Properties['catalogFile'] }
+        }
+
+        foreach ($entry in $entries) {
+            $val = if ($entry.Value.PSObject.Properties['catalogFile']) { $entry.Value.catalogFile } else { $null }
+            if (-not $val -or $val -notmatch '\.md$') { continue }
+
+            $absPath    = Join-Path $script:Root "docs\$val"
+            $htmlPath   = $absPath -replace '\.md$', '.html'
+            $htmlRelVal = $val    -replace '\.md$', '.html'
+
+            if (Test-Path $htmlPath) {
+                # Patch the raw JSON string and rewrite file
+                $manifestRaw = $manifestRaw -replace [regex]::Escape($val), $htmlRelVal
+                $fixedCount++
+                Print-Row "Auto-fixed catalogFile: $($entry.Name)" ".md → .html" 'FIXED'
+                $fixed++
+            } else {
+                Print-Row "catalogFile points to .md with no .html counterpart" $val 'WARN'
+                $warn++
+            }
+        }
+
+        if ($fixedCount -gt 0) {
+            $utf8NoBom = New-Object System.Text.UTF8Encoding $false
+            [System.IO.File]::WriteAllText($manifestPath, $manifestRaw, $utf8NoBom)
+        }
+    }
+
     # ==================================================================
     # CHECK GROUP E — API health probe
     # ==================================================================
@@ -1429,38 +1551,87 @@ function Show-NextSkills {
 
     Write-Host ''
     Write-Host ('─' * 62) -ForegroundColor DarkGray
-    Write-Host '  Next Steps — Run These Skills in GitHub Copilot Chat' -ForegroundColor Yellow
+    Write-Host '  Next Steps — Run in Order' -ForegroundColor Yellow
     Write-Host ('─' * 62) -ForegroundColor DarkGray
     Write-Host ''
 
-    Write-Host '  SKILL 1 — Repo Analysis  (discover features and business rules)' -ForegroundColor Cyan
-    Write-Host "    Run repo-analysis skill for client: $id" -ForegroundColor White
+    Write-Host '  STEP 1 — Repo Analysis  (discover what features exist in the source code)' -ForegroundColor Cyan
+    Write-Host "    In Copilot Chat: /repo-analysis" -ForegroundColor White
+    Write-Host "    Client: $id  |  Modules: $modules" -ForegroundColor DarkGray
     Write-Host "    Repo path: $repo" -ForegroundColor DarkGray
-    Write-Host "    Modules: $modules" -ForegroundColor DarkGray
     Write-Host ''
 
-    Write-Host '  SKILL 2 — Functional Test Catalog  (generate test cases per module)' -ForegroundColor Cyan
+    Write-Host '  STEP 2 — Scaffold each feature  (run once per feature found in Step 1)' -ForegroundColor Cyan
+    Write-Host '    WHY: new-client.ps1 sets up the client shell but cannot scaffold features' -ForegroundColor DarkGray
+    Write-Host '    because feature names are only known AFTER repo-analysis discovers them.' -ForegroundColor DarkGray
+    Write-Host ''
     foreach ($mod in $Details.modules) {
-        Write-Host "    Run functional-test-catalog skill for client: $id, module: $mod" -ForegroundColor White
+        Write-Host "    .\scripts\new-module.ps1 -Client $id -Module $mod -Feature {feature} -Label `"{Feature Label}`"" -ForegroundColor White
+        Write-Host "    Example:" -ForegroundColor DarkGray
+        Write-Host "      .\scripts\new-module.ps1 -Client $id -Module $mod -Feature submit-claim -Label `"Submit Claim`"" -ForegroundColor DarkGray
+    }
+    Write-Host '    Repeat for every feature in this module.' -ForegroundColor DarkGray
+    Write-Host ''
+
+    Write-Host '  STEP 3 — Functional Test Catalog  (generate test cases — one per feature)' -ForegroundColor Cyan
+    foreach ($mod in $Details.modules) {
+        Write-Host "    In Copilot Chat: /functional-test-catalog  client=$id  module=$mod  feature={feature}" -ForegroundColor White
+    }
+    Write-Host '    Review and approve the catalog before proceeding.' -ForegroundColor DarkGray
+    Write-Host ''
+
+    Write-Host '  STEP 4 — Playwright Test Generation  (implement spec + page object files)' -ForegroundColor Cyan
+    foreach ($mod in $Details.modules) {
+        Write-Host "    In Copilot Chat: /playwright-test-generation  client=$id  module=$mod  feature={feature}" -ForegroundColor White
     }
     Write-Host ''
 
-    Write-Host '  SKILL 3 — Playwright Test Generation  (generate spec + page object files)' -ForegroundColor Cyan
-    foreach ($mod in $Details.modules) {
-        Write-Host "    Run playwright-test-generation skill for client: $id, module: $mod" -ForegroundColor White
-    }
+    Write-Host '  STEP 5 — Auth Setup  (save Playwright session cookies — against UAT)' -ForegroundColor Cyan
+    Write-Host "    `$env:TEST_ENV='uat' ; npx playwright test --project=setup-$id" -ForegroundColor White
     Write-Host ''
 
-    Write-Host '  SKILL 4 — Auth Setup  (create Playwright auth state files)' -ForegroundColor Cyan
-    Write-Host "    npx playwright test --project=setup-$id" -ForegroundColor White
+    Write-Host '  STEP 6 — Verify on Dashboard' -ForegroundColor Cyan
+    Write-Host "    npm run dashboard   then open: http://localhost:3333" -ForegroundColor White
+    Write-Host "    Select client: $id  — confirm features appear and catalogs open correctly." -ForegroundColor DarkGray
     Write-Host ''
 
-    Write-Host '  SKILL 5 — Dashboard Verification' -ForegroundColor Cyan
-    Write-Host "    Open: http://localhost:3333" -ForegroundColor White
-    Write-Host "    Filter by client: $id" -ForegroundColor DarkGray
+    Write-Host '  STEP 7 — Run Smoke Tests  (against UAT only)' -ForegroundColor Cyan
+    Write-Host "    `$env:TEST_ENV='uat' ; npx playwright test --project=chromium-$id --grep @smoke" -ForegroundColor White
     Write-Host ''
 
-    Write-Host ('─' * 62) -ForegroundColor DarkGray
+    Write-Host ('═' * 62) -ForegroundColor Yellow
+    Write-Host '  PRE-HANDOFF VERIFICATION CHECKLIST' -ForegroundColor Yellow
+    Write-Host '  Run AFTER Steps 1-4 (Copilot skills) are complete.' -ForegroundColor Yellow
+    Write-Host '  All tests target UAT environment only.' -ForegroundColor Yellow
+    Write-Host ('═' * 62) -ForegroundColor Yellow
+    Write-Host ''
+    Write-Host '  [ ] 1. No credential placeholders remain' -ForegroundColor White
+    Write-Host "          Get-Content config\users\$id\users.json | Select-String 'REPLACE_WITH'" -ForegroundColor DarkGray
+    Write-Host '          Expected: no matches (fill real credentials first)' -ForegroundColor DarkGray
+    Write-Host ''
+    Write-Host '  [ ] 2. TypeScript compiles cleanly (after skills generate files)' -ForegroundColor White
+    Write-Host '          npx tsc --noEmit' -ForegroundColor DarkGray
+    Write-Host '          Expected: zero errors' -ForegroundColor DarkGray
+    Write-Host ''
+    Write-Host '  [ ] 3. Auth setup succeeds against UAT (login reaches the app)' -ForegroundColor White
+    Write-Host "          `$env:TEST_ENV='uat' ; npx playwright test --project=setup-$id" -ForegroundColor DarkGray
+    Write-Host '          Expected: PASSED — storage state file saved to:' -ForegroundColor DarkGray
+    Write-Host "          tests/playwright/fixtures/.auth/$id/" -ForegroundColor DarkGray
+    Write-Host ''
+    Write-Host '  [ ] 4. Catalog appears on dashboard' -ForegroundColor White
+    Write-Host '          npm run dashboard  →  open http://localhost:3333' -ForegroundColor DarkGray
+    Write-Host "          Select client: $id" -ForegroundColor DarkGray
+    Write-Host '          Expected: all features listed, View Catalog opens HTML (not blank/md)' -ForegroundColor DarkGray
+    Write-Host ''
+    Write-Host '  [ ] 5. Smoke tests pass on UAT (no auth/infra errors)' -ForegroundColor White
+    Write-Host "          `$env:TEST_ENV='uat' ; npx playwright test --project=chromium-$id --grep @smoke" -ForegroundColor DarkGray
+    Write-Host '          Expected: tests execute against UAT app' -ForegroundColor DarkGray
+    Write-Host '          fixme / skip = OK (not yet implemented)' -ForegroundColor DarkGray
+    Write-Host '          timeout / login redirect / 401 = NOT OK (fix before handoff)' -ForegroundColor DarkGray
+    Write-Host ''
+    Write-Host ('═' * 62) -ForegroundColor Yellow
+    Write-Host '  Hand off to the developer only when all 5 boxes are ticked.' -ForegroundColor Green
+    Write-Host ('═' * 62) -ForegroundColor Yellow
     Write-Host ''
 }
 
@@ -1529,6 +1700,58 @@ if ($modeChoice -eq 2 -and -not $repoInfo.useExisting) {
     Write-Done "Step 1 — Repository: $($repoInfo.localPath)"
 }
 
+# 1a-ii: Ensure node_modules exist and Playwright Chromium is installed
+Write-Header 'Step 1b — Node Dependencies + Playwright Browsers'
+
+$nodeModulesPath = Join-Path $script:Root 'node_modules'
+if (-not (Test-Path $nodeModulesPath)) {
+    Write-Step 'node_modules not found — running npm install...'
+    Push-Location $script:Root
+    npm install
+    Pop-Location
+    if ($LASTEXITCODE -ne 0) {
+        Write-Warn 'npm install failed. Fix any errors above before continuing.'
+    } else {
+        Write-Done 'npm install complete'
+    }
+} else {
+    Write-Done 'node_modules present'
+}
+
+# Check Chromium binary exists — install only chromium (fastest, most reliable)
+$playwrightCli  = Join-Path $script:Root 'node_modules/@playwright/test/cli.js'
+$chromiumMarker = Join-Path ([System.Environment]::GetFolderPath('LocalApplicationData')) `
+                      'ms-playwright'
+
+if (Test-Path $playwrightCli) {
+    # Ask playwright for the expected chromium path
+    $dryRun = & node $playwrightCli install --dry-run 2>&1
+    $chromiumLine = $dryRun | Select-String 'Install location:.*chromium' | Select-Object -First 1
+    $chromiumDir  = if ($chromiumLine) {
+        ($chromiumLine -replace '.*Install location:\s*', '').Trim()
+    } else { $null }
+
+    # Look for the actual chrome.exe inside the expected folder
+    $chromiumExe = if ($chromiumDir) {
+        Get-ChildItem -Path $chromiumDir -Filter 'chrome.exe' -Recurse -ErrorAction SilentlyContinue |
+            Select-Object -First 1 -ExpandProperty FullName
+    } else { $null }
+
+    if ($chromiumExe -and (Test-Path $chromiumExe)) {
+        Write-Done "Chromium installed: $chromiumExe"
+    } else {
+        Write-Step 'Chromium not found — installing Playwright browsers (chromium only)...'
+        & node $playwrightCli install chromium
+        if ($LASTEXITCODE -ne 0) {
+            Write-Warn 'Playwright browser install failed. Run manually: npx playwright install chromium'
+        } else {
+            Write-Done 'Chromium installed successfully'
+        }
+    }
+} else {
+    Write-Warn 'Playwright CLI not found. Run: npm install  then: npx playwright install chromium'
+}
+
 # 1b: Generate all config files and folder structure
 Write-Header 'Step 2 — Generating Config Files and Folder Structure'
 
@@ -1538,6 +1761,7 @@ Update-RepoRegistry          -Details $details
 New-CatalogManifest          -Details $details
 New-FunctionalCatalogFolder  -Details $details
 New-PlaywrightClientStructure -Details $details
+Update-DashboardHtml          -Details $details
 
 # Scaffold starter features for every module via new-module.ps1
 Write-Step 'Scaffolding features for each module...'
@@ -1560,8 +1784,32 @@ foreach ($mod in $details.modules) {
 }
 Write-Done 'Feature scaffold complete.'
 
-# 1c: Self-validate all artifacts
-Test-OnboardingArtifacts -Details $details
+# 1c: Self-validate all artifacts — block next steps if any credential placeholder remains
+$validationErrors = Test-OnboardingArtifacts -Details $details
+
+if ($validationErrors -gt 0) {
+    Write-Host ''
+    Write-Host ('─' * 62) -ForegroundColor Red
+    Write-Host '  ⚠  ACTION REQUIRED before running the next skills' -ForegroundColor Red
+    Write-Host ('─' * 62) -ForegroundColor Red
+    Write-Host ''
+    if ($details.authType -eq 'username-only') {
+        Write-Host "  1. Open: config\users\$($details.clientId)\users.json" -ForegroundColor Yellow
+        Write-Host '  2. Replace REPLACE_WITH_*_USERNAME with the real login' -ForegroundColor Yellow
+        Write-Host '     value for each role (e.g. dealer code X1A0449).' -ForegroundColor Yellow
+        Write-Host '  3. Ensure "password" is set to "" (empty string).' -ForegroundColor Yellow
+    } else {
+        Write-Host "  1. Open: config\users\$($details.clientId)\users.json" -ForegroundColor Yellow
+        Write-Host '  2. Replace REPLACE_WITH_*_EMAIL with the real email.' -ForegroundColor Yellow
+        Write-Host '  3. Encrypt each password:' -ForegroundColor Yellow
+        Write-Host '       node utils/encrypt-credential.js "your-password"' -ForegroundColor Cyan
+        Write-Host '     Paste the enc:... output into users.json.' -ForegroundColor Yellow
+    }
+    Write-Host ''
+    Write-Host '  Auth setup WILL FAIL until credentials are filled in.' -ForegroundColor Red
+    Write-Host ('─' * 62) -ForegroundColor Red
+    Write-Host ''
+}
 
 # 1d: Reload dashboard cache if server is running
 Write-Header 'Step 3 — Dashboard Reload'
@@ -1579,7 +1827,23 @@ try {
 # 1e: Deep API health check — verify client, modules, catalog, features in live dashboard
 Invoke-DashboardHealthCheck -Details $details
 
-# 1f: Print summary + skill commands
+# 1g: TypeScript compile check — verify scaffolded files have no import errors
+Write-Header 'Step 4 — TypeScript Compile Check'
+$tscBin = Join-Path $script:Root 'node_modules\.bin\tsc.cmd'
+if (Test-Path $tscBin) {
+    Write-Step 'Running npx tsc --noEmit ...'
+    $tscOutput = & $tscBin --noEmit 2>&1
+    if ($LASTEXITCODE -eq 0) {
+        Write-Done 'TypeScript compile check passed — zero errors'
+    } else {
+        Write-Warn 'TypeScript compile check found errors:'
+        $tscOutput | ForEach-Object { Write-Host "    $_" -ForegroundColor DarkYellow }
+        Write-Host '  Fix these before running tests.' -ForegroundColor Yellow
+        Write-Host '  Common cause: template tokens not replaced — re-run new-module.ps1.' -ForegroundColor DarkGray
+    }
+} else {
+    Write-Warn 'tsc not found — run: npm install  then re-run this wizard.'
+}
 $id = $details.clientId
 
 Show-Summary `
@@ -1600,5 +1864,5 @@ Show-Summary `
         "\tests\playwright\clients\$id\data\.gitkeep"
     )
 
-# 1g: Show the exact Copilot Chat skill commands to run next
+# 1h: Show the exact Copilot Chat skill commands to run next
 Show-NextSkills -Details $details

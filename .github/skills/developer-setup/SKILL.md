@@ -196,17 +196,70 @@ if ($cfg.clientId -ne $CLIENT_ID) {
 }
 ```
 
-### 3.4 MASTER_KEY Check / Re-Encrypt Placeholder Passwords
+### 3.4 Validate users.json Credentials — Auth-Type Aware
+
+Read the client's `authType` from `config/clients/{CLIENT_ID}.json` first, then apply the
+correct validation rules. **Rules differ by auth type — never treat all clients the same.**
+
+| authType | Fields required | Password | What a placeholder looks like |
+|---|---|---|---|
+| `email-password` | `email`, `password` | AES-256-GCM encrypted (`enc:…`) | `REPLACE_WITH_*_EMAIL` or `REPLACE_WITH_ENCRYPTED_PASSWORD` |
+| `username-password` | `username`, `password` | AES-256-GCM encrypted (`enc:…`) | `REPLACE_WITH_*_USERNAME` or `REPLACE_WITH_ENCRYPTED_PASSWORD` |
+| `username-only` | `username` **and** `email` (same value), `password = ""` | **Empty string** — no encryption needed | `REPLACE_WITH_*_USERNAME` or `REPLACE_WITH_*_EMAIL` |
+| `forms` / `azure-ad` / `oauth` / `sso` | varies | varies | any `REPLACE_WITH_…` string |
+| `none` | — | — | skip validation |
 
 ```powershell
+$clientCfg = Get-Content "config/clients/$CLIENT_ID.json" -Raw | ConvertFrom-Json
+$authType  = $clientCfg.authentication.authType ?? $clientCfg.authentication.type ?? $clientCfg.authType ?? "forms"
+
 $usersJson = Get-Content "config/users/$CLIENT_ID/users.json" -Raw | ConvertFrom-Json
+$placeholderPattern = '^REPLACE_WITH_'
+
 $usersJson.PSObject.Properties | ForEach-Object {
-    if ($_.Value.password -eq 'REPLACE_WITH_ENCRYPTED_PASSWORD') {
-        Write-Warn "Role '$($_.Name)' has an unencrypted placeholder password."
-        Write-Warn "Encrypt: node utils/encrypt-credential.js ""your-password"""
+    $roleName = $_.Name
+    $roleVal  = $_.Value
+
+    if ($authType -eq 'username-only') {
+        # username-only: must have username (or email) set; password must be empty string
+        $loginVal = $roleVal.username ?? $roleVal.email
+        if (-not $loginVal -or $loginVal -match $placeholderPattern) {
+            Write-Warn "Role '$roleName': 'username'/'email' is still a placeholder."
+            Write-Warn "  Fix: edit config/users/$CLIENT_ID/users.json — set 'username' and 'email' to the actual login value (e.g. dealer code X1A0449)."
+        } else {
+            Write-Host "  [OK] $roleName username: $loginVal"
+        }
+        if ($roleVal.password -ne '') {
+            Write-Warn "Role '$roleName': password must be empty string for username-only auth. Found: '$($roleVal.password)'"
+            Write-Warn "  Fix: set ""password"": """" in config/users/$CLIENT_ID/users.json"
+        }
+    } else {
+        # password-based auth: email/username must not be placeholder, password must be enc:...
+        $loginField = if ($roleVal.email) { 'email' } else { 'username' }
+        $loginVal   = $roleVal.$loginField
+        if (-not $loginVal -or $loginVal -match $placeholderPattern) {
+            Write-Warn "Role '$roleName': '$loginField' is still a placeholder."
+            Write-Warn "  Fix: edit config/users/$CLIENT_ID/users.json and set the real $loginField."
+        } else {
+            Write-Host "  [OK] $roleName $loginField: $loginVal"
+        }
+        if ($roleVal.password -eq 'REPLACE_WITH_ENCRYPTED_PASSWORD' -or (-not $roleVal.password)) {
+            Write-Warn "Role '$roleName': password is missing or placeholder."
+            Write-Warn "  Fix: node utils/encrypt-credential.js ""your-password"" then paste the enc:... value into users.json"
+        } elseif ($roleVal.password -notmatch '^enc:') {
+            Write-Warn "Role '$roleName': password does not start with 'enc:' — it may be stored in plain text."
+            Write-Warn "  Fix: node utils/encrypt-credential.js ""your-password"" and replace with the enc:... value."
+        } else {
+            Write-Host "  [OK] $roleName password: encrypted"
+        }
     }
 }
 ```
+
+**Self-healing — if any placeholder is found:**
+1. For `username-only`: ask the user for the login username/dealer code for each role, then update `users.json` directly — no encryption step needed.
+2. For password-based: ask the user for the plain-text password, run `node utils/encrypt-credential.js "password"`, paste the `enc:…` output into `users.json`.
+3. Re-run validation after every fix until all roles show `[OK]`.
 
 ---
 
@@ -379,7 +432,9 @@ Print a final status summary:
 [ ] Phase 1 — Prerequisites: Node 20+, npm install, Playwright browsers
 [ ] Phase 2 — .env.{TARGET_ENV} created with BASE_URL
 [ ] Phase 3 — config/clients/{CLIENT_ID}.json with correct clientId field
-[ ] Phase 3 — config/users/{CLIENT_ID}/users.json with encrypted passwords
+[ ] Phase 3 — config/users/{CLIENT_ID}/users.json validated for authType
+             email-password / username-password: email/username set, password is enc:...
+             username-only: username AND email set to real login value, password = ""
 [ ] Phase 3 — dashboard/catalogs/{CLIENT_ID}-manifest.json exists
 [ ] Phase 4 — Repo analysis complete (or skipped — no repo path)
 [ ] Phase 5 — Functional catalog generated (or skipped — no modules known)
@@ -395,13 +450,15 @@ Mark each item [OK] / [WARN] / [FAIL] based on verification results.
 ## Self-Healing Rules
 
 | Symptom | Root Cause | Auto-Fix |
-|---|---|---|
+|---|---|---------|
 | `cannot be loaded because running scripts is disabled` | PowerShell execution policy | `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser` |
 | `MASTER_KEY not set` | Missing environment variable | Prompt user to generate + save to `.env.production` |
 | Dashboard shows wrong client data | Duplicate featureId key in catalog cache | `POST /api/admin/reload` — fixed in catalog-service.js |
 | Client not in dashboard after wizard | `clientId` field typo or casing mismatch | Verify `clientId` field in `config/clients/{id}.json` |
 | Auth state file missing | Setup project not run | `npx playwright test --project=setup-{CLIENT_ID}` |
 | `enc:` prefix missing in users.json | Encryption skipped (MASTER_KEY absent) | Set MASTER_KEY, re-run `node utils/encrypt-credential.js` |
+| users.json has `REPLACE_WITH_*_EMAIL` or `REPLACE_WITH_*_USERNAME` | Client created before fix, or wizard skipped credential entry | Fill in the real value; for `username-only` set both `username` and `email` fields to the dealer code — no encryption needed |
+| users.json password is `"REPLACE_WITH_ENCRYPTED_PASSWORD"` for `username-only` client | authType mismatch | Set `"password": ""` (empty string) — `username-only` never uses a password |
 | Catalog entries showing for wrong client | Duplicate plain featureId key (old bug) | Already fixed in catalog-service.js |
 | `npm install` fails offline | No network / proxy | `npm install --prefer-offline` |
 | No modules in dashboard | Catalog manifest is empty `{}` | Run functional-test-catalog skill, then `POST /api/admin/reload` |

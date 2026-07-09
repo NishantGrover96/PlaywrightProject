@@ -41,6 +41,7 @@ function New-Dir($path) {
 function Copy-Template($src, $dst) {
     $content = Get-Content $src -Raw
     $content = $content `
+        -replace '\{\{CLIENT\}\}',      $Client `
         -replace '\{\{MODULE\}\}',       $Module `
         -replace '\{\{FEATURE\}\}',      $Feature `
         -replace '\{\{MODULE_LABEL\}\}', $modLabel `
@@ -76,9 +77,7 @@ Write-Host "  created  $($pageFile.Replace($root, ''))"
 # Fix spec import to use the real page class name
 $specFile    = "$root\tests\playwright\specs\$Client\$Module\feature-$Feature\$Feature.spec.ts"
 $specContent = Get-Content $specFile -Raw
-$specContent = $specContent `
-    -replace 'FeaturePage',  "${pageClass}Page" `
-    -replace 'featurePage',  "$(([string][char]::ToLower($pageClass[0])) + $pageClass.Substring(1))Page"
+$specContent = $specContent -replace 'FeaturePage', "${pageClass}Page"
 Set-Content -Path $specFile -Value $specContent -Encoding utf8
 
 # -- Helpers stub ---------------------------------------------
@@ -131,28 +130,79 @@ foreach ($d in $docFolders) {
 $catalogDir  = "$root\docs\functional-catalogs\$Client\$Module\feature-$Feature"
 $catalogFile = "$catalogDir\functional-units.html"
 New-Dir $catalogDir
-$catalogHtml = ('<!DOCTYPE html>' + "`n" +
-'<html lang="en">' + "`n" +
-'<head>' + "`n" +
-'  <meta charset="UTF-8" />' + "`n" +
-'  <meta name="viewport" content="width=device-width, initial-scale=1.0" />' + "`n" +
-"  <title>$Label - Functional Unit Catalog</title>" + "`n" +
-'  <style>' + "`n" +
-'    body { font-family: system-ui, sans-serif; max-width: 700px; margin: 60px auto; padding: 0 20px; color: #374151; }' + "`n" +
-'    h1   { font-size: 1.4rem; margin-bottom: 4px; }' + "`n" +
-'    p    { color: #6b7280; font-size: 0.9rem; line-height: 1.6; }' + "`n" +
-'    code { background: #f3f4f6; padding: 2px 6px; border-radius: 4px; font-size: 0.85rem; }' + "`n" +
-'    .badge { display:inline-block; background:#fef3c7; color:#92400e; border:1px solid #fcd34d; border-radius:4px; padding:2px 8px; font-size:0.75rem; font-weight:600; margin-bottom:16px; }' + "`n" +
-'  </style>' + "`n" +
-'</head>' + "`n" +
-'<body>' + "`n" +
-'  <span class="badge">Catalog Not Yet Generated</span>' + "`n" +
-"  <h1>$Label</h1>" + "`n" +
-"  <p>Module: <code>$Module</code> &#x7c; Feature: <code>$Feature</code> &#x7c; Client: <code>$Client</code></p>" + "`n" +
-'  <p>This catalog has not been generated yet. Run the <strong>functional-test-catalog</strong> skill in GitHub Copilot to populate this file:</p>' + "`n" +
-"  <p><code>@workspace generate functional test catalog for client=$Client module=$Module feature=$Feature</code></p>" + "`n" +
-'</body>' + "`n" +
-'</html>')
+$catalogHtml = @"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>$Label - Functional Unit Catalog</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous" defer></script>
+  <style>
+    .tier-smoke      { background:#dbeafe; color:#1d4ed8; }
+    .tier-regression { background:#ede9fe; color:#6d28d9; }
+    .tier-e2e        { background:#d1fae5; color:#065f46; }
+    .test-id         { font-family: monospace; font-weight: 700; white-space: nowrap; }
+  </style>
+</head>
+<body class="bg-light">
+
+<div class="bg-secondary text-white px-4 py-3">
+  <h1 class="h4 mb-1">$Label — Functional Unit Catalog</h1>
+  <p class="mb-0 small opacity-75">$Client | $Module module | feature-$Feature</p>
+</div>
+
+<div class="container-fluid px-4 py-4">
+
+  <div class="alert alert-warning d-flex gap-3 align-items-start" role="alert">
+    <span class="fs-4">⚠</span>
+    <div>
+      <strong>Catalog Not Yet Generated</strong>
+      <p class="mb-1 mt-1">Run the <strong>functional-test-catalog</strong> skill in GitHub Copilot Chat to populate this file:</p>
+      <code class="d-block bg-white border rounded px-2 py-1 small mt-2">
+        @workspace /functional-test-catalog client=$Client module=$Module feature=$Feature
+      </code>
+      <p class="mt-2 mb-0 small text-muted">
+        Module: <strong>$Module</strong> &nbsp;&bull;&nbsp;
+        Feature: <strong>$Feature</strong> &nbsp;&bull;&nbsp;
+        Client: <strong>$Client</strong>
+      </p>
+    </div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-header bg-light fw-semibold">Test Coverage — Placeholder</div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover table-sm align-middle mb-0">
+          <thead class="table-dark">
+            <tr>
+              <th scope="col">Test ID</th>
+              <th scope="col">Title</th>
+              <th scope="col">Tier</th>
+              <th scope="col">Priority</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="test-id text-muted">—</td>
+              <td class="text-muted fst-italic">No tests generated yet. Run the functional-test-catalog skill.</td>
+              <td></td>
+              <td></td>
+              <td><span class="badge bg-secondary">Pending</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
+"@
 Set-Content -Path $catalogFile -Value $catalogHtml -Encoding utf8
 Write-Host "  created  $($catalogFile.Replace($root, ''))"
 

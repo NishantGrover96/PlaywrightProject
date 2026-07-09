@@ -1,6 +1,6 @@
 {
   "coop-submit-claim": {
-    "feature": "Coop — Submit Claim",
+    "feature": "Coop â€” Submit Claim",
     "catalogFile": "functional-catalogs/demoportal/coop/feature-submit-claim/functional-units.html",
     "version": "v1",
     "generated": "2026-06-17",
@@ -54,8 +54,8 @@
     "role": "dealer"
   },
   "coop-submit-preapproval": {
-    "feature": "Coop — Submit Preapproval",
-    "catalogFile": "functional-catalogs/demoportal/coop/feature-submit-preapproval/functional-units.md",
+    "feature": "Coop â€” Submit Preapproval",
+    "catalogFile": "functional-catalogs/demoportal/coop/feature-submit-preapproval/functional-units.html",
     "version": "v2",
     "generated": "2026-06-19",
     "auditedAs": "PlatformToAPIWorkspace (Dealer Role, 2026-06-19)",
@@ -108,7 +108,7 @@
     "role": "dealer"
   },
   "coop-dealer-dashboard": {
-    "feature": "Coop — Dealer Dashboard",
+    "feature": "Coop â€” Dealer Dashboard",
     "catalogFile": "functional-catalogs/demoportal/coop/feature-dealer-dashboard/functional-units.html",
     "version": "v1",
     "generated": "2026-06-18",
@@ -163,8 +163,8 @@
     "role": "dealer"
   },
   "coop-admin-reports": {
-    "feature": "Coop — Admin Reports",
-    "catalogFile": "functional-catalogs/demoportal/coop/feature-admin-reports/test-catalog.md",
+    "feature": "Coop â€” Admin Reports",
+    "catalogFile": "functional-catalogs/demoportal/coop/feature-admin-reports/functional-units.html",
     "version": "v1",
     "generated": "",
     "auditedAs": "",
@@ -184,8 +184,8 @@
     "role": "admin"
   },
   "coop-api-submit-claim": {
-    "feature": "Coop API — Submit Claim",
-    "catalogFile": "functional-catalogs/demoportal/coop/feature-submit-claim/test-catalog.md",
+    "feature": "Coop API â€” Submit Claim",
+    "catalogFile": "functional-catalogs/demoportal/coop/feature-submit-claim/functional-units.html",
     "version": "v1",
     "generated": "",
     "auditedAs": "",
@@ -205,8 +205,8 @@
     "role": "api"
   },
   "coop-api-submit-preapproval": {
-    "feature": "Coop API — Submit Preapproval",
-    "catalogFile": "functional-catalogs/demoportal/coop/feature-submit-preapproval/functional-units.md",
+    "feature": "Coop API â€” Submit Preapproval",
+    "catalogFile": "functional-catalogs/demoportal/coop/feature-submit-preapproval/functional-units.html",
     "version": "v1",
     "generated": "2026-06-17",
     "auditedAs": "PlatformToAPIWorkspace (API Layer, 2026-06-17)",
@@ -239,8 +239,8 @@
     "role": "api"
   },
   "popshop-new-order": {
-    "feature": "PopShop — New Order",
-    "catalogFile": "functional-catalogs/demoportal/popshop/feature-new-order/test-catalog.md",
+    "feature": "PopShop â€” New Order",
+    "catalogFile": "functional-catalogs/demoportal/popshop/feature-new-order/functional-units.html",
     "version": "v1",
     "generated": "",
     "auditedAs": "",
@@ -261,7 +261,7 @@
     "role": "dealer"
   },
   "coop-dealer-dashboard-budget": {
-    "feature": "Coop — Dealer Dashboard: Budget Tab",
+    "feature": "Coop â€” Dealer Dashboard: Budget Tab",
     "catalogFile": "functional-catalogs/demoportal/coop/feature-dealer-dashboard/feature-budget/functional-units.html",
     "version": "v1",
     "generated": "2026-06-18",
@@ -316,7 +316,7 @@
     "role": "dealer"
   },
   "engage-ads-view-package": {
-    "feature": "EngageAds — View Package",
+    "feature": "EngageAds â€” View Package",
     "catalogFile": "functional-catalogs/demoportal/engage-ads/feature-view-package/functional-units.html",
     "version": "v1",
     "generated": "2026-06-18",
@@ -371,7 +371,7 @@
     "role": "dealer"
   },
   "engage-ads-campaign-setup": {
-    "feature": "EngageAds — Campaign Setup",
+    "feature": "EngageAds â€” Campaign Setup",
     "catalogFile": "functional-catalogs/demoportal/engage-ads/feature-campaign-setup/functional-units.html",
     "version": "v1",
     "generated": "2026-06-30",
@@ -426,7 +426,7 @@
     "role": "dealer"
   },
   "engage-ads-order-history": {
-    "feature": "EngageAds — Order History",
+    "feature": "EngageAds â€” Order History",
     "catalogFile": "functional-catalogs/demoportal/engage-ads/feature-order-history/functional-units.html",
     "version": "v1",
     "generated": "2026-06-23",
@@ -481,7 +481,7 @@
     "role": "dealer"
   },
   "admin-feature-list": {
-    "feature": "Admin — Feature List",
+    "feature": "Admin â€” Feature List",
     "catalogFile": "functional-catalogs/demoportal/admin/feature-feature-list/functional-units.html",
     "version": "v1",
     "generated": "2026-06-19",
@@ -547,7 +547,7 @@
     "role": "admin"
   },
   "rebate-dashboard": {
-    "feature": "Rebate — Dashboard",
+    "feature": "Rebate â€” Dashboard",
     "catalogFile": "functional-catalogs/demoportal/rebate/feature-dashboard/functional-units.html",
     "version": "v1",
     "generated": "2026-07-07",
@@ -602,7 +602,7 @@
     "role": "admin"
   },
   "rebate-create-offers": {
-    "feature": "Rebate — Create Offers",
+    "feature": "Rebate â€” Create Offers",
     "catalogFile": "functional-catalogs/demoportal/rebate/feature-create-offers/functional-units.html",
     "version": "v1",
     "generated": "2026-07-07",
@@ -657,7 +657,7 @@
     "role": "admin"
   },
   "rebate-manage-offers": {
-    "feature": "Rebate — Manage Offers",
+    "feature": "Rebate â€” Manage Offers",
     "catalogFile": "functional-catalogs/demoportal/rebate/feature-manage-offers/functional-units.html",
     "version": "v1",
     "generated": "2026-07-07",
@@ -712,7 +712,7 @@
     "role": "admin"
   },
   "rebate-setup-campaign": {
-    "feature": "Rebate — Setup Campaign",
+    "feature": "Rebate â€” Setup Campaign",
     "catalogFile": "functional-catalogs/demoportal/rebate/feature-setup-campaign/functional-units.html",
     "version": "v1",
     "generated": "2026-07-07",
@@ -767,7 +767,7 @@
     "role": "admin"
   },
   "rebate-dealer-rebate": {
-    "feature": "Rebate — Dealer Rebate",
+    "feature": "Rebate â€” Dealer Rebate",
     "catalogFile": "functional-catalogs/demoportal/rebate/feature-dealer-rebate/functional-units.html",
     "version": "v1",
     "generated": "2026-07-07",
@@ -822,7 +822,7 @@
     "role": "dealer"
   },
   "rebate-whitelist-ip": {
-    "feature": "Rebate — Whitelist IP",
+    "feature": "Rebate â€” Whitelist IP",
     "catalogFile": "functional-catalogs/demoportal/rebate/feature-whitelist-ip/functional-units.html",
     "version": "v1",
     "generated": "2026-07-07",
@@ -877,7 +877,7 @@
     "role": "admin"
   },
   "deer-australia-coop-submit-claim": {
-    "feature": "Coop — Submit Claim",
+    "feature": "Coop â€” Submit Claim",
     "catalogFile": "functional-catalogs/deer-australia/coop/feature-submit-claim/functional-units.html",
     "version": "v1",
     "generated": "2026-07-08",
@@ -932,7 +932,7 @@
     "role": "dealer"
   },
   "deer-australia-coop-submit-preapproval": {
-    "feature": "Coop — Submit Preapproval",
+    "feature": "Coop â€” Submit Preapproval",
     "catalogFile": "functional-catalogs/deer-australia/coop/feature-submit-preapproval/functional-units.html",
     "version": "v1",
     "generated": "2026-07-08",
@@ -987,8 +987,8 @@
     "role": "dealer"
   },
   "deereadbuilder-asset-upload": {
-    "feature": "DeerAd Builder — Asset Upload",
-    "catalogFile": "functional-catalogs/deereadbuilder/ad-builder/feature-Asset-Upload/test-catalog.md",
+    "feature": "DeerAd Builder â€” Asset Upload",
+    "catalogFile": "functional-catalogs/deereadbuilder/ad-builder/feature-Asset-Upload/test-catalog.html",
     "version": "v1",
     "generated": "2026-07-08",
     "auditedAs": "deereadbuilder.com (Region 1 + Region 2 QA, 2026-07-08)",
@@ -1041,8 +1041,8 @@
     "role": "dealer"
   },
   "deereadbuilder-load-rtr2o": {
-    "feature": "DeerAd Builder — Load RTR2o",
-    "catalogFile": "functional-catalogs/deereadbuilder/ad-builder/feature-Load-RTR2o/test-catalog.md",
+    "feature": "DeerAd Builder â€” Load RTR2o",
+    "catalogFile": "functional-catalogs/deereadbuilder/ad-builder/feature-Load-RTR2o/test-catalog.html",
     "version": "v1",
     "generated": "2026-07-08",
     "auditedAs": "deereadbuilder.com (RTR2o media types: DM/LT/VC/TV/RO/WB/NS, 2026-07-08)",
@@ -1095,8 +1095,8 @@
     "role": "dealer"
   },
   "deereadbuilder-creative-library": {
-    "feature": "DeerAd Builder — Creative Library (Ads With Assets)",
-    "catalogFile": "functional-catalogs/deereadbuilder/ad-builder/feature-Creative-Library/test-catalog.md",
+    "feature": "DeerAd Builder â€” Creative Library (Ads With Assets)",
+    "catalogFile": "functional-catalogs/deereadbuilder/ad-builder/feature-Creative-Library/test-catalog.html",
     "version": "v1",
     "generated": "2026-07-08",
     "auditedAs": "deereadbuilder.com (Search, Filter, Download, Sharing, 2026-07-08)",

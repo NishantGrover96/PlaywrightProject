@@ -203,7 +203,9 @@ export class PackageBuilderPage {
   }
 
   async getCheckedChannelCount(): Promise<number> {
-    return await this.channelCheckItems.filter({ hasClass: 'checked' }).count();
+    return await this.channelCheckItems.evaluateAll(
+      (items) => items.filter((el) => el.classList.contains('checked')).length,
+    );
   }
 
   async addFeatureItem(sectionType: string, title: string): Promise<void> {

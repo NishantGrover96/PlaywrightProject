@@ -1,6 +1,6 @@
 import { Page } from '@playwright/test';
-import { DealerIndexPage } from '../../pages/coop/feature-dealer-dashboard/DealerIndexPage';
-import { DealerAdminIndexPage } from '../../pages/coop/feature-dealer-dashboard/DealerAdminIndexPage';
+import { DealerIndexPage } from '../../../pages/coop/feature-dealer-dashboard/DealerIndexPage';
+import { DealerAdminIndexPage } from '../../../pages/coop/feature-dealer-dashboard/DealerAdminIndexPage';
 
 /**
  * Helper Functions for Dealer Dashboard Test Automation

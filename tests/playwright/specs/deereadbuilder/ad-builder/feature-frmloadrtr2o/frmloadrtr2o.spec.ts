@@ -1,9 +1,9 @@
 ﻿import { test, expect } from '@playwright/test';
-import { Frmloadrtr2oPage } from '../../pages/ad-builder/feature-frmloadrtr2o/Frmloadrtr2oPage';
-import testData from '../../data/ad-builder/feature-frmloadrtr2o/test-data.json';
+import { Frmloadrtr2oPage } from '../../../../pages/deereadbuilder/ad-builder/feature-frmloadrtr2o/Frmloadrtr2oPage';
+import testData from '../../../../data/deereadbuilder/ad-builder/feature-frmloadrtr2o/test-data.json';
 import * as path from 'path';
 
-const DATA_DIR = path.resolve(__dirname, '../../data/ad-builder/feature-frmloadrtr2o');
+const DATA_DIR = path.resolve(__dirname, '../../../../data/deereadbuilder/ad-builder/feature-frmloadrtr2o');
 
 test.describe('Ad-Builder - Load RTR', () => {
 
@@ -14,8 +14,8 @@ test.describe('Ad-Builder - Load RTR', () => {
   test.describe('Smoke', () => {
 
     test('AD_BUILDER-SMOKE-001 - page loads @smoke', async ({ page }) => {
-      const Frmloadrtr2oPage = new Frmloadrtr2oPage(page);
-      await Frmloadrtr2oPage.navigate();
+      const featurePage = new Frmloadrtr2oPage(page);
+      await featurePage.navigate();
       await expect(page).toHaveURL(/frmloadrtr2o/i);
     });
 
@@ -28,8 +28,8 @@ test.describe('Ad-Builder - Load RTR', () => {
   test.describe('Happy Path', () => {
 
     test('AD_BUILDER-TC-001 - happy path @smoke @regression @critical', async ({ page }) => {
-      const Frmloadrtr2oPage = new Frmloadrtr2oPage(page);
-      await Frmloadrtr2oPage.navigate();
+      const featurePage = new Frmloadrtr2oPage(page);
+      await featurePage.navigate();
       // TODO: implement
     });
 
@@ -42,8 +42,8 @@ test.describe('Ad-Builder - Load RTR', () => {
   test.describe('Validation', () => {
 
     test('AD_BUILDER-TC-010 - required field validation @regression', async ({ page }) => {
-      const Frmloadrtr2oPage = new Frmloadrtr2oPage(page);
-      await Frmloadrtr2oPage.navigate();
+      const featurePage = new Frmloadrtr2oPage(page);
+      await featurePage.navigate();
       // TODO: implement
     });
 

@@ -458,7 +458,9 @@ test.describe('Coop — Submit Pre-Approval — E2E', () => {
   // COOP-PA-E2E-004 — Shows & Events gap documented
   test.fixme(
     'COOP-PA-E2E-003-VERIFY @e2e — individual show: equipment list persisted in dealer_shows record',
-    // COOP-PA-FU-036 gap — Shows & Events equipment/dealers/cost not persisted via modern API LinkShowToPreapprovalAsync
+    async () => {
+      // COOP-PA-FU-036 gap — Shows & Events equipment/dealers/cost not persisted via modern API LinkShowToPreapprovalAsync
+    }
   );
 
   // COOP-PA-E2E-004

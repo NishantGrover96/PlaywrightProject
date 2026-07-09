@@ -196,7 +196,8 @@ async function resolveCredentials(config) {
   // Non-custom: load from user config JSON and decrypt
   const userCfg = loadUserConfig(clientId, role);
   if (userCfg) {
-    config.username = userCfg.email;
+    // username-only clients store the login value in .username (and mirror it in .email)
+    config.username = userCfg.email || userCfg.username || "";
     try {
       config.password = await decryptPassword(userCfg.password || "");
     } catch (err) {

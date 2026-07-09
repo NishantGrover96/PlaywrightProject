@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { DealerBudgetPage } from '../../../pages/coop/feature-dealer-dashboard/feature-budget/DealerBudgetPage';
+import { DealerBudgetPage } from '../../../../pages/coop/feature-dealer-dashboard/feature-budget/DealerBudgetPage';
 import {
     loginAsDealer,
     loginAsAdmin,
@@ -16,8 +16,8 @@ import {
     assertHiddenFieldEncrypted,
     attemptCrossDealerAccess,
     assertWritePermission,
-} from '../../../helpers/coop/feature-dealer-dashboard/feature-budget/dealer-budget.helpers';
-import testData from '../../../data/coop/feature-dealer-dashboard/feature-budget/test-data.json';
+} from '../../../../helpers/coop/feature-dealer-dashboard/feature-budget/dealer-budget.helpers';
+import testData from '../../../../data/coop/feature-dealer-dashboard/feature-budget/test-data.json';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 //  SMOKE TESTS — Critical path, fast validation

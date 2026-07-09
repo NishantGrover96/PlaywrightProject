@@ -164,6 +164,81 @@ use: {
 }
 ```
 
+## TypeScript Coding Rules
+
+### Import path depth
+Spec files are generated at `tests/playwright/specs/{client}/{module}/feature-{feature}/`.
+From that folder, count up 4 levels to reach `tests/playwright/`:
+
+```typescript
+// Correct — 4 levels up
+import { SubmitClaimPage } from '../../../../pages/demoportal/coop/feature-submit-claim/SubmitClaimPage';
+import testData from '../../../../data/demoportal/coop/feature-submit-claim/test-data.json';
+const DATA_DIR = path.resolve(__dirname, '../../../../data/demoportal/coop/feature-submit-claim');
+
+// Correct — helpers 4 levels up from tests/playwright/helpers/{client}/{module}/feature-{feature}/
+import { SubmitClaimPage } from '../../../../pages/demoportal/coop/feature-submit-claim/SubmitClaimPage';
+
+// Correct — API specs 4 levels up from tests/api/{client}/{module}/feature-{feature}/
+import testData from '../../../../playwright/data/demoportal/coop/feature-submit-claim/test-data.json';
+```
+
+**Never** use `../../` — it resolves to the wrong folder and will fail `tsc --noEmit`.
+
+### Local variable names must not shadow imported class names
+
+```typescript
+// ✗ Wrong — local var shadows the imported class (TS2448)
+const SubmitClaimPage = new SubmitClaimPage(page);
+
+// ✔ Correct — local var is featurePage
+const featurePage = new SubmitClaimPage(page);
+await featurePage.navigate();
+```
+
+### page.evaluate() casts — use HTMLInputElement / HTMLTextAreaElement directly
+
+`tsconfig.json` includes `"DOM"` in lib. Never define custom shim interfaces for DOM properties.
+When casting inside `page.evaluate()`, use the built-in types with an `unknown` bridge:
+
+```typescript
+// ✗ Wrong — custom shim conflicts with DOM lib
+interface InputEl { required: boolean; maxLength: number; checkValidity: () => boolean; }
+const isRequired = await input.evaluate((el) => (el as InputEl).required);
+
+// ✔ Correct — use HTMLInputElement directly
+const isRequired = await input.evaluate((el) => (el as unknown as HTMLInputElement).required);
+const isInvalid  = await input.evaluate((el) => !(el as unknown as HTMLInputElement).checkValidity());
+```
+
+### test.fixme() requires two arguments
+
+```typescript
+// ✗ Wrong — no overload exists for a single string
+test.fixme('TC-001 placeholder');
+
+// ✔ Correct — always pass a title AND an async body
+test.fixme('TC-001 placeholder', async () => {});
+```
+
+### test-data.json must contain only JSON-literal values
+
+```json
+// ✗ Wrong — JS expressions are not valid JSON
+{ "longString": "X".repeat(1001) }
+
+// ✔ Correct — literal value
+{ "longString": "XXXXX...X" }
+```
+
+### tsconfig.json must include "DOM"
+
+`tsconfig.json` `lib` must be `["ES2020", "DOM"]`. Without `"DOM"`, any `page.evaluate()` callback
+that references `HTMLInputElement`, `HTMLTextAreaElement`, `document`, `window`, or `sessionStorage`
+will fail to compile.
+
+---
+
 ## Quality Gate
 
 Test assets are complete when:
@@ -172,4 +247,10 @@ Test assets are complete when:
 - Every E2E flow in e2e-suite.md has a corresponding `@e2e` test
 - Page Object has no hardcoded URLs or test assertions
 - Helpers cover multi-step flows used by 2+ tests
+- Import paths use the correct depth (`../../../../` for 4-level-deep spec/helper/api files)
+- No local variable name shadows an imported class name
+- No custom DOM shim interfaces — use `el as unknown as HTMLInputElement`
+- `test.fixme()` always passes title + `async () => {}` body
+- `test-data.json` contains only JSON-literal values (no JS expressions)
+- `tsconfig.json` `lib` includes `"DOM"`
 - `npx tsc --noEmit` passes with zero errors

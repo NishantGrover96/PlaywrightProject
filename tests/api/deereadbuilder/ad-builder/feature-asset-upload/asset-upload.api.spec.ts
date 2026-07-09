@@ -294,7 +294,7 @@ test.describe('Asset Upload API', () => {
       );
 
       // Should return image data (200 with image MIME type)
-      if (response.ok) {
+      if (response.ok()) {
         expect(response.headers()['content-type']).toMatch(/image\//);
       }
     });
@@ -323,7 +323,7 @@ test.describe('Asset Upload API', () => {
         },
       });
 
-      if (response.ok) {
+      if (response.ok()) {
         const responseBody = await response.json();
         expect(responseBody.fileName).toBeDefined();
         expect(responseBody.fileName).toContain('Adbuilderfile_');

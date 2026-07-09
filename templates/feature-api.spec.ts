@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import testData from '../../../playwright/data/{{MODULE}}/feature-{{FEATURE}}/test-data.json';
+import testData from '../../../../playwright/data/{{CLIENT}}/{{MODULE}}/feature-{{FEATURE}}/test-data.json';
 
 let authToken = '';
 

@@ -14,7 +14,7 @@
  *              FU-048, FU-049, FU-050, FU-051, FU-054, FU-055
  */
 import { test, expect } from '@playwright/test';
-import testData from '../../playwright/data/coop/feature-submit-claim/test-data.json';
+import testData from '../../../playwright/data/coop/feature-submit-claim/test-data.json';
 
 /**
  * Auth note: These handlers use Razor Pages session auth (cookie-based), NOT Bearer tokens.

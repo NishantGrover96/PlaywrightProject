@@ -263,11 +263,232 @@ Total Test Cases: N (Smoke: N | Regression: N | E2E: N)
 
 ### HTML Format (functional-units.html)
 
-Generate an interactive HTML catalog following the existing pattern in the repository.
-- Collapsible sections per tier (Smoke, Regression, E2E)
-- Color-coded priority (P1=red, P2=orange, P3=yellow, P4=green)
-- Filter by category, priority, and tier
-- Print-friendly layout
+**Always use Bootstrap 5** via CDN. Never write hand-rolled custom CSS for tables, cards, badges, or layout.
+
+Required `<head>` block (copy verbatim):
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous" defer></script>
+<style>
+  /* Tier + priority overrides only — no custom table CSS */
+  .tier-smoke      { background:#dbeafe; color:#1d4ed8; }
+  .tier-regression { background:#ede9fe; color:#6d28d9; }
+  .tier-e2e        { background:#d1fae5; color:#065f46; }
+  .priority-p1     { background:#fee2e2; color:#991b1b; }
+  .priority-p2     { background:#fef3c7; color:#92400e; }
+  .priority-p3     { background:#e0f2fe; color:#0369a1; }
+  .priority-p4     { background:#f0fdf4; color:#166534; }
+  .test-id         { font-family: monospace; font-weight: 700; white-space: nowrap; }
+</style>
+```
+
+#### Table rules (mandatory for every table)
+
+| Rule | Value |
+|---|---|
+| Table classes | `table table-bordered table-striped table-hover table-sm align-middle` |
+| Header | `<thead class="table-dark">` |
+| Column headers | `<th scope="col">` |
+| Scroll wrapper | `<div class="table-responsive">` around every table |
+| Tier badges | `<span class="badge rounded-pill tier-smoke|tier-regression|tier-e2e">` |
+| Priority badges | `<span class="badge priority-p1|priority-p2|priority-p3|priority-p4">` |
+| Stat blocks | Bootstrap `.card .card-body` grid (`row g-3`) |
+| Status | Bootstrap `.alert alert-warning` / `.alert alert-success` |
+| Tier sections | Bootstrap `.accordion` — one panel per tier, Smoke open by default |
+
+#### Full page scaffold (copy and fill in `{tokens}`)
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{Feature Label} — Test Catalog</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous" defer></script>
+  <style>
+    .tier-smoke      { background:#dbeafe; color:#1d4ed8; }
+    .tier-regression { background:#ede9fe; color:#6d28d9; }
+    .tier-e2e        { background:#d1fae5; color:#065f46; }
+    .priority-p1     { background:#fee2e2; color:#991b1b; }
+    .priority-p2     { background:#fef3c7; color:#92400e; }
+    .priority-p3     { background:#e0f2fe; color:#0369a1; }
+    .priority-p4     { background:#f0fdf4; color:#166534; }
+    .test-id         { font-family: monospace; font-weight: 700; white-space: nowrap; }
+  </style>
+</head>
+<body class="bg-light">
+
+<div class="bg-primary text-white px-4 py-3">
+  <h1 class="h4 mb-1">{Feature Label} — Test Catalog</h1>
+  <p class="mb-0 small opacity-75">{Display Name} | {module} module | {clientId} client</p>
+</div>
+
+<div class="container-fluid px-4 py-3">
+
+  <!-- Tier summary badges -->
+  <div class="d-flex gap-2 flex-wrap mb-3">
+    <span class="badge bg-warning text-dark">In Progress</span>
+    <span class="badge rounded-pill tier-smoke">Smoke: {N} tests</span>
+    <span class="badge rounded-pill tier-regression">Regression: {N} tests</span>
+    <span class="badge rounded-pill tier-e2e">E2E: {N} tests</span>
+  </div>
+
+  <!-- Stat cards -->
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-sm-4 col-md-2">
+      <div class="card text-center shadow-sm h-100">
+        <div class="card-body py-2">
+          <div class="fs-4 fw-bold text-primary">{N}</div>
+          <div class="text-muted small">Total Test Cases (Planned)</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-sm-4 col-md-2">
+      <div class="card text-center shadow-sm h-100">
+        <div class="card-body py-2">
+          <div class="fs-4 fw-bold text-primary">{N}</div>
+          <div class="text-muted small">Business Rules</div>
+        </div>
+      </div>
+    </div>
+    <!-- Add one .col card per metric -->
+  </div>
+
+  <!-- Implementation status -->
+  <div class="alert alert-warning" role="alert">
+    <strong>⚠ Implementation Status: In Progress</strong>
+    <p class="mb-1 mt-1 small">Functional test catalog complete. Test asset generation in progress:</p>
+    <ol class="mb-0 small">
+      <li>{Feature}Page.ts (Page Object with {N}+ locators)</li>
+      <li>{feature}.helpers.ts ({N} multi-step helper functions)</li>
+      <li>{feature}.spec.ts ({N} comprehensive test cases)</li>
+      <li>test-data.json (Complete test data sets)</li>
+      <li>verify-records.sql (Database verification)</li>
+      <li>{feature}.api.spec.ts (API handler tests)</li>
+    </ol>
+  </div>
+
+  <h2 class="h5 mb-3">📋 Test Coverage (Planned)</h2>
+
+  <!-- Bootstrap accordion — one panel per tier -->
+  <div class="accordion mb-4" id="accordionCatalog">
+
+    <!-- SMOKE -->
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button" type="button"
+                data-bs-toggle="collapse" data-bs-target="#sectionSmoke"
+                aria-expanded="true" aria-controls="sectionSmoke">
+          Smoke Suite
+          <span class="badge rounded-pill tier-smoke ms-2">{N} tests</span>
+        </button>
+      </h2>
+      <div id="sectionSmoke" class="accordion-collapse collapse show"
+           data-bs-parent="#accordionCatalog">
+        <div class="accordion-body p-0">
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover table-sm align-middle mb-0">
+              <thead class="table-dark">
+                <tr>
+                  <th scope="col">Test ID</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Priority</th>
+                  <th scope="col">Category</th>
+                  <th scope="col">Business Rules</th>
+                  <th scope="col">Expected Result</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="test-id">{MODULE}-SMOKE-001</td>
+                  <td>Page loads for authenticated user</td>
+                  <td><span class="badge priority-p1">P1-Critical</span></td>
+                  <td>Navigation</td>
+                  <td>BR-001</td>
+                  <td>Page renders with correct heading visible</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REGRESSION (collapsed by default) -->
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#sectionRegression"
+                aria-expanded="false" aria-controls="sectionRegression">
+          Regression Suite
+          <span class="badge rounded-pill tier-regression ms-2">{N} tests</span>
+        </button>
+      </h2>
+      <div id="sectionRegression" class="accordion-collapse collapse"
+           data-bs-parent="#accordionCatalog">
+        <div class="accordion-body p-0">
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover table-sm align-middle mb-0">
+              <thead class="table-dark">
+                <tr>
+                  <th scope="col">Test ID</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Priority</th>
+                  <th scope="col">Category</th>
+                  <th scope="col">Business Rules</th>
+                  <th scope="col">Precondition</th>
+                  <th scope="col">Expected Result</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- one <tr> per regression test -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- E2E (collapsed by default) -->
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#sectionE2E"
+                aria-expanded="false" aria-controls="sectionE2E">
+          E2E Suite
+          <span class="badge rounded-pill tier-e2e ms-2">{N} tests</span>
+        </button>
+      </h2>
+      <div id="sectionE2E" class="accordion-collapse collapse"
+           data-bs-parent="#accordionCatalog">
+        <div class="accordion-body p-0">
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover table-sm align-middle mb-0">
+              <thead class="table-dark">
+                <tr>
+                  <th scope="col">Test ID</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Priority</th>
+                  <th scope="col">Workflow Steps</th>
+                  <th scope="col">Expected Result</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- one <tr> per E2E test -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /accordion -->
+</div><!-- /container -->
+</body>
+</html>
+```
 
 ---
 

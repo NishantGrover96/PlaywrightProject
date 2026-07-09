@@ -1,5 +1,4 @@
 ﻿import { test, expect } from '@playwright/test';
-import testData from '../../../playwright/data/ad-builder/feature-frmassetupload/test-data.json';
 
 let authToken = '';
 

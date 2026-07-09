@@ -1,5 +1,4 @@
 ﻿import { test, expect } from '@playwright/test';
-import testData from '../../../playwright/data/ad-builder/feature-adswithassets/test-data.json';
 
 let authToken = '';
 

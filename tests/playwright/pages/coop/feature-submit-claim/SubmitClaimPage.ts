@@ -268,8 +268,16 @@ export class SubmitClaimPage {
     await expect(this.panelDraftSaved).toBeVisible({ timeout: 45_000 });
   }
 
+  async getTempClaimNumber(): Promise<string> {
+    return (await this.tempClaimNumber.textContent()) ?? '';
+  }
+
   async expectSubmitSuccess(): Promise<void> {
     await expect(this.panelSubmitSuccess).toBeVisible({ timeout: 45_000 });
+  }
+
+  async getFinalClaimNumber(): Promise<string> {
+    return (await this.claimConfirmNumber.textContent()) ?? '';
   }
 
   async expectFieldMaxLength(field: Locator, maxLength: number): Promise<void> {
