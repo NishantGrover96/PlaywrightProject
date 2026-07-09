@@ -982,9 +982,13 @@ function Get-ClientDetails {
 
             Write-Step "Encrypting password for '$role'..."
             $encryptScript = Join-Path $script:Root 'utils\encrypt-credential.js'
-            $encResult     = (node $encryptScript $password 2>&1) | Select-Object -Last 1
-            if ($LASTEXITCODE -ne 0 -or ($encResult -notmatch '^enc:')) {
-                Write-Warn "Encryption failed for '$role': $encResult"
+            $allOutput = @()
+            Push-Location $script:Root
+            try   { $allOutput = @(& node $encryptScript $password 2>&1) } finally { Pop-Location }
+            $encResult = $allOutput | Where-Object { $_ -match '^enc:' } | Select-Object -Last 1
+            if (-not $encResult) {
+                $errDetail = ($allOutput | Where-Object { $_ } | Select-Object -Last 3) -join ' | '
+                Write-Warn "Encryption failed for '$role': $errDetail"
                 $encPassword = 'REPLACE_WITH_ENCRYPTED_PASSWORD'
             } else {
                 $encPassword = $encResult.Trim()
@@ -1002,9 +1006,13 @@ function Get-ClientDetails {
 
             Write-Step "Encrypting password for '$role'..."
             $encryptScript = Join-Path $script:Root 'utils\encrypt-credential.js'
-            $encResult     = (node $encryptScript $password 2>&1) | Select-Object -Last 1
-            if ($LASTEXITCODE -ne 0 -or ($encResult -notmatch '^enc:')) {
-                Write-Warn "Encryption failed for '$role': $encResult"
+            $allOutput = @()
+            Push-Location $script:Root
+            try   { $allOutput = @(& node $encryptScript $password 2>&1) } finally { Pop-Location }
+            $encResult = $allOutput | Where-Object { $_ -match '^enc:' } | Select-Object -Last 1
+            if (-not $encResult) {
+                $errDetail = ($allOutput | Where-Object { $_ } | Select-Object -Last 3) -join ' | '
+                Write-Warn "Encryption failed for '$role': $errDetail"
                 $encPassword = 'REPLACE_WITH_ENCRYPTED_PASSWORD'
             } else {
                 $encPassword = $encResult.Trim()
