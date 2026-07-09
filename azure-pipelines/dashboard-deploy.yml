@@ -11,7 +11,10 @@ name: $(date:yyyyMMdd)$(rev:.r)
 #   └── coop-qa-dashboard-$(Build.BuildNumber).zip
 # ─────────────────────────────────────────────────────────────────────────────
 
-trigger: none   # triggered by classic release or manually
+trigger:
+  branches:
+    include:
+      - main
 
 jobs:
 - job: BuildDashboard
