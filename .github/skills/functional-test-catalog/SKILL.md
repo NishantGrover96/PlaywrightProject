@@ -222,6 +222,40 @@ Generate one test case for each:
 
 ---
 
+## Append Mode — Adding Test Cases to an Existing Catalog
+
+When the user includes `mode=append` or `prepend=true` in their request (or says "add new test cases"),
+follow these rules instead of generating a fresh catalog:
+
+### Detection
+Look for any of these signals:
+- `mode=append` parameter
+- `prepend=true` parameter
+- The request says "add new test cases", "add to existing catalog", "append tests"
+- `functional-units.html` already exists and contains real test rows (not just the placeholder)
+
+### Append Rules
+1. **Read the existing `functional-units.html` first** — extract all existing test IDs, titles, and the highest numeric suffix per tier (e.g. `SMOKE-007` → last smoke ID is 7).
+2. **New test IDs continue from the highest existing ID** — never reuse existing IDs.
+3. **New test cases are inserted AT THE TOP of their tier section** — before the first existing row in that tier. This ensures the latest test cases are visible first when the catalog is opened.
+4. **Never delete or modify existing rows** — only prepend new rows within each tier.
+5. **Update the stat card counts** — increment Total, Smoke/Regression/E2E counts to include the new cases.
+6. **Update the status block** — change from "In Progress" to current status, update the generated date.
+
+### New Test Case Position Rule (always enforced, even in full-generate mode)
+Within every tier section, **always order test cases newest-first**:
+- Highest-numbered test IDs appear at the TOP of the `<tbody>`
+- Lowest-numbered (oldest) test IDs appear at the BOTTOM
+- This makes it easy for any developer to see what was recently added without scrolling
+
+### Copilot Chat Commands to Trigger Append Mode
+```
+@workspace /functional-test-catalog
+client={clientId}  module={module}  feature={feature}  mode=append  prepend=true
+```
+
+---
+
 ## Test Catalog Output Format
 
 ### Markdown Format (test-catalog.md)

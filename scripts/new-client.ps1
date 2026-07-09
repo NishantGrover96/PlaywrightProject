@@ -30,13 +30,14 @@ $ErrorActionPreference = 'Stop'
 # PATHS
 # ==============================================================
 
-$script:Root          = Split-Path $PSScriptRoot -Parent
-$script:ClientsDir    = Join-Path $script:Root 'config\clients'
-$script:UsersDir      = Join-Path $script:Root 'config\users'
-$script:CatalogsDir   = Join-Path $script:Root 'dashboard\catalogs'
-$script:DocsDir       = Join-Path $script:Root 'docs\functional-catalogs'
-$script:PlaywrightDir = Join-Path $script:Root 'tests\playwright\clients'
-$script:ReposLocalJson = Join-Path $script:Root 'config\repos.local.json'
+$script:Root             = Split-Path $PSScriptRoot -Parent
+$script:ClientsDir       = Join-Path $script:Root 'config\clients'
+$script:UsersDir         = Join-Path $script:Root 'config\users'
+$script:CatalogsDir      = Join-Path $script:Root 'dashboard\catalogs'
+$script:DocsDir          = Join-Path $script:Root 'docs\functional-catalogs'
+$script:PlaywrightDir    = Join-Path $script:Root 'tests\playwright\clients'
+$script:ReposLocalJson   = Join-Path $script:Root 'config\repos.local.json'
+$script:ExistingClientMode = $false   # set to $true by Get-ClientDetails when user keeps existing config
 
 # ==============================================================
 # DISPLAY HELPERS
@@ -275,23 +276,40 @@ function Get-LocalRepoInfo {
     }
 
     $branch = Read-ValidatedInput `
-        -Prompt 'Branch name (e.g. main, develop)' `
+        -Prompt 'Branch name — enter ONE branch (e.g. main)' `
         -Validator {
-            param($b)
-            if (-not $b) { Write-Warn 'Branch name is required.'; return $false }
+            param($raw)
+            if (-not $raw) { Write-Warn 'Branch name is required.'; return $false }
+
+            # Strip any accidental comma-separated input — use the first token only
+            $b = ($raw -split '[,\s]+' | Where-Object { $_ } | Select-Object -First 1).Trim()
+            if ($b -ne $raw.Trim()) {
+                Write-Host "    [INFO] Multiple values detected — using first token: '$b'" -ForegroundColor Cyan
+            }
 
             # Accept if it exists locally
             $local = git -C $repoPath branch --list $b 2>&1
-            if ($local -match [regex]::Escape($b)) { return $true }
+            if ($local -match [regex]::Escape($b)) {
+                # Rewrite the variable so the returned value is the cleaned token
+                Set-Variable -Name branch -Value $b -Scope 2
+                return $true
+            }
 
             # Accept if it exists remotely
             $remote = git -C $repoPath branch -r 2>&1 | Where-Object { $_ -match "/$b$" -or $_ -match "/$b\s" }
-            if ($remote) { return $true }
+            if ($remote) {
+                Set-Variable -Name branch -Value $b -Scope 2
+                return $true
+            }
 
             Write-Warn "Branch '$b' not found locally or remotely. Run 'git fetch' first if it's a remote branch."
+            Write-Host "    Available local branches:" -ForegroundColor DarkGray
+            git -C $repoPath branch --format='%(refname:short)' 2>$null | ForEach-Object { Write-Host "      $_" -ForegroundColor DarkGray }
             return $false
         }
 
+    # Ensure branch holds the cleaned (first-token) value
+    $branch = ($branch -split '[,\s]+' | Where-Object { $_ } | Select-Object -First 1).Trim()
     Write-Done "Branch '$branch' confirmed."
 
     return [ordered]@{
@@ -370,6 +388,333 @@ function Get-CloneInputs {
 }
 
 # ==============================================================
+# EXISTING CLIENT WIZARD
+# ==============================================================
+
+function Get-ExistingClientModules {
+    param([string]$ClientId)
+    # Source of truth is config file .modules array
+    $configFile = Join-Path $script:ClientsDir "$ClientId.json"
+    $cfg = Get-Content $configFile -Raw | ConvertFrom-Json
+    # Support both .modules (array) and .featureFlags (object keys where value is true)
+    if ($cfg.modules -and $cfg.modules.Count -gt 0) {
+        return @($cfg.modules)
+    }
+    # Fall back to file system scan
+    $catalogBase = Join-Path $script:DocsDir $ClientId
+    if (Test-Path $catalogBase) {
+        return @(Get-ChildItem $catalogBase -Directory | Select-Object -ExpandProperty Name)
+    }
+    return @()
+}
+
+function Get-ExistingClientFeatures {
+    param([string]$ClientId, [string]$Module)
+    $moduleDir = Join-Path $script:DocsDir "$ClientId\$Module"
+    if (-not (Test-Path $moduleDir)) { return @() }
+    return @(
+        Get-ChildItem $moduleDir -Directory |
+        Where-Object { $_.Name -match '^feature-' } |
+        ForEach-Object { $_.Name -replace '^feature-', '' }
+    )
+}
+
+function Invoke-ExistingClientWizard {
+    <#
+    .SYNOPSIS
+        Interactive wizard for when a client already exists.
+        Discovers existing modules/features, presents numbered menus,
+        collects new modules/features to scaffold, and sets prepend mode.
+    #>
+    param(
+        [Parameter(Mandatory)][string]$ClientId,
+        [Parameter(Mandatory)][hashtable]$RepoInfo
+    )
+
+    $script:ExistingClientMode  = $true
+    $script:PrependTestCases    = $false
+
+    # ── Load existing config ────────────────────────────────────────────────
+    $configFile = Join-Path $script:ClientsDir "$ClientId.json"
+    $cfg        = Get-Content $configFile -Raw | ConvertFrom-Json
+
+    $existingAuthType    = if ($cfg.authentication.authType)  { $cfg.authentication.authType  }
+                           elseif ($cfg.authentication.type)  { $cfg.authentication.type      }
+                           else                               { 'email-password'               }
+    $existingClientType  = if ($cfg.clientType)               { $cfg.clientType  } else { 'platform'  }
+    $existingLoginPath   = if ($cfg.authentication.loginPath) { $cfg.authentication.loginPath } else { '' }
+    $existingRoles       = @($cfg.roles | ForEach-Object { $_ })
+    $existingDisplayName = if ($cfg.displayName)              { $cfg.displayName }
+                           elseif ($cfg.clientName)           { $cfg.clientName  }
+                           else                               { $ClientId        }
+    $existingEnvDev      = if ($cfg.environments.dev.baseUrl)     { $cfg.environments.dev.baseUrl     }
+                           elseif ($cfg.environments.dev)         { $cfg.environments.dev             }
+                           else                                   { '' }
+    $existingEnvTesting  = if ($cfg.environments.testing.baseUrl) { $cfg.environments.testing.baseUrl }
+                           elseif ($cfg.environments.testing)     { $cfg.environments.testing         }
+                           else                                   { '' }
+    $existingEnvUat      = if ($cfg.environments.uat.baseUrl)     { $cfg.environments.uat.baseUrl     }
+                           elseif ($cfg.environments.uat)         { $cfg.environments.uat             }
+                           else                                   { '' }
+    $existingEnvProd     = if ($cfg.environments.production.baseUrl) { $cfg.environments.production.baseUrl }
+                           elseif ($cfg.environments.prod)           { $cfg.environments.prod             }
+                           else                                      { '' }
+    $existingDefaultEnv  = if ($cfg.defaultEnvironment) { $cfg.defaultEnvironment }
+                           elseif ($cfg.defaultEnv)     { $cfg.defaultEnv         }
+                           else                         { 'uat'                   }
+
+    # ── Show existing client summary ────────────────────────────────────────
+    Write-Host ''
+    Write-Host ('─' * 62) -ForegroundColor DarkCyan
+    Write-Host "  CLIENT: $existingDisplayName  ($ClientId)" -ForegroundColor Cyan
+    Write-Host ('─' * 62) -ForegroundColor DarkCyan
+    Write-Host ''
+
+    $existingModules = Get-ExistingClientModules -ClientId $ClientId
+    if ($existingModules.Count -gt 0) {
+        Write-Host '  Existing modules:' -ForegroundColor White
+        foreach ($m in $existingModules) {
+            $features = Get-ExistingClientFeatures -ClientId $ClientId -Module $m
+            $featStr  = if ($features.Count -gt 0) { $features -join ', ' } else { '(no features yet)' }
+            Write-Host "    • $m  →  $featStr" -ForegroundColor DarkGray
+        }
+    } else {
+        Write-Host '  No existing modules found in file system.' -ForegroundColor DarkGray
+    }
+    Write-Host ''
+
+    # ── What does the user want to do? ──────────────────────────────────────
+    Write-Header "What do you want to do with '$ClientId'?"
+    Write-Host '    1. Add a feature to an EXISTING module' -ForegroundColor White
+    Write-Host '    2. Add a NEW module (with features)' -ForegroundColor White
+    Write-Host '    3. Both — add to existing module AND add a new module' -ForegroundColor White
+    Write-Host ''
+
+    $actionChoice = ''
+    while ($actionChoice -notin '1','2','3') {
+        $actionChoice = (Read-Host '    Choose [1/2/3]').Trim()
+    }
+
+    $newModuleFeatures = [ordered]@{}
+
+    # ── OPTION 1 or 3 — add feature to existing module ──────────────────────
+    if ($actionChoice -in '1','3') {
+        Write-Host ''
+        Write-Host '  SELECT an existing module to add a feature to:' -ForegroundColor White
+        Write-Host ''
+        for ($i = 0; $i -lt $existingModules.Count; $i++) {
+            Write-Host "    $($i+1). $($existingModules[$i])" -ForegroundColor Cyan
+        }
+        Write-Host "    $($existingModules.Count+1). Type a different module name" -ForegroundColor DarkGray
+        Write-Host ''
+
+        $modChoice = ''
+        while (-not $modChoice) {
+            $raw = (Read-Host '    Module number or name').Trim()
+            [int]$idx = 0
+            if ([int]::TryParse($raw, [ref]$idx)) {
+                if ($idx -ge 1 -and $idx -le $existingModules.Count) {
+                    $modChoice = $existingModules[$idx - 1]
+                } elseif ($idx -eq $existingModules.Count + 1) {
+                    $modChoice = (Read-Host '    Enter module name (kebab-case)').Trim().ToLower()
+                } else {
+                    Write-Warn "    '$raw' is out of range."
+                }
+            } elseif ($raw -match '^[a-z][a-z0-9]*(-[a-z0-9]+)*$') {
+                $modChoice = $raw
+            } else {
+                Write-Warn "    '$raw' is not valid. Use a number or kebab-case name."
+            }
+        }
+
+        # Show existing features in that module
+        $existingFeatures = Get-ExistingClientFeatures -ClientId $ClientId -Module $modChoice
+        Write-Host ''
+        if ($existingFeatures.Count -gt 0) {
+            Write-Host "  Existing features in '$modChoice':" -ForegroundColor White
+            for ($i = 0; $i -lt $existingFeatures.Count; $i++) {
+                Write-Host "    $($i+1). $($existingFeatures[$i])" -ForegroundColor DarkGray
+            }
+            Write-Host "    $($existingFeatures.Count+1). Add a NEW feature (scaffold new files)" -ForegroundColor Cyan
+            Write-Host ''
+            Write-Host '    NOTE: Selecting an existing feature will NOT re-scaffold files.' -ForegroundColor Yellow
+            Write-Host '    It will print the Copilot commands to update/regenerate test cases.' -ForegroundColor Yellow
+            Write-Host ''
+
+            $featChoice = ''
+            $selectedExistingFeat = ''
+            while (-not $featChoice) {
+                $raw = (Read-Host '    Feature number or new name').Trim()
+                [int]$idx = 0
+                if ([int]::TryParse($raw, [ref]$idx)) {
+                    if ($idx -ge 1 -and $idx -le $existingFeatures.Count) {
+                        # Existing feature selected
+                        $selectedExistingFeat = $existingFeatures[$idx - 1]
+                        $featChoice           = $selectedExistingFeat
+                        Write-Host ''
+                        Write-Host "  You selected EXISTING feature: $selectedExistingFeat" -ForegroundColor Yellow
+                        Write-Host ''
+                        Write-Host '  What do you want to do with it?' -ForegroundColor White
+                        Write-Host '    1. Add new test cases (append to existing catalog)' -ForegroundColor White
+                        Write-Host '    2. Regenerate the full catalog (replace existing catalog)' -ForegroundColor White
+                        Write-Host '    3. Both — regenerate catalog AND re-run test generation' -ForegroundColor White
+                        Write-Host ''
+                        $updateChoice = ''
+                        while ($updateChoice -notin '1','2','3') {
+                            $updateChoice = (Read-Host '    Choose [1/2/3]').Trim()
+                        }
+
+                        # Set prepend flag for "add new cases"
+                        if ($updateChoice -in '1','3') {
+                            $script:PrependTestCases = $true
+                        }
+
+                        # Store the intent on the feature entry
+                        if (-not $newModuleFeatures[$modChoice]) {
+                            $newModuleFeatures[$modChoice] = [System.Collections.Generic.List[hashtable]]::new()
+                        }
+                        $featLabel = (Get-Culture).TextInfo.ToTitleCase(($selectedExistingFeat -replace '-', ' '))
+                        $intent    = switch ($updateChoice) {
+                            '1' { 'add-cases'    }
+                            '2' { 'regenerate'   }
+                            '3' { 'regen-and-gen'}
+                        }
+                        ([System.Collections.Generic.List[hashtable]]$newModuleFeatures[$modChoice]).Add(@{
+                            id      = $selectedExistingFeat
+                            label   = $featLabel
+                            intent  = $intent
+                            isExisting = $true
+                        })
+                        Write-Done "  Queued: $modChoice / $selectedExistingFeat  [$intent]"
+                    } elseif ($idx -eq $existingFeatures.Count + 1) {
+                        $featChoice = '__new__'
+                    } else {
+                        Write-Warn "    '$raw' is out of range."
+                    }
+                } elseif ($raw -match '^[a-z][a-z0-9]*(-[a-z0-9]+)*$') {
+                    $featChoice = $raw  # typed a new feature name directly
+                } else {
+                    Write-Warn "    '$raw' is not valid."
+                }
+            }
+
+            # If they chose to add a new feature (option N+1 or typed a name)
+            if ($featChoice -eq '__new__' -or ($featChoice -and -not $selectedExistingFeat)) {
+                $newFeatId = if ($featChoice -eq '__new__') {
+                    $raw = (Read-Host '    New Feature ID (kebab-case)').Trim().ToLower()
+                    $raw
+                } else { $featChoice }
+
+                $featLabel = (Read-Host "    Feature Label (e.g. `"View $((Get-Culture).TextInfo.ToTitleCase($newFeatId))`")").Trim()
+                if (-not $featLabel) { $featLabel = (Get-Culture).TextInfo.ToTitleCase(($newFeatId -replace '-', ' ')) }
+
+                if (-not $newModuleFeatures[$modChoice]) {
+                    $newModuleFeatures[$modChoice] = [System.Collections.Generic.List[hashtable]]::new()
+                }
+                ([System.Collections.Generic.List[hashtable]]$newModuleFeatures[$modChoice]).Add(@{
+                    id         = $newFeatId
+                    label      = $featLabel
+                    intent     = 'new'
+                    isExisting = $false
+                })
+                Write-Done "  Queued: $modChoice / $newFeatId  [new scaffold]"
+            }
+        } else {
+            # Module has no features yet — go straight to new feature input
+            Write-Host "  No existing features in '$modChoice' — enter the first feature to scaffold:" -ForegroundColor DarkGray
+            Write-Host ''
+            $addMore = $true
+            if (-not $newModuleFeatures[$modChoice]) {
+                $newModuleFeatures[$modChoice] = [System.Collections.Generic.List[hashtable]]::new()
+            }
+            while ($addMore) {
+                $featId = ''
+                while (-not $featId) {
+                    $raw = (Read-Host "    Feature ID (e.g. submit-claim)").Trim().ToLower()
+                    if ($raw -match '^[a-z][a-z0-9]*(-[a-z0-9]+)*$') { $featId = $raw }
+                    else { Write-Warn "    '$raw' is not valid kebab-case." }
+                }
+                $featLabel = (Read-Host "    Feature Label").Trim()
+                if (-not $featLabel) { $featLabel = (Get-Culture).TextInfo.ToTitleCase(($featId -replace '-', ' ')) }
+                ([System.Collections.Generic.List[hashtable]]$newModuleFeatures[$modChoice]).Add(@{
+                    id = $featId; label = $featLabel; intent = 'new'; isExisting = $false
+                })
+                Write-Done "  Queued: $modChoice / $featId  [new scaffold]"
+                $another = (Read-Host "    Add another feature for '$modChoice'? (y/N)").Trim().ToLower()
+                $addMore = ($another -eq 'y' -or $another -eq 'yes')
+            }
+        }
+    }
+
+    # ── OPTION 2 or 3 — add a brand new module ───────────────────────────────
+    if ($actionChoice -in '2','3') {
+        Write-Host ''
+        Write-Host '  Enter the new module and its features:' -ForegroundColor White
+        Write-Host ''
+        $addingModules = $true
+        while ($addingModules) {
+            $modInput = (Read-Host '    New Module ID (or Enter to finish)').Trim().ToLower()
+            if (-not $modInput) { $addingModules = $false; break }
+            if ($modInput -in $existingModules) {
+                Write-Warn "    '$modInput' already exists. Use option 1 to add features to an existing module."
+                continue
+            }
+            if ($modInput -notmatch '^[a-z][a-z0-9]*(-[a-z0-9]+)*$') {
+                Write-Warn "    '$modInput' is not valid kebab-case."
+                continue
+            }
+            $newModuleFeatures[$modInput] = [System.Collections.Generic.List[hashtable]]::new()
+            Write-Host "    Module: $modInput" -ForegroundColor Cyan
+            $addingFeats = $true
+            while ($addingFeats) {
+                $featId = ''
+                while (-not $featId) {
+                    $raw = (Read-Host "      Feature ID (e.g. view-$modInput)").Trim().ToLower()
+                    if ($raw -match '^[a-z][a-z0-9]*(-[a-z0-9]+)*$') { $featId = $raw }
+                    else { Write-Warn "      '$raw' is not valid kebab-case." }
+                }
+                $featLabel = (Read-Host "      Feature Label").Trim()
+                if (-not $featLabel) { $featLabel = (Get-Culture).TextInfo.ToTitleCase(($featId -replace '-', ' ')) }
+                ([System.Collections.Generic.List[hashtable]]$newModuleFeatures[$modInput]).Add(@{
+                    id = $featId; label = $featLabel; intent = 'new'; isExisting = $false
+                })
+                Write-Done "  Queued: $modInput / $featId  [new scaffold]"
+                $another = (Read-Host "      Add another feature for '$modInput'? (y/N)").Trim().ToLower()
+                $addingFeats = ($another -eq 'y' -or $another -eq 'yes')
+            }
+        }
+    }
+
+    # ── Convert List<hashtable> to plain arrays ──────────────────────────────
+    $finalFeatures = [ordered]@{}
+    foreach ($mod in $newModuleFeatures.Keys) {
+        $finalFeatures[$mod] = @($newModuleFeatures[$mod])
+    }
+
+    return [ordered]@{
+        clientId       = $ClientId
+        displayName    = $existingDisplayName
+        clientType     = $existingClientType
+        loginPath      = $existingLoginPath
+        authType       = $existingAuthType
+        roles          = $existingRoles
+        credentials    = [ordered]@{}
+        modules        = @($finalFeatures.Keys)
+        moduleFeatures = $finalFeatures
+        repoUrl        = $RepoInfo.url
+        branch         = $RepoInfo.branch
+        localPath      = $RepoInfo.localPath
+        defaultEnv     = $existingDefaultEnv
+        environments   = [ordered]@{
+            dev     = $existingEnvDev
+            testing = $existingEnvTesting
+            uat     = $existingEnvUat
+            prod    = $existingEnvProd
+        }
+    }
+}
+
+# ==============================================================
 # COMMON CLIENT DETAIL COLLECTION
 # ==============================================================
 
@@ -382,14 +727,21 @@ function Get-ClientDetails {
         -Prompt 'Client ID (kebab-case, e.g. samsung, brp, certainteed)' `
         -Validator { param($id) Test-ClientIdFormat $id }
 
-    # --- Duplicate check ---
+    # --- Duplicate check — hand off to focused wizard if client already exists ---
     $existingConfig = Join-Path $script:ClientsDir "$clientId.json"
+    $script:ExistingClientMode = $false
     if (Test-Path $existingConfig) {
         Write-Warn "A client config already exists for '$clientId':"
         Write-Warn "  $existingConfig"
+        Write-Host ''
+        Write-Host '    OPTIONS:' -ForegroundColor Yellow
+        Write-Host '      Y = Overwrite all config files and re-run full setup' -ForegroundColor DarkGray
+        Write-Host '      N = Work with existing client — add modules/features interactively' -ForegroundColor DarkGray
+        Write-Host ''
         $overwrite = Read-YesNo 'Overwrite existing configuration?' -DefaultYes $false
         if (-not $overwrite) {
-            Write-Fail "Aborted. Choose a different Client ID or remove the existing config."
+            # Hand off entirely to the focused existing-client wizard and return its result
+            return Invoke-ExistingClientWizard -ClientId $clientId -RepoInfo $RepoInfo
         }
     }
 
@@ -534,7 +886,7 @@ function Get-ClientDetails {
                 }
             }
             $featLabel = (Read-Host "    Feature Label (e.g. `"View $((Get-Culture).TextInfo.ToTitleCase($mod))`")").Trim()
-            if (-not $featLabel) { $featLabel = (Get-Culture).TextInfo.ToTitleCase($featId -replace '-', ' ') }
+            if (-not $featLabel) { $featLabel = (Get-Culture).TextInfo.ToTitleCase(($featId -replace '-', ' ')) }
 
             $featList.Add(@{ id = $featId; label = $featLabel })
             Write-Done "  Queued: $mod / $featId — $featLabel"
@@ -997,7 +1349,7 @@ function Update-DashboardHtml {
             $label = if ($knownModuleLabels[$mod]) {
                 $knownModuleLabels[$mod]
             } else {
-                (Get-Culture).TextInfo.ToTitleCase($mod -replace '-', ' ')
+                (Get-Culture).TextInfo.ToTitleCase(($mod -replace '-', ' '))
             }
             # Insert before the closing }; of MODULE_LABELS
             $html    = $html -replace "(const MODULE_LABELS = \{[^}]*)(\};)", "`$1  '$mod':  '$label',`n`$2"
@@ -1514,7 +1866,8 @@ function Show-Summary {
 
     Write-Host ''
     Write-Host ('=' * 62) -ForegroundColor Green
-    Write-Host '  Client successfully onboarded' -ForegroundColor Green
+    $summaryTitle = if ($script:ExistingClientMode) { '  Existing client — changes applied' } else { '  Client successfully onboarded' }
+    Write-Host $summaryTitle -ForegroundColor Green
     Write-Host ('=' * 62) -ForegroundColor Green
     Write-Host ''
     Write-Host "  Client ID      : $($Details.clientId)"    -ForegroundColor White
@@ -1525,17 +1878,103 @@ function Show-Summary {
     Write-Host "  Repo Source    : $modeLabel"               -ForegroundColor White
     Write-Host ''
 
-    Write-Host '  Folders Created:' -ForegroundColor Cyan
-    foreach ($f in $FoldersCreated) {
-        Write-Host "    $f" -ForegroundColor DarkCyan
+    if ($FoldersCreated.Count -gt 0) {
+        Write-Host '  Folders Created:' -ForegroundColor Cyan
+        foreach ($f in $FoldersCreated) { Write-Host "    $f" -ForegroundColor DarkCyan }
+        Write-Host ''
     }
+
+    if ($FilesGenerated.Count -gt 0) {
+        Write-Host '  Files Generated:' -ForegroundColor Cyan
+        foreach ($f in $FilesGenerated) { Write-Host "    $f" -ForegroundColor DarkCyan }
+        Write-Host ''
+    }
+}
+
+function Show-ExistingFeatureCopilotCommands {
+    <#
+    .SYNOPSIS Prints intent-aware Copilot Chat commands for existing features.
+              Called after scaffold loop when ExistingClientMode and features had intents.
+    #>
+    param(
+        [Parameter(Mandatory)][string]$ClientId,
+        [System.Collections.Generic.List[hashtable]]$CopilotCommands,
+        [bool]$PrependMode
+    )
+
+    if (-not $CopilotCommands -or $CopilotCommands.Count -eq 0) { return }
+
+    Write-Host ''
+    Write-Host ('═' * 62) -ForegroundColor Cyan
+    Write-Host '  COPILOT CHAT COMMANDS FOR EXISTING FEATURES' -ForegroundColor Cyan
+    Write-Host '  Run each command below in VS Code Copilot Chat.' -ForegroundColor DarkGray
+    Write-Host ('═' * 62) -ForegroundColor Cyan
     Write-Host ''
 
-    Write-Host '  Files Generated:' -ForegroundColor Cyan
-    foreach ($f in $FilesGenerated) {
-        Write-Host "    $f" -ForegroundColor DarkCyan
+    if ($PrependMode) {
+        Write-Host '  NEW TEST CASES WILL BE ADDED AT THE TOP of each section.' -ForegroundColor Green
+        Write-Host '  Include this instruction in your Copilot Chat message:' -ForegroundColor DarkGray
+        Write-Host '    "Prepend new test cases — place them BEFORE existing rows in each tier."' -ForegroundColor Yellow
+        Write-Host ''
     }
-    Write-Host ''
+
+    foreach ($entry in $CopilotCommands) {
+        $mod    = $entry.mod
+        $feat   = $entry.feat
+        $intent = $entry.intent
+
+        Write-Host "  Module: $mod  |  Feature: $($feat.id)" -ForegroundColor White
+        Write-Host ''
+
+        switch ($intent) {
+            'add-cases' {
+                Write-Host '  Action: ADD new test cases to existing catalog (preserve existing rows)' -ForegroundColor DarkGray
+                Write-Host ''
+                Write-Host '  Step 1 — Source analysis (if source code changed since last run):' -ForegroundColor Cyan
+                Write-Host "    @workspace /repo-analysis client=$ClientId module=$mod feature=$($feat.id)" -ForegroundColor White
+                Write-Host ''
+                Write-Host '  Step 2 — Add new test cases to catalog (prepend mode):' -ForegroundColor Cyan
+                Write-Host "    @workspace /functional-test-catalog" -ForegroundColor White
+                Write-Host "    client=$ClientId  module=$mod  feature=$($feat.id)" -ForegroundColor White
+                Write-Host "    mode=append  prepend=true" -ForegroundColor Yellow
+                Write-Host ''
+                Write-Host '  Step 3 — Re-generate spec file with new cases included:' -ForegroundColor Cyan
+                Write-Host "    @workspace /playwright-test-generation" -ForegroundColor White
+                Write-Host "    client=$ClientId  module=$mod  feature=$($feat.id)  mode=append" -ForegroundColor White
+            }
+            'regenerate' {
+                Write-Host '  Action: REGENERATE full catalog (replaces existing catalog entirely)' -ForegroundColor DarkGray
+                Write-Host ''
+                Write-Host '  Step 1 — Fresh source analysis:' -ForegroundColor Cyan
+                Write-Host "    @workspace /repo-analysis client=$ClientId module=$mod feature=$($feat.id)" -ForegroundColor White
+                Write-Host ''
+                Write-Host '  Step 2 — Regenerate full catalog:' -ForegroundColor Cyan
+                Write-Host "    @workspace /functional-test-catalog" -ForegroundColor White
+                Write-Host "    client=$ClientId  module=$mod  feature=$($feat.id)" -ForegroundColor White
+                Write-Host ''
+                Write-Host '  Step 3 — Regenerate full spec file:' -ForegroundColor Cyan
+                Write-Host "    @workspace /playwright-test-generation" -ForegroundColor White
+                Write-Host "    client=$ClientId  module=$mod  feature=$($feat.id)" -ForegroundColor White
+            }
+            'regen-and-gen' {
+                Write-Host '  Action: REGENERATE catalog + RE-GENERATE all test files' -ForegroundColor DarkGray
+                Write-Host ''
+                Write-Host '  Step 1 — Fresh source analysis:' -ForegroundColor Cyan
+                Write-Host "    @workspace /repo-analysis client=$ClientId module=$mod feature=$($feat.id)" -ForegroundColor White
+                Write-Host ''
+                Write-Host '  Step 2 — Regenerate full catalog:' -ForegroundColor Cyan
+                Write-Host "    @workspace /functional-test-catalog" -ForegroundColor White
+                Write-Host "    client=$ClientId  module=$mod  feature=$($feat.id)" -ForegroundColor White
+                Write-Host ''
+                Write-Host '  Step 3 — Regenerate spec + page object files:' -ForegroundColor Cyan
+                Write-Host "    @workspace /playwright-test-generation" -ForegroundColor White
+                Write-Host "    client=$ClientId  module=$mod  feature=$($feat.id)  mode=full-regen" -ForegroundColor White
+            }
+        }
+        Write-Host ''
+        Write-Host ('─' * 62) -ForegroundColor DarkGray
+        Write-Host ''
+    }
 }
 
 function Show-NextSkills {
@@ -1755,34 +2194,66 @@ if (Test-Path $playwrightCli) {
 # 1b: Generate all config files and folder structure
 Write-Header 'Step 2 — Generating Config Files and Folder Structure'
 
-New-ClientConfig             -Details $details
-New-UserConfig               -Details $details
-Update-RepoRegistry          -Details $details
-New-CatalogManifest          -Details $details
-New-FunctionalCatalogFolder  -Details $details
-New-PlaywrightClientStructure -Details $details
-Update-DashboardHtml          -Details $details
+if ($script:ExistingClientMode) {
+    Write-Host '    [SKIP] Existing client mode — skipping config/credential creation.' -ForegroundColor Cyan
+    Write-Host '    [SKIP] Running dashboard wiring, folder structure, and health check only.' -ForegroundColor Cyan
+    Write-Host ''
+    # Still ensure folder structure and dashboard are up to date
+    New-FunctionalCatalogFolder  -Details $details
+    New-PlaywrightClientStructure -Details $details
+    Update-DashboardHtml          -Details $details
+} else {
+    New-ClientConfig             -Details $details
+    New-UserConfig               -Details $details
+    Update-RepoRegistry          -Details $details
+    New-CatalogManifest          -Details $details
+    New-FunctionalCatalogFolder  -Details $details
+    New-PlaywrightClientStructure -Details $details
+    Update-DashboardHtml          -Details $details
+}
 
 # Scaffold starter features for every module via new-module.ps1
 Write-Step 'Scaffolding features for each module...'
 $newModuleScript = Join-Path $script:Root 'scripts\new-module.ps1'
+
+# Track which features need Copilot skill commands printed (existing-feature intents)
+$copilotCommands = [System.Collections.Generic.List[hashtable]]::new()
+
 foreach ($mod in $details.modules) {
     $features = $details.moduleFeatures[$mod]
     if (-not $features) { continue }
     foreach ($feat in $features) {
-        Write-Host "  → $mod / $($feat.id) ($($feat.label))" -ForegroundColor DarkGray
-        & $newModuleScript `
-            -Client $details.clientId `
-            -Module $mod `
-            -Feature $feat.id `
-            -Label   $feat.label
-        if ($LASTEXITCODE -ne 0) {
-            Write-Warn "  Scaffold failed for $mod/$($feat.id) — run manually:"
-            Write-Warn "  .\scripts\new-module.ps1 -Client $($details.clientId) -Module $mod -Feature $($feat.id) -Label `"$($feat.label)`""
+        $isExisting = $feat.isExisting -eq $true
+        $intent     = if ($feat.intent) { $feat.intent } else { 'new' }
+
+        if ($isExisting) {
+            # Do NOT re-scaffold existing feature files — only record Copilot commands to print
+            Write-Host "  → $mod / $($feat.id) [EXISTING — skipping scaffold, will print Copilot commands]" -ForegroundColor Yellow
+            $copilotCommands.Add(@{ mod = $mod; feat = $feat; intent = $intent })
+        } else {
+            # New feature — run new-module.ps1 as normal
+            Write-Host "  → $mod / $($feat.id) ($($feat.label))" -ForegroundColor DarkGray
+            & $newModuleScript `
+                -Client $details.clientId `
+                -Module $mod `
+                -Feature $feat.id `
+                -Label   $feat.label
+            if ($LASTEXITCODE -ne 0) {
+                Write-Warn "  Scaffold failed for $mod/$($feat.id) — run manually:"
+                Write-Warn "  .\scripts\new-module.ps1 -Client $($details.clientId) -Module $mod -Feature $($feat.id) -Label `"$($feat.label)`""
+            }
         }
     }
 }
 Write-Done 'Feature scaffold complete.'
+
+# Print intent-aware Copilot commands for any existing features the user selected
+if ($script:ExistingClientMode -and $copilotCommands.Count -gt 0) {
+    Show-ExistingFeatureCopilotCommands `
+        -ClientId        $details.clientId `
+        -CopilotCommands $copilotCommands `
+        -PrependMode     $script:PrependTestCases
+}
 
 # 1c: Self-validate all artifacts — block next steps if any credential placeholder remains
 $validationErrors = Test-OnboardingArtifacts -Details $details

@@ -142,7 +142,7 @@ Find the module section or create one. Add row to feature table:
   "version":     "v1",
   "generated":   "",
   "auditedAs":   "",
-  "client":      "demoportal",
+  "client":      "{client}",
   "pipeline":    "functional-qa",
   "sections":    0,
   "implementationStatus": {
@@ -170,7 +170,6 @@ Find the module section or create one. Add row to feature table:
 > automatically from `/api/catalog?clientId=X` every time the client changes. You do NOT need to
 > edit `index.html` to add a new module or feature; the new catalog-manifest.json entry above is
 > sufficient for the feature to appear in the dashboard.
-```
 
 ---
 
