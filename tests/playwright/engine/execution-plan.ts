@@ -1,5 +1,5 @@
 /**
- * Execution Plan — Central Data Contract for the Execution Engine
+ * Execution Plan - Central Data Contract for the Execution Engine
  *
  * This file defines all types shared across:
  *   - auth-resolver.ts
@@ -15,7 +15,7 @@
  * No business logic flows past the plan boundary.
  */
 
-// ── Primitive Enumerations ─────────────────────────────────────────────────
+// -- Primitive Enumerations -------------------------------------------------
 
 export type AuthType =
   | 'forms'
@@ -78,11 +78,11 @@ export type ScreenshotMode =
   | 'off'
   | 'only-on-failure';
 
-// ── Feature Flags ──────────────────────────────────────────────────────────
+// -- Feature Flags ----------------------------------------------------------
 
 /**
  * Client-specific execution flags that control what is captured or skipped.
- * Loaded from config/clients/{clientId}.json → execution.featureFlags
+ * Loaded from config/clients/{clientId}.json -> execution.featureFlags
  */
 export interface ExecutionFeatureFlags {
   runVisualTests:  boolean;
@@ -92,7 +92,7 @@ export interface ExecutionFeatureFlags {
   smokeOnly:       boolean;
 }
 
-// ── Timeout Configuration ──────────────────────────────────────────────────
+// -- Timeout Configuration --------------------------------------------------
 
 export interface TimeoutConfig {
   global:     number;  // per-test timeout (ms)
@@ -101,7 +101,7 @@ export interface TimeoutConfig {
   expect:     number;  // expect().toBeVisible() etc. (ms)
 }
 
-// ── Resolved Authentication ────────────────────────────────────────────────
+// -- Resolved Authentication ------------------------------------------------
 
 /**
  * The output of AuthResolver. Describes which Playwright setup project to use
@@ -123,7 +123,7 @@ export interface ResolvedAuth {
   };
 }
 
-// ── Resolved Environment ───────────────────────────────────────────────────
+// -- Resolved Environment ---------------------------------------------------
 
 /**
  * The output of EnvironmentResolver. All values needed to run tests against
@@ -139,7 +139,7 @@ export interface ResolvedEnvironment {
   cookies?:      Array<{ name: string; value: string; url?: string }>;
 }
 
-// ── Artifact Paths ─────────────────────────────────────────────────────────
+// -- Artifact Paths ---------------------------------------------------------
 
 /**
  * All filesystem paths for execution artifacts.
@@ -147,16 +147,16 @@ export interface ResolvedEnvironment {
  */
 export interface ExecutionArtifacts {
   rootDir:        string;  // reports/{clientId}/{date}/{executionId}/
-  htmlReport:     string;  // …/html/
-  jsonReport:     string;  // …/results.json
-  junitReport:    string;  // …/junit.xml
-  tracesDir:      string;  // …/traces/
-  screenshotsDir: string;  // …/screenshots/
-  videosDir:      string;  // …/videos/
-  logsDir:        string;  // …/logs/
+  htmlReport:     string;  // .../html/
+  jsonReport:     string;  // .../results.json
+  junitReport:    string;  // .../junit.xml
+  tracesDir:      string;  // .../traces/
+  screenshotsDir: string;  // .../screenshots/
+  videosDir:      string;  // .../videos/
+  logsDir:        string;  // .../logs/
 }
 
-// ── Execution Request ──────────────────────────────────────────────────────
+// -- Execution Request ------------------------------------------------------
 
 /**
  * What the caller sends in. Validated and expanded into an ExecutionPlan.
@@ -193,14 +193,14 @@ export interface ExecutionRequest {
   priority?: number;
 }
 
-// ── Execution Plan ─────────────────────────────────────────────────────────
+// -- Execution Plan ---------------------------------------------------------
 
 /**
  * A fully resolved, validated plan ready for the Playwright Runtime.
- * The Runtime accepts ONLY an ExecutionPlan — it performs no further resolution.
+ * The Runtime accepts ONLY an ExecutionPlan - it performs no further resolution.
  */
 export interface ExecutionPlan {
-  // ── Identity ─────────────────────────────────────────────────────────
+  // -- Identity ---------------------------------------------------------
   executionId:  string;
   clientId:     string;
   moduleId:     string | null;
@@ -209,57 +209,57 @@ export interface ExecutionPlan {
   environment:  EnvironmentName;
   scope:        ExecutionScope;
 
-  // ── Repository Traceability ───────────────────────────────────────────
+  // -- Repository Traceability -------------------------------------------
   repositoryBranch?: string;
   repositoryCommit?: string;
 
-  // ── Test Selection ────────────────────────────────────────────────────
+  // -- Test Selection ----------------------------------------------------
   specFiles:  string[];   // workspace-relative paths
   tiers:      TierType[];
   features:   string[];
 
-  // ── Authentication ────────────────────────────────────────────────────
+  // -- Authentication ----------------------------------------------------
   auth: ResolvedAuth;
 
-  // ── Environment ───────────────────────────────────────────────────────
+  // -- Environment -------------------------------------------------------
   resolvedEnv: ResolvedEnvironment;
 
-  // ── Playwright Projects ───────────────────────────────────────────────
+  // -- Playwright Projects -----------------------------------------------
   projects: string[];   // e.g. ['setup', 'chromium'] or ['setup-certainteed', 'chromium-certainteed']
 
-  // ── Browser & Parallelism ─────────────────────────────────────────────
+  // -- Browser & Parallelism ---------------------------------------------
   browser:       BrowserType;
   workers:       number;
   retries:       number;
   retryStrategy: RetryStrategy;
 
-  // ── Capture ───────────────────────────────────────────────────────────
+  // -- Capture -----------------------------------------------------------
   trace:      TraceMode;
   video:      VideoMode;
   screenshot: ScreenshotMode;
   headed:     boolean;
 
-  // ── Artifacts ─────────────────────────────────────────────────────────
+  // -- Artifacts ---------------------------------------------------------
   artifacts: ExecutionArtifacts;
 
-  // ── Reporter ──────────────────────────────────────────────────────────
+  // -- Reporter ----------------------------------------------------------
   reporters:    string[];  // Playwright reporter names/paths
   outputDir:    string;    // Playwright test-results dir (for attachments)
 
-  // ── Computed CLI Args & Env ───────────────────────────────────────────
+  // -- Computed CLI Args & Env -------------------------------------------
   // These are the final inputs to playwright-runtime.ts.
   cliArgs: string[];
   envVars: Record<string, string>;
 
-  // ── Validation ────────────────────────────────────────────────────────
+  // -- Validation --------------------------------------------------------
   errors:   string[];
   warnings: string[];
 
-  // ── Timestamps ────────────────────────────────────────────────────────
+  // -- Timestamps --------------------------------------------------------
   createdAt: string;  // ISO 8601
 }
 
-// ── Execution Result ───────────────────────────────────────────────────────
+// -- Execution Result -------------------------------------------------------
 
 /**
  * Normalized output from result-processor.ts after Playwright exits.
@@ -303,7 +303,7 @@ export interface ExecutionResult {
   plan?: ExecutionPlan;
 }
 
-// ── Queue ──────────────────────────────────────────────────────────────────
+// -- Queue ------------------------------------------------------------------
 
 /**
  * A single entry in the execution queue.
@@ -320,7 +320,7 @@ export interface QueuedExecution {
   priority:   number;
 }
 
-// ── Engine Events ──────────────────────────────────────────────────────────
+// -- Engine Events ----------------------------------------------------------
 
 /** Events emitted by ExecutionEngine / PlaywrightRuntime */
 export interface EngineEvents {

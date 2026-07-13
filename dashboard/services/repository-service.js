@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Repository Service — reads config/repos.local.json and exposes
+ * Repository Service - reads config/repos.local.json and exposes
  * repository metadata for all registered clients.
  *
  * Also checks whether the local repository path is accessible.

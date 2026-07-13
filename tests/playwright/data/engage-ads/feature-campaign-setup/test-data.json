@@ -76,7 +76,7 @@
     "editModeAlertHeading": "Edit Mode",
     "updateButtonLabel": "Update Campaign Setup",
     "submitButtonLabel": "Submit Campaign Order",
-    "paidBadge": "PAID ✓"
+    "paidBadge": "PAID "
   },
   "redirects": {
     "orderConfirmation": "/EngageAds/OrderConfirmation",

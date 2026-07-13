@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * ID Generator — produces stable, deterministic Feature IDs.
+ * ID Generator - produces stable, deterministic Feature IDs.
  *
  * Rules:
  *   - Format: {MODULE_UPPER}-{FEATURE_UPPER}

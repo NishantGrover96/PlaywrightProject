@@ -1,4 +1,4 @@
-# Smoke Suite — Submit Claim (Deer Australia)
+# Smoke Suite - Submit Claim (Deer Australia)
 
 **Client:** deer-australia | **Module:** coop | **Feature:** submit-claim  
 **Tier:** Smoke | **Count:** 3 | **Run Order:** Sequential

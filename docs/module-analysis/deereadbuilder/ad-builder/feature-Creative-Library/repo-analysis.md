@@ -1,4 +1,4 @@
-# DeerAd Builder — Creative Library (Ads With Assets) — Repository Analysis Report
+# DeerAd Builder - Creative Library (Ads With Assets) - Repository Analysis Report
 **Generated:** 2026-07-08  
 **Module:** DeerAd Builder (ad-builder)  
 **Feature:** Creative Library / Ads With Assets (adswithassets)  
@@ -33,7 +33,7 @@
 ### **Folder Tree Navigation**
 
 - **Structure:** Hierarchical tree from asset folder path
-- **Interaction:** Click folder → Filter grid by selected folder
+- **Interaction:** Click folder -> Filter grid by selected folder
 - **Expand/Collapse:** Recursive tree loading (API: `GetNewTreeStructure`)
 - **Visual Indicators:** Folder icons, asset count per folder (optional)
 - **Breadcrumb:** Current folder path displayed above tree
@@ -230,7 +230,7 @@
 
 | Sort Field | Ascending | Descending |
 |---|---|---|
-| Title | A → Z | Z → A |
+| Title | A -> Z | Z -> A |
 | Created Date | Oldest first | Newest first (default) |
 | Modified Date | Oldest first | Newest first |
 | File Size | Smallest first | Largest first |
@@ -435,8 +435,8 @@ Each asset stored in multiple formats for different use cases:
 
 | Step | Action | Trigger | API Call |
 |---|---|---|---|
-| 1 | User types search text | Keypress or Search button | — (local validation) |
-| 2 | User selects filters | Checkbox/dropdown change | — |
+| 1 | User types search text | Keypress or Search button | - (local validation) |
+| 2 | User selects filters | Checkbox/dropdown change | - |
 | 3 | User clicks Search button | Button click | `GetAssets` with filters |
 | 4 | Receive paginated results | AJAX success | Update grid with assets |
 | 5 | Display results | Response parsed | Show 12 assets + pagination controls |
@@ -485,7 +485,7 @@ Each asset stored in multiple formats for different use cases:
 | Click | Action |
 |---|---|
 | Column header (Title, Created Date, etc.) | Toggle sort direction (asc ↔ desc); reload grid with new sort |
-| Current sort indicator | Visual arrow (▲ ascending, ▼ descending) |
+| Current sort indicator | Visual arrow (^ ascending, ▼ descending) |
 | Non-sortable columns | No cursor change; click ignored |
 
 ### **Bulk Edit Workflow**
@@ -503,7 +503,7 @@ Each asset stored in multiple formats for different use cases:
 2. **View cart:** Open cart modal (icon in toolbar)
 3. **Cart display:** List of added assets with remove buttons; show total size
 4. **Select format:** Dropdown for each asset (JPG, PNG, etc.) or global format selector
-5. **Export:** Click "Download Cart" → ZIP generated with assets in folder structure
+5. **Export:** Click "Download Cart" -> ZIP generated with assets in folder structure
 6. **HTTP download:** Browser download triggered with `Content-Disposition: attachment`
 
 ### **Admin "Dealer View" Toggle**

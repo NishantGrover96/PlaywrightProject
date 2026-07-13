@@ -3,7 +3,7 @@ name: playwright-test-generation
 description: Generate Playwright test assets including page objects, spec files, helpers, and API and database verification scripts from functional catalogs.
 ---
 
-# Playwright Test Generation — Prompt 3: Generate Test Assets
+# Playwright Test Generation - Prompt 3: Generate Test Assets
 
 ## Purpose
 
@@ -17,7 +17,7 @@ Using the Functional Unit Catalog and Test Catalog from Prompt 2, generate all t
 ## When to Use
 
 - After Prompt 2 (Functional Unit Catalog + Test Catalog) is complete
-- User says "generate Playwright tests for…", "implement automation for…", "generate test assets for…"
+- User says "generate Playwright tests for...", "implement automation for...", "generate test assets for..."
 
 ## Inputs
 
@@ -27,7 +27,7 @@ Using the Functional Unit Catalog and Test Catalog from Prompt 2, generate all t
 - **Smoke Suite**: `docs/functional-catalogs/{client}/{module}/feature-{feature}/smoke-suite.md`
 - **Regression Suite**: `docs/functional-catalogs/{client}/{module}/feature-{feature}/regression-suite.md`
 - **E2E Suite**: `docs/functional-catalogs/{client}/{module}/feature-{feature}/e2e-suite.md`
-- **Existing DemoPortalV2 tests**: `D:\...\DemoPortalV2\tests\playwright\coop\` — reuse proven selectors and patterns
+- **Existing DemoPortalV2 tests**: `D:\...\DemoPortalV2\tests\playwright\coop\` - reuse proven selectors and patterns
 
 ## Output Files
 
@@ -44,7 +44,7 @@ tests/database/{client}/{module}/feature-{feature}/compare-legacy-vs-modern.sql
 ## Page Object Standards
 
 ```typescript
-// {Feature}Page.ts — never contains test logic
+// {Feature}Page.ts - never contains test logic
 export class SubmitClaimPage {
   readonly page: Page;
   readonly url = '/CoopManagement/Claims/Submit/SubmitClaim';
@@ -77,7 +77,7 @@ export class SubmitClaimPage {
 ## Helpers Standards
 
 ```typescript
-// {feature}.helpers.ts — reusable multi-step flows
+// {feature}.helpers.ts - reusable multi-step flows
 import { Page } from '@playwright/test';
 import { SubmitClaimPage } from '../../pages/coop/feature-submit-claim/SubmitClaimPage';
 import testData from '../../data/coop/feature-submit-claim/test-data.json';
@@ -98,13 +98,13 @@ export async function setupClaimForSubmit(page: Page): Promise<SubmitClaimPage> 
 ## Spec File Standards
 
 ```typescript
-// {feature}.spec.ts — organized by test suite sections
+// {feature}.spec.ts - organized by test suite sections
 import { test, expect } from '@playwright/test';
 import { SubmitClaimPage } from '../../../pages/coop/feature-submit-claim/SubmitClaimPage';
 import { setupClaimForSubmit } from '../../../helpers/coop/feature-submit-claim/submit-claim.helpers';
 import testData from '../../../data/coop/feature-submit-claim/test-data.json';
 
-test.describe('Coop — Submit Claim', () => {
+test.describe('Coop - Submit Claim', () => {
 
   test.describe('Smoke', () => {
     test('COOP-SMOKE-001 - page loads @smoke', async ({ page }) => { ... });
@@ -144,19 +144,19 @@ test.describe('Coop — Submit Claim', () => {
 
 ## Selector Strategy (priority order)
 
-1. `page.getByLabel(…)` — accessible label (preferred)
-2. `page.getByRole(…)` — ARIA role
-3. `page.getByTestId(…)` — `data-testid` attribute
-4. `page.locator('css')` — CSS selector (last resort, use `.cshtml` as source)
+1. `page.getByLabel(...)` - accessible label (preferred)
+2. `page.getByRole(...)` - ARIA role
+3. `page.getByTestId(...)` - `data-testid` attribute
+4. `page.locator('css')` - CSS selector (last resort, use `.cshtml` as source)
 
 When reading DemoPortalV2 sources:
 - Check `.cshtml` for `id=`, `name=`, `asp-for=` attributes as selector hints
-- Check `js*.js` files for jQuery selectors (e.g. `$('#txtContactName1')`) → convert to Playwright
+- Check `js*.js` files for jQuery selectors (e.g. `$('#txtContactName1')`) -> convert to Playwright
 
 ## Environment Pattern
 
 ```typescript
-// Never hardcode URLs — always use BASE_URL
+// Never hardcode URLs - always use BASE_URL
 // Auth state loaded from storageState, never re-login per test
 use: {
   baseURL: process.env.BASE_URL,
@@ -171,42 +171,42 @@ Spec files are generated at `tests/playwright/specs/{client}/{module}/feature-{f
 From that folder, count up 4 levels to reach `tests/playwright/`:
 
 ```typescript
-// Correct — 4 levels up
+// Correct - 4 levels up
 import { SubmitClaimPage } from '../../../../pages/demoportal/coop/feature-submit-claim/SubmitClaimPage';
 import testData from '../../../../data/demoportal/coop/feature-submit-claim/test-data.json';
 const DATA_DIR = path.resolve(__dirname, '../../../../data/demoportal/coop/feature-submit-claim');
 
-// Correct — helpers 4 levels up from tests/playwright/helpers/{client}/{module}/feature-{feature}/
+// Correct - helpers 4 levels up from tests/playwright/helpers/{client}/{module}/feature-{feature}/
 import { SubmitClaimPage } from '../../../../pages/demoportal/coop/feature-submit-claim/SubmitClaimPage';
 
-// Correct — API specs 4 levels up from tests/api/{client}/{module}/feature-{feature}/
+// Correct - API specs 4 levels up from tests/api/{client}/{module}/feature-{feature}/
 import testData from '../../../../playwright/data/demoportal/coop/feature-submit-claim/test-data.json';
 ```
 
-**Never** use `../../` — it resolves to the wrong folder and will fail `tsc --noEmit`.
+**Never** use `../../` - it resolves to the wrong folder and will fail `tsc --noEmit`.
 
 ### Local variable names must not shadow imported class names
 
 ```typescript
-// ✗ Wrong — local var shadows the imported class (TS2448)
+// ✗ Wrong - local var shadows the imported class (TS2448)
 const SubmitClaimPage = new SubmitClaimPage(page);
 
-// ✔ Correct — local var is featurePage
+// ✔ Correct - local var is featurePage
 const featurePage = new SubmitClaimPage(page);
 await featurePage.navigate();
 ```
 
-### page.evaluate() casts — use HTMLInputElement / HTMLTextAreaElement directly
+### page.evaluate() casts - use HTMLInputElement / HTMLTextAreaElement directly
 
 `tsconfig.json` includes `"DOM"` in lib. Never define custom shim interfaces for DOM properties.
 When casting inside `page.evaluate()`, use the built-in types with an `unknown` bridge:
 
 ```typescript
-// ✗ Wrong — custom shim conflicts with DOM lib
+// ✗ Wrong - custom shim conflicts with DOM lib
 interface InputEl { required: boolean; maxLength: number; checkValidity: () => boolean; }
 const isRequired = await input.evaluate((el) => (el as InputEl).required);
 
-// ✔ Correct — use HTMLInputElement directly
+// ✔ Correct - use HTMLInputElement directly
 const isRequired = await input.evaluate((el) => (el as unknown as HTMLInputElement).required);
 const isInvalid  = await input.evaluate((el) => !(el as unknown as HTMLInputElement).checkValidity());
 ```
@@ -214,20 +214,20 @@ const isInvalid  = await input.evaluate((el) => !(el as unknown as HTMLInputElem
 ### test.fixme() requires two arguments
 
 ```typescript
-// ✗ Wrong — no overload exists for a single string
+// ✗ Wrong - no overload exists for a single string
 test.fixme('TC-001 placeholder');
 
-// ✔ Correct — always pass a title AND an async body
+// ✔ Correct - always pass a title AND an async body
 test.fixme('TC-001 placeholder', async () => {});
 ```
 
 ### test-data.json must contain only JSON-literal values
 
 ```json
-// ✗ Wrong — JS expressions are not valid JSON
+// ✗ Wrong - JS expressions are not valid JSON
 { "longString": "X".repeat(1001) }
 
-// ✔ Correct — literal value
+// ✔ Correct - literal value
 { "longString": "XXXXX...X" }
 ```
 
@@ -249,7 +249,7 @@ Test assets are complete when:
 - Helpers cover multi-step flows used by 2+ tests
 - Import paths use the correct depth (`../../../../` for 4-level-deep spec/helper/api files)
 - No local variable name shadows an imported class name
-- No custom DOM shim interfaces — use `el as unknown as HTMLInputElement`
+- No custom DOM shim interfaces - use `el as unknown as HTMLInputElement`
 - `test.fixme()` always passes title + `async () => {}` body
 - `test-data.json` contains only JSON-literal values (no JS expressions)
 - `tsconfig.json` `lib` includes `"DOM"`

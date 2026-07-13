@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Execution Resolver — translates a run request into concrete Playwright CLI
+ * Execution Resolver - translates a run request into concrete Playwright CLI
  * arguments and environment variables, using only metadata from services.
  *
  * No hardcoded paths. No switch statements. No FEATURE_FOLDERS.
@@ -10,8 +10,8 @@
  * {
  *   clientId,
  *   environment,   // 'production' | 'uat' | 'dev' | 'testing'
- *   moduleId,      // optional — restricts to module folder
- *   featureId,     // optional — restricts to specific feature
+ *   moduleId,      // optional - restricts to module folder
+ *   featureId,     // optional - restricts to specific feature
  *   role,          // 'dealer' | 'admin' | 'dealer-custom' | ...
  *   tiers,         // ['smoke'] | ['regression'] | ['all'] | []
  *   browser,       // 'chromium' | 'firefox' | 'webkit' (future)
@@ -28,12 +28,12 @@
  *
  * Output (ExecutionPlan):
  * {
- *   args,          // string[] — Playwright CLI args (after 'test')
- *   env,           // object   — environment variables
- *   specPaths,     // string[] — resolved spec paths
- *   projects,      // string[] — Playwright project names
- *   errors,        // string[] — validation errors (non-empty = do not run)
- *   warnings,      // string[] — non-fatal notes
+ *   args,          // string[] - Playwright CLI args (after 'test')
+ *   env,           // object   - environment variables
+ *   specPaths,     // string[] - resolved spec paths
+ *   projects,      // string[] - Playwright project names
+ *   errors,        // string[] - validation errors (non-empty = do not run)
+ *   warnings,      // string[] - non-fatal notes
  * }
  */
 
@@ -72,7 +72,7 @@ function resolve(request) {
   // 1. Validate client exists
   const clientCfg = clientService.getClient(clientId);
   if (!clientCfg) {
-    warnings.push(`Client '${clientId}' config not found — using defaults.`);
+    warnings.push(`Client '${clientId}' config not found - using defaults.`);
   }
 
   // 2. Resolve spec paths
@@ -122,7 +122,7 @@ function resolve(request) {
 
 function _resolveSpecPaths(clientId, features, moduleId, warnings) {
   if (features.length === 0 || features.includes('all')) {
-    // No feature filter — return module-level path or entire client path
+    // No feature filter - return module-level path or entire client path
     return _resolveModulePath(clientId, moduleId, warnings);
   }
 
@@ -143,7 +143,7 @@ function _resolveSpecPaths(clientId, features, moduleId, warnings) {
       continue;
     }
 
-    warnings.push(`Feature '${fid}': no spec path in catalog — skipping.`);
+    warnings.push(`Feature '${fid}': no spec path in catalog - skipping.`);
   }
 
   // Deduplicate
@@ -169,7 +169,7 @@ function _resolveModulePath(clientId, moduleId, warnings) {
   if (moduleId) {
     const modPath = path.join(legacySpecDir, moduleId.toLowerCase());
     if (fs.existsSync(path.join(ROOT, modPath))) return [modPath];
-    warnings.push(`Module directory not found: ${modPath} — running all specs.`);
+    warnings.push(`Module directory not found: ${modPath} - running all specs.`);
   }
 
   return [legacySpecDir];

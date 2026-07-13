@@ -3,7 +3,7 @@ name: ui-analysis
 description: Navigate a live application via Playwright to document UI structure, user journeys, form fields, validations, and error states.
 ---
 
-# UI Analysis — Step 2: Live Application Analysis via Playwright
+# UI Analysis - Step 2: Live Application Analysis via Playwright
 
 ## Purpose
 
@@ -17,7 +17,7 @@ It bridges the gap between source code analysis and actual runtime behavior.
 ## When to Use
 
 - Running Step 2 of the Functional QA Test Generation pipeline
-- User says "analyze UI for…", "inspect live app for…", "observe app behavior for…"
+- User says "analyze UI for...", "inspect live app for...", "observe app behavior for..."
 - Always run after `/repo-analysis` and before `/functional-test-catalog`
 
 ---
@@ -27,11 +27,11 @@ It bridges the gap between source code analysis and actual runtime behavior.
 - **Module**: e.g. `coop`
 - **Feature**: e.g. `submit-claim`
 - **Feature Path**: The URL path of the feature, e.g. `/CoopManagement/Claims/Submit/SubmitClaim`
-- **UAT Base URL**: Loaded automatically from `.env.uat` → `BASE_URL` variable.
+- **UAT Base URL**: Loaded automatically from `.env.uat` -> `BASE_URL` variable.
   The full feature URL is: `{BASE_URL}{featurePath}`
 - **Auth State**: `tests/playwright/fixtures/.auth/user.json` (dealer role) or
   `tests/playwright/fixtures/.auth/admin.json` (admin role)
-  — loaded via `TEST_ENV=uat` project config in `playwright.config.ts`
+  - loaded via `TEST_ENV=uat` project config in `playwright.config.ts`
 
 ### Environment Setup
 
@@ -51,11 +51,11 @@ If `.env.uat` does not exist, ask the user to provide the UAT base URL directly.
 
 ## Analysis Steps
 
-### Step 2.1 — Launch Browser and Navigate
+### Step 2.1 - Launch Browser and Navigate
 
 ```typescript
 // All UI analysis targets DemoPortal UAT environment
-// TEST_ENV=uat loads .env.uat → BASE_URL points to DemoPortal UAT
+// TEST_ENV=uat loads .env.uat -> BASE_URL points to DemoPortal UAT
 
 const browser = await chromium.launch({ headless: false });
 const context = await browser.newContext({
@@ -89,7 +89,7 @@ Write-Host "UI Analysis targeting DemoPortal UAT: $uatUrl"
 
 ---
 
-### Step 2.2 — Page Structure Mapping
+### Step 2.2 - Page Structure Mapping
 
 For the landing page of the feature:
 
@@ -116,16 +116,16 @@ For the landing page of the feature:
 
 ---
 
-### Step 2.3 — User Journey Mapping
+### Step 2.3 - User Journey Mapping
 
 Systematically walk through every user journey the feature supports:
 
 #### Journey 1: Happy Path (Submit)
 1. Navigate to feature URL (authenticated)
-2. Observe initial state — what data is pre-loaded?
+2. Observe initial state - what data is pre-loaded?
 3. Fill all required fields with valid data
 4. Click submit / confirm button
-5. Observe success state — message, redirect, confirmation
+5. Observe success state - message, redirect, confirmation
 
 #### Journey 2: Save Draft (if applicable)
 1. Fill partial form
@@ -136,7 +136,7 @@ Systematically walk through every user journey the feature supports:
 1. Submit the form without filling required fields
 2. Observe validation error display: inline, toast, modal, or summary?
 3. Document exact error messages shown per field
-4. Fill one field at a time and re-submit — capture per-field error behavior
+4. Fill one field at a time and re-submit - capture per-field error behavior
 
 #### Journey 4: Field-Level Interactions
 For each interactive field:
@@ -153,7 +153,7 @@ For each interactive field:
 
 ---
 
-### Step 2.4 — Interaction Catalog
+### Step 2.4 - Interaction Catalog
 
 For each form field and interactive element found, document:
 
@@ -170,7 +170,7 @@ For each form field and interactive element found, document:
 
 ---
 
-### Step 2.5 — Validation Behavior Documentation
+### Step 2.5 - Validation Behavior Documentation
 
 Document how validations are surfaced:
 
@@ -205,19 +205,19 @@ For each validation observed, record:
 
 ---
 
-### Step 2.6 — Page State Variations
+### Step 2.6 - Page State Variations
 
 Capture screenshots and document behavior for:
-1. **Initial / Empty state** — page just loaded
-2. **Partially filled state** — some fields filled, some empty
-3. **Validation error state** — submit clicked with missing/invalid data
-4. **Loading state** — during async operations (spinner, disabled buttons)
-5. **Success state** — after successful submission
-6. **Error state** — server error, network failure, business rule rejection
+1. **Initial / Empty state** - page just loaded
+2. **Partially filled state** - some fields filled, some empty
+3. **Validation error state** - submit clicked with missing/invalid data
+4. **Loading state** - during async operations (spinner, disabled buttons)
+5. **Success state** - after successful submission
+6. **Error state** - server error, network failure, business rule rejection
 
 ---
 
-### Step 2.7 — Network / API Calls
+### Step 2.7 - Network / API Calls
 
 While interacting, observe browser network activity:
 
@@ -226,7 +226,7 @@ While interacting, observe browser network activity:
 
 | Action | Method | URL | Request Body | Response |
 |---|---|---|---|---|
-| Page load | GET | /api/coop/programs | — | [{programId, name}] |
+| Page load | GET | /api/coop/programs | - | [{programId, name}] |
 | Submit | POST | /api/coop/claims | {programId, claimDate, amount} | {claimId, status} |
 ```
 
@@ -238,14 +238,14 @@ Note any:
 
 ---
 
-### Step 2.8 — Selector Inventory
+### Step 2.8 - Selector Inventory
 
 For every interactive element, derive the best Playwright selector following priority order:
 
-1. `page.getByLabel(…)` — accessible label (preferred)
-2. `page.getByRole(…)` — ARIA role + name
-3. `page.getByTestId(…)` — `data-testid` attribute
-4. `page.locator('css')` — CSS selector (last resort)
+1. `page.getByLabel(...)` - accessible label (preferred)
+2. `page.getByRole(...)` - ARIA role + name
+3. `page.getByTestId(...)` - `data-testid` attribute
+4. `page.locator('css')` - CSS selector (last resort)
 
 ```markdown
 ## Selector Inventory
@@ -264,7 +264,7 @@ For every interactive element, derive the best Playwright selector following pri
 ### UI Analysis Report
 
 ```markdown
-# {Module} {Feature} — UI Analysis Report
+# {Module} {Feature} - UI Analysis Report
 Generated: {timestamp}
 Environment: DemoPortal UAT
 App URL: {UAT_BASE_URL}{featurePath}
@@ -297,13 +297,13 @@ Auth State: {authenticated as Dealer | authenticated as Admin | unauthenticated}
 | Code Element (repo-analysis) | UI Element | Match? | Notes |
 |---|---|---|---|
 | ProgramId (required field) | Program select | ✅ | Dropdown populated on load |
-| BusinessRule BR-001 (fund balance) | Amount field + submit | ⚠️ | Server-side only — no client indicator |
+| BusinessRule BR-001 (fund balance) | Amount field + submit | [!]️ | Server-side only - no client indicator |
 
 ## Gaps Observed (UI vs Code)
 | Gap | Description | Impact |
 |---|---|---|
-| Field present in UI but not in code | — | — |
-| Validation in code but not visible in UI | — | Needs test at API level |
+| Field present in UI but not in code | - | - |
+| Validation in code but not visible in UI | - | Needs test at API level |
 ```
 
 ---
@@ -313,9 +313,9 @@ Auth State: {authenticated as Dealer | authenticated as Admin | unauthenticated}
 ```
 docs/module-analysis/{client}/{module}/feature-{feature}/ui-analysis.md
 reports/test-results/{client}/{module}/feature-{feature}/ui-analysis/
-  ├── initial.png
-  ├── validation-errors.png
-  └── success.png
+  ├-- initial.png
+  ├-- validation-errors.png
+  └-- success.png
 ```
 
 ---

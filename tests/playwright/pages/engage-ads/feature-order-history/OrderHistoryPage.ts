@@ -1,12 +1,12 @@
 /**
- * OrderHistoryPage — Page Object
+ * OrderHistoryPage - Page Object
  * Module: engage-ads | Feature: order-history
  * URL: /EngageAds/OrderHistory
  *
  * Locators verified against live DOM on 2026-06-29.
  * See Locator Validation Report at end of file.
  *
- * Column map (fixed — DataTables static header):
+ * Column map (fixed - DataTables static header):
  *   td:nth-child(1)  Action
  *   td:nth-child(2)  Order ID
  *   td:nth-child(3)  Package Name
@@ -24,24 +24,24 @@ export class OrderHistoryPage {
   readonly page: Page;
   readonly url = '/EngageAds/OrderHistory';
 
-  // ── Table ────────────────────────────────────────────────────
+  // -- Table ----------------------------------------------------
   readonly orderTable:       Locator; // #orderHistoryTable
   readonly orderBody:        Locator; // #orderHistoryBody
   readonly orderRows:        Locator; // #orderHistoryBody tr  (data rows after load)
-  readonly loadingCell:      Locator; // td containing loading text — wait for hidden
-  readonly noOrdersMessage:  Locator; // td.dataTables_empty   — DataTables empty state
+  readonly loadingCell:      Locator; // td containing loading text - wait for hidden
+  readonly noOrdersMessage:  Locator; // td.dataTables_empty   - DataTables empty state
 
-  // ── Action column locators (scoped to tbody) ─────────────────
-  readonly viewDetailsLinks: Locator; // a.actionLink.viewOrderDetails  — opens modal
-  readonly editOrderLinks:   Locator; // a[href*="CampaignSetup"]        — navigates
+  // -- Action column locators (scoped to tbody) -----------------
+  readonly viewDetailsLinks: Locator; // a.actionLink.viewOrderDetails  - opens modal
+  readonly editOrderLinks:   Locator; // a[href*="CampaignSetup"]        - navigates
 
-  // ── Status badges ────────────────────────────────────────────
+  // -- Status badges --------------------------------------------
   readonly statusBadges:     Locator; // span.OrderStatusBadge in tbody
 
-  // ── Page heading ─────────────────────────────────────────────
+  // -- Page heading ---------------------------------------------
   readonly pageHeading:      Locator; // h4 "Order Details / Order History"
 
-  // ── Filter inputs (all have stable IDs) ──────────────────────
+  // -- Filter inputs (all have stable IDs) ----------------------
   readonly startDateInput:    Locator; // #txtStartDate
   readonly endDateInput:      Locator; // #txtEndDate
   readonly orderIdInput:      Locator; // #txtOrderId
@@ -52,15 +52,15 @@ export class OrderHistoryPage {
   readonly resetBtn:          Locator; // #btnReset
   readonly exportBtn:         Locator; // #btnExportOrderHistory
 
-  // ── Pagination ───────────────────────────────────────────────
+  // -- Pagination -----------------------------------------------
   readonly pagination:        Locator; // #orderHistoryPagination
   readonly pageSizeSelect:    Locator; // #ddlOrderHistoryPageSize
   readonly totalRecordsSpan:  Locator; // #orderHistoryTotalRecords
   readonly showingStartSpan:  Locator; // #orderHistoryShowingStart
   readonly showingEndSpan:    Locator; // #orderHistoryShowingEnd
 
-  // ── Order Details Modal ──────────────────────────────────────
-  // NOTE: "View Details" opens a modal (href="#") — NOT a page navigation.
+  // -- Order Details Modal --------------------------------------
+  // NOTE: "View Details" opens a modal (href="#") - NOT a page navigation.
   readonly orderDetailsModal: Locator; // #orderDetailsModal
   readonly modalCloseBtn:     Locator; // #orderDetailsModal button[aria-label="Close"]
   readonly modalOrderId:      Locator; // #modalOrderId
@@ -74,24 +74,24 @@ export class OrderHistoryPage {
   constructor(page: Page) {
     this.page = page;
 
-    // ── Table ──────────────────────────────────────────────────
+    // -- Table --------------------------------------------------
     this.orderTable      = page.locator('#orderHistoryTable');
     this.orderBody       = page.locator('#orderHistoryBody');
     this.orderRows       = page.locator('#orderHistoryBody tr');
     this.loadingCell     = page.locator('#orderHistoryBody td').filter({ hasText: 'Loading order history' });
     this.noOrdersMessage = page.locator('td.dataTables_empty');
 
-    // ── Action column ──────────────────────────────────────────
+    // -- Action column ------------------------------------------
     this.viewDetailsLinks = page.locator('#orderHistoryBody a.actionLink.viewOrderDetails');
     this.editOrderLinks   = page.locator('#orderHistoryBody a[href*="CampaignSetup"]');
 
-    // ── Status badges ──────────────────────────────────────────
+    // -- Status badges ------------------------------------------
     this.statusBadges = page.locator('#orderHistoryBody span.OrderStatusBadge');
 
-    // ── Page heading ───────────────────────────────────────────
+    // -- Page heading -------------------------------------------
     this.pageHeading = page.getByRole('heading', { name: /Order Details.*Order History/i });
 
-    // ── Filter inputs ──────────────────────────────────────────
+    // -- Filter inputs ------------------------------------------
     this.startDateInput    = page.locator('#txtStartDate');
     this.endDateInput      = page.locator('#txtEndDate');
     this.orderIdInput      = page.locator('#txtOrderId');
@@ -102,14 +102,14 @@ export class OrderHistoryPage {
     this.resetBtn          = page.locator('#btnReset');
     this.exportBtn         = page.locator('#btnExportOrderHistory');
 
-    // ── Pagination ─────────────────────────────────────────────
+    // -- Pagination ---------------------------------------------
     this.pagination       = page.locator('#orderHistoryPagination');
     this.pageSizeSelect   = page.locator('#ddlOrderHistoryPageSize');
     this.totalRecordsSpan = page.locator('#orderHistoryTotalRecords');
     this.showingStartSpan = page.locator('#orderHistoryShowingStart');
     this.showingEndSpan   = page.locator('#orderHistoryShowingEnd');
 
-    // ── Order Details Modal ────────────────────────────────────
+    // -- Order Details Modal ------------------------------------
     this.orderDetailsModal = page.locator('#orderDetailsModal');
     this.modalCloseBtn     = page.locator('#orderDetailsModal button[aria-label="Close"]');
     this.modalOrderId      = page.locator('#modalOrderId');
@@ -121,25 +121,25 @@ export class OrderHistoryPage {
     this.modalOrderDate    = page.locator('#modalOrderDate');
   }
 
-  // ── Navigation ───────────────────────────────────────────────
+  // -- Navigation -----------------------------------------------
   async navigate(): Promise<void> {
     await this.page.goto(this.url, { waitUntil: 'commit', timeout: 60_000 });
     await this.page.waitForLoadState('domcontentloaded', { timeout: 60_000 }).catch(() => undefined);
   }
 
   /**
-   * waitForReady — waits for the loading row to disappear and confirms
+   * waitForReady - waits for the loading row to disappear and confirms
    * URL + heading are visible. The tbody initially contains a single row
    * with "Loading order history..." which is replaced by AJAX data rows
    * (or td.dataTables_empty when there are no records).
    */
   /**
-   * waitForReady — confirmed loading sequence against live DOM (2026-06-29):
+   * waitForReady - confirmed loading sequence against live DOM (2026-06-29):
    *   1. URL must be on /EngageAds/OrderHistory
    *   2. Page heading must be visible
    *   3. Loading cell (#orderHistoryBody td containing "Loading order history") must be hidden
-   *      — this td is the only row in tbody during AJAX fetch; it disappears when data arrives
-   *      — do NOT use waitForLoadState('networkidle') or #loadingRow (does not exist in DOM)
+   *      - this td is the only row in tbody during AJAX fetch; it disappears when data arrives
+   *      - do NOT use waitForLoadState('networkidle') or #loadingRow (does not exist in DOM)
    */
   async waitForReady(): Promise<void> {
     await expect(this.page).toHaveURL(new RegExp(this.url, 'i'), { timeout: 20_000 });
@@ -148,7 +148,7 @@ export class OrderHistoryPage {
   }
 
   /**
-   * waitForTableReload — call after any filter/search/pagination action
+   * waitForTableReload - call after any filter/search/pagination action
    * to wait for the AJAX reload to complete before reading results.
    */
   // async waitForTableReload(): Promise<void> {
@@ -170,7 +170,7 @@ export class OrderHistoryPage {
   await this.page.waitForLoadState('networkidle').catch(() => {});
   }
 
-  // ── Page assertions ──────────────────────────────────────────
+  // -- Page assertions ------------------------------------------
   async expectPageVisible(): Promise<void> {
     await expect(this.page).toHaveURL(new RegExp(this.url, 'i'), { timeout: 20_000 });
     await expect(this.pageHeading).toBeVisible({ timeout: 20_000 });
@@ -192,7 +192,7 @@ export class OrderHistoryPage {
     await expect(this.noOrdersMessage).toBeVisible({ timeout: 10_000 });
   }
 
-  // ── Row data helpers ─────────────────────────────────────────
+  // -- Row data helpers -----------------------------------------
   /**
    * Returns the number of data rows currently visible.
    * Returns 0 if DataTables shows the empty-state cell.
@@ -245,10 +245,10 @@ export class OrderHistoryPage {
     return (await this.getOrderCount()) === 0;
   }
 
-  // ── Action column ────────────────────────────────────────────
+  // -- Action column --------------------------------------------
   /**
    * Clicks the View Details link for the given row index.
-   * This opens #orderDetailsModal — it does NOT navigate to another page.
+   * This opens #orderDetailsModal - it does NOT navigate to another page.
    */
   async clickViewDetailsByIndex(index: number): Promise<void> {
     await this.orderRows.nth(index).locator('a.actionLink.viewOrderDetails').click();
@@ -287,7 +287,7 @@ export class OrderHistoryPage {
     await this.orderRows.nth(index).locator('a[href*="CampaignSetup"]').click();
   }
 
-  // ── Filter / search ──────────────────────────────────────────
+  // -- Filter / search ------------------------------------------
   async filterByStatus(status: string): Promise<void> {
     await this.statusSelect.selectOption(status);
     await this.searchBtn.click();
@@ -324,7 +324,7 @@ export class OrderHistoryPage {
     await this.waitForTableReload();
   }
 
-  // ── Pagination ───────────────────────────────────────────────
+  // -- Pagination -----------------------------------------------
   async goToPage(pageNumber: number): Promise<void> {
     await this.pagination.locator(`a.orderHistoryPageLink[data-page="${pageNumber}"]`).click();
     await this.waitForTableReload();
@@ -338,7 +338,7 @@ export class OrderHistoryPage {
 
 /*
  * ════════════════════════════════════════════════════════════════
- * LOCATOR VALIDATION REPORT — verified against live DOM 2026-06-29
+ * LOCATOR VALIDATION REPORT - verified against live DOM 2026-06-29
  * ════════════════════════════════════════════════════════════════
  *
  * Locator                                            | Matches                                          | Why chosen                                  | Stability | Fixed col?
@@ -351,7 +351,7 @@ export class OrderHistoryPage {
  * a.actionLink.viewOrderDetails                      | <a class="actionLink viewOrderDetails">          | Two stable classes confirmed in DOM         | High      | No
  * a[href*="CampaignSetup"]                           | <a href="/EngageAds/CampaignSetup?orderSeq=..."> | Stable href pattern for editable orders     | High      | No
  * span.OrderStatusBadge                              | <span class="OrderStatusBadge">                  | Stable class confirmed in DOM               | High      | No
- * getByRole('heading',{name:/Order Details.*Order History/i}) | <h4>Order Details / Order History</h4>  | Accessible role — survives tag/class changes | High    | No
+ * getByRole('heading',{name:/Order Details.*Order History/i}) | <h4>Order Details / Order History</h4>  | Accessible role - survives tag/class changes | High    | No
  * #txtStartDate / #txtEndDate                        | <input id="txtStart/EndDate">                    | Stable element IDs                          | High      | No
  * #txtOrderId / #txtPackageName                      | <input id="txtOrderId/PackageName">              | Stable element IDs                          | High      | No
  * #ddlPaymentType / #ddlStatus                       | <select id="ddlPaymentType/Status">              | Stable element IDs                          | High      | No
@@ -364,18 +364,18 @@ export class OrderHistoryPage {
  * #modalOrderId / #modalPackageName / etc.           | <p id="modalOrderId"> etc.                       | Stable element IDs on modal fields          | High      | No
  * td:nth-child(2..10) via row.locator()              | Column cells by position                         | No td ids/classes; column order is FIXED    | Medium    | Yes
  *
- * ── Removed (were invented — not in live DOM) ──────────────────
- * .order-history-table       — not in DOM
- * .order-row                 — not in DOM
- * .no-orders / .empty-state  — not in DOM (use td.dataTables_empty)
- * td[data-col="packageName"] — not in DOM
- * td.status / td.order-seq   — not in DOM
- * .btn-cancel-order          — does not exist (no cancel feature in DOM)
- * #cancelOrderModal          — does not exist
- * #btnConfirmCancel          — does not exist
- * #statusFilter              — does not exist (correct ID is #ddlStatus)
- * #orderSearch               — does not exist (use #txtOrderId / #txtPackageName)
- * #btnClearSearch            — does not exist (correct ID is #btnReset)
- * a[href*="OrderConfirmation"] — View Details opens a MODAL, not page navigation
+ * -- Removed (were invented - not in live DOM) ------------------
+ * .order-history-table       - not in DOM
+ * .order-row                 - not in DOM
+ * .no-orders / .empty-state  - not in DOM (use td.dataTables_empty)
+ * td[data-col="packageName"] - not in DOM
+ * td.status / td.order-seq   - not in DOM
+ * .btn-cancel-order          - does not exist (no cancel feature in DOM)
+ * #cancelOrderModal          - does not exist
+ * #btnConfirmCancel          - does not exist
+ * #statusFilter              - does not exist (correct ID is #ddlStatus)
+ * #orderSearch               - does not exist (use #txtOrderId / #txtPackageName)
+ * #btnClearSearch            - does not exist (correct ID is #btnReset)
+ * a[href*="OrderConfirmation"] - View Details opens a MODAL, not page navigation
  */
 

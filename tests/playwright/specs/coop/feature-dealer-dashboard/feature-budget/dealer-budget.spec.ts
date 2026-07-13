@@ -20,9 +20,9 @@ import {
 import testData from '../../../../data/coop/feature-dealer-dashboard/feature-budget/test-data.json';
 
 // ═══════════════════════════════════════════════════════════════════════════════
-//  SMOKE TESTS — Critical path, fast validation
+//  SMOKE TESTS - Critical path, fast validation
 // ═══════════════════════════════════════════════════════════════════════════════
-test.describe('Dealer Budget Tab — Smoke Tests', () => {
+test.describe('Dealer Budget Tab - Smoke Tests', () => {
 
     test('@smoke COOP-BDG-T-019: Page loads and shows budget tab for dealer role', async ({ page }) => {
         await loginAsDealer(page, testData.users.dealer);
@@ -72,7 +72,7 @@ test.describe('Dealer Budget Tab — Smoke Tests', () => {
         ).toBe(true);
     });
 
-    test('@smoke COOP-BDG-T-027: IsDealer override — dealer cannot spoof another dealer seq', async ({ page }) => {
+    test('@smoke COOP-BDG-T-027: IsDealer override - dealer cannot spoof another dealer seq', async ({ page }) => {
         await loginAsDealer(page, testData.users.dealer);
         const result = await attemptCrossDealerAccess(
             page,
@@ -97,15 +97,15 @@ test.describe('Dealer Budget Tab — Smoke Tests', () => {
 });
 
 // ═══════════════════════════════════════════════════════════════════════════════
-//  REGRESSION TESTS — Full FU coverage
+//  REGRESSION TESTS - Full FU coverage
 // ═══════════════════════════════════════════════════════════════════════════════
-test.describe('Dealer Budget Tab — Regression Tests', () => {
+test.describe('Dealer Budget Tab - Regression Tests', () => {
 
     test.beforeEach(async ({ page }) => {
         await loginAsDealer(page, testData.users.dealer);
     });
 
-    // ── UI ──────────────────────────────────────────────────────────────────────
+    // -- UI ----------------------------------------------------------------------
     test('@regression COOP-BDG-T-002: Fiscal year dropdown is populated on page load', async ({ page }) => {
         const budgetPage = new DealerBudgetPage(page);
         await budgetPage.navigate(testData.dealers.valid.encryptedDealerSeq);
@@ -150,7 +150,7 @@ test.describe('Dealer Budget Tab — Regression Tests', () => {
         expect(await budgetPage.mediaTypeMoreDetailBtn.isVisible()).toBe(true);
     });
 
-    // ── DataEntry ────────────────────────────────────────────────────────────────
+    // -- DataEntry ----------------------------------------------------------------
     test('@regression COOP-BDG-T-009: Changing fiscal year refreshes all dashboard data', async ({ page }) => {
         const budgetPage = new DealerBudgetPage(page);
         await budgetPage.navigate(testData.dealers.valid.encryptedDealerSeq);
@@ -166,7 +166,7 @@ test.describe('Dealer Budget Tab — Regression Tests', () => {
         await waitForAllChartsRendered(page);
 
         const totalAfter = await budgetPage.getKpiValue('total');
-        // Values may differ or be the same — but the AJAX call must have fired
+        // Values may differ or be the same - but the AJAX call must have fired
         expect(programResponse.status()).toBe(200);
         expect(await budgetPage.assertChartsRendered()).toBe(true);
     });
@@ -190,7 +190,7 @@ test.describe('Dealer Budget Tab — Regression Tests', () => {
         expect(await budgetPage.assertChartsRendered()).toBe(true);
     });
 
-    // ── BusinessLogic ────────────────────────────────────────────────────────────
+    // -- BusinessLogic ------------------------------------------------------------
     test('@regression COOP-BDG-T-012: BudgetData response contains all required spent fields', async ({ page }) => {
         const [response] = await Promise.all([
             page.waitForResponse(r => r.url().includes('/BudgetData') && r.status() === 200),
@@ -249,7 +249,7 @@ test.describe('Dealer Budget Tab — Regression Tests', () => {
         }
     });
 
-    test('@regression COOP-BDG-T-016: Zero-budget scenario — KPIs show $0.00 when no data', async ({ page }) => {
+    test('@regression COOP-BDG-T-016: Zero-budget scenario - KPIs show $0.00 when no data', async ({ page }) => {
         // This test validates the zeroed model return path
         const [response] = await Promise.all([
             page.waitForResponse(r => r.url().includes('/BudgetData') && r.status() === 200),
@@ -280,7 +280,7 @@ test.describe('Dealer Budget Tab — Regression Tests', () => {
         expect(dealerNumber.length).toBeGreaterThan(0);
     });
 
-    // ── Workflow ────────────────────────────────────────────────────────────────
+    // -- Workflow ----------------------------------------------------------------
     test('@regression COOP-BDG-T-021: Fiscal year change updates fiscal range span', async ({ page }) => {
         const budgetPage = new DealerBudgetPage(page);
         await budgetPage.navigate(testData.dealers.valid.encryptedDealerSeq);
@@ -320,7 +320,7 @@ test.describe('Dealer Budget Tab — Regression Tests', () => {
         expect(href).toContain('/Reports/Coop/Budget/BudgetByMediaTypeReport');
     });
 
-    // ── DataPersistence ──────────────────────────────────────────────────────────
+    // -- DataPersistence ----------------------------------------------------------
     test('@regression COOP-BDG-T-024: DealerNumberSeq hidden field contains encrypted value', async ({ page }) => {
         const budgetPage = new DealerBudgetPage(page);
         await budgetPage.navigate(testData.dealers.valid.encryptedDealerSeq);
@@ -336,8 +336,8 @@ test.describe('Dealer Budget Tab — Regression Tests', () => {
         expect(mediaLink).toContain(testData.urls.mediaTypeReport);
     });
 
-    // ── Security ────────────────────────────────────────────────────────────────
-    test('@regression COOP-BDG-T-029: No dealer_number_seq → redirect to AdminIndex', async ({ page }) => {
+    // -- Security ----------------------------------------------------------------
+    test('@regression COOP-BDG-T-029: No dealer_number_seq -> redirect to AdminIndex', async ({ page }) => {
         await navigateToBudgetTabWithoutSeq(page);
         await page.waitForLoadState('networkidle');
         expect(
@@ -345,7 +345,7 @@ test.describe('Dealer Budget Tab — Regression Tests', () => {
         ).toBe(true);
     });
 
-    test('@regression COOP-BDG-T-028: ViewOnly role — writePermission is set to "1"', async ({ page }) => {
+    test('@regression COOP-BDG-T-028: ViewOnly role - writePermission is set to "1"', async ({ page }) => {
         await loginAsDealer(page, testData.users.viewOnly);
         const budgetPage = new DealerBudgetPage(page);
         await budgetPage.navigate(testData.dealers.valid.encryptedDealerSeq);
@@ -355,13 +355,13 @@ test.describe('Dealer Budget Tab — Regression Tests', () => {
 });
 
 // ═══════════════════════════════════════════════════════════════════════════════
-//  E2E TESTS — Cross-tab workflow
+//  E2E TESTS - Cross-tab workflow
 // ═══════════════════════════════════════════════════════════════════════════════
-test.describe('Dealer Budget Tab — E2E Tests', () => {
+test.describe('Dealer Budget Tab - E2E Tests', () => {
 
     test('@e2e COOP-BDG-T-E01: Admin navigates to dealer and views budget tab', async ({ page }) => {
         await loginAsAdmin(page, testData.users.admin);
-        // Start from admin dealer search → select dealer → navigate to budget tab
+        // Start from admin dealer search -> select dealer -> navigate to budget tab
         await page.goto('/CoopManagement/Dealer/AdminIndex');
         await page.waitForLoadState('networkidle');
         // Navigate directly to budget tab simulating dealer selection
@@ -371,7 +371,7 @@ test.describe('Dealer Budget Tab — E2E Tests', () => {
         expect(await budgetPage.assertChartsRendered()).toBe(true);
     });
 
-    test('@e2e COOP-BDG-T-E02: Dealer changes year and program type — full dashboard remains consistent', async ({ page }) => {
+    test('@e2e COOP-BDG-T-E02: Dealer changes year and program type - full dashboard remains consistent', async ({ page }) => {
         await loginAsDealer(page, testData.users.dealer);
         const budgetPage = new DealerBudgetPage(page);
         await budgetPage.navigate(testData.dealers.valid.encryptedDealerSeq);

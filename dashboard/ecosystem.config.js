@@ -1,5 +1,5 @@
 /**
- * PM2 Ecosystem Config — Dealer Platform QA Dashboard
+ * PM2 Ecosystem Config - Dealer Platform QA Dashboard
  *
  * Usage:
  *   pm2 start ecosystem.config.js          # start
@@ -9,7 +9,7 @@
  *   pm2 startup                            # register PM2 as Windows service
  *
  * All sensitive values come from environment variables set by the
- * ADO pipeline — never hardcoded here.
+ * ADO pipeline - never hardcoded here.
  */
 
 module.exports = {
@@ -31,7 +31,7 @@ module.exports = {
       out_file:         "./dashboard/logs/dashboard-out.log",
       merge_logs:       true,
 
-      // Environment — overridden by ADO pipeline at deploy time
+      // Environment - overridden by ADO pipeline at deploy time
       env: {
         NODE_ENV:          "production",
         DASHBOARD_PORT:    process.env.DASHBOARD_PORT    || "3333",

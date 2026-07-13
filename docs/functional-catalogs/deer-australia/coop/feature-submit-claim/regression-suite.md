@@ -1,4 +1,4 @@
-# Regression Suite — Submit Claim (Deer Australia)
+# Regression Suite - Submit Claim (Deer Australia)
 
 **Client:** deer-australia | **Module:** coop | **Feature:** submit-claim  
 **Tier:** Regression | **Count:** 44 | **Run Order:** Parallel by category
@@ -6,7 +6,7 @@
 ---
 
 ## Purpose
-Full behavioral coverage — validation, business logic, workflow, data persistence, security, and error handling. Run on every merge to main and on scheduled nightly runs.
+Full behavioral coverage - validation, business logic, workflow, data persistence, security, and error handling. Run on every merge to main and on scheduled nightly runs.
 
 ---
 
@@ -15,23 +15,23 @@ Full behavioral coverage — validation, business logic, workflow, data persiste
 ### Validation (17 tests)
 | ID | Title | Priority |
 |---|---|---|
-| COOP-CL-TC-001 | Submit without Preapproval selection → error | P2-High |
-| COOP-CL-TC-002 | Submit without invoice number → error | P2-High |
-| COOP-CL-TC-003 | Submit without vendor name → error | P2-High |
-| COOP-CL-TC-004 | Submit without invoice date → error | P2-High |
-| COOP-CL-TC-005 | Submit without invoice amount → error | P2-High |
-| COOP-CL-TC-006 | Submit with claim amount = 0 → error | P2-High |
-| COOP-CL-TC-007 | Claim amount exceeds preapproval balance → blocked | P1-Critical |
-| COOP-CL-TC-008 | Claim amount exceeds 50% of invoice → blocked | P1-Critical |
-| COOP-CL-TC-009 | Submit without email → error | P2-High |
-| COOP-CL-TC-010 | Invalid email format → error | P2-High |
-| COOP-CL-TC-011 | Submit without document and without link (non-admin) → error | P1-Critical |
-| COOP-CL-TC-012 | Provide link only → accepted | P2-High |
+| COOP-CL-TC-001 | Submit without Preapproval selection -> error | P2-High |
+| COOP-CL-TC-002 | Submit without invoice number -> error | P2-High |
+| COOP-CL-TC-003 | Submit without vendor name -> error | P2-High |
+| COOP-CL-TC-004 | Submit without invoice date -> error | P2-High |
+| COOP-CL-TC-005 | Submit without invoice amount -> error | P2-High |
+| COOP-CL-TC-006 | Submit with claim amount = 0 -> error | P2-High |
+| COOP-CL-TC-007 | Claim amount exceeds preapproval balance -> blocked | P1-Critical |
+| COOP-CL-TC-008 | Claim amount exceeds 50% of invoice -> blocked | P1-Critical |
+| COOP-CL-TC-009 | Submit without email -> error | P2-High |
+| COOP-CL-TC-010 | Invalid email format -> error | P2-High |
+| COOP-CL-TC-011 | Submit without document and without link (non-admin) -> error | P1-Critical |
+| COOP-CL-TC-012 | Provide link only -> accepted | P2-High |
 | COOP-CL-TC-013 | Invalid file type rejected | P2-High |
 | COOP-CL-TC-014 | File > 100 MB rejected | P2-High |
-| COOP-CL-TC-015 | Submit with zero fund balance → blocked | P1-Critical |
-| COOP-CL-TC-016 | Duplicate invoice number → blocked | P2-High |
-| COOP-CL-TC-017 | Invoice date in future → blocked | P2-High |
+| COOP-CL-TC-015 | Submit with zero fund balance -> blocked | P1-Critical |
+| COOP-CL-TC-016 | Duplicate invoice number -> blocked | P2-High |
+| COOP-CL-TC-017 | Invoice date in future -> blocked | P2-High |
 
 ### Business Logic (10 tests)
 | ID | Title | Priority |

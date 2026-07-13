@@ -27,73 +27,73 @@ Everything is organized **module-first**, then **feature-first**, consistently a
 
 ```
 {root-folder}/
-└── {sub-type}/
-    └── {module}/
-        └── feature-{feature-name}/
-            └── files
+└-- {sub-type}/
+    └-- {module}/
+        └-- feature-{feature-name}/
+            └-- files
 ```
 
 **Example:** `reports/comparison/coop/feature-submit-claim/coop-submit-claim-comparison.md`
 
 ```
 DealerPlatform.QA/
-├── scripts/
-│   └── new-module.ps1               # Scaffold script for new modules/features
-├── templates/                       # Source templates used by new-module.ps1
-│   ├── feature-spec.ts
-│   ├── FeaturePage.ts
-│   ├── feature-api.spec.ts
-│   ├── test-data.json
-│   └── verify-records.sql
-├── docs/
-│   ├── functional-catalogs/
-│   │   └── {module}/
-│   │       └── feature-{feature}/   # Test catalog, smoke/regression/e2e suites
-│   ├── migration-reports/
-│   │   └── {module}/
-│   │       └── feature-{feature}/   # Legacy-to-Modern component mappings
-│   └── module-analysis/
-│       └── {module}/
-│           └── feature-{feature}/   # Discovery documents
-├── dashboard/
-│   └── server.js                        # QA Dashboard (npm run dashboard → localhost:3333)
-├── tests/
-│   ├── playwright/
-│   │   ├── specs/
-│   │   │   └── {module}/
-│   │   │       └── feature-{feature}/  # UI spec files
-│   │   ├── pages/
-│   │   │   └── {module}/
-│   │   │       └── feature-{feature}/  # Page Object Models
-│   │   ├── helpers/
-│   │   │   └── {module}/
-│   │   │       └── feature-{feature}/  # Reusable action helpers
-│   │   ├── data/
-│   │   │   └── {module}/
-│   │   │       └── feature-{feature}/  # Test data JSON
-│   │   └── fixtures/
-│   │       ├── {module}/               # Environment-aware module fixtures
-│   │       └── .auth/                  # Stored auth state
-│   ├── api/
-│   │   └── {module}/
-│   │       └── feature-{feature}/      # API spec files
-│   └── database/
-│       └── {module}/
-│           └── feature-{feature}/      # SQL verification scripts
-├── reports/
-│   ├── smoke/
-│   │   └── {module}/feature-{feature}/
-│   ├── regression/
-│   │   └── {module}/feature-{feature}/
-│   ├── e2e/
-│   │   └── {module}/feature-{feature}/
-│   ├── comparison/
-│   │   └── {module}/feature-{feature}/
-│   └── readiness/
-│       └── {module}/feature-{feature}/
-└── baseline/
-    ├── legacy/
-    └── modern/
+├-- scripts/
+│   └-- new-module.ps1               # Scaffold script for new modules/features
+├-- templates/                       # Source templates used by new-module.ps1
+│   ├-- feature-spec.ts
+│   ├-- FeaturePage.ts
+│   ├-- feature-api.spec.ts
+│   ├-- test-data.json
+│   └-- verify-records.sql
+├-- docs/
+│   ├-- functional-catalogs/
+│   │   └-- {module}/
+│   │       └-- feature-{feature}/   # Test catalog, smoke/regression/e2e suites
+│   ├-- migration-reports/
+│   │   └-- {module}/
+│   │       └-- feature-{feature}/   # Legacy-to-Modern component mappings
+│   └-- module-analysis/
+│       └-- {module}/
+│           └-- feature-{feature}/   # Discovery documents
+├-- dashboard/
+│   └-- server.js                        # QA Dashboard (npm run dashboard -> localhost:3333)
+├-- tests/
+│   ├-- playwright/
+│   │   ├-- specs/
+│   │   │   └-- {module}/
+│   │   │       └-- feature-{feature}/  # UI spec files
+│   │   ├-- pages/
+│   │   │   └-- {module}/
+│   │   │       └-- feature-{feature}/  # Page Object Models
+│   │   ├-- helpers/
+│   │   │   └-- {module}/
+│   │   │       └-- feature-{feature}/  # Reusable action helpers
+│   │   ├-- data/
+│   │   │   └-- {module}/
+│   │   │       └-- feature-{feature}/  # Test data JSON
+│   │   └-- fixtures/
+│   │       ├-- {module}/               # Environment-aware module fixtures
+│   │       └-- .auth/                  # Stored auth state
+│   ├-- api/
+│   │   └-- {module}/
+│   │       └-- feature-{feature}/      # API spec files
+│   └-- database/
+│       └-- {module}/
+│           └-- feature-{feature}/      # SQL verification scripts
+├-- reports/
+│   ├-- smoke/
+│   │   └-- {module}/feature-{feature}/
+│   ├-- regression/
+│   │   └-- {module}/feature-{feature}/
+│   ├-- e2e/
+│   │   └-- {module}/feature-{feature}/
+│   ├-- comparison/
+│   │   └-- {module}/feature-{feature}/
+│   └-- readiness/
+│       └-- {module}/feature-{feature}/
+└-- baseline/
+    ├-- legacy/
+    └-- modern/
 ```
 
 ---
@@ -107,12 +107,12 @@ DealerPlatform.QA/
 | Submit Claim | `feature-submit-claim` | In Progress |
 | Submit Preapproval | `feature-submit-preapproval` | Planned |
 | Admin Reports | `feature-admin-reports` | Planned |
-| Dealer Dashboard — Dealer Info Tab | `feature-dealer-dashboard/feature-dealer-info-tab` | Planned |
-| Dealer Dashboard — Budget | `feature-dealer-dashboard/feature-budget` | Planned |
-| Dealer Dashboard — My Todo | `feature-dealer-dashboard/feature-my-todo` | Planned |
-| Dealer Dashboard — Claim Activity | `feature-dealer-dashboard/feature-coop-activity/feature-claim-activity` | Planned |
-| Dealer Dashboard — Preapproval Activity | `feature-dealer-dashboard/feature-coop-activity/feature-preapproval-activity` | Planned |
-| Dealer Dashboard — Reports Tab | `feature-dealer-dashboard/feature-reports-tab` | Planned |
+| Dealer Dashboard - Dealer Info Tab | `feature-dealer-dashboard/feature-dealer-info-tab` | Planned |
+| Dealer Dashboard - Budget | `feature-dealer-dashboard/feature-budget` | Planned |
+| Dealer Dashboard - My Todo | `feature-dealer-dashboard/feature-my-todo` | Planned |
+| Dealer Dashboard - Claim Activity | `feature-dealer-dashboard/feature-coop-activity/feature-claim-activity` | Planned |
+| Dealer Dashboard - Preapproval Activity | `feature-dealer-dashboard/feature-coop-activity/feature-preapproval-activity` | Planned |
+| Dealer Dashboard - Reports Tab | `feature-dealer-dashboard/feature-reports-tab` | Planned |
 
 ### PopShop (`popshop`)
 
@@ -177,7 +177,7 @@ npm run dashboard
 
 ### Features
 
-- **Interactive Test Runner**: Select module → feature → tier → platform → environment, then click **Run Tests**
+- **Interactive Test Runner**: Select module -> feature -> tier -> platform -> environment, then click **Run Tests**
 - **Live Streaming**: Results stream in real-time via Server-Sent Events
 - **Test History**: Last 20 run summaries retained with pass/fail metrics
 - **Auto-Updated Status**: Step 4 automatically updates dashboard after test execution with:
@@ -192,9 +192,9 @@ npm run dashboard
 ### Dashboard Data Source
 
 The dashboard reads from `dashboard/catalog-manifest.json`, which is automatically maintained by the migration QA framework during:
-- Step 0 (Scaffold) — Initial feature entry creation
-- Step 3 (Test Generation) — Implementation status updates
-- Step 4 (Test Execution) — Test results and health metrics
+- Step 0 (Scaffold) - Initial feature entry creation
+- Step 3 (Test Generation) - Implementation status updates
+- Step 4 (Test Execution) - Test results and health metrics
 
 ---
 
@@ -249,7 +249,7 @@ Copy the template and fill in your own paths:
 Copy-Item config\repos.json config\repos.local.json
 ```
 
-Then edit `config/repos.local.json` — replace every `{{placeholder}}` with your actual paths:
+Then edit `config/repos.local.json` - replace every `{{placeholder}}` with your actual paths:
 
 ```json
 {
@@ -264,7 +264,7 @@ Then edit `config/repos.local.json` — replace every `{{placeholder}}` with you
 }
 ```
 
-`repos.local.json` is gitignored — your paths never get committed.
+`repos.local.json` is gitignored - your paths never get committed.
 
 ### Environment Configuration
 
@@ -326,28 +326,28 @@ Each feature follows this comprehensive analysis and validation process:
 
 ---
 
-## Migration QA Pipeline (Steps 0 → 4)
+## Migration QA Pipeline (Steps 0 -> 4)
 
 Every feature follows this sequence. **Steps run in order. Step 2.6 is a gate, Step 3 only runs if gate passes.**
 
 ```
-Step 0     /scaffold                        One-time setup — creates folder structure
-             ↓
+Step 0     /scaffold                        One-time setup - creates folder structure
+             v
 Step 2     /functional-unit-discovery       Catalog functional units from source
-             ↓
+             v
 Step 2.5   /gap-analysis                    Legacy vs Modern gap analysis (8 dimensions)
-             ↓
-Step 2.6   /coverage-signoff                GATE — Ready / Remediate / Blocked
-             ↓  (only if PASSED)
+             v
+Step 2.6   /coverage-signoff                GATE - Ready / Remediate / Blocked
+             v  (only if PASSED)
 Step 3     /playwright-test-generation      Generate specs, POMs, helpers, test data
-             ↓
+             v
 Step 4     Run Playwright Test Suite        Execute tests (smoke/regression/e2e)
-             └─ Update QA Dashboard          Reflect test results and health metrics
+             └- Update QA Dashboard          Reflect test results and health metrics
 ```
 
-**Orchestrator**: Use `/migration-qa-framework` to run the complete Steps 2 → 4 pipeline automatically.
+**Orchestrator**: Use `/migration-qa-framework` to run the complete Steps 2 -> 4 pipeline automatically.
 
-### Step 4 — Test Execution
+### Step 4 - Test Execution
 
 After test generation (Step 3), run the Playwright test suite:
 
@@ -366,41 +366,41 @@ Results are automatically updated in the QA Dashboard with:
 - Test execution duration
 - Test health metrics (stability, flaky tests)
 - Links to test reports and artifacts
-           ↓
+           v
 Step 2.5  Legacy vs Modern Gap Analysis
-           ↓
+           v
 Step 2.6  Functional Coverage Sign-off
-           ↓  ← GATE: "Ready for Automation" required
+           v  <- GATE: "Ready for Automation" required
 Step 3   Playwright Test Generation
 
-/migration-qa-framework runs Steps 1 → 2 → 2.5 → 2.6 → 3 in one go (also asks questions first)
+/migration-qa-framework runs Steps 1 -> 2 -> 2.5 -> 2.6 -> 3 in one go (also asks questions first)
 ```
 
-### Step 1 — Repository Discovery
-> "Analyze Co-op Submit Claim — legacy and modern repos"
+### Step 1 - Repository Discovery
+> "Analyze Co-op Submit Claim - legacy and modern repos"
 
 Invokes `/functional-unit-discovery` (mode=discovery). Reads both codebases, maps
 all files, endpoints, services, and stored procedures.
-→ `docs/module-analysis/{module}/feature-{feature}/discovery.md`
+-> `docs/module-analysis/{module}/feature-{feature}/discovery.md`
 
-### Step 2 — Functional Unit Discovery
+### Step 2 - Functional Unit Discovery
 > "Generate Functional Unit Catalog and Migration Mapping"
 
 Invokes `/functional-unit-discovery` (mode=catalog). Extracts every discrete
 testable behavior. Maps each to legacy + modern implementation.
-→ `docs/functional-catalogs/{module}/feature-{feature}/functional-units.md`
-→ `docs/migration-reports/{module}/feature-{feature}/mapping.md`
+-> `docs/functional-catalogs/{module}/feature-{feature}/functional-units.md`
+-> `docs/migration-reports/{module}/feature-{feature}/mapping.md`
 
-### Step 2.5 — Gap Analysis
+### Step 2.5 - Gap Analysis
 > "Run gap analysis for coop submit-claim"
 
 Invokes `/gap-analysis`. Compares all 8 dimensions: Functional Units, UI Elements,
 Validation Rules, Business Rules, Workflow Transitions, Database Operations,
 Stored Procedures, Security Rules.
-→ `docs/functional-catalogs/{module}/feature-{feature}/gap-analysis.md`
-→ `docs/functional-catalogs/{module}/feature-{feature}/coverage-matrix.md`
+-> `docs/functional-catalogs/{module}/feature-{feature}/gap-analysis.md`
+-> `docs/functional-catalogs/{module}/feature-{feature}/coverage-matrix.md`
 
-### Step 2.6 — Coverage Sign-off (Gate)
+### Step 2.6 - Coverage Sign-off (Gate)
 > "Sign off coverage for coop submit-claim"
 
 Invokes `/coverage-signoff`. Issues one of three decisions:
@@ -408,12 +408,12 @@ Invokes `/coverage-signoff`. Issues one of three decisions:
 | Decision | Condition | Action |
 |---|---|---|
 | ✅ Ready for Automation | 0 Critical, 0 High gaps, all coverage thresholds met | Proceed to Step 3 |
-| ⚠️ Needs Remediation | High gaps present, coverage 80–89% | Fix gaps, re-run Step 2.5 |
+| [!]️ Needs Remediation | High gaps present, coverage 80-89% | Fix gaps, re-run Step 2.5 |
 | 🚫 Blocked | Critical gaps or security FUs missing | No automation until fixed |
 
-→ `docs/functional-catalogs/{module}/feature-{feature}/signoff.md`
+-> `docs/functional-catalogs/{module}/feature-{feature}/signoff.md`
 
-### Step 3 — Playwright Generation *(gated)*
+### Step 3 - Playwright Generation *(gated)*
 > "Generate Playwright tests for coop submit-claim"
 
 **Only runs after Step 2.6 returns ✅ Ready for Automation.**
@@ -429,13 +429,13 @@ Invokes `/playwright-test-generation`. Generates:
 
 | Skill | Step | Purpose |
 |---|---|---|
-| `/scaffold` | 0 — One-time setup | Interactive questions → creates all folders, updates dashboard, README, config |
-| `/migration-qa-framework` | Orchestrator | Interactive questions → runs full Steps 2 → 2.5 → 2.6 → 3 → 4 pipeline |
-| `/functional-unit-discovery` | 2 | Repository discovery → Functional Unit Catalog |
+| `/scaffold` | 0 - One-time setup | Interactive questions -> creates all folders, updates dashboard, README, config |
+| `/migration-qa-framework` | Orchestrator | Interactive questions -> runs full Steps 2 -> 2.5 -> 2.6 -> 3 -> 4 pipeline |
+| `/functional-unit-discovery` | 2 | Repository discovery -> Functional Unit Catalog |
 | `/gap-analysis` | 2.5 | Legacy vs Modern gap analysis across 8 dimensions |
-| `/coverage-signoff` | 2.6 | Gate decision — Ready / Remediate / Blocked |
+| `/coverage-signoff` | 2.6 | Gate decision - Ready / Remediate / Blocked |
 | `/playwright-test-generation` | 3 | Generate POMs, specs, helpers, API tests, DB scripts |
-| **Test Execution** | **4** | **Run Playwright tests (smoke/regression/e2e) → Update QA Dashboard** |
+| **Test Execution** | **4** | **Run Playwright tests (smoke/regression/e2e) -> Update QA Dashboard** |
 | `/migration-comparison` | Post-execution | Run legacy vs modern side-by-side, produce diff report |
 | `/api-verification` | Post-execution | Validate REST API contracts |
 | `/database-verification` | Post-execution | SQL data integrity verification scripts |

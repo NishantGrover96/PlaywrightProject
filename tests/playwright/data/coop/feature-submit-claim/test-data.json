@@ -1,5 +1,5 @@
 {
-  "_comment": "Submit Claim — test data. Credentials loaded from env vars; values here are safe defaults for local non-prod runs.",
+  "_comment": "Submit Claim - test data. Credentials loaded from env vars; values here are safe defaults for local non-prod runs.",
   "_verified": "2026-06-17 against demoportal.channel-fusion.com (DemoClient, Dealer01)",
 
   "users": {
@@ -38,19 +38,19 @@
 
   "valid": {
     "mediaType":     "Direct",
-    "mediaName":     "QA Test — Direct Mail Flyer",
+    "mediaName":     "QA Test - Direct Mail Flyer",
     "invoiceAmount": "500.00",
     "invoiceNumber": "INV-QA-001",
     "contactName":   "QA Tester",
     "contactEmail":  "qa@example.com",
     "contactPhone":  "416-555-0123",
     "activityDate":  "01/15/2026",
-    "comment":       "Automated QA submission — do not process"
+    "comment":       "Automated QA submission - do not process"
   },
 
   "validB": {
     "mediaType":     "Paid Search",
-    "mediaName":     "QA Test — Paid Search Campaign",
+    "mediaName":     "QA Test - Paid Search Campaign",
     "invoiceAmount": "250.00",
     "invoiceNumber": "INV-QA-002",
     "activityDate":  "02/01/2026"

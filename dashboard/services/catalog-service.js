@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Catalog Service — loads, merges, and caches all per-client catalog manifests.
+ * Catalog Service - loads, merges, and caches all per-client catalog manifests.
  *
  * Watches dashboard/catalogs/ for file changes and auto-reloads.
  * Source of truth for all feature metadata consumed by the dashboard.
@@ -19,17 +19,17 @@ const path = require('path');
 
 const ROOT         = path.join(__dirname, '..', '..');
 const CATALOGS_DIR = path.join(__dirname, '..', 'catalogs');
-// Legacy single-file manifest (backward compat — DemoPortal existing entries)
+// Legacy single-file manifest (backward compat - DemoPortal existing entries)
 const LEGACY_MANIFEST = path.join(__dirname, '..', 'catalog-manifest.json');
 
 // ---------------------------------------------------------------------------
 // In-memory cache
 // ---------------------------------------------------------------------------
 
-/** @type {Map<string, object>}  featureId → feature entry, across all clients */
+/** @type {Map<string, object>}  featureId -> feature entry, across all clients */
 let _featureCache = new Map();
 
-/** @type {Map<string, object[]>}  clientId → array of feature entries */
+/** @type {Map<string, object[]>}  clientId -> array of feature entries */
 let _clientCache  = new Map();
 
 let _lastLoaded   = 0;
@@ -103,7 +103,7 @@ const catalogService = {
    * Get a single feature entry, searching across all clients or within a specific client.
    *
    * @param {string}  featureId
-   * @param {string?} clientId   Optional — narrows to one client
+   * @param {string?} clientId   Optional - narrows to one client
    * @returns {object|null}
    */
   getFeature(featureId, clientId) {
@@ -188,7 +188,7 @@ const catalogService = {
     try {
       fs.watch(CATALOGS_DIR, { persistent: false }, (event, filename) => {
         if (filename && filename.endsWith('.json')) {
-          console.log(`[catalog-service] File changed: ${filename} — reloading catalog.`);
+          console.log(`[catalog-service] File changed: ${filename} - reloading catalog.`);
           // Debounce: wait 300ms before reload to avoid rapid successive reloads
           clearTimeout(catalogService._reloadTimer);
           catalogService._reloadTimer = setTimeout(() => {
@@ -198,7 +198,7 @@ const catalogService = {
         }
       });
     } catch {
-      // fs.watch not supported in this environment — graceful degradation
+      // fs.watch not supported in this environment - graceful degradation
     }
   },
 };
@@ -244,7 +244,7 @@ function _loadLegacyManifest() {
 
     const cacheKey = `${enriched.clientId}::${featureId}`;
     _featureCache.set(cacheKey, enriched);
-    // NOTE: do NOT add a plain featureId key — that causes duplicate results in getAll()
+    // NOTE: do NOT add a plain featureId key - that causes duplicate results in getAll()
   }
 }
 
@@ -285,14 +285,14 @@ function _loadClientCatalogs() {
         _featureCache.set(cacheKey, enriched);
       }
     } catch (err) {
-      console.warn(`[catalog-service] Cannot load catalog ${file}: ${err.message} — skipping.`);
+      console.warn(`[catalog-service] Cannot load catalog ${file}: ${err.message} - skipping.`);
     }
   }
 }
 
 function _inferModuleFromId(featureId) {
-  // e.g. "coop-submit-claim" → "coop"
-  //      "engage-ads-campaign-setup" → "engage-ads"
+  // e.g. "coop-submit-claim" -> "coop"
+  //      "engage-ads-campaign-setup" -> "engage-ads"
   const parts = featureId.split('-');
   if (parts.length >= 3 && parts[0] === 'engage') return 'engage-ads';
   return parts[0] || 'unknown';

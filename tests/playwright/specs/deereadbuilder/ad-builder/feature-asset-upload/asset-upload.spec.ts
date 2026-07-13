@@ -9,15 +9,15 @@ import {
 } from '../../../../helpers/deereadbuilder/ad-builder/feature-asset-upload/asset-upload.helpers';
 import testData from '../../../../data/deereadbuilder/ad-builder/feature-asset-upload/test-data.json';
 
-test.describe('DeerAd Builder â€” Asset Upload', () => {
+test.describe('DeerAd Builder - Asset Upload', () => {
   test.beforeEach(async ({ page }) => {
     // Auth state should be loaded from storageState fixture
     // This ensures each test starts with an authenticated session
   });
 
-  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  // ------------------------------------------------------------------------------
   // SMOKE TESTS (5 tests)
-  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  // ------------------------------------------------------------------------------
 
   test.describe('Smoke Suite', () => {
     test('ASUP-SMOKE-001: Page loads for authenticated user @smoke @critical', async ({
@@ -60,7 +60,7 @@ test.describe('DeerAd Builder â€” Asset Upload', () => {
       page,
     }) => {
       const assetPage = await uploadAssetHappyPath(page, testFiles.validJpg, {
-        displayName: 'Test Banner â€” Smoke Test',
+        displayName: 'Test Banner - Smoke Test',
         locale: testData.valid.locale,
         divisions: testData.valid.divisions,
       });
@@ -93,7 +93,7 @@ test.describe('DeerAd Builder â€” Asset Upload', () => {
       request,
     }) => {
       const assetPage = await uploadAssetHappyPath(page, testFiles.validJpg, {
-        displayName: 'Smoke Test Asset â€” DB Verification',
+        displayName: 'Smoke Test Asset - DB Verification',
       });
 
       // Verify success message
@@ -110,9 +110,9 @@ test.describe('DeerAd Builder â€” Asset Upload', () => {
     });
   });
 
-  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-  // VALIDATION TESTS (21 tests â€” sampling)
-  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  // ------------------------------------------------------------------------------
+  // VALIDATION TESTS (21 tests - sampling)
+  // ------------------------------------------------------------------------------
 
   test.describe('Validation Tests', () => {
     test('ASUP-TC-001: Display name required @regression', async ({ page }) => {
@@ -259,12 +259,12 @@ test.describe('DeerAd Builder â€” Asset Upload', () => {
     });
   });
 
-  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-  // BUSINESS LOGIC TESTS (15 tests â€” sampling)
-  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  // ------------------------------------------------------------------------------
+  // BUSINESS LOGIC TESTS (15 tests - sampling)
+  // ------------------------------------------------------------------------------
 
   test.describe('Business Logic Tests', () => {
-    test('ASUP-TC-003: Asset type auto-detected: JPG â†’ Image @regression', async ({
+    test('ASUP-TC-003: Asset type auto-detected: JPG -> Image @regression', async ({
       page,
     }) => {
       const assetPage = await navigateToAssetUpload(page);
@@ -279,7 +279,7 @@ test.describe('DeerAd Builder â€” Asset Upload', () => {
       await expect(assetPage.settingSelect).toBeVisible();
     });
 
-    test('ASUP-TC-004: Asset type auto-detected: MP4 â†’ Video @regression', async ({
+    test('ASUP-TC-004: Asset type auto-detected: MP4 -> Video @regression', async ({
       page,
     }) => {
       const assetPage = await navigateToAssetUpload(page);
@@ -328,7 +328,7 @@ test.describe('DeerAd Builder â€” Asset Upload', () => {
       }
     });
 
-    test('ASUP-TC-031: New asset â†’ Save & New flow @regression', async ({
+    test('ASUP-TC-031: New asset -> Save & New flow @regression', async ({
       page,
     }) => {
       // Upload and save first asset
@@ -376,9 +376,9 @@ test.describe('DeerAd Builder â€” Asset Upload', () => {
     });
   });
 
-  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-  // WORKFLOW TESTS (12 tests â€” sampling)
-  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  // ------------------------------------------------------------------------------
+  // WORKFLOW TESTS (12 tests - sampling)
+  // ------------------------------------------------------------------------------
 
   test.describe('Workflow Tests', () => {
     test('ASUP-TC-030: Edit mode shows update button, not save button @regression', async ({
@@ -438,7 +438,7 @@ test.describe('DeerAd Builder â€” Asset Upload', () => {
       await expect(assetRow).toBeVisible({ timeout: 5000 });
     });
 
-    test('ASUP-TC-037: Status change: Active â†’ Inactive @regression', async ({
+    test('ASUP-TC-037: Status change: Active -> Inactive @regression', async ({
       page,
     }) => {
       const assetPage = await uploadAssetHappyPath(page, testFiles.validJpg, {
@@ -469,9 +469,9 @@ test.describe('DeerAd Builder â€” Asset Upload', () => {
     });
   });
 
-  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  // ------------------------------------------------------------------------------
   // SECURITY TESTS (4 tests)
-  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  // ------------------------------------------------------------------------------
 
   test.describe('Security Tests', () => {
     test('ASUP-TC-039: File extension whitelist enforcement @regression @security', async ({
@@ -546,15 +546,15 @@ test.describe('DeerAd Builder â€” Asset Upload', () => {
     });
   });
 
-  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-  // E2E TESTS (11 tests â€” sampling)
-  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  // ------------------------------------------------------------------------------
+  // E2E TESTS (11 tests - sampling)
+  // ------------------------------------------------------------------------------
 
   test.describe('E2E Tests', () => {
-    test('ASUP-E2E-001: Full workflow: Upload â†’ Save â†’ Verify in library @e2e', async ({
+    test('ASUP-E2E-001: Full workflow: Upload -> Save -> Verify in library @e2e', async ({
       page,
     }) => {
-      const displayName = 'E2E Test Banner â€” ' + Date.now();
+      const displayName = 'E2E Test Banner - ' + Date.now();
 
       // Step 1: Upload and save
       const assetPage = await uploadAssetHappyPath(page, testFiles.validJpg, {
@@ -582,10 +582,10 @@ test.describe('DeerAd Builder â€” Asset Upload', () => {
       await expect(titleInPreview).toBeVisible();
     });
 
-    test('ASUP-E2E-003: Edit asset â†’ Update â†’ Verify changes @e2e', async ({ page }) => {
+    test('ASUP-E2E-003: Edit asset -> Update -> Verify changes @e2e', async ({ page }) => {
       // Create initial asset
-      const originalName = 'Original Name â€” ' + Date.now();
-      const updatedName = 'Updated Name â€” ' + Date.now();
+      const originalName = 'Original Name - ' + Date.now();
+      const updatedName = 'Updated Name - ' + Date.now();
 
       await uploadAssetHappyPath(page, testFiles.validJpg, {
         displayName: originalName,
@@ -615,7 +615,7 @@ test.describe('DeerAd Builder â€” Asset Upload', () => {
       await expect(updatedAssetRow).toBeVisible({ timeout: 5000 });
     });
 
-    test('ASUP-E2E-006: Error recovery: Invalid upload â†’ Retry â†’ Success @e2e', async ({
+    test('ASUP-E2E-006: Error recovery: Invalid upload -> Retry -> Success @e2e', async ({
       page,
     }) => {
       const assetPage = await navigateToAssetUpload(page);
@@ -641,25 +641,25 @@ test.describe('DeerAd Builder â€” Asset Upload', () => {
       await assetPage.expectSuccessMessage('Saved successfully');
     });
 
-    test('ASUP-E2E-010: Complete lifecycle: Create â†’ Edit â†’ Duplicate â†’ Archive @e2e', async ({
+    test('ASUP-E2E-010: Complete lifecycle: Create -> Edit -> Duplicate -> Archive @e2e', async ({
       page,
     }) => {
-      const baseName = 'Lifecycle Test â€” ' + Date.now();
+      const baseName = 'Lifecycle Test - ' + Date.now();
 
       // Step 1: Create asset
       const assetPage = await uploadAssetHappyPath(page, testFiles.validJpg, {
-        displayName: baseName + ' â€” V1',
+        displayName: baseName + ' - V1',
       });
 
       // Step 2: Edit asset (go to library, edit)
       await page.goto('/DAL/frmAssetList.aspx');
       const searchBox = page.locator('input[placeholder*="Search"]');
-      await searchBox.fill(baseName + ' â€” V1');
+      await searchBox.fill(baseName + ' - V1');
 
       const editButton = page.locator('a:has-text("Edit")').first();
       await editButton.click();
 
-      await assetPage.fillDisplayName(baseName + ' â€” V1 Updated');
+      await assetPage.fillDisplayName(baseName + ' - V1 Updated');
       await assetPage.update();
       await assetPage.expectSuccessMessage();
 
@@ -669,7 +669,7 @@ test.describe('DeerAd Builder â€” Asset Upload', () => {
       // Step 4: Archive (change status to Inactive)
       await page.goto('/DAL/frmAssetList.aspx');
       const searchBox2 = page.locator('input[placeholder*="Search"]');
-      await searchBox2.fill(baseName + ' â€” V1 Updated');
+      await searchBox2.fill(baseName + ' - V1 Updated');
 
       const editButton2 = page.locator('a:has-text("Edit")').first();
       await editButton2.click();
@@ -681,7 +681,7 @@ test.describe('DeerAd Builder â€” Asset Upload', () => {
       // Verify archived (status changed in library)
       await page.goto('/DAL/frmAssetList.aspx');
       const searchBox3 = page.locator('input[placeholder*="Search"]');
-      await searchBox3.fill(baseName + ' â€” V1 Updated');
+      await searchBox3.fill(baseName + ' - V1 Updated');
 
       const statusLabel = page.locator(`text="Inactive"`);
       await expect(statusLabel).toBeVisible({ timeout: 5000 });

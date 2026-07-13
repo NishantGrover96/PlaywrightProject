@@ -160,14 +160,14 @@
       "category": "spec-files",
       "clientId": "demoportal",
       "featureId": "coop-admin-reports",
-      "message": "Missing spec file — coop-admin-reports [smoke]: tests/playwright/specs/coop/feature-admin-reports/"
+      "message": "Missing spec file - coop-admin-reports [smoke]: tests/playwright/specs/coop/feature-admin-reports/"
     },
     {
       "severity": "WARNING",
       "category": "spec-files",
       "clientId": "demoportal",
       "featureId": "coop-admin-reports",
-      "message": "Missing spec file — coop-admin-reports [regression]: tests/playwright/specs/coop/feature-admin-reports/"
+      "message": "Missing spec file - coop-admin-reports [regression]: tests/playwright/specs/coop/feature-admin-reports/"
     },
     {
       "severity": "WARNING",
@@ -193,14 +193,14 @@
   ],
   "rollbackInstructions": [
     "Phase 6 migration is fully non-destructive. To rollback:",
-    "1. dashboard/catalog-manifest.json is untouched — it remains the automatic fallback.",
+    "1. dashboard/catalog-manifest.json is untouched - it remains the automatic fallback.",
     "2. catalog-service.js reads legacy manifest first; per-client manifests override.",
     "   Removing dashboard/catalogs/ entirely restores legacy behavior instantly.",
     "3. No spec files were moved. All existing tests run unchanged.",
-    "4. config/clients/ configs were enriched (not replaced) — the added fields are",
+    "4. config/clients/ configs were enriched (not replaced) - the added fields are",
     "   additive and backward-compatible. Remove added fields to revert individual configs.",
-    "5. Git: git diff config/clients/ — shows all client config changes.",
-    "        git checkout config/clients/ — restores all client configs to original."
+    "5. Git: git diff config/clients/ - shows all client config changes.",
+    "        git checkout config/clients/ - restores all client configs to original."
   ],
   "compatibility": {
     "legacyManifestIntact": true,

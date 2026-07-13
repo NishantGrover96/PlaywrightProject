@@ -1,4 +1,4 @@
-# Coop Dealer Dashboard — Migration Mapping
+# Coop Dealer Dashboard - Migration Mapping
 
 ## Overview
 
@@ -71,7 +71,7 @@ Initial assessment indicates the feature structure is present but implementation
 
 | FU ID | Legacy Implementation | Modern Implementation | Equivalence |
 |---|---|---|---|
-| COOP-FU-DD-029 | Index.cshtml.cs:OnPostSearch() orchestrating validation → auth → search → process | Unknown - Orchestration pattern may differ | Unverified |
+| COOP-FU-DD-029 | Index.cshtml.cs:OnPostSearch() orchestrating validation -> auth -> search -> process | Unknown - Orchestration pattern may differ | Unverified |
 | COOP-FU-DD-030 | Index.cshtml.cs:OnPostSearch() - ModelState.IsValid check + validation logic | Unknown - Validation approach may differ | Unverified |
 | COOP-FU-DD-031 | Index.cshtml.cs:ProcessSearchResults() - If count==1: RedirectToPage("Detail") | Unknown - Navigation pattern may differ | Unverified |
 | COOP-FU-DD-032 | AdminIndex.cshtml.cs:OnPostSearch() - If count>1: populate Model.Results | Unknown - Results handling may differ | Unverified |
@@ -106,12 +106,12 @@ Initial assessment indicates the feature structure is present but implementation
 
 ### Anticipated Architectural Changes:
 
-1. **Service Layer → API Layer**:
+1. **Service Layer -> API Layer**:
    - Legacy: Direct injection of IDealerService, IMediaOnlineService, IUserService, IAddressService, IReportService
    - Modern (Expected): HTTP API calls to separate service layer with DTOs
    - Impact: Error handling, timeouts, retry logic, performance characteristics may differ
 
-2. **Session Management → Distributed State**:
+2. **Session Management -> Distributed State**:
    - Legacy: In-process HttpContext.Session with 14+ keys
    - Modern (Expected): IDistributedCache (Redis/SQL) or claims-based state
    - Impact: Session expiration, scalability, cross-instance state sharing behavior may differ
@@ -171,13 +171,13 @@ Initial assessment indicates the feature structure is present but implementation
 
 2. **Service Dependencies**:
    - Verify all service methods have API equivalents:
-     - IDealerService.SearchDealers → API endpoint?
-     - IDealerService.SearchDealerswithPaging → API endpoint?
-     - IMediaOnlineService.CheckDealerMediaAgency → API endpoint?
-     - IMediaOnlineService.GetUserAgencyDealers → API endpoint?
-     - IUserService.GetCrcUserByExternalUserName → Claims or API?
-     - IAddressService.GetCountryByProgramSeq → API endpoint?
-     - IReportService.GetStates → API endpoint?
+     - IDealerService.SearchDealers -> API endpoint?
+     - IDealerService.SearchDealerswithPaging -> API endpoint?
+     - IMediaOnlineService.CheckDealerMediaAgency -> API endpoint?
+     - IMediaOnlineService.GetUserAgencyDealers -> API endpoint?
+     - IUserService.GetCrcUserByExternalUserName -> Claims or API?
+     - IAddressService.GetCountryByProgramSeq -> API endpoint?
+     - IReportService.GetStates -> API endpoint?
 
 3. **Authorization Checks**:
    - Dealer-can-only-access-own-number check

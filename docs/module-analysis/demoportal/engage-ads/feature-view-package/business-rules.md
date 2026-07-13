@@ -1,4 +1,4 @@
-# EngageAds — View Package (BundledAdPackages) Business Rules
+# EngageAds - View Package (BundledAdPackages) Business Rules
 
 Generated: 2026-06-18T16:37:04.157+05:30
 
@@ -6,16 +6,16 @@ Total Business Rules: 32
 
 | BR ID | Title | Category | Source | Evidence (UI) | Priority |
 |---|---|---|---|---|---|
-| BR-001 | Authenticated session is required | Auth/Security | BundledAdPackages.cshtml.cs inherits BasePageModel; repo-analysis §2 Authentication | Unauthenticated users are expected to redirect before the package page renders. | Critical |
+| BR-001 | Authenticated session is required | Auth/Security | BundledAdPackages.cshtml.cs inherits BasePageModel; repo-analysis 2 Authentication | Unauthenticated users are expected to redirect before the package page renders. | Critical |
 | BR-002 | Catalog is scoped to the current program | Page Load | OnGetAsync -> LoadCompleteDataAsync -> GetCompleteProgramPackagesAsync(programSeq) | Catalog loads program packages for the active EngageAds context. | High |
-| BR-003 | Dealers see only eligible packages | Authorization | GetCompleteProgramPackagesAsync(programSeq, false); repo-analysis §2 Role-Based Restrictions | Dealer live view shows purchasable packages and payment actions. | High |
+| BR-003 | Dealers see only eligible packages | Authorization | GetCompleteProgramPackagesAsync(programSeq, false); repo-analysis 2 Role-Based Restrictions | Dealer live view shows purchasable packages and payment actions. | High |
 | BR-004 | Admin and CFAdmin can browse all packages | Authorization | IsAdminOrCFAdmin + GetCompleteProgramPackagesAsync(programSeq, true) | UI analysis notes admin users can browse all packages. | High |
 | BR-005 | Admin and CFAdmin cannot purchase from this page | Authorization | Payment CTA omitted when IsAdminOrCFAdmin = true | Admin view shows informational quote-box messaging instead of a purchase CTA. | Critical |
-| BR-006 | Empty package response renders NoPackageAvailable | Page Load | OnGetAsync empty-state branch; repo-analysis §3 Empty State | When no packages exist, wizard is hidden and `.noPackage` message is shown. | High |
+| BR-006 | Empty package response renders NoPackageAvailable | Page Load | OnGetAsync empty-state branch; repo-analysis 3 Empty State | When no packages exist, wizard is hidden and `.noPackage` message is shown. | High |
 | BR-007 | Initial dealer view renders the package wizard and package grid | UI | BundledAdPackages.cshtml Step 1 markup + OnGetAsync data binding | Observed live: `Choose Plan` step active with 7+ package cards visible. | Critical |
 | BR-008 | Custom packages use Talk To An Expert instead of checkout actions | Package Display | IsCustom conditional rendering in BundledAdPackages.cshtml | Observed live: Custom Package card shows `Talk To An Expert` and no `Select Package` button. | High |
 | BR-009 | Standard packages expose View Details and Select Package | Package Display | Non-custom card rendering in BundledAdPackages.cshtml | Observed live: standard cards show `View Details` and `Select Package`. | High |
-| BR-010 | Client-visible package and budget identifiers remain encrypted | Security | IEncryptDecrypt usage for packageSeq and ProgramBudgetSeq; repo-analysis §2 Security Controls | Selectors such as `.cardBadge[packageSeq]`, `.selectPackage[packageSeq]`, and budget option values use encrypted tokens. | Critical |
+| BR-010 | Client-visible package and budget identifiers remain encrypted | Security | IEncryptDecrypt usage for packageSeq and ProgramBudgetSeq; repo-analysis 2 Security Controls | Selectors such as `.cardBadge[packageSeq]`, `.selectPackage[packageSeq]`, and budget option values use encrypted tokens. | Critical |
 | BR-011 | Deep-link packageSeq auto-selects the package on load | Workflow | jsengageads.js document.ready query-string handler | Source confirms `?packageSeq=` skips directly into the payment-summary step. | High |
 | BR-012 | Selecting a standard package loads Step 2 via LoadPackageData | Workflow | POST ?handler=LoadPackageData + dynamic Step 2 build in jsengageads.js | Observed live: selecting Local Lead Starter advances to `Payment & Checkout` with cost summary. | Critical |
 | BR-013 | Invalid package selection is rejected | Error Handling | OnPostCreateStripeSession / package lookup validation; repo-analysis VR-017 | Source-confirmed error message: `Package not found`. | High |

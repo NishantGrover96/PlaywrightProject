@@ -1,5 +1,5 @@
 ================================================================================
-  DEER AUSTRALIA — CLIENT ONBOARDING LOG
+  DEER AUSTRALIA - CLIENT ONBOARDING LOG
   Date: 2026-07-08
   Framework: DealerPlatform QA (Playwright + TypeScript)
 ================================================================================
@@ -15,7 +15,7 @@ Module: coop only. Two features catalogued: submit-claim and submit-preapproval.
 STEPS COMPLETED
 --------------------------------------------------------------------------------
 
-STEP 1 — PREREQUISITES VERIFIED
+STEP 1 - PREREQUISITES VERIFIED
   - Node.js v22.18.0 LTS confirmed
   - npm 10.9.3 confirmed
   - PowerShell 5.1 confirmed
@@ -23,7 +23,7 @@ STEP 1 — PREREQUISITES VERIFIED
   - npm install completed (15 packages)
   - PowerShell execution policy set to RemoteSigned (was Restricted)
 
-STEP 2 — REPO ANALYSIS (submit-claim)
+STEP 2 - REPO ANALYSIS (submit-claim)
   File: docs/module-analysis/deer-australia/coop/feature-submit-claim/repo-analysis.md
   - Analysed: OnlineClaimForm-Step1.aspx, .vb, ClaimInformation.vb,
     clsBudget.vb, clsDatabaseSelect.vb, clsDatabaseUpdate.vb,
@@ -38,7 +38,7 @@ STEP 2 — REPO ANALYSIS (submit-claim)
       * Claim amount capped against preapproval balance
       * Status = RECEIVED (dealer) / IN PROGRESS (admin) on submit
 
-STEP 3 — REPO ANALYSIS (submit-preapproval)
+STEP 3 - REPO ANALYSIS (submit-preapproval)
   File: docs/module-analysis/deer-australia/coop/feature-submit-preapproval/repo-analysis.md
   - Analysed: OnlinePreapprovalForm.aspx, .vb, shared classes
   - Found: 26 UI fields, 17 business rules, 20 validation rules,
@@ -51,12 +51,12 @@ STEP 3 — REPO ANALYSIS (submit-preapproval)
       * File renamed on upload: {preapproval_number}_{original_filename}
       * Dropzone max 100 MB
 
-STEP 4 — BUSINESS RULES CATALOGS (30 rules each)
+STEP 4 - BUSINESS RULES CATALOGS (30 rules each)
   Files:
     docs/module-analysis/deer-australia/coop/feature-submit-claim/business-rules.md
     docs/module-analysis/deer-australia/coop/feature-submit-preapproval/business-rules.md
 
-STEP 5 — FUNCTIONAL TEST CATALOGS GENERATED
+STEP 5 - FUNCTIONAL TEST CATALOGS GENERATED
   submit-claim  (52 tests: Smoke 3 | Regression 44 | E2E 5)
     docs/functional-catalogs/deer-australia/coop/feature-submit-claim/test-catalog.md
     docs/functional-catalogs/deer-australia/coop/feature-submit-claim/functional-units.html
@@ -71,14 +71,14 @@ STEP 5 — FUNCTIONAL TEST CATALOGS GENERATED
     docs/functional-catalogs/deer-australia/coop/feature-submit-preapproval/regression-suite.md
     docs/functional-catalogs/deer-australia/coop/feature-submit-preapproval/e2e-suite.md
 
-STEP 6 — DASHBOARD REGISTRATION
-  dashboard/catalog-manifest.json  — 2 new entries added:
+STEP 6 - DASHBOARD REGISTRATION
+  dashboard/catalog-manifest.json  - 2 new entries added:
     deer-australia-coop-submit-claim       (52 tests, functionalUnit implemented)
     deer-australia-coop-submit-preapproval (48 tests, functionalUnit implemented)
-  dashboard/index.html             — "Deer Australia" added to client dropdown
+  dashboard/index.html             - "Deer Australia" added to client dropdown
                                      FEATURE_FOLDERS map updated with both spec paths
 
-STEP 7 — CLIENT CONFIG CREATED (via new-client.ps1 wizard)
+STEP 7 - CLIENT CONFIG CREATED (via new-client.ps1 wizard)
   config/clients/deer-australia.json
   config/users/deer-australia/users.json
   config/repos.local.json             (deer-australia entry added)
@@ -88,30 +88,30 @@ STEP 7 — CLIENT CONFIG CREATED (via new-client.ps1 wizard)
 ISSUES ENCOUNTERED AND RESOLUTIONS
 --------------------------------------------------------------------------------
 
-ISSUE 1 — PowerShell execution policy blocked npm
+ISSUE 1 - PowerShell execution policy blocked npm
   Symptom : "npm : File cannot be loaded because running scripts is disabled"
   Cause   : Default PowerShell execution policy was "Restricted"
   Fix     : Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
 
-ISSUE 2 — new-client.ps1 wizard used wrong Client ID ("deeraus")
+ISSUE 2 - new-client.ps1 wizard used wrong Client ID ("deeraus")
   Symptom : Config files created under "deeraus" instead of "deer-australia";
             mismatched with catalog files and dashboard entries built under
             "deer-australia"
   Cause   : User entered "deeraus" as the Client ID during the wizard
   Fix     : Renamed all three wizard-generated files:
-              config/clients/deeraus.json      → deer-australia.json
-              config/users/deeraus/            → deer-australia/
-              dashboard/catalogs/deeraus-manifest.json → deer-australia-manifest.json
+              config/clients/deeraus.json      -> deer-australia.json
+              config/users/deeraus/            -> deer-australia/
+              dashboard/catalogs/deeraus-manifest.json -> deer-australia-manifest.json
             Updated clientId field inside each file.
             Updated config/repos.local.json key from "deeraus" to "deer-australia".
 
-ISSUE 3 — Wrong Production URL entered in wizard
+ISSUE 3 - Wrong Production URL entered in wizard
   Symptom : Production URL set to "https://23coop.deere.com" (incorrect)
   Cause   : Previous session typo carried over
   Fix     : Updated production.baseUrl in config/clients/deer-australia.json to
             "http://deereaustraliauat.channel-fusion.com"
 
-ISSUE 4 — Deer Australia not appearing in dashboard client dropdown
+ISSUE 4 - Deer Australia not appearing in dashboard client dropdown
   Symptom : Dashboard /api/clients returned only 3 clients; deer-australia missing
   Cause   : PowerShell 5.1 Set-Content -Encoding utf8 writes a UTF-8 BOM
             (bytes EF BB BF) at the start of JSON files.
@@ -127,12 +127,12 @@ ISSUE 4 — Deer Australia not appearing in dashboard client dropdown
   Note    : Dashboard server restart required because catalog-manifest.json is
             not watched by the file watcher (only dashboard/catalogs/ is watched).
 
-ISSUE 5 — Features not appearing after client showed in dropdown
+ISSUE 5 - Features not appearing after client showed in dropdown
   Symptom : Selecting "Deer Australia" showed Coop module but no feature
             checkboxes in the dashboard
   Root cause A: catalog-manifest.json entries for deer-australia used field
                 "client": "deer-australia" but catalog-service.js reads
-                "clientId" field → fell back to "demoportal", features were
+                "clientId" field -> fell back to "demoportal", features were
                 registered under wrong client
   Fix A   : Renamed "client" to "clientId" in both deer-australia entries in
             dashboard/catalog-manifest.json
@@ -140,7 +140,7 @@ ISSUE 5 — Features not appearing after client showed in dropdown
   Fix B   : Patched _loadLegacyManifest in catalog-service.js:
               clientId: entry.clientId || entry.client || 'demoportal'
 
-ISSUE 6 — Smoke test failed with wrong Playwright project names
+ISSUE 6 - Smoke test failed with wrong Playwright project names
   Symptom : Error: Project(s) "setup", "chromium" not found.
             Available: "setup-deer-australia", "chromium-deer-australia", ...
   Cause   : client-service.js getProjectsForRole() has hardcoded defaults
@@ -234,7 +234,7 @@ FILES CREATED / MODIFIED (SUMMARY)
 KNOWN SECURITY NOTES
 --------------------------------------------------------------------------------
 
-  - Credentials were shared in chat during session — recommend rotating:
+  - Credentials were shared in chat during session - recommend rotating:
       Dealer user: X1S0804
       Admin user:  $Admin2022
   - Playwright v1.48.2 has advisory GHSA-7mvr-c777-76hp (SSL bypass on browser

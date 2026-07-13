@@ -4,7 +4,7 @@ description: Generate comprehensive Playwright test cases for EngageAds module f
 applyTo: tests/playwright/specs/engage-ads/**
 ---
 
-# EngageAds — Playwright Test Coverage Guidelines
+# EngageAds - Playwright Test Coverage Guidelines
 
 ## Scope
 Applies to all EngageAds feature specs under `tests/playwright/specs/engage-ads/`.
@@ -20,7 +20,7 @@ All role-based tests use credentials from the project `.env` files.
 | Dealer | `TEST_USER_EMAIL` / `TEST_USER_PASSWORD` | Own campaigns only |
 | Unauthorized | No session / expired token | Redirected to login |
 
-Network error and HTTP fault injection tests are **out of scope** — skip them.
+Network error and HTTP fault injection tests are **out of scope** - skip them.
 
 ---
 
@@ -67,18 +67,18 @@ For each role that has different access:
 - Exact match returns correct row
 - Partial match (e.g., partial Order ID, partial Package Name)
 - Case-insensitive search
-- No matching records → DataTables empty state (`td.dataTables_empty` text "No data available in table")
+- No matching records -> DataTables empty state (`td.dataTables_empty` text "No data available in table")
 - Multiple filters combined
 - Clear/Reset filters restores full result set
 - Invalid filter value (e.g., letters in a numeric field)
 
-### 7. Sorting Tests (`@regression @sort`) — when columns are sortable
+### 7. Sorting Tests (`@regression @sort`) - when columns are sortable
 - Ascending order (first click)
 - Descending order (second click)
 - Sort with duplicate values
 - Sort with empty/null values in column
 
-### 8. Pagination Tests (`@regression @pagination`) — when table is paginated
+### 8. Pagination Tests (`@regression @pagination`) - when table is paginated
 - First page: Previous button disabled
 - Last page: Next button disabled
 - Single page: both Prev/Next disabled
@@ -87,16 +87,16 @@ For each role that has different access:
 - Navigate to specific page via page number link
 
 ### 9. Date Handling (`@regression @dates`)
-- Invalid date range (end before start) → validation message
-- Same start and end date → valid
+- Invalid date range (end before start) -> validation message
+- Same start and end date -> valid
 - Leap year date (Feb 29) where date pickers used
-- Future date → valid or invalid depending on business rule
+- Future date -> valid or invalid depending on business rule
 
 ### 10. Input Edge Cases (`@regression @edge`)
-- Leading/trailing whitespace in search fields → trimmed and searched
-- Special characters in search (e.g., `& < > "`) → no crash
-- HTML injection in search input → rendered as text, not executed
-- SQL injection string in search → no error, no data exposure
+- Leading/trailing whitespace in search fields -> trimmed and searched
+- Special characters in search (e.g., `& < > "`) -> no crash
+- HTML injection in search input -> rendered as text, not executed
+- SQL injection string in search -> no error, no data exposure
 
 ### 11. Dynamic UI (`@regression @dynamic-ui`)
 - Loading indicator appears on data fetch
@@ -107,10 +107,10 @@ For each role that has different access:
 - Modal opens with correct data, closes on dismiss
 
 ### 12. User Action Edge Cases (`@regression @ux`)
-- Browser refresh during wizard step → correct behavior (return to step or start)
-- Back button mid-wizard → step persists or prompts unsaved changes
-- Cancel action in a multi-step flow → returns to previous state
-- Rapid repeated clicks on submit → only one submission triggered
+- Browser refresh during wizard step -> correct behavior (return to step or start)
+- Back button mid-wizard -> step persists or prompts unsaved changes
+- Cancel action in a multi-step flow -> returns to previous state
+- Rapid repeated clicks on submit -> only one submission triggered
 
 ---
 
@@ -126,7 +126,7 @@ For each role that has different access:
 - [ ] Dynamic UI: loading states, toasts, modals, disabled controls
 - [ ] Input edge cases: whitespace, special chars (no HTML injection execution)
 - [ ] No `waitForTimeout()` used anywhere
-- [ ] No invented locators — all verified against live DOM or provided HTML
+- [ ] No invented locators - all verified against live DOM or provided HTML
 - [ ] Locator Validation Report table included in output
 - [ ] Tests are independent (no shared mutable state between tests)
 - [ ] Existing helper methods reused (check `tests/playwright/helpers/engage-ads/`)
@@ -140,7 +140,7 @@ import { test, expect } from '../../../fixtures/auth.fixtures';
 import { OrderHistoryPage } from '../../../pages/engage-ads/feature-order-history/OrderHistoryPage';
 import testData from '../../../data/engage-ads/feature-order-history/test-data.json';
 
-test.describe('EngageAds — Order History', () => {
+test.describe('EngageAds - Order History', () => {
 
   test.describe('Smoke', () => {
     test('OH-SMOKE-001 - page loads for authenticated dealer @smoke', async ({ dealerPage }) => { });
@@ -179,7 +179,7 @@ test.describe('EngageAds — Order History', () => {
   });
 
   test.describe('E2E', () => {
-    test('OH-E2E-001 - filter → view details → reset full workflow @e2e', async ({ dealerPage }) => { });
+    test('OH-E2E-001 - filter -> view details -> reset full workflow @e2e', async ({ dealerPage }) => { });
   });
 
 });
@@ -228,7 +228,7 @@ await expect(page.locator('#orderHistoryBody td').filter({ hasText: 'Loading' })
 
 | Skill | When to Use |
 |---|---|
-| `repo-analysis` | Before generating tests — analyze controller, service, DTO, view to find business rules |
+| `repo-analysis` | Before generating tests - analyze controller, service, DTO, view to find business rules |
 | `ui-analysis` | Inspect live UAT DOM to confirm locators before writing POM |
 | `functional-test-catalog` | Generate test IDs and tier assignments before coding specs |
 | `playwright-test-generation` | Global generation rules (output structure, POM conventions) |

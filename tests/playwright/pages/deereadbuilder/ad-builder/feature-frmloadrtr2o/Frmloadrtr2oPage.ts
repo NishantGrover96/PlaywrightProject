@@ -5,7 +5,7 @@ export class Frmloadrtr2oPage {
 
   readonly url = '/ad-builder/frmloadrtr2o';
 
-  // Form fields â€” replace with actual locators
+  // Form fields - replace with actual locators
   readonly primaryButton: Locator;
   readonly successMessage: Locator;
   readonly errorSummary: Locator;

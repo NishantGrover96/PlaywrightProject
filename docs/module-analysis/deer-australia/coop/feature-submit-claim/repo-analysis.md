@@ -1,4 +1,4 @@
-# Coop — Submit Claim — Repository Analysis Report
+# Coop - Submit Claim - Repository Analysis Report
 
 **Client:** Deer Australia  
 **Module:** CoopManagement  
@@ -12,12 +12,12 @@
 
 | File | Layer | Purpose |
 |---|---|---|
-| `CoopManagement/Claims/Submit/OnlineClaimForm-Step1.aspx` | UI | Submit Claim form — fields, layout, client-side behavior |
+| `CoopManagement/Claims/Submit/OnlineClaimForm-Step1.aspx` | UI | Submit Claim form - fields, layout, client-side behavior |
 | `CoopManagement/Claims/Submit/OnlineClaimForm-Step1.aspx.vb` | Business Logic | Page_Load, validation, business rules, DB orchestration |
-| `Classes/ClaimInformation.vb` | Data Model | Claim session transfer object — all claim/activity properties |
+| `Classes/ClaimInformation.vb` | Data Model | Claim session transfer object - all claim/activity properties |
 | `Classes/clsBudget.vb` | Business Logic | Budget retrieval, fund transfers, program budget lookup |
-| `Classes/clsDatabaseSelect.vb` | Data Access | Select SP calls — dealer, claim, activity queries |
-| `Classes/clsDatabaseUpdate.vb` | Data Access | Update SP calls — claim, activity, document writes |
+| `Classes/clsDatabaseSelect.vb` | Data Access | Select SP calls - dealer, claim, activity queries |
+| `Classes/clsDatabaseUpdate.vb` | Data Access | Update SP calls - claim, activity, document writes |
 | `Classes/clsSession.vb` | Security | Session management, role assignments, login flows |
 | `App_GlobalResources/GlobalResources.resx` | Localization | Validation messages, field labels |
 | `Scripts/AjaxCall.js` | Client-side | AJAX wrapper, session timeout handling |
@@ -28,34 +28,34 @@
 
 | Field ID | Type | Required | Label | Conditional | Notes |
 |---|---|---|---|---|---|
-| `drpPreapproval` | DropDownList | Yes | Select Pre-Approval Number | — | Value -1 = unselected; filters by finance type and JDF approval status |
-| `txtEmail` | TextBox | Yes | Contact Email | — | Max 250 chars |
+| `drpPreapproval` | DropDownList | Yes | Select Pre-Approval Number | - | Value -1 = unselected; filters by finance type and JDF approval status |
+| `txtEmail` | TextBox | Yes | Contact Email | - | Max 250 chars |
 | `rbAdvertising` | RadioButton | Yes (one of 3) | Advertising | GroupName="expenseType" | Triggers `bindMediaType(lngMediaCategorySeqAdvertising)` |
 | `rbSalesSupport` | RadioButton | Yes (one of 3) | Sales Support | GroupName="expenseType" | Triggers `bindMediaType(lngMediaCategorySeqSalesSupport)` |
 | `rbDSO` | RadioButton | Yes (one of 3) | DSO | Visible=false initially | Only shown for DSO claim types |
 | `drpMediaCategory` | DropDownList | Yes | Advertising Type | Populated after preapproval selected | Bound from `getMediaTypeByProgramSeq()` |
-| `drpFund` | DropDownList | Yes | Select Allocation / Fund | — | Bound from program budget; affects reimbursement calculation |
-| `txtMediaName` | TextBox | Yes | Vendor Name | — | Required |
-| `txtInvoiceNumber` | TextBox | Yes | Invoice Number | — | Required |
-| `txtInvoiceAmount` | TextBox | Yes | Paid Invoice Amount | — | Decimal only; max 12 chars; must be > 0; 2 decimal places enforced client-side |
-| `ctrlCalendarTextBox1` | Calendar | Yes | Publisher/Vendor Invoice Date | — | No future dates |
-| `ctrlCalendarTextBox2` | Calendar | Yes | Activity Date(s) | — | Multiple dates via Add Date; no duplicates |
-| `calDealerInvoiceDate` | Calendar | No | Dealer Invoice Date | — | No future dates |
-| `txtDealeInvoiceNo` | TextBox | No | Dealer Invoice Number | — | Optional |
-| `txtClaim` | TextBox | Yes | Claim Amount | — | Must be > 0; client-side: decimal only |
-| `lblClaimAmount` | Label | — | Auto-calculated Claim Amount (display) | — | Read-only; = invoice amount × 50% |
-| `txtAutoClaim` | TextBox (hidden) | — | Auto-calculated claim value | — | Used as hidden carrier for 50% calculation |
-| `txtTotalAdvertisementAmount` | TextBox | — | Total Advertisement Amount incl. GST | — | Populated from preapproval |
-| `txtFirstPlacementDate` | TextBox (readonly) | — | First Placement Date | — | Populated from preapproval |
-| `txtLastPlacementDate` | TextBox (readonly) | — | Last Placement Date | — | Populated from preapproval |
-| `txtAvailablePreAppAmount` | TextBox (hidden) | — | Available preapproval amount | — | = TotalAdvertisementAmount - total_invoice_amount |
-| `txtRemainingPreapproval` | TextBox (hidden) | — | Remaining preapproval balance | — | Used in claim amount cap validation |
-| `dgrdActivityDates` | DataGrid | Yes | Activity Dates list | — | At least one required; Delete button per row |
-| `btnNext` | Button | — | Submit Claim | Disabled if no funds | Triggers full validation and save |
-| `btnAddDate` | Button | — | Add Activity Date | Disabled if no funds | Validates for duplicates |
-| `litFundsAvailable` | Literal | — | Allocation Fund Remaining | — | Read-only fund balance display |
-| `lblReimbursementPercent` | Label | — | Reimbursement % | — | Displays "50%" always (both TMF and non-TMF) |
-| `hdnEditMode` | Hidden | — | Edit mode flag | — | "EDIT" or "" (empty = new) |
+| `drpFund` | DropDownList | Yes | Select Allocation / Fund | - | Bound from program budget; affects reimbursement calculation |
+| `txtMediaName` | TextBox | Yes | Vendor Name | - | Required |
+| `txtInvoiceNumber` | TextBox | Yes | Invoice Number | - | Required |
+| `txtInvoiceAmount` | TextBox | Yes | Paid Invoice Amount | - | Decimal only; max 12 chars; must be > 0; 2 decimal places enforced client-side |
+| `ctrlCalendarTextBox1` | Calendar | Yes | Publisher/Vendor Invoice Date | - | No future dates |
+| `ctrlCalendarTextBox2` | Calendar | Yes | Activity Date(s) | - | Multiple dates via Add Date; no duplicates |
+| `calDealerInvoiceDate` | Calendar | No | Dealer Invoice Date | - | No future dates |
+| `txtDealeInvoiceNo` | TextBox | No | Dealer Invoice Number | - | Optional |
+| `txtClaim` | TextBox | Yes | Claim Amount | - | Must be > 0; client-side: decimal only |
+| `lblClaimAmount` | Label | - | Auto-calculated Claim Amount (display) | - | Read-only; = invoice amount × 50% |
+| `txtAutoClaim` | TextBox (hidden) | - | Auto-calculated claim value | - | Used as hidden carrier for 50% calculation |
+| `txtTotalAdvertisementAmount` | TextBox | - | Total Advertisement Amount incl. GST | - | Populated from preapproval |
+| `txtFirstPlacementDate` | TextBox (readonly) | - | First Placement Date | - | Populated from preapproval |
+| `txtLastPlacementDate` | TextBox (readonly) | - | Last Placement Date | - | Populated from preapproval |
+| `txtAvailablePreAppAmount` | TextBox (hidden) | - | Available preapproval amount | - | = TotalAdvertisementAmount - total_invoice_amount |
+| `txtRemainingPreapproval` | TextBox (hidden) | - | Remaining preapproval balance | - | Used in claim amount cap validation |
+| `dgrdActivityDates` | DataGrid | Yes | Activity Dates list | - | At least one required; Delete button per row |
+| `btnNext` | Button | - | Submit Claim | Disabled if no funds | Triggers full validation and save |
+| `btnAddDate` | Button | - | Add Activity Date | Disabled if no funds | Validates for duplicates |
+| `litFundsAvailable` | Literal | - | Allocation Fund Remaining | - | Read-only fund balance display |
+| `lblReimbursementPercent` | Label | - | Reimbursement % | - | Displays "50%" always (both TMF and non-TMF) |
+| `hdnEditMode` | Hidden | - | Edit mode flag | - | "EDIT" or "" (empty = new) |
 
 ---
 
@@ -78,21 +78,21 @@
 
 | Rule ID | Description | Source | Logic Summary |
 |---|---|---|---|
-| BR-CL-001 | Role enforcement | `Page_Load` | Only BMDLR, BMAGDLR, BMADMIN may access. Unauthorized → redirect to `~/DealerSearch/` |
-| BR-CL-002 | Disabled dealer block | `Page_Load` | If BMDLR + `IsDisableDealerActivity()` = true → redirect to `DealerDisable.aspx` |
-| BR-CL-003 | Zero fund balance block | `GetFundsAvailable()` | If `current_budget <= 0` → disable all form controls; show "You have no fund balance to continue." |
-| BR-CL-004 | Preapproval filter — JDF Finance | `drpPreapprovalbind()` | Preapprovals with JDF Finance ("John Deere Financial - Consumer Finance" or "John Deere Financial - Commercial Finance") require both `status='APPROVED'` AND `jdf_status='APPROVED'` |
-| BR-CL-005 | Preapproval filter — non-JDF Finance | `drpPreapprovalbind()` | Preapprovals with finance = NULL / "" / "No finance promoted" / "Other Financier" require only `status='APPROVED'` |
-| BR-CL-006 | Preapproval filter — used balance | `drpPreapprovalbind()` | For NEW claims: only show preapprovals where `total_amount_used < amount` |
-| BR-CL-007 | Preapproval filter — CRC user | `drpPreapprovalbind()` | If user level is BMAG or BMAGDLR: filter preapprovals to `crc_user_seq = clsSession.slngCRCUserSeq` |
-| BR-CL-008 | Preapproval filter — placement date | `drpPreapprovalbind()` | Only preapprovals where `placement_date >= StartDateForPreapproval()` |
+| BR-CL-001 | Role enforcement | `Page_Load` | Only BMDLR, BMAGDLR, BMADMIN may access. Unauthorized -> redirect to `~/DealerSearch/` |
+| BR-CL-002 | Disabled dealer block | `Page_Load` | If BMDLR + `IsDisableDealerActivity()` = true -> redirect to `DealerDisable.aspx` |
+| BR-CL-003 | Zero fund balance block | `GetFundsAvailable()` | If `current_budget <= 0` -> disable all form controls; show "You have no fund balance to continue." |
+| BR-CL-004 | Preapproval filter - JDF Finance | `drpPreapprovalbind()` | Preapprovals with JDF Finance ("John Deere Financial - Consumer Finance" or "John Deere Financial - Commercial Finance") require both `status='APPROVED'` AND `jdf_status='APPROVED'` |
+| BR-CL-005 | Preapproval filter - non-JDF Finance | `drpPreapprovalbind()` | Preapprovals with finance = NULL / "" / "No finance promoted" / "Other Financier" require only `status='APPROVED'` |
+| BR-CL-006 | Preapproval filter - used balance | `drpPreapprovalbind()` | For NEW claims: only show preapprovals where `total_amount_used < amount` |
+| BR-CL-007 | Preapproval filter - CRC user | `drpPreapprovalbind()` | If user level is BMAG or BMAGDLR: filter preapprovals to `crc_user_seq = clsSession.slngCRCUserSeq` |
+| BR-CL-008 | Preapproval filter - placement date | `drpPreapprovalbind()` | Only preapprovals where `placement_date >= StartDateForPreapproval()` |
 | BR-CL-009 | Reimbursement rate fixed at 50% | `setClaimAmount()`, `drpFund_SelectedIndexChanged()` | Both TMF and non-TMF funds pay at 50% reimbursement; no variation by fund type |
-| BR-CL-010 | Claim amount cap — NEW claim | `btnNext_Click()` | `claimamount <= remainingpreappamount` (remaining from preapproval) |
-| BR-CL-011 | Claim amount cap — EDIT claim (not denied/cancelled) | `btnNext_Click()` | `claimamount - existingclaimamount <= remainingpreappamount` |
+| BR-CL-010 | Claim amount cap - NEW claim | `btnNext_Click()` | `claimamount <= remainingpreappamount` (remaining from preapproval) |
+| BR-CL-011 | Claim amount cap - EDIT claim (not denied/cancelled) | `btnNext_Click()` | `claimamount - existingclaimamount <= remainingpreappamount` |
 | BR-CL-012 | Activity date uniqueness | `btnAddDate_Click()` | Duplicate activity dates rejected; message: "Activity date cannot be duplicated" (resource key: `StrNoDuplicateDate`) |
 | BR-CL-013 | At least one activity date | `btnNext_Click()` | At least one date in `dgrdActivityDates` required before submitting |
 | BR-CL-014 | Country-based currency display | `getDealerCountry()` | If country_code = "NZL": show NZD labels and currency conversion rate; if "AUS": show AUD labels |
-| BR-CL-015 | NZL conversion rate | `getDealerCountry()` | Calls `getCurrencyByProgramSeq()` to get AUD→NZD rate; amounts stored in AUD after division by rate |
+| BR-CL-015 | NZL conversion rate | `getDealerCountry()` | Calls `getCurrencyByProgramSeq()` to get AUD->NZD rate; amounts stored in AUD after division by rate |
 | BR-CL-016 | Claim status on submit | `saveClaim()` | New claim: status = "RECEIVED", sub_status = "IN PROGRESS" |
 | BR-CL-017 | Claim status on edit (approved) | `saveActivity()` | If existing condition = "APPROVED": activity claim_status = "PROCESSED", condition = "APPROVED" |
 | BR-CL-018 | Claim status on edit (other) | `saveActivity()` | If existing condition ≠ "APPROVED": activity claim_status = "NOT PROCESSED", condition = "VALID" |
@@ -133,8 +133,8 @@
 
 | From Status | To Status | Sub-Status | Trigger | Notification |
 |---|---|---|---|---|
-| — | RECEIVED | IN PROGRESS | `btnNext_Click` → `saveClaim()` (new claim) | None at Step 1 |
-| RECEIVED | RECEIVED | IN PROGRESS | `btnNext_Click` → `saveClaim()` (edit, not approved) | None |
+| - | RECEIVED | IN PROGRESS | `btnNext_Click` -> `saveClaim()` (new claim) | None at Step 1 |
+| RECEIVED | RECEIVED | IN PROGRESS | `btnNext_Click` -> `saveClaim()` (edit, not approved) | None |
 | Any (if condition=APPROVED) | PROCESSED | PROCESSED | `saveActivity()` on edit of approved activity | None at Step 1 |
 | INCOMPLETE / stored | RECEIVED | IN PROGRESS | Resume from session and resubmit | None |
 
@@ -176,7 +176,7 @@
 | Authentication required | `Page_Load` role check; redirect to `~/DealerSearch/` if unauthorized | All roles |
 | Dealer-level access | UserLevel must be BMDLR, BMAGDLR, or BMADMIN | BMDLR / BMAGDLR / BMADMIN |
 | BMADMIN: explicit dealer scope | Must supply `dealer_number_seq` via querystring | BMADMIN only |
-| Disabled dealer block | `IsDisableDealerActivity()` → redirect to `DealerDisable.aspx` | BMDLR |
+| Disabled dealer block | `IsDisableDealerActivity()` -> redirect to `DealerDisable.aspx` | BMDLR |
 | CRC user data scope | BMAGDLR: preapprovals filtered to `crc_user_seq = clsSession.slngCRCUserSeq` | BMAGDLR |
 | Session-based identity | Dealer number, level, and name loaded from HTTP Session | All roles |
 | Anti-forgery | Standard WebForms `__VIEWSTATE` / `__EVENTVALIDATION` | All POST operations |
@@ -197,11 +197,11 @@
 | Behavior | Trigger | Logic |
 |---|---|---|
 | Claim amount auto-calculation | `txtInvoiceAmount` focusout | `claimAmount = invoiceAmount × (reimbursementPercent / 100)`; default 50%; update `lblClaimAmount` and `txtAutoClaim` |
-| Decimal-only input enforcement | `txtInvoiceAmount` keypress | Allow only digits (48–57), decimal point (46, max 1), backspace (8) |
+| Decimal-only input enforcement | `txtInvoiceAmount` keypress | Allow only digits (48-57), decimal point (46, max 1), backspace (8) |
 | Max 2 decimal places | `txtInvoiceAmount` input | Truncate to 2 decimal places using regex `/^-?\d+(?:\.\d{0,2})?/` |
 | Leading decimal prevention | `txtInvoiceAmount` input | Prepend "0" if value starts with "." |
 | Fund change recalculation | `drpFund` click | Recalculate `(invoiceAmount - dealerAmount) × reimbursementPercent / 100` |
-| Before-unload warning | `window.onbeforeunload` (commented out) | "When all your activities have been added, you must click on the 'Submit Claim' button…" |
+| Before-unload warning | `window.onbeforeunload` (commented out) | "When all your activities have been added, you must click on the 'Submit Claim' button..." |
 | Cancel confirmation | `CancelClaim()` | `confirm("Are you sure you want to cancel this claim?")` |
 | Ad search popup | `.pseudo-link` click | Show `.popoutPanel` modal; calculate position relative to scroll |
 | Pre-made ad selection | `.item-link` click | Set `data-id` to `.ad-target`; reset preapproval and media dropdowns |

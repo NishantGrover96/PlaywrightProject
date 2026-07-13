@@ -3,12 +3,12 @@ name: coverage-signoff
 description: Review gap analysis results and issue a formal sign-off decision as a hard gate before Playwright test generation.
 ---
 
-# Coverage Sign-off — Step 2.6: Gate Before Automation
+# Coverage Sign-off - Step 2.6: Gate Before Automation
 
 ## Purpose
 
 Review the Gap Analysis results and issue a formal sign-off decision.
-This is the **hard gate** — Step 3 (Playwright generation) MUST NOT run until
+This is the **hard gate** - Step 3 (Playwright generation) MUST NOT run until
 this skill returns `Ready for Automation`.
 
 ## When to Use
@@ -26,7 +26,7 @@ this skill returns `Ready for Automation`.
 
 ## Decision Rules
 
-### BLOCKED — Stop immediately, do not proceed to Step 3
+### BLOCKED - Stop immediately, do not proceed to Step 3
 
 Conditions (ANY of):
 - ≥ 1 Critical gap exists
@@ -34,15 +34,15 @@ Conditions (ANY of):
 - Any security FU is Missing
 - Core workflow transition is Missing (claim cannot be submitted/saved)
 
-### NEEDS REMEDIATION — Fix gaps before proceeding to Step 3
+### NEEDS REMEDIATION - Fix gaps before proceeding to Step 3
 
 Conditions (ANY of, no Critical):
 - ≥ 1 High gap exists
-- Functional Coverage 80%–89%
+- Functional Coverage 80%-89%
 - Any validation rule is Missing
 - Any DB persistence operation is Missing
 
-### READY FOR AUTOMATION — Proceed to Step 3
+### READY FOR AUTOMATION - Proceed to Step 3
 
 Conditions (ALL of):
 - Zero Critical gaps
@@ -58,7 +58,7 @@ Conditions (ALL of):
 ## Sign-off Report Format
 
 ```markdown
-# {Module} {Feature} — Coverage Sign-off
+# {Module} {Feature} - Coverage Sign-off
 
 ## Decision: READY FOR AUTOMATION | NEEDS REMEDIATION | BLOCKED
 
@@ -86,7 +86,7 @@ For each: FU ID, description, what must be fixed/implemented in Modern.
 ## Approved Exceptions (if any)
 High or Medium gaps that are documented and accepted.
 Each exception must be logged in the relevant test as:
-  test.fixme('COOP-FU-NNN gap — {reason}')
+  test.fixme('COOP-FU-NNN gap - {reason}')
 
 ## Automation Scope
 What IS included in Step 3 automation:
@@ -117,9 +117,9 @@ reports/readiness/{client}/{module}/feature-{feature}/readiness.md
 After generating the sign-off report, the final line of the response MUST be one of:
 
 ```
-✅ GATE PASSED — Proceed to Step 3: /playwright-test-generation
-⚠️  GATE: NEEDS REMEDIATION — Fix N High gaps before Step 3
-🚫 GATE BLOCKED — N Critical gaps. Step 3 is not permitted.
+✅ GATE PASSED - Proceed to Step 3: /playwright-test-generation
+[!]️  GATE: NEEDS REMEDIATION - Fix N High gaps before Step 3
+🚫 GATE BLOCKED - N Critical gaps. Step 3 is not permitted.
 ```
 
 This line is read by the orchestrator (`/migration-qa-framework`) to decide

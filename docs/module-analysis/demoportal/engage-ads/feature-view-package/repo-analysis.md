@@ -1,4 +1,4 @@
-# EngageAds — View Package (BundledAdPackages) Repository Analysis Report
+# EngageAds - View Package (BundledAdPackages) Repository Analysis Report
 
 Generated: 2026-06-18T16:01:41.761+05:30
 
@@ -6,7 +6,7 @@ Generated: 2026-06-18T16:01:41.761+05:30
 
 | Item | Details |
 |---|---|
-| Feature | EngageAds — View Package / Bundled Ad Packages |
+| Feature | EngageAds - View Package / Bundled Ad Packages |
 | Razor page | `Presentation\Web\Pages\EngageAds\BundledAdPackages.cshtml` |
 | Page model | `BundledAdPackagesModel : BasePageModel` |
 | Namespace | `Web.Pages.EngageAds` |
@@ -222,7 +222,7 @@ Generated: 2026-06-18T16:01:41.761+05:30
   9. Store response in `TempData["PaymentResponse"]`.
 - **Success output:** `{ success: true, redirectUrl: "/EngageAds/OrderConfirmation" }`
 - **Failure behavior:** warning/error notifications plus HTTP 400/500 JSON error payload.
-- **Important note:** The handler accepts card-related inputs and `PaymentIntentId`, but the current page’s visible flow routes card scenarios to Stripe session creation first.
+- **Important note:** The handler accepts card-related inputs and `PaymentIntentId`, but the current page's visible flow routes card scenarios to Stripe session creation first.
 
 ## 4.5 OnPostSubmitInquiry
 
@@ -413,7 +413,7 @@ Generated: 2026-06-18T16:01:41.761+05:30
 | `#stripePlanSummary` | Package summary placeholder |
 | `#stripeCheckoutMount` | Stripe iframe mount target |
 
-## 6.3 Step 1 — Package Selection
+## 6.3 Step 1 - Package Selection
 
 | Selector / element | Type | Purpose / behavior |
 |---|---|---|
@@ -426,7 +426,7 @@ Generated: 2026-06-18T16:01:41.761+05:30
 | `a.talkToExpertBtn` | button/link | Opens consultation modal for custom package |
 | `.section` groups | content | Description item groups and channels |
 
-## 6.4 Step 2 — Payment / Checkout Summary
+## 6.4 Step 2 - Payment / Checkout Summary
 
 ### Summary / display-only fields
 
@@ -486,30 +486,30 @@ Generated: 2026-06-18T16:01:41.761+05:30
 
 ## 7. Business Rules
 
-1. **BR-001 — Auth required:** Users must be authenticated to access the page.
-2. **BR-002 — Program-scoped catalog:** Packages load for the current session program only.
-3. **BR-003 — Role-scoped catalog:** Admin / ChannelFusionAdmin see all packages; dealers see only eligible packages.
-4. **BR-004 — Purchase restriction for admin roles:** Admin / ChannelFusionAdmin can browse but cannot purchase because payment CTA is omitted.
-5. **BR-005 — Custom package behavior:** `IsCustom == true` packages show `Talk to an Expert` rather than `Select Package`.
-6. **BR-006 — Empty-state behavior:** If no packages are returned, the wizard is hidden and `NoPackageAvailable` is shown.
-7. **BR-007 — Deep-link behavior:** `?packageSeq=` auto-selects a package on page load.
-8. **BR-008 — Co-op visibility:** Co-op controls are shown only when total available co-op budget is greater than zero.
-9. **BR-009 — Terms gate:** Payment UI is locked until Terms & Conditions are accepted.
-10. **BR-010 — Transaction fee rule:** Transaction fee is calculated only when the card-funded portion is greater than zero.
-11. **BR-011 — Fee service fallback:** If the fee API fails, the system falls back to local `2.9% + $0.30` calculation.
-12. **BR-012 — Full co-op handling:** If co-op covers the full package amount, fee rows are hidden and card charge becomes zero.
-13. **BR-013 — Multiple budget lines allowed:** Users may allocate co-op across multiple budget types.
-14. **BR-014 — No duplicate budget line:** The same product/budget code cannot be added twice unless the user is editing the existing row.
-15. **BR-015 — Budget-line cap:** A line allocation cannot exceed the selected product line’s available budget.
-16. **BR-016 — Package-cost cap:** Total co-op allocations cannot exceed the package cost.
-17. **BR-017 — Split payment supported:** Partial co-op + partial card payment is allowed; informational banner is shown but payment remains enabled.
-18. **BR-018 — Package activation rule:** User-facing copy states the package will not be activated until the full amount is paid.
-19. **BR-019 — Fiscal-year budget context:** Co-op budget lookup is based on current fiscal year and active division.
-20. **BR-020 — Inquiry routing:** Custom-package consultation requests are sent as `CUSTOM_PACKAGE` inquiries to the `DIGITAL_FUSION` team.
-21. **BR-021 — State list source:** State lookup uses hard-coded `countrySeq=1`.
-22. **BR-022 — Package / budget identifier protection:** Encrypted IDs are used in client HTML and AJAX payloads.
-23. **BR-023 — Stripe enablement:** If Stripe config cannot be loaded, the page degrades gracefully with `IsStripeEnabled = false`.
-24. **BR-024 — Custom-only catalog behavior:** If there are no selectable non-custom packages, wizard tabs/actions and the payment panel are hidden.
+1. **BR-001 - Auth required:** Users must be authenticated to access the page.
+2. **BR-002 - Program-scoped catalog:** Packages load for the current session program only.
+3. **BR-003 - Role-scoped catalog:** Admin / ChannelFusionAdmin see all packages; dealers see only eligible packages.
+4. **BR-004 - Purchase restriction for admin roles:** Admin / ChannelFusionAdmin can browse but cannot purchase because payment CTA is omitted.
+5. **BR-005 - Custom package behavior:** `IsCustom == true` packages show `Talk to an Expert` rather than `Select Package`.
+6. **BR-006 - Empty-state behavior:** If no packages are returned, the wizard is hidden and `NoPackageAvailable` is shown.
+7. **BR-007 - Deep-link behavior:** `?packageSeq=` auto-selects a package on page load.
+8. **BR-008 - Co-op visibility:** Co-op controls are shown only when total available co-op budget is greater than zero.
+9. **BR-009 - Terms gate:** Payment UI is locked until Terms & Conditions are accepted.
+10. **BR-010 - Transaction fee rule:** Transaction fee is calculated only when the card-funded portion is greater than zero.
+11. **BR-011 - Fee service fallback:** If the fee API fails, the system falls back to local `2.9% + $0.30` calculation.
+12. **BR-012 - Full co-op handling:** If co-op covers the full package amount, fee rows are hidden and card charge becomes zero.
+13. **BR-013 - Multiple budget lines allowed:** Users may allocate co-op across multiple budget types.
+14. **BR-014 - No duplicate budget line:** The same product/budget code cannot be added twice unless the user is editing the existing row.
+15. **BR-015 - Budget-line cap:** A line allocation cannot exceed the selected product line's available budget.
+16. **BR-016 - Package-cost cap:** Total co-op allocations cannot exceed the package cost.
+17. **BR-017 - Split payment supported:** Partial co-op + partial card payment is allowed; informational banner is shown but payment remains enabled.
+18. **BR-018 - Package activation rule:** User-facing copy states the package will not be activated until the full amount is paid.
+19. **BR-019 - Fiscal-year budget context:** Co-op budget lookup is based on current fiscal year and active division.
+20. **BR-020 - Inquiry routing:** Custom-package consultation requests are sent as `CUSTOM_PACKAGE` inquiries to the `DIGITAL_FUSION` team.
+21. **BR-021 - State list source:** State lookup uses hard-coded `countrySeq=1`.
+22. **BR-022 - Package / budget identifier protection:** Encrypted IDs are used in client HTML and AJAX payloads.
+23. **BR-023 - Stripe enablement:** If Stripe config cannot be loaded, the page degrades gracefully with `IsStripeEnabled = false`.
+24. **BR-024 - Custom-only catalog behavior:** If there are no selectable non-custom packages, wizard tabs/actions and the payment panel are hidden.
 
 ---
 
@@ -741,7 +741,7 @@ When `.btnPayment` is clicked:
 ## 11.3 Additional Client Endpoint Present in JS
 
 - `processOrderWithCard()` contains a call to `/api/EngageAds/CreateOrder`.
-- This is part of client script but is not the primary active path from this page’s current redirect-to-`/EngageAds/Payment` flow.
+- This is part of client script but is not the primary active path from this page's current redirect-to-`/EngageAds/Payment` flow.
 
 ---
 

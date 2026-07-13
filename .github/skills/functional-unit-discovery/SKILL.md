@@ -3,15 +3,15 @@ name: functional-unit-discovery
 description: Read legacy and modern codebases to map files, endpoints, services, and UI components, then extract all independently testable functional units.
 ---
 
-# Functional Unit Discovery — Steps 1 & 2
+# Functional Unit Discovery - Steps 1 & 2
 
 ## Purpose
 
-**Step 1 — Repository Discovery**: Read both Legacy and Modern codebases for a given
+**Step 1 - Repository Discovery**: Read both Legacy and Modern codebases for a given
 module/feature. Map every file, endpoint, service, stored procedure, and UI component
 involved. Produce a structured discovery report.
 
-**Step 2 — Functional Unit Discovery**: From the discovery, extract every discrete,
+**Step 2 - Functional Unit Discovery**: From the discovery, extract every discrete,
 independently testable behavior. Produce a Functional Unit Catalog and Migration Mapping.
 
 ## When to Use
@@ -26,12 +26,12 @@ independently testable behavior. Produce a Functional Unit Catalog and Migration
 - **Feature**: e.g. `submit-claim`
 - **Mode**: `discovery` (Step 1 only) | `catalog` (Step 2 only) | `both` (default)
 
-### Resolving Repo Paths — Auto-Discovery
+### Resolving Repo Paths - Auto-Discovery
 
 Read workspace roots from `config/repos.local.json`.
 Only two values are required from the user:
-- `legacy.root` — workspace root
-- `legacy.modules.{module}.features.{feature}.featurePath` — the exact feature folder
+- `legacy.root` - workspace root
+- `legacy.modules.{module}.features.{feature}.featurePath` - the exact feature folder
 
 **Everything else is auto-discovered** by following references in the source code.
 Do NOT ask the user for individual dependency paths. Derive them.
@@ -39,52 +39,52 @@ Do NOT ask the user for individual dependency paths. Derive them.
 #### Auto-Discovery Algorithm
 
 ```
-STEP A — Primary read (always)
+STEP A - Primary read (always)
   Read all files in featurePath:
-    *.cshtml      → form fields, UI elements, partial view references
-    *.cshtml.cs   → injected service interfaces (IClaimService, IBudgetService, etc.)
+    *.cshtml      -> form fields, UI elements, partial view references
+    *.cshtml.cs   -> injected service interfaces (IClaimService, IBudgetService, etc.)
                     bound properties, handler methods, validation attributes
 
-STEP B — Service / Business Logic (when FU category = BusinessLogic or Workflow)
+STEP B - Service / Business Logic (when FU category = BusinessLogic or Workflow)
   From .cshtml.cs: extract injected interface names (e.g. IClaimService)
   Search: {legacyRoot}\Libraries\BusinessLogic\Services\**\*.cs
-    → find implementations of those interfaces
-    → read method signatures and logic
+    -> find implementations of those interfaces
+    -> read method signatures and logic
 
-STEP C — Data Models / Entities (when FU category = DataPersistence)
+STEP C - Data Models / Entities (when FU category = DataPersistence)
   From service files: extract entity/model class names used
   Search: {legacyRoot}\Libraries\CommonEntity\**\*.cs
-    → find those model/entity files
-    → read property names and data types for DB field mapping
+    -> find those model/entity files
+    -> read property names and data types for DB field mapping
 
-STEP D — Stored Procedures / Database (when FU category = DataPersistence)
+STEP D - Stored Procedures / Database (when FU category = DataPersistence)
   From service/accessor files: extract accessor class calls and SP names
   Search: {legacyRoot}\Libraries\**\*Accessor*.cs  OR  *DAL*.cs
-    → find SP names, table names, and query parameters
+    -> find SP names, table names, and query parameters
 
-STEP E — Validation Messages (when FU category = DataEntry or Validation)
+STEP E - Validation Messages (when FU category = DataEntry or Validation)
   Derive resource path from workspace structure:
     {legacyRoot}\RAL\Resources\{ModuleLabel}\ViewResource.*.resx
     (ModuleLabel = Title-cased module, e.g. Coop, PopShop)
-  Read .resx files → extract exact validation message strings
+  Read .resx files -> extract exact validation message strings
   These are used verbatim in test assertions
 
-STEP F — Client-Side Behavior (when FU category = UI or DataEntry)
+STEP F - Client-Side Behavior (when FU category = UI or DataEntry)
   Derive script path:
     {legacyRoot}\{webFolder}\wwwroot\WebScripts\{moduleFolder}\js*.js
-  Read matching JS files → AJAX calls, client validation, encrypted params
+  Read matching JS files -> AJAX calls, client validation, encrypted params
 
-STEP G — Existing Test Patterns (when generating FUs for Playwright)
+STEP G - Existing Test Patterns (when generating FUs for Playwright)
   Derive test path:
     {legacyRoot}\tests\playwright\{module}\
-  Read existing page objects and helpers → reuse proven selectors
+  Read existing page objects and helpers -> reuse proven selectors
 
-STEP H — Modern equivalent (when mode=both and modern workspace exists)
+STEP H - Modern equivalent (when mode=both and modern workspace exists)
   From modern.root + modern.webFolder:
-    Controllers → {modernRoot}\{modernWebFolder}\**\*Controller.cs
-    Services    → {modernRoot}\src\Services\{module}\**\*.cs
-    Validators  → {modernRoot}\src\Validators\{module}\**\*.cs
-    Repository  → {modernRoot}\src\Data\**\*Repository.cs
+    Controllers -> {modernRoot}\{modernWebFolder}\**\*Controller.cs
+    Services    -> {modernRoot}\src\Services\{module}\**\*.cs
+    Validators  -> {modernRoot}\src\Validators\{module}\**\*.cs
+    Repository  -> {modernRoot}\src\Data\**\*Repository.cs
   Search for classes/endpoints matching each FU discovered in legacy
 ```
 
@@ -106,7 +106,7 @@ Only stop and ask the user if a derived path doesn't exist on disk.
 
 ---
 
-## STEP 1 — Repository Discovery
+## STEP 1 - Repository Discovery
 
 ### What to Read in the Legacy Repo
 
@@ -134,7 +134,7 @@ Only stop and ask the user if a derived path doesn't exist on disk.
 ### Discovery Report Format
 
 ```markdown
-# {Module} {Feature} — Discovery Report
+# {Module} {Feature} - Discovery Report
 
 ## Legacy Source Files
 | File | Purpose |
@@ -172,7 +172,7 @@ Items visible in legacy with no obvious modern counterpart
 
 ---
 
-## STEP 2 — Functional Unit Catalog
+## STEP 2 - Functional Unit Catalog
 
 ### Functional Unit Format
 
@@ -185,7 +185,7 @@ Modern: endpoint or service method
 Status: Implemented | Partial | Missing
 ```
 
-### Discovery Checklist — extract a FU for every item
+### Discovery Checklist - extract a FU for every item
 
 **UI Behaviors**
 - [ ] Page load and initialisation (auth redirect, data pre-load)
@@ -196,9 +196,9 @@ Status: Implemented | Partial | Missing
 - [ ] Read-only vs editable state
 
 **Data Entry**
-- [ ] Required field validation — one FU per required field
+- [ ] Required field validation - one FU per required field
 - [ ] Field format validation (date format, currency, length, regex)
-- [ ] File upload — type restriction, size limit, count limit
+- [ ] File upload - type restriction, size limit, count limit
 - [ ] Lookup / autocomplete / search
 - [ ] Auto-population from related data
 
@@ -210,9 +210,9 @@ Status: Implemented | Partial | Missing
 - [ ] Amount validation rules
 
 **Workflow**
-- [ ] Draft save → temp identifier assigned
-- [ ] Submit → final identifier assigned
-- [ ] Every status transition (Draft→Submitted→Received→Approved/Denied)
+- [ ] Draft save -> temp identifier assigned
+- [ ] Submit -> final identifier assigned
+- [ ] Every status transition (Draft->Submitted->Received->Approved/Denied)
 - [ ] Email/notification trigger per transition
 - [ ] Resubmit flow (if applicable)
 
@@ -224,7 +224,7 @@ Status: Implemented | Partial | Missing
 - [ ] Audit record (action, old/new status, user, timestamp)
 
 **Security**
-- [ ] Unauthenticated access → redirect to login
+- [ ] Unauthenticated access -> redirect to login
 - [ ] Role-based access (dealer vs admin vs CSR)
 - [ ] Data scoping (dealer sees only own records)
 - [ ] Encrypted/obfuscated parameters in requests

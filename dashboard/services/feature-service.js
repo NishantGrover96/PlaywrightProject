@@ -1,9 +1,9 @@
 'use strict';
 
 /**
- * Feature Service — metadata queries on top of the Catalog Service.
+ * Feature Service - metadata queries on top of the Catalog Service.
  *
- * Never reads from the file system directly — all data comes from catalog-service.
+ * Never reads from the file system directly - all data comes from catalog-service.
  *
  * Provides:
  *   featureService.getFeature(featureId, clientId?)
@@ -111,9 +111,9 @@ const featureService = {
   /**
    * Get coverage summary.
    *
-   * When clientId is provided — returns per-module coverage for that client.
-   * When moduleId is also provided — returns per-feature coverage.
-   * When neither — returns per-client coverage.
+   * When clientId is provided - returns per-module coverage for that client.
+   * When moduleId is also provided - returns per-feature coverage.
+   * When neither - returns per-client coverage.
    *
    * @param {string?} clientId
    * @param {string?} moduleId
@@ -132,7 +132,7 @@ const featureService = {
       return _buildModuleCoverage(features);
     }
 
-    // All clients — per-client rollup
+    // All clients - per-client rollup
     const allFeatures  = catalogService.getAll();
     const clientGroups = _groupBy(allFeatures, 'clientId');
     const result       = {};

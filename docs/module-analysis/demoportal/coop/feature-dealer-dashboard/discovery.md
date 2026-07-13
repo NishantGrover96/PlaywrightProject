@@ -1,4 +1,4 @@
-# Coop Dealer Dashboard — Discovery Report
+# Coop Dealer Dashboard - Discovery Report
 
 ## Feature Summary
 

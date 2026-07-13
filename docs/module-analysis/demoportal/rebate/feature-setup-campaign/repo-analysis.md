@@ -1,4 +1,4 @@
-# Rebate Setup Campaign (Create Rebate) — Repository Analysis Report
+# Rebate Setup Campaign (Create Rebate) - Repository Analysis Report
 Generated: 2026-07-07
 
 ## Source Files Analyzed
@@ -6,40 +6,40 @@ Generated: 2026-07-07
 |---|---|---|
 | `Presentation/Web/Pages/Rebate/CreateRebate.cshtml` | UI | Multi-step wizard container (3 sections) |
 | `Presentation/Web/Pages/Rebate/CreateRebate.cshtml.cs` | Handler | GET (load/edit campaign), POST (save, publish, delete) |
-| `Presentation/Web/Pages/Rebate/_RebateSetUp.cshtml` | UI Partial | Step 1 — Campaign config: group, type, offers, dates, amounts |
-| `Presentation/Web/Pages/Rebate/_AddPaymentRule.cshtml` | UI Partial | Step 2 — Payment rule: By Product or By Series |
-| `Presentation/Web/Pages/Rebate/_RebateWebsiteLanguage.cshtml` | UI Partial | Step 3 — Language-specific content |
+| `Presentation/Web/Pages/Rebate/_RebateSetUp.cshtml` | UI Partial | Step 1 - Campaign config: group, type, offers, dates, amounts |
+| `Presentation/Web/Pages/Rebate/_AddPaymentRule.cshtml` | UI Partial | Step 2 - Payment rule: By Product or By Series |
+| `Presentation/Web/Pages/Rebate/_RebateWebsiteLanguage.cshtml` | UI Partial | Step 3 - Language-specific content |
 | `Presentation/Web/Infrastructure/ApiClients/Rebate/IRebateManageApiService.cs` | Service Contract | SaveCampaignAsync, GetCampaignAsync, GetGroupCampaignsAsync, etc. |
 | `Libraries/CommonEntity/Rebate/Rebate_Campaign_Modal.cs` | Entity | Full campaign model |
 
 ---
 
-## UI / Form Fields — Step 1 (_RebateSetUp)
+## UI / Form Fields - Step 1 (_RebateSetUp)
 | Field Name | Type | Required | Label | Conditional | Notes |
 |---|---|---|---|---|---|
-| rebate_group_campaign_seq | select | Yes | Campaign Selection | — | Must select group; no groups = redirect to `/Admin/CMS/Campaign/list` |
+| rebate_group_campaign_seq | select | Yes | Campaign Selection | - | Must select group; no groups = redirect to `/Admin/CMS/Campaign/list` |
 | rebate_type_seq (Type) | select | Yes (if >1 type) | Type | Hidden when only 1 type (auto-selected) | Populated from `RebateTypeList` |
-| ddproduct (Products) | multi-select | Yes | Rebate Offer | — | SmartSearch multi-select; links offers to campaign |
+| ddproduct (Products) | multi-select | Yes | Rebate Offer | - | SmartSearch multi-select; links offers to campaign |
 | rebate_code | text | No | Rebate Code | `#DivRebateCode` | `maxlength=200` |
-| start_date | date picker | Yes | Start Date | — | `MM/DD/YYYY` format, hidden input `txtStartDate` |
-| end_date | date picker | Yes | End Date | — | Must be after start date |
+| start_date | date picker | Yes | Start Date | - | `MM/DD/YYYY` format, hidden input `txtStartDate` |
+| end_date | date picker | Yes | End Date | - | Must be after start date |
 | cut_off_date | date picker | No | Cut Off Date | Conditional per config | Submission deadline |
 | Currency | select | Yes | Currency | Disabled on Edit | Locked after creation |
 | amount | number | Depends on type | Amount | Conditional | Currency-masked via `jquery.maskMoney` / `autonumeric` |
-| duplicate_address_count | number | No | Duplicate Address Count | — | Range 0 to MaxInt |
-| documentation_flag | checkbox | No | Require Documentation | — | |
-| is_varying_payout | checkbox | No | Varying Payout | — | |
-| is_GasCard_Rebate | checkbox | No | Gas Card Rebate | — | |
-| enable_sms | checkbox | No | Enable SMS | — | |
-| publish_status (hdnPublish) | hidden | — | — | — | Current publish state |
-| isEdit (hdnEdit) | hidden | — | — | — | `"edit"` when editing |
+| duplicate_address_count | number | No | Duplicate Address Count | - | Range 0 to MaxInt |
+| documentation_flag | checkbox | No | Require Documentation | - | |
+| is_varying_payout | checkbox | No | Varying Payout | - | |
+| is_GasCard_Rebate | checkbox | No | Gas Card Rebate | - | |
+| enable_sms | checkbox | No | Enable SMS | - | |
+| publish_status (hdnPublish) | hidden | - | - | - | Current publish state |
+| isEdit (hdnEdit) | hidden | - | - | - | `"edit"` when editing |
 
 ---
 
-## UI / Form Fields — Step 2 (_AddPaymentRule)
+## UI / Form Fields - Step 2 (_AddPaymentRule)
 | Field Name | Type | Required | Label | Conditional | Notes |
 |---|---|---|---|---|---|
-| rebate (radio) | radio | Yes | By Product / By Series | — | Drives which payment table is shown |
+| rebate (radio) | radio | Yes | By Product / By Series | - | Drives which payment table is shown |
 | Amount (per product) | currency input | Yes | Amount | By Product mode | Amount per linked offer |
 | Series grid | table | Yes | By Series | By Series mode | Upload-driven series quantity/amount |
 
@@ -68,7 +68,7 @@ Generated: 2026-07-07
 | BR-SC04 | By Series vs By Product | `_AddPaymentRule.cshtml` | Radio selection drives payment rule type; `_PaymentRuleModal.BySeries.Count > 0` pre-selects By Series |
 | BR-SC05 | Publish gate | Publish modal | User must confirm before publish; campaign name and start date shown in confirmation modal |
 | BR-SC06 | EnsureGroupCampaignOption | `CreateRebateModel.EnsureGroupCampaignOptionAsync` | On edit, if linked group campaign is expired/inactive, it is added to dropdown to avoid broken reference |
-| BR-SC07 | Duplicate address count | `RebateCampaignModal` | `[Range(0, int.MaxValue)]` — must be non-negative integer |
+| BR-SC07 | Duplicate address count | `RebateCampaignModal` | `[Range(0, int.MaxValue)]` - must be non-negative integer |
 | BR-SC08 | Series upload | `OnPostSavePaymentRule` | Excel file parsed via `ExcelDataReader`; series deserialized into `_PaymentRuleModal.BySeriesJson` |
 
 ---
@@ -90,9 +90,9 @@ Generated: 2026-07-07
 ## Workflow / Status Transitions
 | From Status | To Status | Trigger | Notification |
 |---|---|---|---|
-| — | Draft | Create (default) | None |
-| Draft | Published | Publish modal confirm → `UpdatePublishStatusAsync` | Success notification |
-| Published | (locked) | — | Currency field disabled; group campaign locked |
+| - | Draft | Create (default) | None |
+| Draft | Published | Publish modal confirm -> `UpdatePublishStatusAsync` | Success notification |
+| Published | (locked) | - | Currency field disabled; group campaign locked |
 | Any | Deleted | Delete handler | Redirect to ManageRebate |
 
 ---
@@ -122,7 +122,7 @@ Generated: 2026-07-07
 |---|---|---|
 | Auth required | `BasePageModel` session | Authenticated users only |
 | Encrypted campaign seqs | `re_campaign_seq`, `re_rule_campaign_seq`, `re_group_seq` use `Encrypt` | Plain IDs never in form/URL |
-| Admin roles | `IsAuthorize()` → Admin, AdminLevel1/2, RebateAdmin | Manage-level access required |
+| Admin roles | `IsAuthorize()` -> Admin, AdminLevel1/2, RebateAdmin | Manage-level access required |
 | Anti-CSRF | Razor Pages built-in `__RequestVerificationToken` | All POST handlers |
 
 ---

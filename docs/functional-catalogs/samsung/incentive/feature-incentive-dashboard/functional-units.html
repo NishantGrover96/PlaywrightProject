@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Incentive Dashboard &#8212; Test Catalog</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous" defer></script>
+  <style>
+    .tier-smoke      { background:#dbeafe; color:#1d4ed8; }
+    .tier-regression { background:#ede9fe; color:#6d28d9; }
+    .tier-e2e        { background:#d1fae5; color:#065f46; }
+    .priority-p1     { background:#fee2e2; color:#991b1b; }
+    .priority-p2     { background:#fef3c7; color:#92400e; }
+    .priority-p3     { background:#e0f2fe; color:#0369a1; }
+    .priority-p4     { background:#f0fdf4; color:#166534; }
+    .test-id         { font-family: monospace; font-weight: 700; white-space: nowrap; }
+  </style>
+</head>
+<body class="bg-light">
+
+<div class="bg-primary text-white px-4 py-3">
+  <h1 class="h4 mb-1">Incentive Dashboard &#8212; Test Catalog</h1>
+  <p class="mb-0 small opacity-75">Samsung Portal | incentive module | samsung client</p>
+</div>
+
+<div class="container-fluid px-4 py-3">
+
+  <div class="d-flex gap-2 flex-wrap mb-3">
+    <span class="badge bg-success">Generated 2026-07-09</span>
+    <span class="badge rounded-pill tier-smoke">Smoke: 5 tests</span>
+    <span class="badge rounded-pill tier-regression">Regression: 55 tests</span>
+    <span class="badge rounded-pill tier-e2e">E2E: 5 tests</span>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-sm-4 col-md-2"><div class="card text-center shadow-sm h-100"><div class="card-body py-2"><div class="fs-4 fw-bold text-primary">65</div><div class="text-muted small">Total Test Cases</div></div></div></div>
+    <div class="col-6 col-sm-4 col-md-2"><div class="card text-center shadow-sm h-100"><div class="card-body py-2"><div class="fs-4 fw-bold text-primary">30</div><div class="text-muted small">Business Rules</div></div></div></div>
+    <div class="col-6 col-sm-4 col-md-2"><div class="card text-center shadow-sm h-100"><div class="card-body py-2"><div class="fs-4 fw-bold text-success">5</div><div class="text-muted small">Smoke Tests</div></div></div></div>
+    <div class="col-6 col-sm-4 col-md-2"><div class="card text-center shadow-sm h-100"><div class="card-body py-2"><div class="fs-4 fw-bold" style="color:#6d28d9;">55</div><div class="text-muted small">Regression Tests</div></div></div></div>
+    <div class="col-6 col-sm-4 col-md-2"><div class="card text-center shadow-sm h-100"><div class="card-body py-2"><div class="fs-4 fw-bold" style="color:#065f46;">5</div><div class="text-muted small">E2E Tests</div></div></div></div>
+    <div class="col-6 col-sm-4 col-md-2"><div class="card text-center shadow-sm h-100"><div class="card-body py-2"><div class="fs-4 fw-bold text-danger">9</div><div class="text-muted small">User Types Covered</div></div></div></div>
+  </div>
+
+  <div class="alert alert-warning" role="alert">
+    <strong>&#9888; Implementation Status: In Progress</strong>
+    <p class="mb-1 mt-1 small">Functional test catalog complete. Test asset generation pending:</p>
+    <ol class="mb-0 small">
+      <li>IncentiveDashboardPage.ts (Page Object with 40+ locators)</li>
+      <li>incentive-dashboard.helpers.ts (multi-step helper functions)</li>
+      <li>incentive-dashboard.spec.ts (65 comprehensive test cases)</li>
+      <li>test-data.json (Test data sets per user type)</li>
+      <li>verify-records.sql (Dashboard data verification)</li>
+      <li>incentive-dashboard.api.spec.ts (17 API handler tests)</li>
+    </ol>
+  </div>
+
+  <h2 class="h5 mb-3">&#128203; Test Coverage (Planned)</h2>
+
+  <div class="accordion mb-4" id="accordionCatalog">
+
+    <!-- SMOKE -->
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#sectionSmoke" aria-expanded="true" aria-controls="sectionSmoke">
+          Smoke Suite <span class="badge rounded-pill tier-smoke ms-2">5 tests</span>
+        </button>
+      </h2>
+      <div id="sectionSmoke" class="accordion-collapse collapse show" data-bs-parent="#accordionCatalog">
+        <div class="accordion-body p-0">
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover table-sm align-middle mb-0">
+              <thead class="table-dark"><tr><th scope="col">Test ID</th><th scope="col">Title</th><th scope="col">Priority</th><th scope="col">Category</th><th scope="col">Business Rules</th><th scope="col">Precondition</th><th scope="col">Expected Result</th></tr></thead>
+              <tbody>
+                <tr><td class="test-id">INC-SMOKE-005</td><td>Dealer dashboard page loads with dealer dropdown</td><td><span class="badge priority-p1">P1-Critical</span></td><td>Navigation</td><td>BR-021, BR-001</td><td>Authenticated as Dealer role</td><td>Page renders; dealer dropdown populated; default tab active</td></tr>
+                <tr><td class="test-id">INC-SMOKE-004</td><td>KPI tiles load data on page ready</td><td><span class="badge priority-p1">P1-Critical</span></td><td>UI</td><td>BR-007, BR-011</td><td>Authenticated as BMDM; program active</td><td>All Units, Unqualified, Returned, and Reward Amount tiles show numeric values</td></tr>
+                <tr><td class="test-id">INC-SMOKE-003</td><td>Dealer landing dashboard loads for authenticated dealer</td><td><span class="badge priority-p1">P1-Critical</span></td><td>Navigation</td><td>BR-021, BR-010</td><td>Authenticated as Dealer</td><td>Page renders with dealer name; program tiles visible; fiscal year/quarter controls present</td></tr>
+                <tr><td class="test-id">INC-SMOKE-002</td><td>Unauthenticated user redirected to login</td><td><span class="badge priority-p1">P1-Critical</span></td><td>Security</td><td>BR-021</td><td>No active session cookie</td><td>HTTP 302 redirect to /Account/Login; dashboard content not rendered</td></tr>
+                <tr><td class="test-id">INC-SMOKE-001</td><td>Admin dashboard page loads for authenticated admin (BMDM)</td><td><span class="badge priority-p1">P1-Critical</span></td><td>Navigation</td><td>BR-021, BR-001, BR-006</td><td>Authenticated as BMDM role</td><td>Page renders; fiscal year and quarter dropdowns visible; TM pre-populated; KPI area visible</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REGRESSION -->
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sectionRegression" aria-expanded="false" aria-controls="sectionRegression">
+          Regression Suite <span class="badge rounded-pill tier-regression ms-2">55 tests</span>
+        </button>
+      </h2>
+      <div id="sectionRegression" class="accordion-collapse collapse" data-bs-parent="#accordionCatalog">
+        <div class="accordion-body p-0">
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover table-sm align-middle mb-0">
+              <thead class="table-dark"><tr><th scope="col">Test ID</th><th scope="col">Title</th><th scope="col">Priority</th><th scope="col">Category</th><th scope="col">Business Rules</th><th scope="col">Precondition</th><th scope="col">Expected Result</th></tr></thead>
+              <tbody>
+                <tr><td class="test-id">INC-TC-055</td><td>BMRM with PRSM sm param passes sm to corporate SP</td><td><span class="badge priority-p2">P2-High</span></td><td>BusinessLogic</td><td>BR-026, BR-028</td><td>Authenticated as BMRM; PRSM mode active</td><td>API call includes sm param with non-zero value</td></tr>
+                <tr><td class="test-id">INC-TC-054</td><td>DIST/RDIST/DARO route to GetDemoCorporateDashboardDataByType2</td><td><span class="badge priority-p2">P2-High</span></td><td>BusinessLogic</td><td>BR-027, BR-001</td><td>Authenticated as DIST</td><td>Data from distributor-scoped SP; KPI tiles display distributor-scoped data</td></tr>
+                <tr><td class="test-id">INC-TC-053</td><td>BMDM/BMRM users route to GetDemoCorporateDashboardDataByType</td><td><span class="badge priority-p2">P2-High</span></td><td>BusinessLogic</td><td>BR-026, BR-001</td><td>Authenticated as BMDM</td><td>Corporate SP called with correct rule_mode; returns 200 with data</td></tr>
+                <tr><td class="test-id">INC-TC-052</td><td>BMNM/FAST/OAM users route to GetOrganizationDashboardDataByType</td><td><span class="badge priority-p2">P2-High</span></td><td>BusinessLogic</td><td>BR-025, BR-001</td><td>Authenticated as BMNM</td><td>Org-scoped SP called; KPI tiles return 200 with org-scoped values</td></tr>
+                <tr><td class="test-id">INC-TC-051</td><td>_OnlyPrimaryUnitsDisplayed note shown in footer</td><td><span class="badge priority-p4">P4-Low</span></td><td>UI</td><td>BR-020</td><td>Any authenticated user</td><td>Note "Single-phase ODU count are considered qualified units" visible in footer</td></tr>
+                <tr><td class="test-id">INC-TC-050</td><td>Redeem Cash Rewards button triggers OnGetRedeemCashRewards</td><td><span class="badge priority-p2">P2-High</span></td><td>Workflow</td><td>BR-001 (write)</td><td>Dealer with available rewards; AlreadyRedeemed=false</td><td>GET to RedeemCashRewards returns 200; button state updates to redeemed</td></tr>
+                <tr><td class="test-id">INC-TC-049</td><td>Dealer locations list populated on LandingDashboard</td><td><span class="badge priority-p3">P3-Medium</span></td><td>UI</td><td>BR-010</td><td>Dealer with multiple locations</td><td>Locations control visible with &#8805; 1 option</td></tr>
+                <tr><td class="test-id">INC-TC-048</td><td>Sales rep reward data loads for dealer</td><td><span class="badge priority-p3">P3-Medium</span></td><td>UI</td><td>BR-010</td><td>Dealer user on LandingDashboard</td><td>Sales rep rewards section rendered and not in loading state</td></tr>
+                <tr><td class="test-id">INC-TC-047</td><td>unitPercentage = 0 when no units purchased</td><td><span class="badge priority-p3">P3-Medium</span></td><td>BusinessLogic</td><td>BR-016</td><td>Dealer with 0 group_period_unit_purchase</td><td>Unit progress shows 0%</td></tr>
+                <tr><td class="test-id">INC-TC-046</td><td>unitPercentage = 100 when program_tier_max = 9999999</td><td><span class="badge priority-p2">P2-High</span></td><td>BusinessLogic</td><td>BR-016</td><td>Program with tier_max = 9999999</td><td>Unit percentage displays 100%</td></tr>
+                <tr><td class="test-id">INC-TC-045</td><td>unitPercentage capped at 100 when actual units &#8805; tier max</td><td><span class="badge priority-p2">P2-High</span></td><td>BusinessLogic</td><td>BR-016</td><td>group_period_unit_purchase &#8805; program_tier_max (finite)</td><td>Percentage rendered &#8804; 100</td></tr>
+                <tr><td class="test-id">INC-TC-044</td><td>totalAmountSummary=true returns dealer name, address, account number</td><td><span class="badge priority-p3">P3-Medium</span></td><td>BusinessLogic</td><td>BR-019</td><td>Dealer on DealerDashboard; program with summary data</td><td>Name, Address, Account_Number, DBA_Name and 6 amount categories rendered</td></tr>
+                <tr><td class="test-id">INC-TC-043</td><td>partnerprogram queryParam overrides active tab to pp-tab</td><td><span class="badge priority-p3">P3-Medium</span></td><td>BusinessLogic</td><td>BR-014</td><td>Dealer with partner program; isPartnerProgram=true</td><td>pp-tab is active on load regardless of SP default</td></tr>
+                <tr><td class="test-id">INC-TC-042</td><td>Non-pt-tab displays tiered program data</td><td><span class="badge priority-p3">P3-Medium</span></td><td>BusinessLogic</td><td>BR-015</td><td>Default tab is not pt-tab</td><td>Tier program fields visible; adjustment columns absent</td></tr>
+                <tr><td class="test-id">INC-TC-041</td><td>pt-tab displays adjustment amount and date</td><td><span class="badge priority-p3">P3-Medium</span></td><td>BusinessLogic</td><td>BR-015</td><td>Dealer on DealerDashboard; pt-tab available</td><td>adjustment_amount and adjustment_date fields displayed</td></tr>
+                <tr><td class="test-id">INC-TC-040</td><td>Default tab determined by GetDashboardTab SP result</td><td><span class="badge priority-p2">P2-High</span></td><td>BusinessLogic</td><td>BR-014</td><td>Dealer with known default tab in SP</td><td>Active tab matches SP tab value on load</td></tr>
+                <tr><td class="test-id">INC-TC-039</td><td>LandingDashboard Base64-decodes dn param for dealer context</td><td><span class="badge priority-p2">P2-High</span></td><td>Security</td><td>BR-010</td><td>Valid Base64-encoded dealer number in URL</td><td>Dealer context loaded; no error rendered</td></tr>
+                <tr><td class="test-id">INC-TC-038</td><td>DealerDashboard decrypts encrypted dealer_number URL param</td><td><span class="badge priority-p1">P1-Critical</span></td><td>Security</td><td>BR-009</td><td>Valid AES-encrypted dealer_number in URL</td><td>Correct dealer data loaded; no exception rendered</td></tr>
+                <tr><td class="test-id">INC-TC-037</td><td>API response dealer_number_seq values are AES-encrypted</td><td><span class="badge priority-p1">P1-Critical</span></td><td>Security</td><td>BR-008</td><td>Admin user; dealer data exists</td><td>CorporateDashboardDataByType response JSON dealer_number_seq is not a plain integer</td></tr>
+                <tr><td class="test-id">INC-TC-036</td><td>Selecting brand filter triggers dashboard reload</td><td><span class="badge priority-p3">P3-Medium</span></td><td>UI</td><td>BR-011</td><td>Non-Rewards mode; brands available</td><td>CorporateDashboardDataByType called with rebate_product_category_seq param</td></tr>
+                <tr><td class="test-id">INC-TC-035</td><td>Brand filter dropdown populated via GetTreadPattern</td><td><span class="badge priority-p3">P3-Medium</span></td><td>UI</td><td>BR-011</td><td>Non-Rewards mode; brands configured</td><td>Brand dropdown has &#8805; 1 option; Brand endpoint returns 200</td></tr>
+                <tr><td class="test-id">INC-TC-034</td><td>Dealer dropdown only shows primary_flag="Y" dealers</td><td><span class="badge priority-p2">P2-High</span></td><td>BusinessLogic</td><td>BR-013</td><td>Admin; distributor with primary and non-primary locations</td><td>Only primary-flagged locations appear; non-primary excluded</td></tr>
+                <tr><td class="test-id">INC-TC-033</td><td>Least Rewarded Dealers table populates with data</td><td><span class="badge priority-p3">P3-Medium</span></td><td>UI</td><td>BR-007</td><td>Admin; dealer reward data exists</td><td>tblLeastFanticDealer has &#8805; 1 row with dealer number, name, amount</td></tr>
+                <tr><td class="test-id">INC-TC-032</td><td>Most Rewarded Dealers table populates with data</td><td><span class="badge priority-p3">P3-Medium</span></td><td>UI</td><td>BR-007</td><td>Admin; dealer reward data exists</td><td>tblTrueFanticDealer has &#8805; 1 row with dealer number, name, reward amount</td></tr>
+                <tr><td class="test-id">INC-TC-031</td><td>Non-Rewards mode shows SalesPerson and Dealer filters</td><td><span class="badge priority-p2">P2-High</span></td><td>UI</td><td>BR-011</td><td>ConvertToRewards=false</td><td>Sales person and Dealer dropdowns visible; TBM filter hidden</td></tr>
+                <tr><td class="test-id">INC-TC-030</td><td>Non-Rewards mode shows Brand Promotion tab</td><td><span class="badge priority-p2">P2-High</span></td><td>UI</td><td>BR-011, BR-029</td><td>ConvertToRewards=false</td><td>#Brand tab visible; PromotionEarned_Brand section visible</td></tr>
+                <tr><td class="test-id">INC-TC-029</td><td>Rewards mode shows TBM and Distributor filter controls</td><td><span class="badge priority-p2">P2-High</span></td><td>UI</td><td>BR-011</td><td>ConvertToRewards=true</td><td>#ddlTM and #ddlDistributor visible</td></tr>
+                <tr><td class="test-id">INC-TC-028</td><td>Rewards mode hides Brand Promotion tab</td><td><span class="badge priority-p2">P2-High</span></td><td>UI</td><td>BR-011, BR-029</td><td>ConvertToRewards=true</td><td>#Brand tab hidden; In-house tab (PromotionEarned) is default active</td></tr>
+                <tr><td class="test-id">INC-TC-027</td><td>Earned Branding Points tile hidden in Non-Rewards mode</td><td><span class="badge priority-p2">P2-High</span></td><td>UI</td><td>BR-011, BR-012</td><td>Non-Rewards mode program</td><td>#spnTentative tile not visible</td></tr>
+                <tr><td class="test-id">INC-TC-026</td><td>Earned Branding Points tile visible in Rewards mode</td><td><span class="badge priority-p2">P2-High</span></td><td>UI</td><td>BR-011</td><td>Rewards mode program</td><td>#spnTentative visible and shows numeric value</td></tr>
+                <tr><td class="test-id">INC-TC-025</td><td>Total Purchases tile visible when IsShowPurchase=false</td><td><span class="badge priority-p3">P3-Medium</span></td><td>UI</td><td>BR-012</td><td>IsShowPurchase=false</td><td>#spnTotalpurchase visible</td></tr>
+                <tr><td class="test-id">INC-TC-024</td><td>Total Purchases tile hidden when IsShowPurchase=true</td><td><span class="badge priority-p2">P2-High</span></td><td>UI</td><td>BR-012</td><td>IsShowPurchase=true</td><td>#spnTotalpurchase, unqualified, and returned cost tiles all hidden</td></tr>
+                <tr><td class="test-id">INC-TC-023</td><td>Reward Amount tile displays value</td><td><span class="badge priority-p2">P2-High</span></td><td>UI</td><td>BR-007</td><td>Admin; reward data exists</td><td>#promoTotalAmount not empty</td></tr>
+                <tr><td class="test-id">INC-TC-022</td><td>Returned Units tile displays value</td><td><span class="badge priority-p3">P3-Medium</span></td><td>UI</td><td>BR-007</td><td>Admin; returned units data exists</td><td>#spnReturnedTires not empty</td></tr>
+                <tr><td class="test-id">INC-TC-021</td><td>Unqualified Units tile displays value</td><td><span class="badge priority-p3">P3-Medium</span></td><td>UI</td><td>BR-007</td><td>Admin; unqualified unit data exists</td><td>#spnUnqualifiedTires not empty</td></tr>
+                <tr><td class="test-id">INC-TC-020</td><td>All Units tile displays value from CorporateDashboardDataByType</td><td><span class="badge priority-p2">P2-High</span></td><td>UI</td><td>BR-007</td><td>Admin; unit data exists</td><td>#spnTotalTires shows non-empty numeric value after spinner hides</td></tr>
+                <tr><td class="test-id">INC-TC-019</td><td>BMNM user distributor cascade populates correct dealer list</td><td><span class="badge priority-p2">P2-High</span></td><td>BusinessLogic</td><td>BR-003, BR-013</td><td>BMNM user; distributor with assigned dealers</td><td>Dealer dropdown has &#8805; 1 option matching org-scoped primary dealer data</td></tr>
+                <tr><td class="test-id">INC-TC-018</td><td>TBM dropdown populated via GetSalesManager in Rewards mode</td><td><span class="badge priority-p2">P2-High</span></td><td>UI</td><td>BR-018, BR-011</td><td>Rewards mode; BMMGT or admin user</td><td>#ddlTM has &#8805; 1 TM option; SalesManager endpoint returns 200</td></tr>
+                <tr><td class="test-id">INC-TC-017</td><td>Distributor center dropdown shows for DCWH distributor type</td><td><span class="badge priority-p3">P3-Medium</span></td><td>UI</td><td>BR-001</td><td>Admin; DCWH-type distributor selected</td><td>#ddDistributorCenter becomes visible and populated after DCWH selection</td></tr>
+                <tr><td class="test-id">INC-TC-016</td><td>Distributor cascades to sales person dropdown</td><td><span class="badge priority-p3">P3-Medium</span></td><td>UI</td><td>BR-001</td><td>Non-Rewards mode; DIST user; sales persons exist</td><td>#ddDealerSalesPerson has &#8805; 1 option; SalesPersonByDistributor returns 200</td></tr>
+                <tr><td class="test-id">INC-TC-015</td><td>Selecting distributor cascades to dealer dropdown</td><td><span class="badge priority-p2">P2-High</span></td><td>UI</td><td>BR-001, BR-013</td><td>BMMGT user; territory and distributor available</td><td>Dealer dropdown visible with &#8805; 1 primary dealer after distributor selection</td></tr>
+                <tr><td class="test-id">INC-TC-014</td><td>Selecting territory cascades distributor dropdown</td><td><span class="badge priority-p2">P2-High</span></td><td>UI</td><td>BR-005</td><td>BMMGT user; territory and distributor data exists</td><td>#ddDistributor has &#8805; 1 option; DistributorByTerritory returns 200</td></tr>
+                <tr><td class="test-id">INC-TC-013</td><td>Territory dropdown populated for BMMGT user</td><td><span class="badge priority-p2">P2-High</span></td><td>UI</td><td>BR-005</td><td>Authenticated as BMMGT</td><td>#ddTerritory has &#8805; 2 options; first option value = "0" (placeholder)</td></tr>
+                <tr><td class="test-id">INC-TC-012</td><td>Changing quarter triggers KPI tile refresh</td><td><span class="badge priority-p2">P2-High</span></td><td>UI</td><td>BR-024</td><td>Admin; multiple quarters with data</td><td>CorporateDashboardDataByType called with new period_number after quarter change</td></tr>
+                <tr><td class="test-id">INC-TC-011</td><td>Changing fiscal year triggers KPI tile refresh</td><td><span class="badge priority-p2">P2-High</span></td><td>UI</td><td>BR-023</td><td>Admin; multiple fiscal years available</td><td>CorporateDashboardDataByType called with updated fiscal_year after year change</td></tr>
+                <tr><td class="test-id">INC-TC-010</td><td>Quarter dropdown has exactly 4 options (Q1-Q4)</td><td><span class="badge priority-p3">P3-Medium</span></td><td>UI</td><td>BR-001</td><td>Any authenticated user</td><td>#ddlQuarterly has exactly 4 options with values 1, 2, 3, 4</td></tr>
+                <tr><td class="test-id">INC-TC-009</td><td>Fiscal year dropdown populated from GetFiscalYearByDivisionSeq</td><td><span class="badge priority-p3">P3-Medium</span></td><td>UI</td><td>BR-017</td><td>Active division with fiscal year data</td><td>#ddlFiscalYear has &#8805; 1 option; current year selected by default</td></tr>
+                <tr><td class="test-id">INC-TC-008</td><td>Dashboard loads for OAM user - org-scoped data shown</td><td><span class="badge priority-p2">P2-High</span></td><td>Authorization</td><td>BR-001, BR-025</td><td>Authenticated as OAM</td><td>Page loads; distributor pre-populated with OAM's dealer_number_seq</td></tr>
+                <tr><td class="test-id">INC-TC-007</td><td>Dashboard loads for BMDM user - TM auto-selected from session</td><td><span class="badge priority-p2">P2-High</span></td><td>Initialization</td><td>BR-006, BR-001</td><td>Authenticated as BMDM</td><td>TM pre-populated from session; KPI tiles load without manual TM selection</td></tr>
+                <tr><td class="test-id">INC-TC-006</td><td>Dashboard loads for FAST user - territory + dealers shown</td><td><span class="badge priority-p2">P2-High</span></td><td>Initialization</td><td>BR-004</td><td>Authenticated as FAST; district dealers exist</td><td>Territory selector visible; dealer list pre-populated for Falken district</td></tr>
+                <tr><td class="test-id">INC-TC-005</td><td>Dashboard loads for BMMGT user - territory selector shown</td><td><span class="badge priority-p2">P2-High</span></td><td>Initialization</td><td>BR-005</td><td>Authenticated as BMMGT</td><td>#ddTerritory visible; first option contains "Select Territory"</td></tr>
+                <tr><td class="test-id">INC-TC-004</td><td>Dashboard loads for BMNM user - dealer list for org shown</td><td><span class="badge priority-p2">P2-High</span></td><td>Initialization</td><td>BR-003</td><td>Authenticated as BMNM</td><td>Dealer dropdown visible and populated with org-scoped dealers sorted A-Z</td></tr>
+                <tr><td class="test-id">INC-TC-003</td><td>Dashboard loads for RDIST user - distributor pre-populated</td><td><span class="badge priority-p2">P2-High</span></td><td>Initialization</td><td>BR-002</td><td>Authenticated as RDIST</td><td>Distributor dropdown shows RDIST own account as selected; no selection required</td></tr>
+                <tr><td class="test-id">INC-TC-002</td><td>BMADMIN user sees all territory managers (seq=0, no org filter)</td><td><span class="badge priority-p2">P2-High</span></td><td>Authorization</td><td>BR-022, BR-018</td><td>Authenticated as BMADMIN</td><td>TM dropdown contains all TMs (unfiltered); SalesManager called with seq=0</td></tr>
+                <tr><td class="test-id">INC-TC-001</td><td>Dashboard loads for DIST user - distributor pre-populated</td><td><span class="badge priority-p2">P2-High</span></td><td>Initialization</td><td>BR-002</td><td>Authenticated as DIST</td><td>hdDistributor_dealer_number_seq equals session dealer_number_seq; distributor shown without user interaction</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- E2E -->
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sectionE2E" aria-expanded="false" aria-controls="sectionE2E">
+          E2E Suite <span class="badge rounded-pill tier-e2e ms-2">5 tests</span>
+        </button>
+      </h2>
+      <div id="sectionE2E" class="accordion-collapse collapse" data-bs-parent="#accordionCatalog">
+        <div class="accordion-body p-0">
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover table-sm align-middle mb-0">
+              <thead class="table-dark"><tr><th scope="col">Test ID</th><th scope="col">Title</th><th scope="col">Priority</th><th scope="col">Business Rules</th><th scope="col">Workflow Steps</th><th scope="col">Expected Result</th></tr></thead>
+              <tbody>
+                <tr><td class="test-id">INC-E2E-005</td><td>BMRM filters by territory manager - verifies scoped data loads</td><td><span class="badge priority-p2">P2-High</span></td><td>BR-026, BR-028, BR-030</td><td>1. Navigate as BMRM &#8594; 2. Verify TM pre-populated &#8594; 3. Change fiscal year &#8594; 4. Change quarter &#8594; 5. Verify KPI refresh</td><td>All KPI tiles show territory-scoped data; calls include correct rule_mode per filter change</td></tr>
+                <tr><td class="test-id">INC-E2E-004</td><td>Dealer opens DealerDashboard, selects tabs, views tier and adjustment data</td><td><span class="badge priority-p2">P2-High</span></td><td>BR-009, BR-014, BR-015, BR-016, BR-019</td><td>1. Navigate with encrypted dealer_number &#8594; 2. Verify default tab &#8594; 3. Click each program tab &#8594; 4. Click pt-tab &#8594; 5. Verify unitPercentage &#8804; 100</td><td>Tab navigation works; pt-tab shows adjustment fields; no unitPercentage &gt; 100</td></tr>
+                <tr><td class="test-id">INC-E2E-003</td><td>Admin changes fiscal year and quarter - full dashboard refreshes</td><td><span class="badge priority-p2">P2-High</span></td><td>BR-023, BR-024, BR-007</td><td>1. Navigate as BMDM &#8594; 2. Note KPI values &#8594; 3. Change fiscal year &#8594; 4. Note updated values &#8594; 5. Change quarter &#8594; 6. Note Q1 values</td><td>2 additional CorporateDashboardDataByType calls; KPI values differ per period; no stale data</td></tr>
+                <tr><td class="test-id">INC-E2E-002</td><td>Dealer navigates landing dashboard and redeems cash rewards</td><td><span class="badge priority-p1">P1-Critical</span></td><td>BR-010, BR-021 (write)</td><td>1. Navigate as dealer &#8594; 2. Verify promotions visible &#8594; 3. Verify controls present &#8594; 4. Click Redeem &#8594; 5. Monitor RedeemCashRewards</td><td>RedeemCashRewards called with correct dealerNumberSeq; button state updates to indicate redemption complete</td></tr>
+                <tr><td class="test-id">INC-E2E-001</td><td>Admin drills territory to distributor to dealer - KPI tiles refresh</td><td><span class="badge priority-p1">P1-Critical</span></td><td>BR-005, BR-007, BR-001, BR-013</td><td>1. Navigate as BMMGT &#8594; 2. Select territory &#8594; 3. Select distributor &#8594; 4. Select dealer &#8594; 5. Verify KPI tiles and dealer tables</td><td>All KPI tiles non-empty; Most/Least Rewarded tables have rows; dealer_number_seq in response is encrypted string</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <h2 class="h5 mb-3">&#128202; Coverage Breakdown</h2>
+  <div class="table-responsive mb-4">
+    <table class="table table-bordered table-sm align-middle" style="max-width:700px;">
+      <thead class="table-dark"><tr><th scope="col">Coverage Area</th><th scope="col">Tests</th><th scope="col">Business Rules</th></tr></thead>
+      <tbody>
+        <tr><td>Security &amp; Authentication</td><td>6</td><td>BR-008, BR-009, BR-010, BR-021</td></tr>
+        <tr><td>Role-Based Initialization (9 user types)</td><td>11</td><td>BR-001, BR-002, BR-003, BR-004, BR-005, BR-006, BR-022</td></tr>
+        <tr><td>ConvertToRewards UI Mode</td><td>6</td><td>BR-011, BR-012, BR-029</td></tr>
+        <tr><td>KPI Tiles &amp; Summary Data</td><td>8</td><td>BR-007, BR-012</td></tr>
+        <tr><td>Filter Cascading</td><td>7</td><td>BR-005, BR-013, BR-018, BR-023, BR-024</td></tr>
+        <tr><td>DealerDashboard Tab Logic</td><td>7</td><td>BR-014, BR-015, BR-016, BR-019</td></tr>
+        <tr><td>Data Routing by User Type</td><td>4</td><td>BR-025, BR-026, BR-027, BR-028</td></tr>
+        <tr><td>Workflow (Redeem Cash Rewards)</td><td>2</td><td>Write action</td></tr>
+        <tr><td>Resource Strings</td><td>1</td><td>BR-020</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="alert alert-info small" role="alert">
+    <strong>Note:</strong> No UI analysis report available. All tests derived from
+    <code>docs/module-analysis/samsung/incentive/feature-incentive-dashboard/repo-analysis.md</code>.
+    When UI analysis is complete, add selector-level tests:
+    <code>@workspace /functional-test-catalog client=samsung module=incentive feature=incentive-dashboard mode=append prepend=true</code>
+  </div>
+
+</div>
+</body>
+</html>

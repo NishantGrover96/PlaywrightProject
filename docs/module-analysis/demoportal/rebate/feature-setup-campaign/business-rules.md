@@ -1,11 +1,11 @@
-# Rebate Setup Campaign — Business Rule Catalog
+# Rebate Setup Campaign - Business Rule Catalog
 Generated: 2026-07-07
 
 | BR ID | Title | Category | Source (Code) | Evidence (UI) | Test Priority |
 |---|---|---|---|---|---|
 | BR-SC-01 | Authenticated access required | Security | `BasePageModel` session auth | Redirect to `/Account/Login` | Critical |
 | BR-SC-02 | Admin / RebateAdmin role required | Security | `IsAuthorize()` role switch | Dealer role cannot access `/Rebate/CreateRebate` | Critical |
-| BR-SC-03 | Group campaign required to proceed | Business Logic | `Rebate_Group_Campaign.Count == 0` → redirect to `/Admin/CMS/Campaign/list` | Error notification + redirect if no groups exist | Critical |
+| BR-SC-03 | Group campaign required to proceed | Business Logic | `Rebate_Group_Campaign.Count == 0` -> redirect to `/Admin/CMS/Campaign/list` | Error notification + redirect if no groups exist | Critical |
 | BR-SC-04 | Campaign Selection required | Validation | `re_group_seq` required | Wizard Step 1: error if no group campaign selected | High |
 | BR-SC-05 | Rebate Offer (product) required | Validation | `products_error` span | At least one offer must be linked | High |
 | BR-SC-06 | Start Date required | Validation | `start_date_error` span + date picker | Missing start date shows error | High |

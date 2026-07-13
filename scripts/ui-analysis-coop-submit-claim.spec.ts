@@ -1,5 +1,5 @@
 /**
- * UI Analysis — Coop Submit Claim
+ * UI Analysis - Coop Submit Claim
  * Multi-client, multi-dealer session analysis.
  *
  * Captures per wizard step:
@@ -11,7 +11,7 @@
  *
  * Output:
  *   reports/test-results/coop/feature-submit-claim/ui-analysis/{session}/
- *     *.png          — screenshots per step
+ *     *.png          - screenshots per step
  *   docs/module-analysis/coop/feature-submit-claim/multi-client-analysis.html
  *
  * Run:
@@ -23,11 +23,11 @@ import { test, expect, type Page } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
 
-// ── Output paths ───────────────────────────────────────────────────────────────
+// -- Output paths ---------------------------------------------------------------
 const REPORTS_ROOT = path.resolve(__dirname, '../reports/test-results/coop/feature-submit-claim/ui-analysis');
 const REPORT_OUT   = path.resolve(__dirname, '../docs/module-analysis/coop/feature-submit-claim/multi-client-analysis.html');
 
-// ── Session definitions ────────────────────────────────────────────────────────
+// -- Session definitions --------------------------------------------------------
 // Each session = one browser window that pauses at login for manual credential entry.
 const SESSIONS: Record<string, {
   portal: 'DemoPortal' | 'CertainTeed';
@@ -66,7 +66,7 @@ const SESSIONS: Record<string, {
   },
 };
 
-// ── Types ──────────────────────────────────────────────────────────────────────
+// -- Types ----------------------------------------------------------------------
 type FieldInfo = {
   id:          string;
   label:       string;
@@ -124,7 +124,7 @@ type SessionResult = {
   errors:       string[];
 };
 
-// ── Utilities ──────────────────────────────────────────────────────────────────
+// -- Utilities ------------------------------------------------------------------
 function dedupe(arr: string[]): string[] {
   return [...new Set(arr.map(s => s.trim()).filter(Boolean))];
 }
@@ -195,7 +195,7 @@ async function isVisible(page: Page, selector: string): Promise<boolean> {
   return page.locator(selector).first().isVisible().catch(() => false);
 }
 
-// ── Feature flags fetcher ──────────────────────────────────────────────────────
+// -- Feature flags fetcher ------------------------------------------------------
 // Tries the admin endpoint. If access is denied (non-admin session), returns empty.
 async function fetchFeatureFlags(page: Page, baseUrl: string): Promise<FeatureFlag[]> {
   const modules = ['Coop', 'EngageAds', 'PopShop'];
@@ -218,13 +218,13 @@ async function fetchFeatureFlags(page: Page, baseUrl: string): Promise<FeatureFl
         });
       }
     } catch {
-      // Feature list not accessible for this role — silently skip
+      // Feature list not accessible for this role - silently skip
     }
   }
   return all;
 }
 
-// ── Step capture orchestrator ──────────────────────────────────────────────────
+// -- Step capture orchestrator --------------------------------------------------
 async function captureStep(
   page: Page,
   stepName: string,
@@ -277,7 +277,7 @@ async function captureStep(
   };
 }
 
-// ── Main analysis session ──────────────────────────────────────────────────────
+// -- Main analysis session ------------------------------------------------------
 async function runSession(
   page: Page,
   sessionId: string,
@@ -292,7 +292,7 @@ async function runSession(
   const networkCalls: NetworkCall[] = [];
   const currentPhase = { value: 'login' };
 
-  // ── Network intercept ──────────────────────────────────────────────
+  // -- Network intercept ----------------------------------------------
   page.on('request', req => {
     try {
       const u = new URL(req.url());
@@ -311,29 +311,29 @@ async function runSession(
     } catch { /* ignore */ }
   });
 
-  // ── Step 0: Login — pause for manual credential entry ─────────────
+  // -- Step 0: Login - pause for manual credential entry -------------
   console.log(`\n[${sessionId}] Opening login page. Enter credentials and click Login, then Resume in Playwright inspector.`);
   await page.goto(session.loginPath, { waitUntil: 'domcontentloaded' });
   await page.screenshot({ path: path.join(sessionDir, '00-login-page.png') });
-  await page.pause();   // ← YOU log in here
+  await page.pause();   // <- YOU log in here
 
   // Confirm login succeeded
   const postLoginUrl = page.url();
   const loginFailed  = /login/i.test(new URL(postLoginUrl).pathname);
   if (loginFailed) {
-    errors.push(`Login may have failed — still on login-like URL: ${postLoginUrl}`);
+    errors.push(`Login may have failed - still on login-like URL: ${postLoginUrl}`);
   }
 
-  // ── Step 0b: Fetch feature flags (best-effort — may need admin role) ──
+  // -- Step 0b: Fetch feature flags (best-effort - may need admin role) --
   currentPhase.value = 'feature-flags';
   const featureFlags = await fetchFeatureFlags(page, baseUrl);
 
-  // ── Step 1: Navigate to Submit Claim ──────────────────────────────
+  // -- Step 1: Navigate to Submit Claim ------------------------------
   currentPhase.value = 'step1-claim-type';
   await page.goto(session.submitClaimPath, { waitUntil: 'domcontentloaded' });
-  steps.push(await captureStep(page, 'Step 1 — Claim Type & Contact', sessionDir, '01-step1-claim-type', networkCalls, currentPhase));
+  steps.push(await captureStep(page, 'Step 1 - Claim Type & Contact', sessionDir, '01-step1-claim-type', networkCalls, currentPhase));
 
-  // ── Step 2: Advance Step 1 (No Pre-Approval path) ─────────────────
+  // -- Step 2: Advance Step 1 (No Pre-Approval path) -----------------
   currentPhase.value = 'step1-advance';
   const noPA = page.locator('#rdNoPreApproval, input[value="NoPreapproval"]').first();
   if (await noPA.isVisible().catch(() => false)) {
@@ -347,11 +347,11 @@ async function runSession(
   }
   steps.push(await captureStep(page, 'After Step 1 Continue', sessionDir, '02-after-step1', networkCalls, currentPhase));
 
-  // ── Step 3: Media Type selection (may not be present on all portals) ──
+  // -- Step 3: Media Type selection (may not be present on all portals) --
   currentPhase.value = 'step3-media-type';
   const mediaVisible = await isVisible(page, 'ul.IconListRow, .IconListRow');
   if (mediaVisible) {
-    steps.push(await captureStep(page, 'Step 3 — Media Type Tiles', sessionDir, '03-media-tiles', networkCalls, currentPhase));
+    steps.push(await captureStep(page, 'Step 3 - Media Type Tiles', sessionDir, '03-media-tiles', networkCalls, currentPhase));
     // Select first tile
     const firstTile = page.locator('ul.IconListRow li').first();
     if (await firstTile.isVisible().catch(() => false)) {
@@ -366,7 +366,7 @@ async function runSession(
     steps.push(await captureStep(page, 'After Media Type Selection', sessionDir, '04-after-media', networkCalls, currentPhase));
   } else {
     steps.push({
-      step: 'Step 3 — Media Type Tiles',
+      step: 'Step 3 - Media Type Tiles',
       screenshot: 'NOT_PRESENT',
       fields: [], buttons: [], tiles: [],
       dropdowns: {}, networkCalls: [],
@@ -375,14 +375,14 @@ async function runSession(
     });
   }
 
-  // ── Step 4: Activity form ──────────────────────────────────────────
+  // -- Step 4: Activity form ------------------------------------------
   currentPhase.value = 'step4-activity';
-  steps.push(await captureStep(page, 'Step 4 — Activity Form', sessionDir, '05-activity-form', networkCalls, currentPhase));
+  steps.push(await captureStep(page, 'Step 4 - Activity Form', sessionDir, '05-activity-form', networkCalls, currentPhase));
 
-  // ── Step 4b: Scroll to bottom to reveal all conditional sections ───
+  // -- Step 4b: Scroll to bottom to reveal all conditional sections ---
   await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
   await page.waitForTimeout(800);
-  steps.push(await captureStep(page, 'Step 4 — Activity Form (scrolled)', sessionDir, '06-activity-form-scrolled', networkCalls, currentPhase));
+  steps.push(await captureStep(page, 'Step 4 - Activity Form (scrolled)', sessionDir, '06-activity-form-scrolled', networkCalls, currentPhase));
 
   return {
     sessionId,
@@ -396,12 +396,12 @@ async function runSession(
   };
 }
 
-// ── Report generator ───────────────────────────────────────────────────────────
+// -- Report generator -----------------------------------------------------------
 function generateReport(results: SessionResult[]): string {
   const sessionIds = results.map(r => r.sessionId);
 
   // Build flag comparison matrix
-  const allFlags = new Map<string, Map<string, string>>();   // flag_key → sessionId → active_flag
+  const allFlags = new Map<string, Map<string, string>>();   // flag_key -> sessionId -> active_flag
   for (const r of results) {
     for (const f of r.featureFlags) {
       if (!allFlags.has(f.feature_key)) allFlags.set(f.feature_key, new Map());
@@ -409,7 +409,7 @@ function generateReport(results: SessionResult[]): string {
     }
   }
 
-  // Build wizard step matrix — which conditionals were present per session
+  // Build wizard step matrix - which conditionals were present per session
   const conditionalKeys = [
     'mediaTypeStep', 'dealerTypeDropdown', 'productLinesBlock', 'vendorInfoBlock',
     'preApprovalInput', 'invoiceUpload', 'budgetDisplay', 'multiCurrencyToggle',
@@ -445,7 +445,7 @@ function generateReport(results: SessionResult[]): string {
   const badge = (val: string | boolean) => {
     if (val === 'Y' || val === true)  return `<span class="on">On</span>`;
     if (val === 'N' || val === false) return `<span class="off">Off</span>`;
-    return `<span class="unknown">—</span>`;
+    return `<span class="unknown">-</span>`;
   };
 
   const diff = (vals: string[]) => {
@@ -458,7 +458,7 @@ function generateReport(results: SessionResult[]): string {
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Coop Submit Claim — Multi-Client Analysis</title>
+<title>Coop Submit Claim - Multi-Client Analysis</title>
 <style>
   body{font-family:'Segoe UI',sans-serif;font-size:13px;background:#f8fafc;color:#1e293b;margin:0;padding:20px}
   h1{font-size:20px;font-weight:700;color:#1e40af;margin-bottom:4px}
@@ -481,14 +481,14 @@ function generateReport(results: SessionResult[]): string {
 </style>
 </head>
 <body>
-<h1>Coop — Submit Claim — Multi-Client UI Analysis</h1>
+<h1>Coop - Submit Claim - Multi-Client UI Analysis</h1>
 <div class="meta">
-  Generated: ${new Date().toISOString()} &nbsp;·&nbsp;
-  Sessions: ${results.map(r => `${r.portal} / ${r.dealer}`).join(' | ')} &nbsp;·&nbsp;
+  Generated: ${new Date().toISOString()} &nbsp;.&nbsp;
+  Sessions: ${results.map(r => `${r.portal} / ${r.dealer}`).join(' | ')} &nbsp;.&nbsp;
   Feature: /CoopManagement/Claims/Submit/SubmitClaim
 </div>
 
-<h2>1 — Wizard Step Presence Matrix</h2>
+<h2>1 - Wizard Step Presence Matrix</h2>
 <table>
   <thead>
     <tr>
@@ -504,15 +504,15 @@ function generateReport(results: SessionResult[]): string {
       return `<tr class="${rowDiff}">
         <td><code>${key}</code></td>
         ${vals.map(v => `<td>${badge(v)}</td>`).join('')}
-        <td>${rowDiff ? '⚠ Yes' : '—'}</td>
+        <td>${rowDiff ? '[!] Yes' : '-'}</td>
       </tr>`;
     }).join('')}
   </tbody>
 </table>
 
-<h2>2 — Feature Flag Matrix (Coop module)</h2>
+<h2>2 - Feature Flag Matrix (Coop module)</h2>
 ${allFlags.size === 0
-  ? '<div class="section"><em>Feature flags could not be fetched — dealer role may not have access to /Admin/Feature/FeatureList. Run with an admin account to populate this section.</em></div>'
+  ? '<div class="section"><em>Feature flags could not be fetched - dealer role may not have access to /Admin/Feature/FeatureList. Run with an admin account to populate this section.</em></div>'
   : `<table>
   <thead>
     <tr>
@@ -523,21 +523,21 @@ ${allFlags.size === 0
   </thead>
   <tbody>
     ${[...allFlags.entries()].map(([key, sessionMap]) => {
-      const vals = sessionIds.map(id => sessionMap.get(id) ?? '—');
-      const rowDiff = [...new Set(vals.filter(v => v !== '—'))].length > 1 ? ' diff' : '';
+      const vals = sessionIds.map(id => sessionMap.get(id) ?? '-');
+      const rowDiff = [...new Set(vals.filter(v => v !== '-'))].length > 1 ? ' diff' : '';
       return `<tr class="${rowDiff}">
         <td><code>${key}</code></td>
         ${vals.map(v => `<td>${badge(v)}</td>`).join('')}
-        <td>${rowDiff ? '⚠ Yes' : '—'}</td>
+        <td>${rowDiff ? '[!] Yes' : '-'}</td>
       </tr>`;
     }).join('')}
   </tbody>
 </table>`}
 
-<h2>3 — Field Inventory per Session</h2>
+<h2>3 - Field Inventory per Session</h2>
 ${results.map(r => `
-<div class="session-header"><strong>${r.portal} — ${r.dealer}</strong> &nbsp;|&nbsp; ${r.baseUrl} &nbsp;|&nbsp; ${r.capturedAt}</div>
-${r.errors.map(e => `<div class="error">⚠ ${e}</div>`).join('')}
+<div class="session-header"><strong>${r.portal} - ${r.dealer}</strong> &nbsp;|&nbsp; ${r.baseUrl} &nbsp;|&nbsp; ${r.capturedAt}</div>
+${r.errors.map(e => `<div class="error">[!] ${e}</div>`).join('')}
 ${r.steps.filter(s => s.screenshot !== 'NOT_PRESENT').map(s => `
 <div class="section">
   <strong>${s.step}</strong>
@@ -546,12 +546,12 @@ ${r.steps.filter(s => s.screenshot !== 'NOT_PRESENT').map(s => `
     <tbody>
       ${s.fields.filter(f => f.visible).map(f => `
       <tr>
-        <td><code>${f.id || '—'}</code></td>
-        <td>${f.label || '—'}</td>
+        <td><code>${f.id || '-'}</code></td>
+        <td>${f.label || '-'}</td>
         <td>${f.tagName}${f.type ? `[${f.type}]` : ''}</td>
         <td>${f.required ? '✅ Yes' : 'No'}</td>
-        <td>${f.visible ? '✅' : '—'}</td>
-        <td>${f.maxlength || '—'}</td>
+        <td>${f.visible ? '✅' : '-'}</td>
+        <td>${f.maxlength || '-'}</td>
       </tr>`).join('')}
       ${s.fields.filter(f => f.visible).length === 0 ? '<tr><td colspan="6"><em>No visible input fields</em></td></tr>' : ''}
     </tbody>
@@ -561,13 +561,13 @@ ${r.steps.filter(s => s.screenshot !== 'NOT_PRESENT').map(s => `
 </div>`).join('')}
 `).join('')}
 
-<h2>4 — ClientProfile Recommendations</h2>
+<h2>4 - ClientProfile Recommendations</h2>
 <p>Based on observed UI differences, add the following to <code>config/clients/{clientId}.json</code>:</p>
 ${recommendations.map(r => `<pre>${r}</pre>`).join('')}
 
-<h2>5 — Network Calls per Session</h2>
+<h2>5 - Network Calls per Session</h2>
 ${results.map(r => `
-<div class="session-header"><strong>${r.portal} — ${r.dealer}</strong></div>
+<div class="session-header"><strong>${r.portal} - ${r.dealer}</strong></div>
 <table>
   <thead><tr><th>Phase</th><th>Method</th><th>Path</th><th>Status</th></tr></thead>
   <tbody>
@@ -577,7 +577,7 @@ ${results.map(r => `
         <td>${n.phase}</td>
         <td>${n.method}</td>
         <td><code>${n.path}</code></td>
-        <td>${n.status ?? '—'}</td>
+        <td>${n.status ?? '-'}</td>
       </tr>`)
     ).join('')}
   </tbody>
@@ -586,11 +586,11 @@ ${results.map(r => `
 </html>`;
 }
 
-// ── Shared results store (populated across test runs) ─────────────────────────
+// -- Shared results store (populated across test runs) -------------------------
 const allResults: SessionResult[] = [];
 
-// ── Test: DemoPortal UAT — Dealer 1 ───────────────────────────────────────────
-test('DemoPortal UAT — Dealer 1 — Submit Claim Analysis', async ({ page, baseURL }) => {
+// -- Test: DemoPortal UAT - Dealer 1 -------------------------------------------
+test('DemoPortal UAT - Dealer 1 - Submit Claim Analysis', async ({ page, baseURL }) => {
   const result = await runSession(page, 'demoportal-dealer1', baseURL ?? '');
   allResults.push(result);
   fs.writeFileSync(
@@ -601,8 +601,8 @@ test('DemoPortal UAT — Dealer 1 — Submit Claim Analysis', async ({ page, bas
   expect(result.errors.length).toBe(0);
 });
 
-// ── Test: DemoPortal UAT — Dealer 2 ───────────────────────────────────────────
-test('DemoPortal UAT — Dealer 2 — Submit Claim Analysis', async ({ page, baseURL }) => {
+// -- Test: DemoPortal UAT - Dealer 2 -------------------------------------------
+test('DemoPortal UAT - Dealer 2 - Submit Claim Analysis', async ({ page, baseURL }) => {
   const result = await runSession(page, 'demoportal-dealer2', baseURL ?? '');
   allResults.push(result);
   fs.writeFileSync(
@@ -613,8 +613,8 @@ test('DemoPortal UAT — Dealer 2 — Submit Claim Analysis', async ({ page, bas
   expect(result.errors.length).toBe(0);
 });
 
-// ── Test: CertainTeed UAT — Dealer 1 ──────────────────────────────────────────
-test('CertainTeed UAT — Dealer 1 — Submit Claim Analysis', async ({ page, baseURL }) => {
+// -- Test: CertainTeed UAT - Dealer 1 ------------------------------------------
+test('CertainTeed UAT - Dealer 1 - Submit Claim Analysis', async ({ page, baseURL }) => {
   const result = await runSession(page, 'certainteed-dealer1', baseURL ?? '');
   allResults.push(result);
   fs.writeFileSync(
@@ -625,8 +625,8 @@ test('CertainTeed UAT — Dealer 1 — Submit Claim Analysis', async ({ page, ba
   expect(result.errors.length).toBe(0);
 });
 
-// ── Test: CertainTeed UAT — Dealer 2 ──────────────────────────────────────────
-test('CertainTeed UAT — Dealer 2 — Submit Claim Analysis', async ({ page, baseURL }) => {
+// -- Test: CertainTeed UAT - Dealer 2 ------------------------------------------
+test('CertainTeed UAT - Dealer 2 - Submit Claim Analysis', async ({ page, baseURL }) => {
   const result = await runSession(page, 'certainteed-dealer2', baseURL ?? '');
   allResults.push(result);
   fs.writeFileSync(
@@ -637,10 +637,10 @@ test('CertainTeed UAT — Dealer 2 — Submit Claim Analysis', async ({ page, ba
   expect(result.errors.length).toBe(0);
 });
 
-// ── After all: generate consolidated HTML report ───────────────────────────────
+// -- After all: generate consolidated HTML report -------------------------------
 test.afterAll(async () => {
   if (allResults.length === 0) {
-    console.warn('[report] No sessions completed — skipping HTML report generation');
+    console.warn('[report] No sessions completed - skipping HTML report generation');
     return;
   }
 

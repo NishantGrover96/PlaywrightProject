@@ -10,30 +10,30 @@
  *   - Provide setup project discovery for playwright.config.ts
  *
  * Adding a new auth type: implement AuthProvider, register in AUTH_PROVIDERS.
- * Adding a new client:    add config/clients/{clientId}.json — no code change needed.
+ * Adding a new client:    add config/clients/{clientId}.json - no code change needed.
  */
 
 import * as fs   from 'fs';
 import * as path from 'path';
 import type { AuthType, ResolvedAuth } from './execution-plan';
 
-// Workspace root (engine/ → playwright/ → tests/ → workspace)
+// Workspace root (engine/ -> playwright/ -> tests/ -> workspace)
 const WORKSPACE_ROOT = path.join(__dirname, '..', '..', '..');
 const AUTH_DIR       = path.join(__dirname, '..', 'fixtures', '.auth');
 
-// ── Legacy client list ─────────────────────────────────────────────────────
+// -- Legacy client list -----------------------------------------------------
 // Clients that share the default setup/setup-admin projects.
 // New clients automatically get dedicated setup-{clientId} projects.
 const LEGACY_SHARED_CLIENTS = new Set(['demoportal', 'certainteed', 'samsung']);
 
-// ── Auth Provider Interface ────────────────────────────────────────────────
+// -- Auth Provider Interface ------------------------------------------------
 
 interface AuthProvider {
   readonly type: AuthType;
   resolve(clientId: string, role: string, environment: string): ResolvedAuth;
 }
 
-// ── Provider: Forms Authentication ────────────────────────────────────────
+// -- Provider: Forms Authentication ----------------------------------------
 
 class FormsAuthProvider implements AuthProvider {
   readonly type: AuthType = 'forms';
@@ -63,7 +63,7 @@ class FormsAuthProvider implements AuthProvider {
   }
 }
 
-// ── Provider: Azure AD ─────────────────────────────────────────────────────
+// -- Provider: Azure AD -----------------------------------------------------
 
 class AzureADAuthProvider implements AuthProvider {
   readonly type: AuthType = 'azure-ad';
@@ -84,7 +84,7 @@ class AzureADAuthProvider implements AuthProvider {
   }
 }
 
-// ── Provider: OAuth 2.0 ───────────────────────────────────────────────────
+// -- Provider: OAuth 2.0 ---------------------------------------------------
 
 class OAuthProvider implements AuthProvider {
   readonly type: AuthType = 'oauth';
@@ -104,7 +104,7 @@ class OAuthProvider implements AuthProvider {
   }
 }
 
-// ── Provider: SSO (delegates to Forms) ────────────────────────────────────
+// -- Provider: SSO (delegates to Forms) ------------------------------------
 
 class SSOAuthProvider implements AuthProvider {
   readonly type: AuthType = 'sso';
@@ -116,7 +116,7 @@ class SSOAuthProvider implements AuthProvider {
   }
 }
 
-// ── Provider: Email + Password (alias for Forms) ─────────────────────────
+// -- Provider: Email + Password (alias for Forms) -------------------------
 
 class EmailPasswordAuthProvider extends FormsAuthProvider {
   readonly type: AuthType = 'email-password';
@@ -125,7 +125,7 @@ class EmailPasswordAuthProvider extends FormsAuthProvider {
   }
 }
 
-// ── Provider: Username + Password ─────────────────────────────────────────
+// -- Provider: Username + Password -----------------------------------------
 // Same login flow as Forms but the username field is a username, not email.
 // auth.setup.generic.ts already tries username selectors first.
 
@@ -136,8 +136,8 @@ class UsernamePasswordAuthProvider extends FormsAuthProvider {
   }
 }
 
-// ── Provider: Username Only (no password) ─────────────────────────────────
-// e.g. dealer code login — just a username/code, no password field.
+// -- Provider: Username Only (no password) ---------------------------------
+// e.g. dealer code login - just a username/code, no password field.
 
 class UsernameOnlyAuthProvider extends FormsAuthProvider {
   readonly type: AuthType = 'username-only';
@@ -146,7 +146,7 @@ class UsernameOnlyAuthProvider extends FormsAuthProvider {
   }
 }
 
-// ── Provider: No Auth ──────────────────────────────────────────────────────
+// -- Provider: No Auth ------------------------------------------------------
 
 class NoAuthProvider implements AuthProvider {
   readonly type: AuthType = 'none';
@@ -162,7 +162,7 @@ class NoAuthProvider implements AuthProvider {
   }
 }
 
-// ── Registry ───────────────────────────────────────────────────────────────
+// -- Registry ---------------------------------------------------------------
 
 const AUTH_PROVIDERS: Record<AuthType, AuthProvider> = {
   'forms':             new FormsAuthProvider(),
@@ -175,7 +175,7 @@ const AUTH_PROVIDERS: Record<AuthType, AuthProvider> = {
   'none':              new NoAuthProvider(),
 };
 
-// ── Helpers ────────────────────────────────────────────────────────────────
+// -- Helpers ----------------------------------------------------------------
 
 function isAdminRole(role: string): boolean {
   return role === 'admin' || role.endsWith('-admin');
@@ -216,7 +216,7 @@ function getClientAuthType(clientId: string): AuthType {
   }
 }
 
-// ── Setup Project Name Resolution ──────────────────────────────────────────
+// -- Setup Project Name Resolution ------------------------------------------
 
 /**
  * Determines the Playwright setup project name for a client × role.
@@ -250,7 +250,7 @@ function resolveBrowserProjectName(
     : `${browser}-${clientId}`;
 }
 
-// ── Public API ─────────────────────────────────────────────────────────────
+// -- Public API -------------------------------------------------------------
 
 /**
  * Resolve authentication for a given execution context.

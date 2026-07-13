@@ -1,25 +1,25 @@
 /**
  * Generic Authentication Setup
  *
- * A single, reusable setup spec that any client can use — no code change needed
+ * A single, reusable setup spec that any client can use - no code change needed
  * when adding a new client.
  *
  * Reads all configuration from environment variables injected by the engine:
  *
- *   AUTH_STORAGE_PATH  — where to write the storageState JSON
- *   LOGIN_PATH         — e.g. /account/login or /Account/Login?Internal
- *   TEST_USER_EMAIL    — email / username
- *   TEST_USER_PASSWORD — password
- *   CLIENT_ID          — for logging
- *   ROLE               — for logging
- *   TEST_ENV           — for error messages
+ *   AUTH_STORAGE_PATH  - where to write the storageState JSON
+ *   LOGIN_PATH         - e.g. /account/login or /Account/Login?Internal
+ *   TEST_USER_EMAIL    - email / username
+ *   TEST_USER_PASSWORD - password
+ *   CLIENT_ID          - for logging
+ *   ROLE               - for logging
+ *   TEST_ENV           - for error messages
  *
  * This spec is registered in playwright.config.ts as the testMatch for any
  * non-legacy client setup project (setup-{clientId}).
  *
  * Legacy clients (demoportal, certainteed, samsung) continue to use:
- *   auth.setup.ts       — dealer auth
- *   auth.setup.admin.ts — admin auth
+ *   auth.setup.ts       - dealer auth
+ *   auth.setup.admin.ts - admin auth
  */
 
 import { test as setup, expect } from '@playwright/test';
@@ -29,12 +29,12 @@ import * as fs   from 'fs';
 setup('generic authentication', async ({ page }) => {
   setup.setTimeout(240_000);
 
-  // ── Resolve env vars ────────────────────────────────────────────────────
+  // -- Resolve env vars ----------------------------------------------------
   const storagePath = process.env.AUTH_STORAGE_PATH;
   // Use ?? so that an explicitly empty LOGIN_PATH ("") means "base URL IS the login page"
   const rawLoginPath = process.env.LOGIN_PATH;
   const loginPath    = rawLoginPath !== undefined ? rawLoginPath : '/account/login';
-  const loginUrl     = loginPath || '/';  // empty string → navigate to site root
+  const loginUrl     = loginPath || '/';  // empty string -> navigate to site root
   const authType     = process.env.AUTH_TYPE || 'forms';
   const email        = process.env.TEST_USER_EMAIL    || process.env.ADMIN_EMAIL    || '';
   const password     = process.env.TEST_USER_PASSWORD || process.env.ADMIN_PASSWORD || '';
@@ -42,7 +42,7 @@ setup('generic authentication', async ({ page }) => {
   const role         = process.env.ROLE       || 'dealer';
   const testEnv      = process.env.TEST_ENV   || 'production';
 
-  // username-only clients have no password — only require email/username
+  // username-only clients have no password - only require email/username
   if (!email) {
     throw new Error(
       `[auth] Username/email not set for client '${clientId}' / role '${role}'. ` +
@@ -69,12 +69,12 @@ setup('generic authentication', async ({ page }) => {
     fs.mkdirSync(authDir, { recursive: true });
   }
 
-  // ── Navigate to login ───────────────────────────────────────────────────
+  // -- Navigate to login ---------------------------------------------------
   // loginUrl is '/' when loginPath is '' (base URL is the login page)
   await page.goto(loginUrl);
   await page.waitForLoadState('domcontentloaded', { timeout: 20_000 });
 
-  // ── Fill credentials ────────────────────────────────────────────────────
+  // -- Fill credentials ----------------------------------------------------
   // Tries multiple common selector patterns, falling back gracefully.
   const usernameSelectors = [
     // Explicit IDs used by known platforms
@@ -106,7 +106,7 @@ setup('generic authentication', async ({ page }) => {
     '[data-testid="username"]',
     '[data-testid="email"]',
     '[data-testid="login"]',
-    // Label text fallback — matches any input labelled with these words
+    // Label text fallback - matches any input labelled with these words
     'input[placeholder*="username" i]',
     'input[placeholder*="user id" i]',
     'input[placeholder*="racf" i]',
@@ -130,10 +130,10 @@ setup('generic authentication', async ({ page }) => {
     'button:has-text("Next")',
     'button:has-text("Continue")',
     'button:has-text("Submit")',
-    '[type="submit"]',            // broad fallback — any element with type=submit
+    '[type="submit"]',            // broad fallback - any element with type=submit
   ];
 
-  console.log(`[auth] Starting login — client: '${clientId}', role: '${role}', authType: '${authType}', loginUrl: '${loginUrl}'`);
+  console.log(`[auth] Starting login - client: '${clientId}', role: '${role}', authType: '${authType}', loginUrl: '${loginUrl}'`);
 
   // Fill username / email / dealer code
   let filledEmail = false;
@@ -149,7 +149,7 @@ setup('generic authentication', async ({ page }) => {
     throw new Error(`[auth] Could not find username/email field on login page: ${page.url()}`);
   }
 
-  // Fill password — skipped for username-only (dealer code, no password field)
+  // Fill password - skipped for username-only (dealer code, no password field)
   if (authType !== 'username-only') {
     let filledPassword = false;
     for (const sel of passwordSelectors) {
@@ -180,7 +180,7 @@ setup('generic authentication', async ({ page }) => {
           el.click(),
         ]).catch(() => { /* URL check below will surface a meaningful error */ });
       } else {
-        // Base URL login — click and wait for network to settle after redirect
+        // Base URL login - click and wait for network to settle after redirect
         await el.click();
         await page.waitForLoadState('networkidle', { timeout: 90_000 }).catch(() => {});
       }
@@ -194,7 +194,7 @@ setup('generic authentication', async ({ page }) => {
 
   await page.waitForLoadState('domcontentloaded', { timeout: 60_000 }).catch(() => {});
 
-  // ── Verify success ──────────────────────────────────────────────────────
+  // -- Verify success ------------------------------------------------------
   // Only do the /login path check when we navigated to an explicit login path.
   // For base-URL logins the app may never have a /login segment to check.
   if (hasExplicitLoginPath) {
@@ -208,14 +208,14 @@ setup('generic authentication', async ({ page }) => {
     }
   }
 
-  // ── Dismiss common overlays ─────────────────────────────────────────────
+  // -- Dismiss common overlays ---------------------------------------------
   const skipBtn = page.locator("button:has-text('Skip')");
   if (await skipBtn.isVisible({ timeout: 3_000 }).catch(() => false)) await skipBtn.click();
 
   const acceptBtn = page.locator("button:has-text('Accept')");
   if (await acceptBtn.isVisible({ timeout: 2_000 }).catch(() => false)) await acceptBtn.click();
 
-  // ── Save storage state ──────────────────────────────────────────────────
+  // -- Save storage state --------------------------------------------------
   await page.context().storageState({ path: storagePath });
-  console.log(`[auth] Session saved for client '${clientId}' / role '${role}' → ${storagePath}`);
+  console.log(`[auth] Session saved for client '${clientId}' / role '${role}' -> ${storagePath}`);
 });

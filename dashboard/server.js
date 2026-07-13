@@ -1,9 +1,9 @@
-/**
- * DealerPlatform QA â€” On-Demand Test Dashboard
+﻿/**
+ * DealerPlatform QA - On-Demand Test Dashboard
  *
  * Modes:
- *   Run Mode    â€” run tests against a single URL
- *   Compare Mode â€” run against Legacy, then Modern, diff the results
+ *   Run Mode    - run tests against a single URL
+ *   Compare Mode - run against Legacy, then Modern, diff the results
  *
  * Usage:  node dashboard/server.js  |  npm run dashboard
  * Open:   http://localhost:3333
@@ -16,7 +16,7 @@ const fs      = require("fs");
 const path    = require("path");
 const { spawn } = require("child_process");
 
-// ── Bootstrap: load MASTER_KEY from .env.production if not already in env ───
+// -- Bootstrap: load MASTER_KEY from .env.production if not already in env ---
 // This means `npm run dashboard` works without manually setting MASTER_KEY.
 if (!process.env.MASTER_KEY) {
   const envFile = path.join(__dirname, "..", ".env.production");
@@ -35,7 +35,7 @@ if (!process.env.MASTER_KEY) {
 
 const { decryptPassword } = require("../utils/crypto-helper");
 
-// ── Services (metadata-driven — Phase 3) ─────────────────────────────────────
+// -- Services (metadata-driven - Phase 3) -------------------------------------
 const catalogService    = require("./services/catalog-service");
 const clientService     = require("./services/client-service");
 const featureService    = require("./services/feature-service");
@@ -48,7 +48,7 @@ const healthService     = require("./services/health-service");
 catalogService.watch();
 clientService.watch();
 
-// ── Backward-compat helpers (kept for resolveCredentials internal use) ────────
+// -- Backward-compat helpers (kept for resolveCredentials internal use) --------
 const USERS_DIR = path.join(__dirname, "..", "config", "users");
 
 function loadUserConfig(clientId, role) {
@@ -69,13 +69,13 @@ function loadUserConfig(clientId, role) {
   try { return JSON.parse(fs.readFileSync(file, "utf8")); } catch { return null; }
 }
 
-// â”€â”€ Config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// -- Config --------------------------------------------------------------------
 const PORT      = process.env.DASHBOARD_PORT || 3333;
 const ROOT_DIR  = path.join(__dirname, "..");
 const HTML_FILE = path.join(__dirname, "index.html");
 
-// FEATURE_FOLDERS removed — spec paths now resolved dynamically by execution-resolver
-// ROLE_PROJECTS removed   — project resolution delegated to client-service
+// FEATURE_FOLDERS removed - spec paths now resolved dynamically by execution-resolver
+// ROLE_PROJECTS removed   - project resolution delegated to client-service
 const TIER_TAGS = { smoke: "@smoke", regression: "@regression", e2e: "@e2e" };
 
 // loadEnvForTestEnv kept as internal fallback for resolveCredentials
@@ -103,10 +103,10 @@ function loadEnvForTestEnv(testEnv = "production") {
   return {};
 }
 
-// â”€â”€ Shared state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// -- Shared state --------------------------------------------------------------
 let state = { running: false, proc: null, clients: [], history: [] };
 
-// â”€â”€ SSE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// -- SSE -----------------------------------------------------------------------
 function broadcast(type, payload) {
   const msg = `data: ${JSON.stringify({ type, ...payload })}\n\n`;
   state.clients = state.clients.filter(res => {
@@ -119,12 +119,12 @@ function broadcast(type, payload) {
   });
 }
 
-// â”€â”€ Line parser â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// -- Line parser ---------------------------------------------------------------
 function parseLine(raw) {
   const line = raw.replace(/\x1B\[[0-9;]*m/g, "").replace(/\r/g, "").trim();
   if (!line) return { kind: "line", text: raw };
 
-  const passRx = /^\s*(?:ok|✓|✔)\s+(\d+)\s+\[.*?\]\s+[›>]\s+.*?[›>]\s+(.*?)(?:\s+\((\S+)\))?\s*$/u;
+  const passRx = /^\s*(?:ok||✔)\s+(\d+)\s+\[.*?\]\s+[›>]\s+.*?[›>]\s+(.*?)(?:\s+\((\S+)\))?\s*$/u;
   const failRx = /^\s*(?:x+|✗|✘|×)\s+(\d+)\s+\[.*?\]\s+[›>]\s+.*?[›>]\s+(.*?)(?:\s+\((\S+)\))?\s*$/u;
   const skipRx = /^\s*[-]\s+(\d+)\s+\[.*?\]\s+[›>]\s+.*?[›>]\s+(.*?)(?:\s+\(\S+\))?\s*$/u;
   const summaryPassRx = /(\d+)\s+passed\s+\(([^)]+)\)/;
@@ -153,7 +153,7 @@ function parseLine(raw) {
   return { kind: "line", text: raw };
 }
 
-// â”€â”€ Build args â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// -- Build args ----------------------------------------------------------------
 function buildArgs(config) {
   const plan = executionResolver.resolve(config);
   if (plan.warnings.length > 0) plan.warnings.forEach(w => apiLog.warn("buildArgs", w));
@@ -161,14 +161,14 @@ function buildArgs(config) {
   return plan.args;
 }
 
-// â”€â”€ Build env vars â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// -- Build env vars ------------------------------------------------------------
 function buildEnv(config, urlOverride) {
   const merged = urlOverride ? { ...config, baseUrl: urlOverride } : config;
   const plan   = executionResolver.resolve(merged);
   return plan.env;
 }
 
-// ── Credential resolver ──────────────────────────────────────────────────────
+// -- Credential resolver ------------------------------------------------------
 // For non-custom roles: load credentials from config/users/{clientId}/{role}.json
 // and decrypt the password. Also resolves the client-specific baseUrl for the
 // selected environment so the correct portal is targeted regardless of .env file.
@@ -178,14 +178,14 @@ async function resolveCredentials(config) {
   const testEnv  = config.testEnv  || "production";
   const isCustom = role === "dealer-custom" || role === "admin-custom";
 
-  // ── Resolve baseUrl from client config when no manual override is set ──────
+  // -- Resolve baseUrl from client config when no manual override is set ------
   // Priority: explicit UI override > client JSON env URL > .env file URL
   if (!config.baseUrl) {
     const resolvedUrl = clientService.getBaseUrl(clientId, testEnv);
     if (resolvedUrl) config.baseUrl = resolvedUrl;
   }
 
-  // Custom roles: credentials come from the request body — decrypt if encrypted
+  // Custom roles: credentials come from the request body - decrypt if encrypted
   if (isCustom) {
     if (config.password) {
       try { config.password = await decryptPassword(config.password); } catch { /* use as-is */ }
@@ -206,13 +206,13 @@ async function resolveCredentials(config) {
     }
     console.log(`[dashboard] Credentials resolved: client=${clientId} role=${role} user=${config.username}`);
   } else {
-    console.warn(`[dashboard] No user config found for client=${clientId} role=${role} — TEST_USER_EMAIL will be empty`);
+    console.warn(`[dashboard] No user config found for client=${clientId} role=${role} - TEST_USER_EMAIL will be empty`);
   }
 
   return config;
 }
 
-// ── Single Run ─────────────────────────────────────────────────────────────
+// -- Single Run -------------------------------------------------------------
 function runTests(config) {
   if (state.running) return { ok: false, error: "A test run is already in progress." };
 
@@ -243,7 +243,7 @@ function runTests(config) {
 
   let buffer        = "";
   let summary       = { passed: 0, failed: 0, skipped: 0, duration: "" };
-  let pendingDetail = null; // { idx, lines[] } â€” collects error output after a fail result
+  let pendingDetail = null; // { idx, lines[] } - collects error output after a fail result
 
   // Emit a 'detail' event for the last failed test and reset the collector
   function flushDetail() {
@@ -324,7 +324,7 @@ function runTests(config) {
   return { ok: true, pid: proc.pid, args };
 }
 
-// â”€â”€ Comparison Run â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// -- Comparison Run ------------------------------------------------------------
 function computeDiff(legacyResults, modernResults) {
   const legacyMap = new Map(legacyResults.map(r => [r.name, r]));
   const modernMap = new Map(modernResults.map(r => [r.name, r]));
@@ -339,8 +339,8 @@ function computeDiff(legacyResults, modernResults) {
     else if (!m)                                        category = "legacy-only";
     else if (l.status === "pass" && m.status === "pass") category = "both-pass";
     else if (l.status === "fail" && m.status === "fail") category = "both-fail";
-    else if (l.status === "pass" && m.status === "fail") category = "regression";  // ðŸš¨ critical
-    else if (l.status === "fail" && m.status === "pass") category = "fixed";       // ðŸ”§ modern fixed
+    else if (l.status === "pass" && m.status === "fail") category = "regression";  // [!] critical
+    else if (l.status === "fail" && m.status === "pass") category = "fixed";       //  modern fixed
     else                                                category = "skip";
     rows.push({ name, legacy: l || null, modern: m || null, category });
   }
@@ -361,7 +361,7 @@ function computeDiff(legacyResults, modernResults) {
 }
 
 /**
- * spawnPlaywright — shared helper used by runComparison for each phase.
+ * spawnPlaywright - shared helper used by runComparison for each phase.
  *
  * @param {string[]} args       Playwright CLI args (after 'test')
  * @param {object}   env        Environment variables
@@ -436,18 +436,18 @@ function runComparison(config) {
   const legacyResults = [];
   const modernResults = [];
 
-  console.log(`[dashboard] Compare phase 1 â€” Legacy: ${config.legacyUrl}`);
-  broadcast("compare-phase", { phase: "legacy", label: "Running against Legacyâ€¦" });
+  console.log(`[dashboard] Compare phase 1 - Legacy: ${config.legacyUrl}`);
+  broadcast("compare-phase", { phase: "legacy", label: "Running against Legacy..." });
 
-  // Phase 1 â€” Legacy
+  // Phase 1 - Legacy
   spawnPlaywright(args, buildEnv(config, config.legacyUrl),
     (r) => { legacyResults.push(r); broadcast("compare-result", { phase: "legacy", ...r }); },
     (legacySummary, _code1) => {
       broadcast("compare-phase-done", { phase: "legacy", summary: legacySummary });
-      console.log(`[dashboard] Compare phase 2 â€” Modern: ${config.modernUrl}`);
-      broadcast("compare-phase", { phase: "modern", label: "Running against Modernâ€¦" });
+      console.log(`[dashboard] Compare phase 2 - Modern: ${config.modernUrl}`);
+      broadcast("compare-phase", { phase: "modern", label: "Running against Modern..." });
 
-      // Phase 2 â€” Modern
+      // Phase 2 - Modern
       spawnPlaywright(args, buildEnv(config, config.modernUrl),
         (r) => { modernResults.push(r); broadcast("compare-result", { phase: "modern", ...r }); },
         (modernSummary, _code2) => {
@@ -465,7 +465,7 @@ function runComparison(config) {
           state.history.unshift(entry);
           if (state.history.length > 20) state.history.pop();
           broadcast("compare-done", { diff, legacySummary, modernSummary });
-          console.log(`[dashboard] Compare done â€” regressions: ${diff.summary.regression}`);
+          console.log(`[dashboard] Compare done - regressions: ${diff.summary.regression}`);
         }
       );
     }
@@ -474,7 +474,7 @@ function runComparison(config) {
   return { ok: true };
 }
 
-// â”€â”€ Stop (works for both modes) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// -- Stop (works for both modes) -----------------------------------------------
 function stopRun() {
   if (!state.proc) return;
   const pid = state.proc.pid;
@@ -492,13 +492,13 @@ function stopRun() {
                   exitCode: -1, config: {}, summary: { passed: 0, failed: 0, skipped: 0 } };
   state.history.unshift(entry);
   if (state.history.length > 20) state.history.pop();
-  broadcast("line",    { text: "â¹ Test run stopped by user." });
+  broadcast("line",    { text: " Test run stopped by user." });
   broadcast("end",     { exitCode: -1, stopped: true, summary: { passed: 0, failed: 0, skipped: 0 } });
   broadcast("compare-done", { stopped: true, diff: { rows: [], summary: {} } });
   console.log(`[dashboard] Stopped PID ${pid}`);
 }
 
-// â”€â”€ HTTP server â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// -- HTTP server ---------------------------------------------------------------
 process.on("uncaughtException", (err) => {
   console.error("[dashboard] Uncaught exception (server kept alive):", err.message);
 });
@@ -520,12 +520,12 @@ const server = http.createServer((req, res) => {
       res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
       res.end(html);
     } catch {
-      res.writeHead(500); res.end("Dashboard HTML not found — run: npm run dashboard");
+      res.writeHead(500); res.end("Dashboard HTML not found - run: npm run dashboard");
     }
     return;
   }
 
-  // ── /workspace — Phase 4 metadata-driven Automation Workspace ──────────
+  // -- /workspace - Phase 4 metadata-driven Automation Workspace ----------
   if (method === "GET" && (url === "/workspace" || url === "/workspace.html")) {
     const wsFile = path.join(__dirname, "workspace.html");
     try {
@@ -551,7 +551,7 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // ── /api/catalog — metadata-driven, supports ?clientId ?module ?status ?feature ──
+  // -- /api/catalog - metadata-driven, supports ?clientId ?module ?status ?feature --
   if (method === "GET" && url === "/api/catalog") {
     apiLog.request(method, url, qs);
     try {
@@ -576,10 +576,10 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // ── /api/health — Phase 5.5 pre-flight validation ─────────────────────────
-  // ?full=1  → include async URL reachability probes (slow, ~8s per client)
-  // ?client= → restrict to a single client
-  // ?skipUrls=1 → skip URL probes even in full mode
+  // -- /api/health - Phase 5.5 pre-flight validation -------------------------
+  // ?full=1  -> include async URL reachability probes (slow, ~8s per client)
+  // ?client= -> restrict to a single client
+  // ?skipUrls=1 -> skip URL probes even in full mode
   if (method === "GET" && url === "/api/health") {
     apiLog.request(method, url, qs);
     const full     = qs.full     === "1" || qs.full     === "true";
@@ -604,7 +604,7 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // ── /api/clients ──────────────────────────────────────────────────────────
+  // -- /api/clients ----------------------------------------------------------
   if (method === "GET" && url === "/api/clients") {
     apiLog.request(method, url, qs);
     res.writeHead(200, { "Content-Type": "application/json" });
@@ -624,7 +624,7 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // ── /api/modules?clientId=X ───────────────────────────────────────────────
+  // -- /api/modules?clientId=X -----------------------------------------------
   if (method === "GET" && url === "/api/modules") {
     apiLog.request(method, url, qs);
     const clientId = qs.clientId || qs.client || "demoportal";
@@ -634,7 +634,7 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // ── /api/migration-report — Phase 6 migration status ─────────────────────
+  // -- /api/migration-report - Phase 6 migration status ---------------------
   if (method === "GET" && url === "/api/migration-report") {
     apiLog.request(method, url, qs);
     const reportPath = path.join(__dirname, "migration-report.json");
@@ -658,7 +658,7 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // ── /api/features?clientId=X&moduleId=Y&status=Z ─────────────────────────
+  // -- /api/features?clientId=X&moduleId=Y&status=Z -------------------------
   if (method === "GET" && url === "/api/features") {
     apiLog.request(method, url, qs);
     const features = featureService.getFeatures({
@@ -673,7 +673,7 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // ── /api/repository?clientId=X ───────────────────────────────────────────
+  // -- /api/repository?clientId=X -------------------------------------------
   if (method === "GET" && url === "/api/repository") {
     apiLog.request(method, url, qs);
     const clientId = qs.clientId || qs.client;
@@ -689,7 +689,7 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // ── /api/coverage?clientId=X&moduleId=Y ──────────────────────────────────
+  // -- /api/coverage?clientId=X&moduleId=Y ----------------------------------
   if (method === "GET" && url === "/api/coverage") {
     apiLog.request(method, url, qs);
     const clientId = qs.clientId || qs.client;
@@ -699,7 +699,7 @@ const server = http.createServer((req, res) => {
     res.end(JSON.stringify({ clientId: clientId || "all", moduleId: moduleId || "all", coverage }));
     return;
   }
-  // ─────────────────────────────────────────────────────────────────────────
+  // -------------------------------------------------------------------------
 
   if (method === "POST" && url === "/api/run") {
     let body = "";
@@ -745,7 +745,7 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // ── /api/admin/reload — force-reload catalog + client caches from disk ────
+  // -- /api/admin/reload - force-reload catalog + client caches from disk ----
   if (method === "POST" && url === "/api/admin/reload") {
     try {
       catalogService.reload();
@@ -759,7 +759,7 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // ── Serve test-results screenshots ────────────────────────────────────────
+  // -- Serve test-results screenshots ----------------------------------------
   if (method === "GET" && url.startsWith("/test-results/")) {
     const relativePath = url.replace(/^\/test-results\//, "").split("?")[0];
     const filePath = path.join(ROOT_DIR, "test-results", relativePath);
@@ -814,8 +814,8 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`\n  ðŸŽ­ DealerPlatform QA Dashboard`);
-  console.log(`  â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€`);
+  console.log(`\n  DealerPlatform QA Dashboard`);
+  console.log(`  -------------------------------------`);
   console.log(`  Open:  http://localhost:${PORT}`);
   console.log(`  Root:  ${ROOT_DIR}`);
   console.log(`\n  Press Ctrl+C to stop.\n`);

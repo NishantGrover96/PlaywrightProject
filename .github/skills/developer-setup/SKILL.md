@@ -4,7 +4,7 @@ description: Complete first-time environment setup for a new developer joining t
 applyTo: '**'
 ---
 
-# Developer Setup — 9-Phase Self-Healing Orchestrator
+# Developer Setup - 9-Phase Self-Healing Orchestrator
 
 ## Purpose
 
@@ -20,13 +20,13 @@ before moving to the next phase.
 
 ---
 
-## Phase 0 — Collect All Inputs Once
+## Phase 0 - Collect All Inputs Once
 
 Ask ALL of the following questions before doing anything else.
 Do not revisit these questions. Store answers as variables used throughout all phases.
 
 ```
-Q1. What is the client ID you are onboarding? (e.g. acmecorp — lowercase, letters/hyphens only)
+Q1. What is the client ID you are onboarding? (e.g. acmecorp - lowercase, letters/hyphens only)
 
 Q2. What is the client's display name? (e.g. "Acme Corporation")
 
@@ -38,11 +38,11 @@ Q5. Does a local source repo exist for this client? If yes, provide the local fo
     (Used for repo-analysis. Press Enter to skip if unknown.)
 
 Q6. Which modules exist in this client? (comma-separated, e.g. coop,engage-ads,inventory)
-    If you don't know yet, type "unknown" — we will discover them via repo-analysis.
+    If you don't know yet, type "unknown" - we will discover them via repo-analysis.
 ```
 
 Store answers as:
-- `CLIENT_ID` — lowercase, letters/hyphens only
+- `CLIENT_ID` - lowercase, letters/hyphens only
 - `DISPLAY_NAME`
 - `TARGET_ENV`
 - `BASE_URL`
@@ -51,7 +51,7 @@ Store answers as:
 
 ---
 
-## Phase 1 — Prerequisites
+## Phase 1 - Prerequisites
 
 ### 1.1 PowerShell Execution Policy
 
@@ -102,13 +102,13 @@ npx playwright install chromium
 $nodeVer = (node --version) -replace '^v',''
 $major   = [int]($nodeVer.Split('.')[0])
 if ($major -lt 20) { Write-Error "Node.js 20+ required. Found: v$nodeVer" }
-if (-not (Test-Path "node_modules")) { Write-Error "npm install may have failed — node_modules missing" }
+if (-not (Test-Path "node_modules")) { Write-Error "npm install may have failed - node_modules missing" }
 Write-Host "[Phase 1] Prerequisites OK"
 ```
 
 ---
 
-## Phase 2 — Environment Files
+## Phase 2 - Environment Files
 
 Create `.env.{TARGET_ENV}` with the client's base URL.
 
@@ -118,7 +118,7 @@ if (-not (Test-Path $envFile)) {
     Set-Content -Path $envFile -Encoding UTF8 -Value "BASE_URL=$BASE_URL"
     Write-Host "Created $envFile"
 } else {
-    Write-Host "$envFile already exists — not overwritten"
+    Write-Host "$envFile already exists - not overwritten"
 }
 ```
 
@@ -131,23 +131,23 @@ if (Test-Path $prodEnvFile) {
     if ($content -match 'MASTER_KEY=') {
         Write-Host "[Phase 2] MASTER_KEY found in .env.production"
     } else {
-        Write-Warn "[Phase 2] MASTER_KEY missing from .env.production — passwords won't encrypt"
+        Write-Warn "[Phase 2] MASTER_KEY missing from .env.production - passwords won't encrypt"
     }
 } else {
-    Write-Warn "[Phase 2] .env.production not found — credentials won't encrypt until created"
+    Write-Warn "[Phase 2] .env.production not found - credentials won't encrypt until created"
 }
 ```
 
 ---
 
-## Phase 3 — Client Configuration (new-client.ps1)
+## Phase 3 - Client Configuration (new-client.ps1)
 
 ### 3.1 Check if Client Already Configured
 
 ```powershell
 $configFile = "config/clients/$CLIENT_ID.json"
 if (Test-Path $configFile) {
-    Write-Host "[Phase 3] Client '$CLIENT_ID' already configured — skipping wizard"
+    Write-Host "[Phase 3] Client '$CLIENT_ID' already configured - skipping wizard"
 } else {
     Write-Host "[Phase 3] Running new-client.ps1 for '$CLIENT_ID'..."
     powershell -File "scripts/new-client.ps1"
@@ -196,18 +196,18 @@ if ($cfg.clientId -ne $CLIENT_ID) {
 }
 ```
 
-### 3.4 Validate users.json Credentials — Auth-Type Aware
+### 3.4 Validate users.json Credentials - Auth-Type Aware
 
 Read the client's `authType` from `config/clients/{CLIENT_ID}.json` first, then apply the
-correct validation rules. **Rules differ by auth type — never treat all clients the same.**
+correct validation rules. **Rules differ by auth type - never treat all clients the same.**
 
 | authType | Fields required | Password | What a placeholder looks like |
 |---|---|---|---|
-| `email-password` | `email`, `password` | AES-256-GCM encrypted (`enc:…`) | `REPLACE_WITH_*_EMAIL` or `REPLACE_WITH_ENCRYPTED_PASSWORD` |
-| `username-password` | `username`, `password` | AES-256-GCM encrypted (`enc:…`) | `REPLACE_WITH_*_USERNAME` or `REPLACE_WITH_ENCRYPTED_PASSWORD` |
-| `username-only` | `username` **and** `email` (same value), `password = ""` | **Empty string** — no encryption needed | `REPLACE_WITH_*_USERNAME` or `REPLACE_WITH_*_EMAIL` |
-| `forms` / `azure-ad` / `oauth` / `sso` | varies | varies | any `REPLACE_WITH_…` string |
-| `none` | — | — | skip validation |
+| `email-password` | `email`, `password` | AES-256-GCM encrypted (`enc:...`) | `REPLACE_WITH_*_EMAIL` or `REPLACE_WITH_ENCRYPTED_PASSWORD` |
+| `username-password` | `username`, `password` | AES-256-GCM encrypted (`enc:...`) | `REPLACE_WITH_*_USERNAME` or `REPLACE_WITH_ENCRYPTED_PASSWORD` |
+| `username-only` | `username` **and** `email` (same value), `password = ""` | **Empty string** - no encryption needed | `REPLACE_WITH_*_USERNAME` or `REPLACE_WITH_*_EMAIL` |
+| `forms` / `azure-ad` / `oauth` / `sso` | varies | varies | any `REPLACE_WITH_...` string |
+| `none` | - | - | skip validation |
 
 ```powershell
 $clientCfg = Get-Content "config/clients/$CLIENT_ID.json" -Raw | ConvertFrom-Json
@@ -225,7 +225,7 @@ $usersJson.PSObject.Properties | ForEach-Object {
         $loginVal = $roleVal.username ?? $roleVal.email
         if (-not $loginVal -or $loginVal -match $placeholderPattern) {
             Write-Warn "Role '$roleName': 'username'/'email' is still a placeholder."
-            Write-Warn "  Fix: edit config/users/$CLIENT_ID/users.json — set 'username' and 'email' to the actual login value (e.g. dealer code X1A0449)."
+            Write-Warn "  Fix: edit config/users/$CLIENT_ID/users.json - set 'username' and 'email' to the actual login value (e.g. dealer code X1A0449)."
         } else {
             Write-Host "  [OK] $roleName username: $loginVal"
         }
@@ -247,7 +247,7 @@ $usersJson.PSObject.Properties | ForEach-Object {
             Write-Warn "Role '$roleName': password is missing or placeholder."
             Write-Warn "  Fix: node utils/encrypt-credential.js ""your-password"" then paste the enc:... value into users.json"
         } elseif ($roleVal.password -notmatch '^enc:') {
-            Write-Warn "Role '$roleName': password does not start with 'enc:' — it may be stored in plain text."
+            Write-Warn "Role '$roleName': password does not start with 'enc:' - it may be stored in plain text."
             Write-Warn "  Fix: node utils/encrypt-credential.js ""your-password"" and replace with the enc:... value."
         } else {
             Write-Host "  [OK] $roleName password: encrypted"
@@ -256,41 +256,41 @@ $usersJson.PSObject.Properties | ForEach-Object {
 }
 ```
 
-**Self-healing — if any placeholder is found:**
-1. For `username-only`: ask the user for the login username/dealer code for each role, then update `users.json` directly — no encryption step needed.
-2. For password-based: ask the user for the plain-text password, run `node utils/encrypt-credential.js "password"`, paste the `enc:…` output into `users.json`.
+**Self-healing - if any placeholder is found:**
+1. For `username-only`: ask the user for the login username/dealer code for each role, then update `users.json` directly - no encryption step needed.
+2. For password-based: ask the user for the plain-text password, run `node utils/encrypt-credential.js "password"`, paste the `enc:...` output into `users.json`.
 3. Re-run validation after every fix until all roles show `[OK]`.
 
 ---
 
-## Phase 4 — Repository Analysis (if REPO_PATH provided)
+## Phase 4 - Repository Analysis (if REPO_PATH provided)
 
 If the user provided a local repo path in Phase 0, run the repo-analysis skill inline.
 
 ```
 If REPO_PATH is not empty:
-  → Read and follow: .github/skills/repo-analysis/SKILL.md
-  → Pass in: clientId = CLIENT_ID, repoPath = REPO_PATH
-  → Store discovered modules, endpoints, and field definitions for Phase 5
+  -> Read and follow: .github/skills/repo-analysis/SKILL.md
+  -> Pass in: clientId = CLIENT_ID, repoPath = REPO_PATH
+  -> Store discovered modules, endpoints, and field definitions for Phase 5
 
 If REPO_PATH is empty:
-  → Skip Phase 4
-  → Use MODULE list from Phase 0 inputs
-  → If MODULES = ["unknown"], prompt: "Provide at least one module name to proceed with catalog generation."
+  -> Skip Phase 4
+  -> Use MODULE list from Phase 0 inputs
+  -> If MODULES = ["unknown"], prompt: "Provide at least one module name to proceed with catalog generation."
 ```
 
 ---
 
-## Phase 5 — Functional Test Catalog Generation
+## Phase 5 - Functional Test Catalog Generation
 
 Run the functional-test-catalog skill for each module.
 
 ```
 For each MODULE in MODULES:
-  → Read and follow: .github/skills/functional-test-catalog/SKILL.md
-  → Pass in: clientId = CLIENT_ID, moduleId = MODULE, repoAnalysis = (Phase 4 output or empty)
-  → Write generated tests into: docs/functional-catalogs/{CLIENT_ID}/{MODULE}/
-  → Update dashboard/catalogs/{CLIENT_ID}-manifest.json with all feature entries
+  -> Read and follow: .github/skills/functional-test-catalog/SKILL.md
+  -> Pass in: clientId = CLIENT_ID, moduleId = MODULE, repoAnalysis = (Phase 4 output or empty)
+  -> Write generated tests into: docs/functional-catalogs/{CLIENT_ID}/{MODULE}/
+  -> Update dashboard/catalogs/{CLIENT_ID}-manifest.json with all feature entries
 ```
 
 ### Manifest Entry Template
@@ -314,7 +314,7 @@ If `MODULES = ["unknown"]`, skip Phase 5 and tell the user:
 
 ---
 
-## Phase 6 — Auth Setup
+## Phase 6 - Auth Setup
 
 Playwright requires authenticated state files before tests can run.
 
@@ -357,14 +357,14 @@ if ($authFiles.Count -gt 0) {
 
 ---
 
-## Phase 7 — Dashboard Verification
+## Phase 7 - Dashboard Verification
 
 ### 7.1 Start Dashboard if Not Running
 
 ```powershell
 $response = try { Invoke-WebRequest -Uri "http://localhost:3333/api/clients" -UseBasicParsing } catch { $null }
 if (-not $response) {
-    Write-Host "[Phase 7] Dashboard not running — starting..."
+    Write-Host "[Phase 7] Dashboard not running - starting..."
     Start-Process -FilePath "node" -ArgumentList "dashboard/server.js" -NoNewWindow
     Start-Sleep -Seconds 3
     $response = try { Invoke-WebRequest -Uri "http://localhost:3333/api/clients" -UseBasicParsing } catch { $null }
@@ -404,7 +404,7 @@ if ($modules.modules.Count -eq 0) {
 
 ---
 
-## Phase 8 — Smoke Test
+## Phase 8 - Smoke Test
 
 Run the first available smoke test to confirm end-to-end connectivity.
 
@@ -424,23 +424,23 @@ If tests fail due to auth:
 
 ---
 
-## Phase 9 — Final Checklist
+## Phase 9 - Final Checklist
 
 Print a final status summary:
 
 ```
-[ ] Phase 1 — Prerequisites: Node 20+, npm install, Playwright browsers
-[ ] Phase 2 — .env.{TARGET_ENV} created with BASE_URL
-[ ] Phase 3 — config/clients/{CLIENT_ID}.json with correct clientId field
-[ ] Phase 3 — config/users/{CLIENT_ID}/users.json validated for authType
+[ ] Phase 1 - Prerequisites: Node 20+, npm install, Playwright browsers
+[ ] Phase 2 - .env.{TARGET_ENV} created with BASE_URL
+[ ] Phase 3 - config/clients/{CLIENT_ID}.json with correct clientId field
+[ ] Phase 3 - config/users/{CLIENT_ID}/users.json validated for authType
              email-password / username-password: email/username set, password is enc:...
              username-only: username AND email set to real login value, password = ""
-[ ] Phase 3 — dashboard/catalogs/{CLIENT_ID}-manifest.json exists
-[ ] Phase 4 — Repo analysis complete (or skipped — no repo path)
-[ ] Phase 5 — Functional catalog generated (or skipped — no modules known)
-[ ] Phase 6 — Auth state files present in tests/playwright/.auth/{CLIENT_ID}/
-[ ] Phase 7 — Dashboard running, client visible, modules loaded
-[ ] Phase 8 — Smoke test passes (or skipped — no tests yet)
+[ ] Phase 3 - dashboard/catalogs/{CLIENT_ID}-manifest.json exists
+[ ] Phase 4 - Repo analysis complete (or skipped - no repo path)
+[ ] Phase 5 - Functional catalog generated (or skipped - no modules known)
+[ ] Phase 6 - Auth state files present in tests/playwright/.auth/{CLIENT_ID}/
+[ ] Phase 7 - Dashboard running, client visible, modules loaded
+[ ] Phase 8 - Smoke test passes (or skipped - no tests yet)
 ```
 
 Mark each item [OK] / [WARN] / [FAIL] based on verification results.
@@ -453,12 +453,12 @@ Mark each item [OK] / [WARN] / [FAIL] based on verification results.
 |---|---|---------|
 | `cannot be loaded because running scripts is disabled` | PowerShell execution policy | `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser` |
 | `MASTER_KEY not set` | Missing environment variable | Prompt user to generate + save to `.env.production` |
-| Dashboard shows wrong client data | Duplicate featureId key in catalog cache | `POST /api/admin/reload` — fixed in catalog-service.js |
+| Dashboard shows wrong client data | Duplicate featureId key in catalog cache | `POST /api/admin/reload` - fixed in catalog-service.js |
 | Client not in dashboard after wizard | `clientId` field typo or casing mismatch | Verify `clientId` field in `config/clients/{id}.json` |
 | Auth state file missing | Setup project not run | `npx playwright test --project=setup-{CLIENT_ID}` |
 | `enc:` prefix missing in users.json | Encryption skipped (MASTER_KEY absent) | Set MASTER_KEY, re-run `node utils/encrypt-credential.js` |
-| users.json has `REPLACE_WITH_*_EMAIL` or `REPLACE_WITH_*_USERNAME` | Client created before fix, or wizard skipped credential entry | Fill in the real value; for `username-only` set both `username` and `email` fields to the dealer code — no encryption needed |
-| users.json password is `"REPLACE_WITH_ENCRYPTED_PASSWORD"` for `username-only` client | authType mismatch | Set `"password": ""` (empty string) — `username-only` never uses a password |
+| users.json has `REPLACE_WITH_*_EMAIL` or `REPLACE_WITH_*_USERNAME` | Client created before fix, or wizard skipped credential entry | Fill in the real value; for `username-only` set both `username` and `email` fields to the dealer code - no encryption needed |
+| users.json password is `"REPLACE_WITH_ENCRYPTED_PASSWORD"` for `username-only` client | authType mismatch | Set `"password": ""` (empty string) - `username-only` never uses a password |
 | Catalog entries showing for wrong client | Duplicate plain featureId key (old bug) | Already fixed in catalog-service.js |
 | `npm install` fails offline | No network / proxy | `npm install --prefer-offline` |
 | No modules in dashboard | Catalog manifest is empty `{}` | Run functional-test-catalog skill, then `POST /api/admin/reload` |
@@ -468,25 +468,25 @@ Mark each item [OK] / [WARN] / [FAIL] based on verification results.
 ## Execution Order
 
 ```
-Phase 0  →  Collect all inputs ONCE
-Phase 1  →  Prerequisites (Node, npm, Playwright)
-Phase 2  →  .env files
-Phase 3  →  new-client.ps1 + artifact validation + clientId check + credential check
-Phase 4  →  Repo analysis (conditional: only if REPO_PATH provided)
-Phase 5  →  Functional test catalog (conditional: only if modules known)
-Phase 6  →  Auth setup (Playwright setup project)
-Phase 7  →  Dashboard start + cache reload + API verification
-Phase 8  →  Smoke test
-Phase 9  →  Final checklist
+Phase 0  ->  Collect all inputs ONCE
+Phase 1  ->  Prerequisites (Node, npm, Playwright)
+Phase 2  ->  .env files
+Phase 3  ->  new-client.ps1 + artifact validation + clientId check + credential check
+Phase 4  ->  Repo analysis (conditional: only if REPO_PATH provided)
+Phase 5  ->  Functional test catalog (conditional: only if modules known)
+Phase 6  ->  Auth setup (Playwright setup project)
+Phase 7  ->  Dashboard start + cache reload + API verification
+Phase 8  ->  Smoke test
+Phase 9  ->  Final checklist
 ```
 
 Each phase must fully succeed (or be deliberately skipped) before the next phase begins.
 On failure, apply self-healing rule, retry once, then report the failure clearly without proceeding.
 
-    Options: Yes | No — I'll install it now
+    Options: Yes | No - I'll install it now
 
 Q3. Which client are you setting up for?
-    Options: demoportal | certainteed | samsung | (other — I'll specify)
+    Options: demoportal | certainteed | samsung | (other - I'll specify)
     (determines which .env file and credential set you need)
 
 Q4. Which environment will you test against first?
@@ -494,12 +494,12 @@ Q4. Which environment will you test against first?
 
 Q5. Do you have access to the source/application repo on your local machine?
     (e.g. D:\Leads\DemoPortalV2)
-    Options: Yes — I have the path | No — I only have the QA repo
+    Options: Yes - I have the path | No - I only have the QA repo
 ```
 
 ---
 
-## Step 2 — Verify / Install Prerequisites
+## Step 2 - Verify / Install Prerequisites
 
 ### 2.1 Node.js
 
@@ -542,7 +542,7 @@ $PSVersionTable.PSVersion
 
 ---
 
-## Step 3 — Clone & Install Dependencies
+## Step 3 - Clone & Install Dependencies
 
 ```powershell
 # Clone the QA repo (skip if already cloned)
@@ -560,9 +560,9 @@ npx playwright install chromium
 
 ---
 
-## Step 4 — Create Environment Files
+## Step 4 - Create Environment Files
 
-Create `.env.{environment}` in the repo root. These files are **gitignored — never commit them**.
+Create `.env.{environment}` in the repo root. These files are **gitignored - never commit them**.
 
 ### Template (fill in real values from your team lead)
 
@@ -587,7 +587,7 @@ Test-Path .env.production # should return True (if testing prod)
 
 ---
 
-## Step 5 — Configure Encrypted Credentials (new-client setup)
+## Step 5 - Configure Encrypted Credentials (new-client setup)
 
 If the client is **not yet configured** in `config/clients/{clientId}.json`, run the new-client wizard:
 
@@ -598,7 +598,7 @@ If the client is **not yet configured** in `config/clients/{clientId}.json`, run
 This interactive script will:
 1. Prompt for the client name, modules (coop / engage-ads / popshop / rebate / admin)
 2. Collect dealer + admin email and password
-3. **Encrypt the credentials automatically** — plaintext is never stored
+3. **Encrypt the credentials automatically** - plaintext is never stored
 4. Write `config/clients/{clientId}.json`
 5. Create `docs/functional-catalogs/{clientId}/` folder structure
 6. Create `dashboard/catalogs/{clientId}-manifest.json`
@@ -607,9 +607,9 @@ This interactive script will:
 
 ---
 
-## Step 6 — Configure Local Repo Paths
+## Step 6 - Configure Local Repo Paths
 
-Create `config/repos.local.json` — **gitignored, your machine only**.
+Create `config/repos.local.json` - **gitignored, your machine only**.
 Use `config/repos.json` as the template.
 
 ```powershell
@@ -628,11 +628,11 @@ Then edit `config/repos.local.json` with your actual local paths:
 ```
 
 If you don't have the source repo locally, set `"root": ""` and leave `webFolder` empty.
-You can still run existing tests — only the analysis skills need the source path.
+You can still run existing tests - only the analysis skills need the source path.
 
 ---
 
-## Step 7 — Run Auth Setup (saves browser session)
+## Step 7 - Run Auth Setup (saves browser session)
 
 This creates saved login sessions so tests don't need to log in every run.
 
@@ -640,7 +640,7 @@ This creates saved login sessions so tests don't need to log in every run.
 # Dealer session
 npx playwright test tests/playwright/specs/auth.setup.ts --project=setup
 
-# Admin session (optional — only needed if running admin tests)
+# Admin session (optional - only needed if running admin tests)
 npx playwright test tests/playwright/specs/auth.setup.admin.ts --project=setup-admin
 ```
 
@@ -652,7 +652,7 @@ npx playwright test tests/playwright/specs/auth.setup.admin.ts --project=setup-a
 
 ---
 
-## Step 8 — Verify the Setup with Smoke Tests
+## Step 8 - Verify the Setup with Smoke Tests
 
 Run the fastest available smoke test to confirm everything works end to end:
 
@@ -668,7 +668,7 @@ npx playwright test tests/playwright/specs/engage-ads/feature-view-package/ --pr
 
 ---
 
-## Step 9 — Start the QA Dashboard
+## Step 9 - Start the QA Dashboard
 
 ```powershell
 npm run dashboard
@@ -692,7 +692,7 @@ npm run dashboard
 
 ---
 
-## Step 10 — Scaffold a New Module or Feature (optional)
+## Step 10 - Scaffold a New Module or Feature (optional)
 
 Only run this if you are **adding a brand-new feature** that doesn't exist in the repo yet.
 
@@ -706,14 +706,14 @@ Only run this if you are **adding a brand-new feature** that doesn't exist in th
 
 This creates:
 - Playwright spec, Page Object, helpers, test-data stubs
-- `docs/functional-catalogs/{client}/{module}/feature-{feature}/functional-units.html` — placeholder catalog page
+- `docs/functional-catalogs/{client}/{module}/feature-{feature}/functional-units.html` - placeholder catalog page
 - API spec and database script stubs
 
-> If the feature already exists, skip this step — running it again will overwrite stubs.
+> If the feature already exists, skip this step - running it again will overwrite stubs.
 
 ---
 
-## Step 11 — Next Step After Setup
+## Step 11 - Next Step After Setup
 
 Once your environment is working, choose your path:
 
@@ -764,7 +764,7 @@ node -e "require('dotenv').config({ path: '.env.production' }); console.log(proc
 
 ---
 
-## Checklist — Setup Complete When All Items Are Checked
+## Checklist - Setup Complete When All Items Are Checked
 
 ```
 [ ] node --version returns v20.x.x
@@ -772,8 +772,8 @@ node -e "require('dotenv').config({ path: '.env.production' }); console.log(proc
 [ ] npx playwright install chromium completed
 [ ] .env.{environment} file exists with real credentials
 [ ] config/repos.local.json exists
-[ ] Auth setup ran — .auth/user.json exists
-[ ] npm run test:smoke — at least one test passes
-[ ] npm run dashboard — http://localhost:3333 loads with client list
+[ ] Auth setup ran - .auth/user.json exists
+[ ] npm run test:smoke - at least one test passes
+[ ] npm run dashboard - http://localhost:3333 loads with client list
 [ ] Module dropdown populates on client select
 ```

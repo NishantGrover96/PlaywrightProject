@@ -1,5 +1,5 @@
 /**
- * CampaignSetupPage.ts — EngageAds Campaign Setup Page Object
+ * CampaignSetupPage.ts - EngageAds Campaign Setup Page Object
  * DOM verified: 2026-06-29 on https://demoportaluat.channel-fusion.com/EngageAds/CampaignSetup
  *
  * Locator Validation Report
@@ -17,7 +17,7 @@
  * | getByRole button 'Submit...'     | button.btnFill (Submit/Update)   | Text-based, no ID on button | High   |
  * | a[href*=OrderHistory] Cancel     | a[href=/EngageAds/OrderHistory]  | Href+text filter            | High   |
  * | #CampaignIntake_EncryptedOrderSeq| input[type=hidden]               | Confirmed ID from DOM       | High   |
- * | #FirstName … #AdditionalNotes    | All form inputs                  | Confirmed IDs from DOM      | High   |
+ * | #FirstName ... #AdditionalNotes    | All form inputs                  | Confirmed IDs from DOM      | High   |
  * | #TermsAccepted                   | input[type=checkbox]             | Confirmed ID                | High   |
  * | label[for=X] .text-danger        | span.text-danger inside label    | Required asterisk pattern   | High   |
  * | #review_*                        | span#review_* review spans       | Confirmed IDs from DOM      | High   |
@@ -79,7 +79,7 @@ export class CampaignSetupPage {
   readonly hdnOrderNumber: Locator;
   readonly hdnCampaignSetupSeq: Locator;
 
-  // Step 1 — Primary Contact
+  // Step 1 - Primary Contact
   readonly firstNameInput: Locator;
   readonly lastNameInput: Locator;
   readonly primaryContactEmailInput: Locator;
@@ -87,7 +87,7 @@ export class CampaignSetupPage {
   readonly leadDestinationEmailInput: Locator;
   readonly phoneNumberToDisplayInAdsInput: Locator;
 
-  // Step 2 — Business Details
+  // Step 2 - Business Details
   readonly businessNameInput: Locator;
   readonly streetAddressInput: Locator;
   readonly addressLine2Input: Locator;
@@ -98,7 +98,7 @@ export class CampaignSetupPage {
   readonly businessLogoInput: Locator;
   readonly websiteUrlInput: Locator;
 
-  // Step 3 — Campaign Details
+  // Step 3 - Campaign Details
   readonly desiredCampaignStartDateInput: Locator;
   readonly serviceAreaTextarea: Locator;
   readonly websiteAccuracyConfirmedCheckbox: Locator;
@@ -127,7 +127,7 @@ export class CampaignSetupPage {
   readonly websiteUrlRequiredStar: Locator;
   readonly serviceAreaRequiredStar: Locator;
 
-  // Step 4 — Review & Submit
+  // Step 4 - Review & Submit
   readonly termsAcceptedCheckbox: Locator;
   readonly termsConditionsModal: Locator;
   readonly termsLink: Locator;
@@ -143,7 +143,7 @@ export class CampaignSetupPage {
   readonly reviewFacebookPage: Locator;
   readonly reviewStartDate: Locator;
 
-  // Loading overlay — dismissed before any interaction (Guideline 1)
+  // Loading overlay - dismissed before any interaction (Guideline 1)
   readonly loadingSpinner: Locator;
 
   // Toast / notifications
@@ -158,19 +158,19 @@ export class CampaignSetupPage {
     this.packageName = page.locator('.packageInfoHeader .packageName');               // ✅ confirmed
     this.packagePrice = page.locator('.packageInfoHeader .packagePrice');             // ✅ confirmed
     this.paidBadge = page.locator('.packageInfoHeader .badge-success');               // ✅ confirmed: span.badge.badge-success
-    // editModeAlert — filtered by text to avoid matching the logo file-format alert
+    // editModeAlert - filtered by text to avoid matching the logo file-format alert
     this.editModeAlert = page.locator('.alert').filter({ hasText: /edit mode/i });   // ✅ text-filtered
     this.expiredAlert = page.locator('.alert').filter({ hasText: /campaign form already submitted/i }); // ✅ text-filtered
     this.redirectCountdown = page.locator('#redirectCountdown');                      // ✅ confirmed
     this.campaignSetupForm = page.locator('form').filter({ has: page.locator('#FirstName') }); // form wrapper (no form ID in DOM)
 
-    // Navigation — no IDs on wizard nav buttons; text-based locators confirmed from DOM
+    // Navigation - no IDs on wizard nav buttons; text-based locators confirmed from DOM
     this.btnBack = page.getByRole('button', { name: /^back$/i });                    // ✅ confirmed text "Back"
     this.btnContinue = page.getByRole('button', { name: /^next/i });                // ✅ confirmed text "Next"
     this.btnSubmit = page.getByRole('button', { name: /submit campaign order|update campaign setup/i }); // ✅ confirmed
     this.cancelLink = page.locator('a[href*="OrderHistory"]').filter({ hasText: /cancel/i }); // ✅ confirmed
 
-    // Hidden fields — confirmed IDs from DOM
+    // Hidden fields - confirmed IDs from DOM
     this.hdnOrderSeq = page.locator('#CampaignIntake_EncryptedOrderSeq');            // ✅ actual ID (was wrong: CampaignIntake.OrderSeq)
     this.hdnOrderNumber = page.locator('#CampaignIntake_OrderNumber');               // ✅ confirmed
     this.hdnCampaignSetupSeq = page.locator('#CampaignIntake_CampaignSetupSeq');     // ✅ confirmed
@@ -194,13 +194,13 @@ export class CampaignSetupPage {
     this.businessLogoInput = page.locator('#BusinessLogo');
     this.websiteUrlInput = page.locator('#WebsiteUrl');
 
-    // Step 3 — all IDs confirmed from DOM
+    // Step 3 - all IDs confirmed from DOM
     this.desiredCampaignStartDateInput = page.locator('#DesiredCampaignStartDate');  // ✅ confirmed: type=text, datepicker
     this.serviceAreaTextarea = page.locator('#ServiceArea');                          // ✅ confirmed: maxlength=2400
     this.websiteAccuracyConfirmedCheckbox = page.locator('#WebsiteAccuracyConfirmed'); // ✅ confirmed: required
     this.preferredLandingPageUrlsTextarea = page.locator('#PreferredLandingPageUrls'); // ✅ confirmed: optional
-    // Facebook section is conditionally rendered per package channels — check isVisible() before interaction
-    this.facebookSection = page.locator('.facebookSection, [id*="facebookSection"]'); // ⚠️ rendered only for FB-channel packages
+    // Facebook section is conditionally rendered per package channels - check isVisible() before interaction
+    this.facebookSection = page.locator('.facebookSection, [id*="facebookSection"]'); // [!]️ rendered only for FB-channel packages
     this.hasFacebookYesRadio = page.locator('input[type="radio"][value="true"][name*="HasFacebook"], #HasFacebookYes'); // conditional
     this.hasFacebookNoRadio = page.locator('input[type="radio"][value="false"][name*="HasFacebook"], #HasFacebookNo');  // conditional
     this.facebookUrlSection = page.locator('#facebookUrlSection, .facebookUrlSection'); // conditional
@@ -208,7 +208,7 @@ export class CampaignSetupPage {
     this.additionalNotesTextarea = page.locator('#AdditionalNotes');                   // ✅ confirmed: maxlength=2000
     this.additionalNotesCount = page.locator('#additionalNotesCount');                 // ✅ confirmed
 
-    // Required asterisks — label[for="X"] .text-danger
+    // Required asterisks - label[for="X"] .text-danger
     this.firstNameRequiredStar                = page.locator('label[for="FirstName"] .text-danger');
     this.lastNameRequiredStar                 = page.locator('label[for="LastName"] .text-danger');
     this.primaryContactEmailRequiredStar      = page.locator('label[for="PrimaryContactEmail"] .text-danger');
@@ -251,24 +251,24 @@ export class CampaignSetupPage {
   }
 
   async navigate(orderSeq?: string): Promise<void> {
-    console.log('orderSeq:', orderSeq ?? '(none — no orderSeq passed)');
+    console.log('orderSeq:', orderSeq ?? '(none - no orderSeq passed)');
     const target = orderSeq ? `${this.url}?orderSeq=${encodeURIComponent(orderSeq)}` : this.url;
-    console.log('navigate → target URL:', target);
+    console.log('navigate -> target URL:', target);
     await this.page.goto(target, { waitUntil: 'commit', timeout: 60_000 });
     await this.page.waitForLoadState('domcontentloaded', { timeout: 60_000 }).catch(() => undefined);
     await this.page.waitForLoadState('networkidle', { timeout: 60_000 }).catch(() => undefined);
   }
 
   /**
-   * Guideline 1 — Page Readiness:
+   * Guideline 1 - Page Readiness:
    * Waits for the page to settle, then decides which checks to run:
    *
-   * — If the app redirected away from CampaignSetup (e.g. missing orderSeq
-   *   → BundledAdPackages, or unauthenticated → Login), the redirect IS the
+   * - If the app redirected away from CampaignSetup (e.g. missing orderSeq
+   *   -> BundledAdPackages, or unauthenticated -> Login), the redirect IS the
    *   behaviour under test. We confirm the destination page opened and return
-   *   immediately — no wizard or locator checks are needed on a different page.
+   *   immediately - no wizard or locator checks are needed on a different page.
    *
-   * — If we are still on CampaignSetup, run the full spinner + wizard checks.
+   * - If we are still on CampaignSetup, run the full spinner + wizard checks.
    */
   async waitForReady(): Promise<void> {
     // Wait for the page to settle so the URL reflects any server-side redirect
@@ -277,12 +277,12 @@ export class CampaignSetupPage {
     // Generic redirect guard
     const landed = this.page.url();
     if (landed && !new RegExp(this.url, 'i').test(landed)) {
-      // Redirected to a different page — confirm it opened and pass the test
+      // Redirected to a different page - confirm it opened and pass the test
       expect(landed).toBeTruthy();
       return;
     }
 
-    // Still on CampaignSetup — full readiness checks
+    // Still on CampaignSetup - full readiness checks
     await expect(this.loadingSpinner)
       .toBeHidden({ timeout: 15_000 })
       .catch(() => undefined); // spinner may not be present on every load

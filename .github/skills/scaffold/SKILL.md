@@ -3,7 +3,7 @@ name: scaffold
 description: One-time interactive setup for a new module or feature, creating all folders, starter files, and updating config and dashboard.
 ---
 
-# Scaffold — Step 0: New Module / Feature Setup
+# Scaffold - Step 0: New Module / Feature Setup
 
 ## Purpose
 
@@ -18,11 +18,11 @@ updates `config/repos.local.json`, `README.md`, and the dashboard.
 
 ---
 
-## Step 0 — Collect Inputs via AskUserQuestion (ALWAYS first)
+## Step 0 - Collect Inputs via AskUserQuestion (ALWAYS first)
 
 Ask in **two rounds** (max 4 questions per call).
 
-### Round 1 — Client / Module / Feature Identity
+### Round 1 - Client / Module / Feature Identity
 
 ```
 Q1. Client ID  [kebab-case]
@@ -42,10 +42,10 @@ Q4. Feature label  [human-readable]
 Q5. Feature page URL path
     The URL route for this feature in the app.
     e.g. /CoopManagement/Claims/Submit/SubmitClaim
-    (used in Playwright tests — can be updated later)
+    (used in Playwright tests - can be updated later)
 ```
 
-### Round 2 — Legacy Repository Paths
+### Round 2 - Legacy Repository Paths
 
 ```
 Q6. Legacy Workspace Folder
@@ -69,7 +69,7 @@ Q9. Legacy Feature Folder
 
 ---
 
-## Step 0.5 — Resolve and Confirm Paths
+## Step 0.5 - Resolve and Confirm Paths
 
 Compute resolved paths and show to user before creating anything:
 
@@ -87,7 +87,7 @@ On-demand dependencies:
 
 ---
 
-## Step 1 — Run Scaffold Script
+## Step 1 - Run Scaffold Script
 
 ```powershell
 .\scripts\new-module.ps1 -Client {client} -Module {module} -Feature {feature} -Label "{label}"
@@ -98,7 +98,7 @@ All paths are client-scoped: `tests/playwright/specs/{client}/{module}/feature-{
 
 ---
 
-## Step 2 — Update config/repos.local.json
+## Step 2 - Update config/repos.local.json
 
 Read `config/repos.local.json`. Add or update the module entry:
 
@@ -122,7 +122,7 @@ Read `config/repos.local.json`. Add or update the module entry:
 
 ---
 
-## Step 3 — Update README.md
+## Step 3 - Update README.md
 
 Find the module section or create one. Add row to feature table:
 
@@ -132,12 +132,12 @@ Find the module section or create one. Add row to feature table:
 
 ---
 
-## Step 4 — Update Dashboard
+## Step 4 - Update Dashboard
 
-**`dashboard/catalog-manifest.json`** — add entry:
+**`dashboard/catalog-manifest.json`** - add entry:
 ```json
 "{module}-{feature}": {
-  "feature":     "{Module} — {Feature Label}",
+  "feature":     "{Module} - {Feature Label}",
   "catalogFile": "functional-catalogs/{client}/{module}/feature-{feature}/functional-units.html",
   "version":     "v1",
   "generated":   "",
@@ -161,22 +161,22 @@ Find the module section or create one. Add row to feature table:
 }
 ```
 
-**`dashboard/server.js`** — add to `FEATURE_FOLDERS` if used for test execution:
+**`dashboard/server.js`** - add to `FEATURE_FOLDERS` if used for test execution:
 ```javascript
 "{module}-{feature}": "tests/playwright/specs/{client}/{module}/feature-{feature}",
 ```
 
-> **Note — `index.html` is fully dynamic.** The module dropdown and feature checkboxes are rebuilt
+> **Note - `index.html` is fully dynamic.** The module dropdown and feature checkboxes are rebuilt
 > automatically from `/api/catalog?clientId=X` every time the client changes. You do NOT need to
 > edit `index.html` to add a new module or feature; the new catalog-manifest.json entry above is
 > sufficient for the feature to appear in the dashboard.
 
 ---
 
-## Step 5 — Confirm Summary
+## Step 5 - Confirm Summary
 
 ```
-## Scaffold Complete — {Module} / {Feature Label}
+## Scaffold Complete - {Module} / {Feature Label}
 
 Resolved paths:
   Feature folder:  {legacyWorkspace}\{legacyWeb}\Pages\{moduleFolder}\{featureFolder}\

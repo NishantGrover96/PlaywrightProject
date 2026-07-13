@@ -1,4 +1,4 @@
-# Migration Mapping — Admin / Feature List
+# Migration Mapping - Admin / Feature List
 
 **Generated:** 2026-06-19  
 **Legacy Path:** `Presentation\Web\Pages\Admin\Feature\`  
@@ -18,23 +18,23 @@
 | `OnGetFeatureCounts` | `OnGetFeatureCounts` (async) | **Async + API** | Response shape identical |
 | `OnGetExportFeatureFlags` | `OnGetExportFeatureFlags` (async) | **Async** | Excel generation identical |
 | `OnPostImportFeatureFlags` | `OnPostImportFeatureFlags` (async) | **Async + API** | Toggle via `_featureApiService.ToggleFeatureAsync` + `UpdateUserGroupAsync` |
-| `OnPostProgramFeatureActiveFlag` | `OnPostProgramFeatureActiveFlag` (async) | **Async + API** | `_programService.UpdateActiveFlag` → `_featureApiService.ToggleFeatureAsync` |
+| `OnPostProgramFeatureActiveFlag` | `OnPostProgramFeatureActiveFlag` (async) | **Async + API** | `_programService.UpdateActiveFlag` -> `_featureApiService.ToggleFeatureAsync` |
 | `OnGetUserList` | `OnGetUserList` (sync) | **Same** | Still uses `_programService.GetUserList` |
-| `OnGetAllUserGroupListDetail` | `OnGetAllUserGroupListDetail` (async) | **Async + API** | `IUserLoginService` + `IDivisionService` → `INotificationApiService`; result shape same |
-| `OnPostUserGroup` | `OnPostUserGroup` (async) | **Async + API** | `_programService.UpdateUserGroup` → `_featureApiService.UpdateUserGroupAsync` |
+| `OnGetAllUserGroupListDetail` | `OnGetAllUserGroupListDetail` (async) | **Async + API** | `IUserLoginService` + `IDivisionService` -> `INotificationApiService`; result shape same |
+| `OnPostUserGroup` | `OnPostUserGroup` (async) | **Async + API** | `_programService.UpdateUserGroup` -> `_featureApiService.UpdateUserGroupAsync` |
 | `OnPostSaveFeatureScope` | `OnPostSaveFeatureScope` (async) | **Async + API** | Same |
-| `OnGetDivisionList` | `OnGetDivisionList` (async) | **Async + API** | `_divisionService` → `_commonSupportService` |
-| `OnGetCountryList` | `OnGetCountryList` (async) | **Async + API** | `_addressService` → `_commonSupportService` |
+| `OnGetDivisionList` | `OnGetDivisionList` (async) | **Async + API** | `_divisionService` -> `_commonSupportService` |
+| `OnGetCountryList` | `OnGetCountryList` (async) | **Async + API** | `_addressService` -> `_commonSupportService` |
 | `OnPostValidateUserPin` | `OnPostValidateUserPin` (sync) | **Same** | Still uses `_user.GetCrcUserById`; identical logic |
 | `OnPostResetValidPin` | `OnPostResetValidPin` (sync) | **Same** | Identical |
-| `OnPostAddFeature` | `OnPostAddFeature` (async) | **Async + API** | `_programService.InsertFeature` → `_featureApiService.InsertFeatureAsync`; validation logic same |
-| `OnPostEditDescription` | `OnPostEditDescription` (async) | **Async + API** | `_programService.UpdateFeatureFlagDescription` → `_featureApiService.UpdateFeatureFlagDescriptionAsync` |
+| `OnPostAddFeature` | `OnPostAddFeature` (async) | **Async + API** | `_programService.InsertFeature` -> `_featureApiService.InsertFeatureAsync`; validation logic same |
+| `OnPostEditDescription` | `OnPostEditDescription` (async) | **Async + API** | `_programService.UpdateFeatureFlagDescription` -> `_featureApiService.UpdateFeatureFlagDescriptionAsync` |
 
 ### ModuleList Page
 
 | Aspect | Legacy | Modern | Delta |
 |--------|--------|--------|-------|
-| All handlers | Sync | Sync | **No change** — code is identical |
+| All handlers | Sync | Sync | **No change** - code is identical |
 
 ---
 
@@ -42,8 +42,8 @@
 
 | Aspect | Legacy | Modern | Delta |
 |--------|--------|--------|-------|
-| FeatureList.cshtml | ✅ | ✅ | **Identical** — no markup changes |
-| ModuleList.cshtml | ✅ | ✅ | **Identical** — no markup changes |
+| FeatureList.cshtml | ✅ | ✅ | **Identical** - no markup changes |
+| ModuleList.cshtml | ✅ | ✅ | **Identical** - no markup changes |
 | Feature.js | ✅ | N/A | Modern uses same JS file from shared wwwroot |
 
 ---

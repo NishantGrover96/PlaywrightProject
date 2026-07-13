@@ -26,18 +26,18 @@ For tools that support root-level instruction discovery, see `AGENTS.md`.
 - Add or update tests when changing behavior.
 - Prefer small, targeted test runs first, then broader runs if needed.
 
-## Playwright Page Object & Test Generation — Master Rules
+## Playwright Page Object & Test Generation - Master Rules
 
 > Applied to every Page Object, spec file, helper, and fixture generated in this repo.
 
 ### 1. Understand the UI First
 - Analyze every HTML snippet provided before writing a single locator.
-- Screenshots are supporting context only — never the primary source.
+- Screenshots are supporting context only - never the primary source.
 - If JavaScript dynamically renders content, state this and wait for the final DOM.
 - If supplied HTML is incomplete, **explicitly list what additional HTML is needed** before writing any locator.
 - Never fabricate DOM structures.
 
-### 2. Locator Preference Order (highest → lowest stability)
+### 2. Locator Preference Order (highest -> lowest stability)
 1. `id`
 2. `data-testid`
 3. `data-test` / `data-qa`
@@ -47,7 +47,7 @@ For tools that support root-level instruction discovery, see `AGENTS.md`.
 7. `getByPlaceholder()`
 8. `getByText()`
 9. Stable structural CSS selector
-10. `nth-child()` — **only** when table column order is fixed and nothing better exists
+10. `nth-child()` - **only** when table column order is fixed and nothing better exists
 
 **Never use:**
 - Auto-generated IDs
@@ -60,22 +60,22 @@ For every locator answer:
 - Will it uniquely identify the element?
 - Will it survive CSS/styling changes?
 
-If any answer is **No** — choose a different locator. Never generate code that will timeout.
+If any answer is **No** - choose a different locator. Never generate code that will timeout.
 
 ### 4. Dynamic Content & AJAX
 Assume enterprise apps use AJAX, Fetch, SignalR, DataTables, lazy loading, or server-side pagination.
 
 **Never interact with data immediately after navigation.** Always wait for:
-- Loading spinner hidden → `expect(spinner).toBeHidden()`
+- Loading spinner hidden -> `expect(spinner).toBeHidden()`
 - Skeleton/loading row removed
-- Table body populated → `expect(rows.first()).toBeVisible()` or `expect(rows).toHaveCount(n)`
+- Table body populated -> `expect(rows.first()).toBeVisible()` or `expect(rows).toHaveCount(n)`
 
 ### 5. Table Handling
-- Never assume tables have custom CSS classes — inspect actual HTML
+- Never assume tables have custom CSS classes - inspect actual HTML
 - Use `row.locator('td').nth(n)` only when no stable attribute exists, and only when column order is fixed
 - Every table method must handle: records exist / empty / loading / API failure
 
-### 6. Synchronization — Playwright expectations only, never `waitForTimeout()`
+### 6. Synchronization - Playwright expectations only, never `waitForTimeout()`
 ```ts
 expect(locator).toBeVisible()
 expect(locator).toBeHidden()
@@ -88,16 +88,16 @@ expect(locator).toContainText('...')
 - All locators defined in the constructor
 - Public methods: `waitForReady()`, `search()`, `filter()`, `clearFilters()`, `getRowCount()`,
   `getCellText()`, `clickView()`, `clickEdit()`, `delete()`, `save()`, `cancel()`, `isEmpty()`, `getToastMessage()`
-- Tests call Page Object methods only — no raw locators in spec files
+- Tests call Page Object methods only - no raw locators in spec files
 - Preserve existing public API when modifying a Page Object; explain any breaking changes before applying
 
-### 8. Assertions — Validate Business Behavior
+### 8. Assertions - Validate Business Behavior
 ```ts
-// ✔ Correct — behavior assertions
+// ✔ Correct - behavior assertions
 expect(await page.getOrderStatus()).toBe('PAID');
 expect(await page.isEmpty()).toBe(false);
 
-// ✗ Wrong — implementation/CSS assertions
+// ✗ Wrong - implementation/CSS assertions
 expect(row).toHaveClass('highlight');
 ```
 
@@ -126,11 +126,11 @@ Include this table before returning any Page Object or spec file:
 |---|---|---|---|---|
 | `page.locator('#orderHistoryBody tr')` | `<tr>` in `#orderHistoryBody` | Stable `id` on `tbody` | High | No |
 
-Flag every selector that references a non-existent attribute — propose a corrected alternative.
+Flag every selector that references a non-existent attribute - propose a corrected alternative.
 
 ### 12. Existing Project Compatibility
 - Match file/folder structure under `tests/playwright/pages/`, `tests/playwright/specs/`, `tests/playwright/helpers/`
-- TypeScript strict mode — no `any`, explicit return types on public methods
+- TypeScript strict mode - no `any`, explicit return types on public methods
 - Reuse existing fixtures from `tests/playwright/fixtures/`
 
 ## Security And Secrets

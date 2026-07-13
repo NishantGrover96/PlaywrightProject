@@ -1,14 +1,14 @@
 'use strict';
 
 /**
- * Health Service — Phase 5.5 Pre-flight Validation
+ * Health Service - Phase 5.5 Pre-flight Validation
  *
  * JavaScript mirror of health-check.ts for use by dashboard/server.js.
  * Runs the same checks without requiring ts-node or a build step.
  *
  * Exports:
- *   runHealthChecks(opts?)       → Promise<HealthReport>  — full checks, includes URL probes
- *   runQuickHealthChecks(opts?)  → HealthReport            — fast sync checks only (no HTTP)
+ *   runHealthChecks(opts?)       -> Promise<HealthReport>  - full checks, includes URL probes
+ *   runQuickHealthChecks(opts?)  -> HealthReport            - fast sync checks only (no HTTP)
  *
  * Options: { clientId?: string, skipUrls?: boolean }
  */
@@ -20,7 +20,7 @@ const https = require('https');
 
 const ROOT = path.join(__dirname, '..', '..');
 
-// ── Result constructors ───────────────────────────────────────────────────────
+// -- Result constructors -------------------------------------------------------
 
 function _pass(name, cat, sev, msg, clientId)              { return { name, category: cat, severity: sev, status: 'PASS', message: msg, clientId }; }
 function _fail(name, cat, sev, msg, detail, clientId)      { return { name, category: cat, severity: sev, status: 'FAIL', message: msg, detail, clientId }; }
@@ -31,7 +31,7 @@ function _abs(rel) {
   return path.isAbsolute(rel) ? rel : path.join(ROOT, rel);
 }
 
-// ── Config ────────────────────────────────────────────────────────────────────
+// -- Config --------------------------------------------------------------------
 
 function _loadConfig() {
   const base  = path.join(ROOT, 'config', 'health-check.config.json');
@@ -42,7 +42,7 @@ function _loadConfig() {
 
   if (fs.existsSync(local)) {
     try   { cfg = _deepMerge(cfg, JSON.parse(fs.readFileSync(local, 'utf8'))); }
-    catch { /* bad local override — ignore */ }
+    catch { /* bad local override - ignore */ }
   }
   return cfg;
 }
@@ -87,7 +87,7 @@ function _defaultConfig() {
   };
 }
 
-// ── Client discovery ──────────────────────────────────────────────────────────
+// -- Client discovery ----------------------------------------------------------
 
 function _getClients(cfg, onlyClient) {
   const dir = path.join(ROOT, 'config', 'clients');
@@ -98,7 +98,7 @@ function _getClients(cfg, onlyClient) {
   return all;
 }
 
-// ── Check: Required folders ───────────────────────────────────────────────────
+// -- Check: Required folders ---------------------------------------------------
 
 function _checkRequiredFolders(cfg) {
   const c = cfg.checks.requiredFolders;
@@ -111,7 +111,7 @@ function _checkRequiredFolders(cfg) {
   });
 }
 
-// ── Check: Client configs ─────────────────────────────────────────────────────
+// -- Check: Client configs -----------------------------------------------------
 
 function _checkClientConfigs(cfg, clients) {
   const c = cfg.checks.clientConfig;
@@ -147,13 +147,13 @@ function _checkClientConfigs(cfg, clients) {
       continue;
     }
     results.push(_pass(`client-config:${clientId}`, 'client-config', c.severity,
-      `Valid — ${clientId}: ${Object.keys(envs).length} env(s), roles: ${roles.join(', ')}`, clientId));
+      `Valid - ${clientId}: ${Object.keys(envs).length} env(s), roles: ${roles.join(', ')}`, clientId));
   }
 
   return results;
 }
 
-// ── Check: Repositories ───────────────────────────────────────────────────────
+// -- Check: Repositories -------------------------------------------------------
 
 function _checkRepositories(cfg) {
   const c = cfg.checks.repositories;
@@ -162,8 +162,8 @@ function _checkRepositories(cfg) {
   const reposPath = path.join(ROOT, 'config', 'repos.local.json');
   if (!fs.existsSync(reposPath)) {
     return [_warn('repositories', 'repositories', c.severity,
-      'config/repos.local.json not found — repository paths not configured',
-      'Copy config/repos.json → config/repos.local.json and fill in local paths')];
+      'config/repos.local.json not found - repository paths not configured',
+      'Copy config/repos.json -> config/repos.local.json and fill in local paths')];
   }
 
   let registry;
@@ -194,7 +194,7 @@ function _checkRepositories(cfg) {
   return results;
 }
 
-// ── Check: Catalog manifest ───────────────────────────────────────────────────
+// -- Check: Catalog manifest ---------------------------------------------------
 
 function _checkCatalogManifest(cfg) {
   const c = cfg.checks.catalogManifest;
@@ -218,7 +218,7 @@ function _checkCatalogManifest(cfg) {
   return results;
 }
 
-// ── Check: Spec files ─────────────────────────────────────────────────────────
+// -- Check: Spec files ---------------------------------------------------------
 
 function _checkSpecFiles(cfg) {
   const c = cfg.checks.specFiles;
@@ -237,7 +237,7 @@ function _checkSpecFiles(cfg) {
       if (!specPath) continue;
       totalRefs++;
       if (!fs.existsSync(_abs(specPath))) {
-        results.push(_fail(`spec-file:${featureId}:${tier}`, 'spec-files', c.severity, `Missing: ${featureId} [${tier}] → ${specPath}`));
+        results.push(_fail(`spec-file:${featureId}:${tier}`, 'spec-files', c.severity, `Missing: ${featureId} [${tier}] -> ${specPath}`));
       }
     }
   }
@@ -247,7 +247,7 @@ function _checkSpecFiles(cfg) {
   return results;
 }
 
-// ── Check: Auth setup files ───────────────────────────────────────────────────
+// -- Check: Auth setup files ---------------------------------------------------
 
 const LEGACY_CLIENTS = new Set(['demoportal', 'certainteed', 'samsung']);
 
@@ -276,7 +276,7 @@ function _checkAuthSetupFiles(cfg, clients) {
       const rel = path.relative(ROOT, authFile).replace(/\\/g, '/');
       if (!fs.existsSync(authFile)) {
         results.push(_warn(`auth:${clientId}:${role}`, 'auth-setup-files', c.severity,
-          `Auth file missing — ${clientId}/${role}: ${rel}`, 'Run setup project', clientId));
+          `Auth file missing - ${clientId}/${role}: ${rel}`, 'Run setup project', clientId));
         continue;
       }
       try {
@@ -285,21 +285,21 @@ function _checkAuthSetupFiles(cfg, clients) {
                            (Array.isArray(parsed.origins) && parsed.origins.length > 0);
         if (!hasContent) {
           results.push(_warn(`auth:${clientId}:${role}`, 'auth-setup-files', c.severity,
-            `Auth file has empty session — ${clientId}/${role}: ${rel}`, 'Re-run auth setup', clientId));
+            `Auth file has empty session - ${clientId}/${role}: ${rel}`, 'Re-run auth setup', clientId));
         } else {
           results.push(_pass(`auth:${clientId}:${role}`, 'auth-setup-files', c.severity,
-            `Auth file valid — ${clientId}/${role}`, clientId));
+            `Auth file valid - ${clientId}/${role}`, clientId));
         }
       } catch {
         results.push(_warn(`auth:${clientId}:${role}`, 'auth-setup-files', c.severity,
-          `Auth file not valid JSON — ${clientId}/${role}: ${rel}`, undefined, clientId));
+          `Auth file not valid JSON - ${clientId}/${role}: ${rel}`, undefined, clientId));
       }
     }
   }
   return results;
 }
 
-// ── Check: Environment URLs ───────────────────────────────────────────────────
+// -- Check: Environment URLs ---------------------------------------------------
 
 async function _checkEnvironmentUrls(cfg, clients, skipUrls) {
   const c = cfg.checks.environmentUrls;
@@ -356,7 +356,7 @@ function _httpGet(url, timeoutMs) {
   });
 }
 
-// ── Check: Dashboard services ─────────────────────────────────────────────────
+// -- Check: Dashboard services -------------------------------------------------
 
 function _checkDashboardServices(cfg) {
   const c = cfg.checks.dashboardServices;
@@ -373,7 +373,7 @@ function _checkDashboardServices(cfg) {
   });
 }
 
-// ── Summary builder ───────────────────────────────────────────────────────────
+// -- Summary builder -----------------------------------------------------------
 
 function _buildSummary(checks) {
   return {
@@ -408,7 +408,7 @@ function _writeReport(report, cfg) {
   } catch { /* report write failure must not break API response */ }
 }
 
-// ── Public API ────────────────────────────────────────────────────────────────
+// -- Public API ----------------------------------------------------------------
 
 /**
  * Run all health checks including async URL probes.
@@ -465,7 +465,7 @@ function runQuickHealthChecks(opts = {}) {
     ..._checkCatalogManifest(cfg),
     ..._checkSpecFiles(cfg),
     ..._checkAuthSetupFiles(cfg, clients),
-    _skip('environment-urls', 'environment-urls', 'MEDIUM', 'Skipped in quick mode — use ?full=1 for URL probes'),
+    _skip('environment-urls', 'environment-urls', 'MEDIUM', 'Skipped in quick mode - use ?full=1 for URL probes'),
     ..._checkDashboardServices(cfg),
   ];
 

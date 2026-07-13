@@ -1,4 +1,4 @@
-# Coop — Submit Preapproval — Functional Test Catalog
+# Coop - Submit Preapproval - Functional Test Catalog
 
 **Client:** Deer Australia  
 **Module:** coop  
@@ -11,7 +11,7 @@
 
 ## Smoke Suite (3 tests)
 
-### COOP-PA-SMOKE-001 — Page loads for authenticated dealer
+### COOP-PA-SMOKE-001 - Page loads for authenticated dealer
 - **Tier:** Smoke
 - **Category:** UI
 - **Priority:** P1-Critical
@@ -28,7 +28,7 @@
 
 ---
 
-### COOP-PA-SMOKE-002 — Unauthenticated user is redirected
+### COOP-PA-SMOKE-002 - Unauthenticated user is redirected
 - **Tier:** Smoke
 - **Category:** Security
 - **Priority:** P1-Critical
@@ -43,7 +43,7 @@
 
 ---
 
-### COOP-PA-SMOKE-003 — Happy path: dealer submits valid preapproval
+### COOP-PA-SMOKE-003 - Happy path: dealer submits valid preapproval
 - **Tier:** Smoke
 - **Category:** Workflow
 - **Priority:** P1-Critical
@@ -68,9 +68,9 @@
 
 ## Regression Suite (40 tests)
 
-### — Validation: Required Fields —
+### - Validation: Required Fields -
 
-### COOP-PA-TC-001 — Submit without Advertisement Type → error shown
+### COOP-PA-TC-001 - Submit without Advertisement Type -> error shown
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P2-High
@@ -81,7 +81,7 @@
 
 ---
 
-### COOP-PA-TC-002 — Submit without Segment → error shown
+### COOP-PA-TC-002 - Submit without Segment -> error shown
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P2-High
@@ -92,7 +92,7 @@
 
 ---
 
-### COOP-PA-TC-003 — Submit with empty Vendor Name → error shown
+### COOP-PA-TC-003 - Submit with empty Vendor Name -> error shown
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P2-High
@@ -103,7 +103,7 @@
 
 ---
 
-### COOP-PA-TC-004 — Submit without First Placement Date → error shown
+### COOP-PA-TC-004 - Submit without First Placement Date -> error shown
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P2-High
@@ -114,7 +114,7 @@
 
 ---
 
-### COOP-PA-TC-005 — Submit with Preapproval Amount empty → error shown
+### COOP-PA-TC-005 - Submit with Preapproval Amount empty -> error shown
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P2-High
@@ -125,7 +125,7 @@
 
 ---
 
-### COOP-PA-TC-006 — Submit with Preapproval Amount = 0 → error shown
+### COOP-PA-TC-006 - Submit with Preapproval Amount = 0 -> error shown
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P2-High
@@ -136,7 +136,7 @@
 
 ---
 
-### COOP-PA-TC-007 — Submit with Preapproval Amount exceeding fund balance → blocked
+### COOP-PA-TC-007 - Submit with Preapproval Amount exceeding fund balance -> blocked
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P1-Critical
@@ -148,7 +148,7 @@
 
 ---
 
-### COOP-PA-TC-008 — Submit with empty email → error shown
+### COOP-PA-TC-008 - Submit with empty email -> error shown
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P2-High
@@ -159,7 +159,7 @@
 
 ---
 
-### COOP-PA-TC-009 — Submit with invalid email format → validation error
+### COOP-PA-TC-009 - Submit with invalid email format -> validation error
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P2-High
@@ -170,7 +170,7 @@
 
 ---
 
-### COOP-PA-TC-010 — Non-admin submit without document AND without link → error
+### COOP-PA-TC-010 - Non-admin submit without document AND without link -> error
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P1-Critical
@@ -181,7 +181,7 @@
 
 ---
 
-### COOP-PA-TC-011 — Non-admin provides link only (no upload) → accepted
+### COOP-PA-TC-011 - Non-admin provides link only (no upload) -> accepted
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P2-High
@@ -192,7 +192,7 @@
 
 ---
 
-### COOP-PA-TC-012 — Submit without JDFADMIN finance selection → blocked for JDFADMIN
+### COOP-PA-TC-012 - Submit without JDFADMIN finance selection -> blocked for JDFADMIN
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P2-High
@@ -204,7 +204,7 @@
 
 ---
 
-### COOP-PA-TC-013 — Submit with sponsorship visible but none checked → error
+### COOP-PA-TC-013 - Submit with sponsorship visible but none checked -> error
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P2-High
@@ -216,9 +216,9 @@
 
 ---
 
-### — Business Logic —
+### - Business Logic -
 
-### COOP-PA-TC-014 — Zero fund balance blocks submission with appropriate message
+### COOP-PA-TC-014 - Zero fund balance blocks submission with appropriate message
 - **Tier:** Regression
 - **Category:** BusinessLogic
 - **Priority:** P1-Critical
@@ -230,7 +230,7 @@
 
 ---
 
-### COOP-PA-TC-015 — Email pre-populated from session on page load
+### COOP-PA-TC-015 - Email pre-populated from session on page load
 - **Tier:** Regression
 - **Category:** UI
 - **Priority:** P2-High
@@ -241,7 +241,7 @@
 
 ---
 
-### COOP-PA-TC-016 — Current dealer auto-included in dealer grid on page load
+### COOP-PA-TC-016 - Current dealer auto-included in dealer grid on page load
 - **Tier:** Regression
 - **Category:** BusinessLogic
 - **Priority:** P2-High
@@ -252,7 +252,7 @@
 
 ---
 
-### COOP-PA-TC-017 — Add additional dealer to grid
+### COOP-PA-TC-017 - Add additional dealer to grid
 - **Tier:** Regression
 - **Category:** UI
 - **Priority:** P2-High
@@ -263,7 +263,7 @@
 
 ---
 
-### COOP-PA-TC-018 — Add duplicate dealer → blocked
+### COOP-PA-TC-018 - Add duplicate dealer -> blocked
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P3-Medium
@@ -273,7 +273,7 @@
 
 ---
 
-### COOP-PA-TC-019 — Remove dealer from grid
+### COOP-PA-TC-019 - Remove dealer from grid
 - **Tier:** Regression
 - **Category:** UI
 - **Priority:** P3-Medium
@@ -283,7 +283,7 @@
 
 ---
 
-### COOP-PA-TC-020 — File upload accepted within 100 MB
+### COOP-PA-TC-020 - File upload accepted within 100 MB
 - **Tier:** Regression
 - **Category:** Security
 - **Priority:** P2-High
@@ -293,7 +293,7 @@
 
 ---
 
-### COOP-PA-TC-021 — File upload rejected above 100 MB (client-side)
+### COOP-PA-TC-021 - File upload rejected above 100 MB (client-side)
 - **Tier:** Regression
 - **Category:** Security
 - **Priority:** P2-High
@@ -303,7 +303,7 @@
 
 ---
 
-### COOP-PA-TC-022 — Invalid file type rejected
+### COOP-PA-TC-022 - Invalid file type rejected
 - **Tier:** Regression
 - **Category:** Security
 - **Priority:** P2-High
@@ -313,7 +313,7 @@
 
 ---
 
-### COOP-PA-TC-023 — Valid file types accepted (PDF, JPEG, DOCX)
+### COOP-PA-TC-023 - Valid file types accepted (PDF, JPEG, DOCX)
 - **Tier:** Regression
 - **Category:** Security
 - **Priority:** P2-High
@@ -323,7 +323,7 @@
 
 ---
 
-### COOP-PA-TC-024 — Delete uploaded file removes it from grid
+### COOP-PA-TC-024 - Delete uploaded file removes it from grid
 - **Tier:** Regression
 - **Category:** UI
 - **Priority:** P3-Medium
@@ -333,7 +333,7 @@
 
 ---
 
-### COOP-PA-TC-025 — Preapproval status = PENDING REVIEW on submit (dealer)
+### COOP-PA-TC-025 - Preapproval status = PENDING REVIEW on submit (dealer)
 - **Tier:** Regression
 - **Category:** Workflow
 - **Priority:** P1-Critical
@@ -344,7 +344,7 @@
 
 ---
 
-### COOP-PA-TC-026 — Admin non-JDF submit auto-approves preapproval
+### COOP-PA-TC-026 - Admin non-JDF submit auto-approves preapproval
 - **Tier:** Regression
 - **Category:** Workflow
 - **Priority:** P2-High
@@ -356,7 +356,7 @@
 
 ---
 
-### COOP-PA-TC-027 — Admin submit button shows "Submit and Approve"
+### COOP-PA-TC-027 - Admin submit button shows "Submit and Approve"
 - **Tier:** Regression
 - **Category:** UI
 - **Priority:** P2-High
@@ -368,7 +368,7 @@
 
 ---
 
-### COOP-PA-TC-028 — Dealer submit button shows "Submit"
+### COOP-PA-TC-028 - Dealer submit button shows "Submit"
 - **Tier:** Regression
 - **Category:** UI
 - **Priority:** P2-High
@@ -379,7 +379,7 @@
 
 ---
 
-### COOP-PA-TC-029 — JDFADMIN submit with JDF Finance → PENDING REVIEW (not auto-approved)
+### COOP-PA-TC-029 - JDFADMIN submit with JDF Finance -> PENDING REVIEW (not auto-approved)
 - **Tier:** Regression
 - **Category:** Workflow
 - **Priority:** P2-High
@@ -391,7 +391,7 @@
 
 ---
 
-### COOP-PA-TC-030 — Preapproval record created in tblPreapproval on submit
+### COOP-PA-TC-030 - Preapproval record created in tblPreapproval on submit
 - **Tier:** Regression
 - **Category:** DataPersistence
 - **Priority:** P1-Critical
@@ -402,7 +402,7 @@
 
 ---
 
-### COOP-PA-TC-031 — Dealer linked to preapproval in tblPreapprovalDealer
+### COOP-PA-TC-031 - Dealer linked to preapproval in tblPreapprovalDealer
 - **Tier:** Regression
 - **Category:** DataPersistence
 - **Priority:** P1-Critical
@@ -413,7 +413,7 @@
 
 ---
 
-### COOP-PA-TC-032 — Uploaded document record created in tblDocumentImage
+### COOP-PA-TC-032 - Uploaded document record created in tblDocumentImage
 - **Tier:** Regression
 - **Category:** DataPersistence
 - **Priority:** P2-High
@@ -424,7 +424,7 @@
 
 ---
 
-### COOP-PA-TC-033 — Document filename renamed on upload (preapproval_number_filename)
+### COOP-PA-TC-033 - Document filename renamed on upload (preapproval_number_filename)
 - **Tier:** Regression
 - **Category:** Security
 - **Priority:** P2-High
@@ -434,7 +434,7 @@
 
 ---
 
-### COOP-PA-TC-034 — Comment saved in tblComment on submit
+### COOP-PA-TC-034 - Comment saved in tblComment on submit
 - **Tier:** Regression
 - **Category:** DataPersistence
 - **Priority:** P2-High
@@ -444,7 +444,7 @@
 
 ---
 
-### COOP-PA-TC-035 — Contact saved in tblContact on submit
+### COOP-PA-TC-035 - Contact saved in tblContact on submit
 - **Tier:** Regression
 - **Category:** DataPersistence
 - **Priority:** P2-High
@@ -454,7 +454,7 @@
 
 ---
 
-### COOP-PA-TC-036 — BMDLR can access preapproval form
+### COOP-PA-TC-036 - BMDLR can access preapproval form
 - **Tier:** Regression
 - **Category:** Security
 - **Priority:** P2-High
@@ -464,7 +464,7 @@
 
 ---
 
-### COOP-PA-TC-037 — BMAGDLR can access preapproval form
+### COOP-PA-TC-037 - BMAGDLR can access preapproval form
 - **Tier:** Regression
 - **Category:** Security
 - **Priority:** P2-High
@@ -474,7 +474,7 @@
 
 ---
 
-### COOP-PA-TC-038 — Disabled dealer redirected to DealerDisable
+### COOP-PA-TC-038 - Disabled dealer redirected to DealerDisable
 - **Tier:** Regression
 - **Category:** Security
 - **Priority:** P1-Critical
@@ -485,7 +485,7 @@
 
 ---
 
-### COOP-PA-TC-039 — First placement date future date blocked
+### COOP-PA-TC-039 - First placement date future date blocked
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P2-High
@@ -495,7 +495,7 @@
 
 ---
 
-### COOP-PA-TC-040 — Media category change updates document type dropdown
+### COOP-PA-TC-040 - Media category change updates document type dropdown
 - **Tier:** Regression
 - **Category:** BusinessLogic
 - **Priority:** P2-High
@@ -507,19 +507,19 @@
 
 ## E2E Suite (5 tests)
 
-### COOP-PA-E2E-001 — Full workflow: dealer submits → appears in pending preapprovals
+### COOP-PA-E2E-001 - Full workflow: dealer submits -> appears in pending preapprovals
 - **Tier:** E2E
 - **Category:** Workflow
 - **Priority:** P1-Critical
 - **BR Covered:** BR-PA-009, BR-PA-024, BR-PA-025
 - **Steps:**
   1. Submit valid preapproval as BMDLR
-  2. Navigate to Preapprovals → View → ViewPreapprovalRequestStatus
+  2. Navigate to Preapprovals -> View -> ViewPreapprovalRequestStatus
 - **Expected:** Preapproval visible with status PENDING REVIEW
 
 ---
 
-### COOP-PA-E2E-002 — Full workflow: dealer submits → admin receives notification
+### COOP-PA-E2E-002 - Full workflow: dealer submits -> admin receives notification
 - **Tier:** E2E
 - **Category:** Workflow
 - **Priority:** P2-High
@@ -531,7 +531,7 @@
 
 ---
 
-### COOP-PA-E2E-003 — Full workflow: admin auto-approves → dealer sees APPROVED status
+### COOP-PA-E2E-003 - Full workflow: admin auto-approves -> dealer sees APPROVED status
 - **Tier:** E2E
 - **Category:** Workflow
 - **Priority:** P2-High
@@ -543,7 +543,7 @@
 
 ---
 
-### COOP-PA-E2E-004 — JDF preapproval requires dual approval before claim linkage
+### COOP-PA-E2E-004 - JDF preapproval requires dual approval before claim linkage
 - **Tier:** E2E
 - **Category:** BusinessLogic
 - **Priority:** P2-High
@@ -555,7 +555,7 @@
 
 ---
 
-### COOP-PA-E2E-005 — Multiple dealers on one preapproval — all linked in DB
+### COOP-PA-E2E-005 - Multiple dealers on one preapproval - all linked in DB
 - **Tier:** E2E
 - **Category:** DataPersistence
 - **Priority:** P2-High
@@ -574,8 +574,8 @@
 | Every form field has ≥ 1 test | ✅ 26 fields covered |
 | Every required field has ≥ 1 missing-field validation test | ✅ TC-001 through TC-010 |
 | Every business rule has ≥ 1 positive and ≥ 1 negative test | ✅ All 30 BRs mapped |
-| Every workflow transition has ≥ 1 test | ✅ SMOKE-003, TC-025, TC-026, TC-029, E2E-001–E2E-003 |
-| Every security rule has ≥ 1 test | ✅ TC-020–TC-024, TC-036–TC-038, SMOKE-002 |
+| Every workflow transition has ≥ 1 test | ✅ SMOKE-003, TC-025, TC-026, TC-029, E2E-001-E2E-003 |
+| Every security rule has ≥ 1 test | ✅ TC-020-TC-024, TC-036-TC-038, SMOKE-002 |
 | Smoke: page load + unauthenticated + happy path | ✅ SMOKE-001, SMOKE-002, SMOKE-003 |
 | E2E: ≥ 1 full workflow scenario | ✅ E2E-001 through E2E-005 |
 | Total count per tier | ✅ Smoke: 3 | Regression: 40 | E2E: 5 |

@@ -1,4 +1,4 @@
-# Three-Feature QA Catalog Generation — Summary Report
+# Three-Feature QA Catalog Generation - Summary Report
 **Generated:** 2026-07-08  
 **Status:** ✅ COMPLETE
 
@@ -15,9 +15,9 @@
 
 | Feature | Business Rules | Test Cases | Status |
 |---|---|---|---|
-| Asset-Upload | 32 (BR-001–BR-032) | 68 (5 Smoke + 52 Regression + 11 E2E) | ✅ Complete |
-| Load-RTR2o | 38 (BR-101–BR-138) | 82 (6 Smoke + 64 Regression + 12 E2E) | ✅ Complete |
-| Creative-Library | 35 (BR-201–BR-235) | 71 (5 Smoke + 54 Regression + 12 E2E) | ✅ Complete |
+| Asset-Upload | 32 (BR-001-BR-032) | 68 (5 Smoke + 52 Regression + 11 E2E) | ✅ Complete |
+| Load-RTR2o | 38 (BR-101-BR-138) | 82 (6 Smoke + 64 Regression + 12 E2E) | ✅ Complete |
+| Creative-Library | 35 (BR-201-BR-235) | 71 (5 Smoke + 54 Regression + 12 E2E) | ✅ Complete |
 | **TOTAL** | **105 BR IDs** | **221 Test Cases** | **✅ Complete** |
 
 ### Phase 3: Dashboard Registration ✅
@@ -90,17 +90,17 @@
 ## Test Distribution
 
 ### By Tier (221 Total)
-- **Smoke (16)**: 7% — Critical path, page load, auth, happy path, notifications
-- **Regression (170)**: 77% — All validation rules, business logic, workflows, security
-- **E2E (35)**: 16% — Full workflows, error recovery, boundary tests, cross-feature scenarios
+- **Smoke (16)**: 7% - Critical path, page load, auth, happy path, notifications
+- **Regression (170)**: 77% - All validation rules, business logic, workflows, security
+- **E2E (35)**: 16% - Full workflows, error recovery, boundary tests, cross-feature scenarios
 
 ### By Category
-- **Validation (67)**: 30% — Required fields, format checks, uniqueness, business rule enforcement
-- **Business Logic (52)**: 24% — AI features, conversions, auto-detection, regional logic
-- **Workflow (37)**: 17% — Status transitions, multi-step operations, user journeys
-- **Security (12)**: 5% — File upload safety, session management, access control
-- **UI/Interaction (20)**: 9% — Navigation, modals, filtering, pagination
-- **Boundary/Integration (33)**: 15% — Edge cases, error recovery, concurrent operations, lifecycle
+- **Validation (67)**: 30% - Required fields, format checks, uniqueness, business rule enforcement
+- **Business Logic (52)**: 24% - AI features, conversions, auto-detection, regional logic
+- **Workflow (37)**: 17% - Status transitions, multi-step operations, user journeys
+- **Security (12)**: 5% - File upload safety, session management, access control
+- **UI/Interaction (20)**: 9% - Navigation, modals, filtering, pagination
+- **Boundary/Integration (33)**: 15% - Edge cases, error recovery, concurrent operations, lifecycle
 
 ---
 
@@ -136,7 +136,7 @@
 ### Manifest Entries Added (3)
 ```json
 "deereadbuilder-asset-upload": {
-  "feature": "DeerAd Builder — Asset Upload",
+  "feature": "DeerAd Builder - Asset Upload",
   "total_tests": 68,
   "implementationStatus": {
     "smoke": { "implemented": true },
@@ -147,13 +147,13 @@
 }
 
 "deereadbuilder-load-rtr2o": {
-  "feature": "DeerAd Builder — Load RTR2o",
+  "feature": "DeerAd Builder - Load RTR2o",
   "total_tests": 82,
   "implementationStatus": { ... }
 }
 
 "deereadbuilder-creative-library": {
-  "feature": "DeerAd Builder — Creative Library (Ads With Assets)",
+  "feature": "DeerAd Builder - Creative Library (Ads With Assets)",
   "total_tests": 71,
   "implementationStatus": { ... }
 }

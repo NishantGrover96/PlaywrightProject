@@ -1,4 +1,4 @@
-# Coop — Submit Claim — Functional Test Catalog
+# Coop - Submit Claim - Functional Test Catalog
 
 **Client:** Deer Australia  
 **Module:** coop  
@@ -13,7 +13,7 @@
 
 ---
 
-### COOP-CL-SMOKE-001 — Page loads for authenticated dealer
+### COOP-CL-SMOKE-001 - Page loads for authenticated dealer
 - **Tier:** Smoke
 - **Category:** UI
 - **Priority:** P1-Critical
@@ -30,7 +30,7 @@
 
 ---
 
-### COOP-CL-SMOKE-002 — Unauthenticated user is redirected
+### COOP-CL-SMOKE-002 - Unauthenticated user is redirected
 - **Tier:** Smoke
 - **Category:** Security
 - **Priority:** P1-Critical
@@ -46,7 +46,7 @@
 
 ---
 
-### COOP-CL-SMOKE-003 — Happy path: submit valid claim
+### COOP-CL-SMOKE-003 - Happy path: submit valid claim
 - **Tier:** Smoke
 - **Category:** Workflow
 - **Priority:** P1-Critical
@@ -75,15 +75,15 @@
 
 ## Regression Suite (44 tests)
 
-### — Validation: Required Fields —
+### - Validation: Required Fields -
 
 ---
 
-### COOP-CL-TC-001 — Submit without selecting Media Category
+### COOP-CL-TC-001 - Submit without selecting Media Category
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P2-High
-- **BR Covered:** BR-CL-013 (implicit — media type required)
+- **BR Covered:** BR-CL-013 (implicit - media type required)
 - **Precondition:** Authenticated BMDLR; form loaded with fund balance
 - **Steps:**
   1. Navigate to claim form; select preapproval
@@ -99,7 +99,7 @@
 
 ---
 
-### COOP-CL-TC-002 — Submit without selecting Fund
+### COOP-CL-TC-002 - Submit without selecting Fund
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P2-High
@@ -116,7 +116,7 @@
 
 ---
 
-### COOP-CL-TC-003 — Submit with empty Vendor Name
+### COOP-CL-TC-003 - Submit with empty Vendor Name
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P2-High
@@ -132,7 +132,7 @@
 
 ---
 
-### COOP-CL-TC-004 — Submit with empty Invoice Number
+### COOP-CL-TC-004 - Submit with empty Invoice Number
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P2-High
@@ -147,7 +147,7 @@
 
 ---
 
-### COOP-CL-TC-005 — Submit without Invoice Date
+### COOP-CL-TC-005 - Submit without Invoice Date
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P2-High
@@ -162,7 +162,7 @@
 
 ---
 
-### COOP-CL-TC-006 — Submit with Invoice Amount = 0
+### COOP-CL-TC-006 - Submit with Invoice Amount = 0
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P2-High
@@ -177,7 +177,7 @@
 
 ---
 
-### COOP-CL-TC-007 — Invoice Amount blocked for alphabetic input
+### COOP-CL-TC-007 - Invoice Amount blocked for alphabetic input
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P3-Medium
@@ -192,7 +192,7 @@
 
 ---
 
-### COOP-CL-TC-008 — Invoice Amount exceeds 12-character limit
+### COOP-CL-TC-008 - Invoice Amount exceeds 12-character limit
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P3-Medium
@@ -207,7 +207,7 @@
 
 ---
 
-### COOP-CL-TC-009 — Submit with Claim Amount = 0
+### COOP-CL-TC-009 - Submit with Claim Amount = 0
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P2-High
@@ -222,7 +222,7 @@
 
 ---
 
-### COOP-CL-TC-010 — Submit without any Activity Date
+### COOP-CL-TC-010 - Submit without any Activity Date
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P2-High
@@ -237,7 +237,7 @@
 
 ---
 
-### COOP-CL-TC-011 — Add duplicate Activity Date
+### COOP-CL-TC-011 - Add duplicate Activity Date
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P2-High
@@ -253,7 +253,7 @@
 
 ---
 
-### COOP-CL-TC-012 — Claim amount exceeds remaining preapproval balance
+### COOP-CL-TC-012 - Claim amount exceeds remaining preapproval balance
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P1-Critical
@@ -270,11 +270,11 @@
 
 ---
 
-### — Business Logic —
+### - Business Logic -
 
 ---
 
-### COOP-CL-TC-013 — Form disabled when fund balance is zero
+### COOP-CL-TC-013 - Form disabled when fund balance is zero
 - **Tier:** Regression
 - **Category:** BusinessLogic
 - **Priority:** P1-Critical
@@ -292,7 +292,7 @@
 
 ---
 
-### COOP-CL-TC-014 — Claim amount auto-calculated as 50% of invoice amount
+### COOP-CL-TC-014 - Claim amount auto-calculated as 50% of invoice amount
 - **Tier:** Regression
 - **Category:** BusinessLogic
 - **Priority:** P2-High
@@ -308,7 +308,7 @@
 
 ---
 
-### COOP-CL-TC-015 — Reimbursement percent always shows 50%
+### COOP-CL-TC-015 - Reimbursement percent always shows 50%
 - **Tier:** Regression
 - **Category:** BusinessLogic
 - **Priority:** P2-High
@@ -322,7 +322,7 @@
 
 ---
 
-### COOP-CL-TC-016 — Selecting preapproval populates dates and available amount
+### COOP-CL-TC-016 - Selecting preapproval populates dates and available amount
 - **Tier:** Regression
 - **Category:** BusinessLogic
 - **Priority:** P2-High
@@ -337,7 +337,7 @@
 
 ---
 
-### COOP-CL-TC-017 — Consumer media type resets preapproval selection
+### COOP-CL-TC-017 - Consumer media type resets preapproval selection
 - **Tier:** Regression
 - **Category:** BusinessLogic
 - **Priority:** P3-Medium
@@ -351,7 +351,7 @@
 
 ---
 
-### COOP-CL-TC-018 — Advertising radio loads advertising media types
+### COOP-CL-TC-018 - Advertising radio loads advertising media types
 - **Tier:** Regression
 - **Category:** BusinessLogic
 - **Priority:** P2-High
@@ -365,7 +365,7 @@
 
 ---
 
-### COOP-CL-TC-019 — Sales Support radio loads sales support media types
+### COOP-CL-TC-019 - Sales Support radio loads sales support media types
 - **Tier:** Regression
 - **Category:** BusinessLogic
 - **Priority:** P2-High
@@ -379,7 +379,7 @@
 
 ---
 
-### COOP-CL-TC-020 — JDF Finance preapproval only shown when both statuses approved
+### COOP-CL-TC-020 - JDF Finance preapproval only shown when both statuses approved
 - **Tier:** Regression
 - **Category:** BusinessLogic
 - **Priority:** P2-High
@@ -394,7 +394,7 @@
 
 ---
 
-### COOP-CL-TC-021 — Exhausted preapproval not shown in dropdown
+### COOP-CL-TC-021 - Exhausted preapproval not shown in dropdown
 - **Tier:** Regression
 - **Category:** BusinessLogic
 - **Priority:** P2-High
@@ -409,7 +409,7 @@
 
 ---
 
-### COOP-CL-TC-022 — Invoice date future date blocked
+### COOP-CL-TC-022 - Invoice date future date blocked
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P2-High
@@ -423,7 +423,7 @@
 
 ---
 
-### COOP-CL-TC-023 — Invoice amount truncated to 2 decimal places
+### COOP-CL-TC-023 - Invoice amount truncated to 2 decimal places
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P3-Medium
@@ -437,11 +437,11 @@
 
 ---
 
-### — Authorization —
+### - Authorization -
 
 ---
 
-### COOP-CL-TC-024 — BMDLR (dealer) can access claim form
+### COOP-CL-TC-024 - BMDLR (dealer) can access claim form
 - **Tier:** Regression
 - **Category:** Security
 - **Priority:** P2-High
@@ -456,7 +456,7 @@
 
 ---
 
-### COOP-CL-TC-025 — BMAGDLR (agency dealer) can access claim form
+### COOP-CL-TC-025 - BMAGDLR (agency dealer) can access claim form
 - **Tier:** Regression
 - **Category:** Security
 - **Priority:** P2-High
@@ -471,7 +471,7 @@
 
 ---
 
-### COOP-CL-TC-026 — Unauthorized role is redirected
+### COOP-CL-TC-026 - Unauthorized role is redirected
 - **Tier:** Regression
 - **Category:** Security
 - **Priority:** P2-High
@@ -486,7 +486,7 @@
 
 ---
 
-### COOP-CL-TC-027 — Disabled dealer redirected to DealerDisable page
+### COOP-CL-TC-027 - Disabled dealer redirected to DealerDisable page
 - **Tier:** Regression
 - **Category:** Security
 - **Priority:** P1-Critical
@@ -501,7 +501,7 @@
 
 ---
 
-### COOP-CL-TC-028 — BMAGDLR sees only their CRC preapprovals
+### COOP-CL-TC-028 - BMAGDLR sees only their CRC preapprovals
 - **Tier:** Regression
 - **Category:** Security
 - **Priority:** P2-High
@@ -516,11 +516,11 @@
 
 ---
 
-### — Workflow & Data Persistence —
+### - Workflow & Data Persistence -
 
 ---
 
-### COOP-CL-TC-029 — Submitted claim has status RECEIVED / IN PROGRESS
+### COOP-CL-TC-029 - Submitted claim has status RECEIVED / IN PROGRESS
 - **Tier:** Regression
 - **Category:** Workflow
 - **Priority:** P1-Critical
@@ -536,7 +536,7 @@
 
 ---
 
-### COOP-CL-TC-030 — Claim record created on submit
+### COOP-CL-TC-030 - Claim record created on submit
 - **Tier:** Regression
 - **Category:** DataPersistence
 - **Priority:** P1-Critical
@@ -550,7 +550,7 @@
 
 ---
 
-### COOP-CL-TC-031 — Activity record created on submit
+### COOP-CL-TC-031 - Activity record created on submit
 - **Tier:** Regression
 - **Category:** DataPersistence
 - **Priority:** P1-Critical
@@ -565,7 +565,7 @@
 
 ---
 
-### COOP-CL-TC-032 — Activity dates created for each added date
+### COOP-CL-TC-032 - Activity dates created for each added date
 - **Tier:** Regression
 - **Category:** DataPersistence
 - **Priority:** P2-High
@@ -580,7 +580,7 @@
 
 ---
 
-### COOP-CL-TC-033 — Edit of approved activity preserves PROCESSED status
+### COOP-CL-TC-033 - Edit of approved activity preserves PROCESSED status
 - **Tier:** Regression
 - **Category:** Workflow
 - **Priority:** P2-High
@@ -596,7 +596,7 @@
 
 ---
 
-### COOP-CL-TC-034 — Edit of non-approved activity sets VALID status
+### COOP-CL-TC-034 - Edit of non-approved activity sets VALID status
 - **Tier:** Regression
 - **Category:** Workflow
 - **Priority:** P2-High
@@ -611,11 +611,11 @@
 
 ---
 
-### — Boundary Tests —
+### - Boundary Tests -
 
 ---
 
-### COOP-CL-TC-035 — Invoice amount at exactly maximum preapproval remaining
+### COOP-CL-TC-035 - Invoice amount at exactly maximum preapproval remaining
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P2-High
@@ -631,7 +631,7 @@
 
 ---
 
-### COOP-CL-TC-036 — Invoice amount one cent above maximum preapproval balance
+### COOP-CL-TC-036 - Invoice amount one cent above maximum preapproval balance
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P2-High
@@ -646,11 +646,11 @@
 
 ---
 
-### COOP-CL-TC-037 — Activity date exactly today is accepted
+### COOP-CL-TC-037 - Activity date exactly today is accepted
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P3-Medium
-- **BR Covered:** BR-CL-023 (inverse — today is valid)
+- **BR Covered:** BR-CL-023 (inverse - today is valid)
 - **Steps:**
   1. Add today's date as activity date
 - **Expected:** Date accepted; appears in `dgrdActivityDates`
@@ -660,7 +660,7 @@
 
 ---
 
-### COOP-CL-TC-038 — Multiple activity dates all accepted (no duplicates)
+### COOP-CL-TC-038 - Multiple activity dates all accepted (no duplicates)
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P3-Medium
@@ -674,11 +674,11 @@
 
 ---
 
-### — Error Handling —
+### - Error Handling -
 
 ---
 
-### COOP-CL-TC-039 — Session expiry during form fill triggers redirect
+### COOP-CL-TC-039 - Session expiry during form fill triggers redirect
 - **Tier:** Regression
 - **Category:** ErrorHandling
 - **Priority:** P2-High
@@ -693,7 +693,7 @@
 
 ---
 
-### COOP-CL-TC-040 — BMADMIN without querystring scope is handled
+### COOP-CL-TC-040 - BMADMIN without querystring scope is handled
 - **Tier:** Regression
 - **Category:** Security
 - **Priority:** P2-High
@@ -708,7 +708,7 @@
 
 ---
 
-### COOP-CL-TC-041 — NZL dealer sees NZD labels and conversion rate
+### COOP-CL-TC-041 - NZL dealer sees NZD labels and conversion rate
 - **Tier:** Regression
 - **Category:** UI
 - **Priority:** P3-Medium
@@ -724,7 +724,7 @@
 
 ---
 
-### COOP-CL-TC-042 — AUS dealer sees AUD labels (no conversion rate)
+### COOP-CL-TC-042 - AUS dealer sees AUD labels (no conversion rate)
 - **Tier:** Regression
 - **Category:** UI
 - **Priority:** P3-Medium
@@ -739,7 +739,7 @@
 
 ---
 
-### COOP-CL-TC-043 — Delete activity date removes it from grid
+### COOP-CL-TC-043 - Delete activity date removes it from grid
 - **Tier:** Regression
 - **Category:** UI
 - **Priority:** P3-Medium
@@ -754,7 +754,7 @@
 
 ---
 
-### COOP-CL-TC-044 — Invoice amount leading decimal corrected to zero prefix
+### COOP-CL-TC-044 - Invoice amount leading decimal corrected to zero prefix
 - **Tier:** Regression
 - **Category:** Validation
 - **Priority:** P3-Medium
@@ -772,14 +772,14 @@
 
 ---
 
-### COOP-CL-E2E-001 — Full workflow: submit claim → appears in claim status list
+### COOP-CL-E2E-001 - Full workflow: submit claim -> appears in claim status list
 - **Tier:** E2E
 - **Category:** Workflow
 - **Priority:** P1-Critical
 - **BR Covered:** BR-CL-016, BR-CL-028, BR-CL-029, BR-CL-030
 - **Steps:**
   1. Submit a valid claim via full form (Steps 1 + 2)
-  2. Navigate to Claims → View → ClaimStatus
+  2. Navigate to Claims -> View -> ClaimStatus
 - **Expected:** New claim appears with status "RECEIVED" / "IN PROGRESS"
 - **Assertions:**
   - Claim visible in status list
@@ -788,7 +788,7 @@
 
 ---
 
-### COOP-CL-E2E-002 — Full workflow: submit claim → admin sees claim in review queue
+### COOP-CL-E2E-002 - Full workflow: submit claim -> admin sees claim in review queue
 - **Tier:** E2E
 - **Category:** Workflow
 - **Priority:** P2-High
@@ -804,7 +804,7 @@
 
 ---
 
-### COOP-CL-E2E-003 — Edit existing claim updates activity record
+### COOP-CL-E2E-003 - Edit existing claim updates activity record
 - **Tier:** E2E
 - **Category:** Workflow
 - **Priority:** P2-High
@@ -822,7 +822,7 @@
 
 ---
 
-### COOP-CL-E2E-004 — Submit claim with 3 activity dates — all dates persisted
+### COOP-CL-E2E-004 - Submit claim with 3 activity dates - all dates persisted
 - **Tier:** E2E
 - **Category:** DataPersistence
 - **Priority:** P2-High
@@ -837,7 +837,7 @@
 
 ---
 
-### COOP-CL-E2E-005 — Claim amount cap enforced across form — cannot exceed preapproval balance
+### COOP-CL-E2E-005 - Claim amount cap enforced across form - cannot exceed preapproval balance
 - **Tier:** E2E
 - **Category:** BusinessLogic
 - **Priority:** P1-Critical

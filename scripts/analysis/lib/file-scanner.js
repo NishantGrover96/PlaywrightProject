@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * File Scanner — recursively walks a repository directory, applying ignore
+ * File Scanner - recursively walks a repository directory, applying ignore
  * patterns from analysis.config.json.
  *
  * Features:
@@ -91,7 +91,7 @@ async function scan(repoPath, cfg, logger, cacheStore = {}) {
             fullPath, entry.name, ignoredFileRegexes, maxSize,
             files, skipped, cacheStore, logger
           );
-          void accepted; // result not used here — arrays are mutated
+          void accepted; // result not used here - arrays are mutated
         }
       }
 
@@ -145,10 +145,10 @@ async function _processFile(fullPath, name, ignoredFileRegexes, maxSize, files, 
     return false;
   }
 
-  // Cache check — skip if mtime unchanged
+  // Cache check - skip if mtime unchanged
   const mtimeMs = stat.mtimeMs;
   if (cacheStore[fullPath] && cacheStore[fullPath].mtimeMs === mtimeMs) {
-    // File unchanged since last scan — still include in result using cached entry
+    // File unchanged since last scan - still include in result using cached entry
     files.push(fullPath);
     return true;
   }

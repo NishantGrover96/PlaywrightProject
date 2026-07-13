@@ -1,4 +1,4 @@
-# Rebate Whitelist IP — Business Rule Catalog
+# Rebate Whitelist IP - Business Rule Catalog
 Generated: 2026-07-07
 
 | BR ID | Title | Category | Source (Code) | Evidence (UI) | Test Priority |
@@ -11,7 +11,7 @@ Generated: 2026-07-07
 | BR-WL-06 | Comment is required; max length 500 | Validation | `[LocalizedRequired]` + `[MaxLength(500)]` | Required + maxlength validation on Comment field | High |
 | BR-WL-07 | Status is required | Validation | `[LocalizedRequired]` on `Status` | Required field error on save without status | High |
 | BR-WL-08 | IP readonly in edit mode | Business Logic | JS: `mode=edit` disables `#IPAddress` | IP cannot be changed after initial creation | High |
-| BR-WL-09 | Duplicate IP check on CREATE only | Business Logic | `OnPostCheckIPDuplicate` — only runs when `mode=create` | Duplicate check skipped in edit mode | High |
+| BR-WL-09 | Duplicate IP check on CREATE only | Business Logic | `OnPostCheckIPDuplicate` - only runs when `mode=create` | Duplicate check skipped in edit mode | High |
 | BR-WL-10 | IPv4 format validation (client-side JS) | Validation | JS regex on `#IPAddress` | Invalid IPv4 format shows inline error | High |
 | BR-WL-11 | IPv6 format validation (client-side JS) | Validation | JS regex on `#IPAddress` | Invalid IPv6 format shows inline error | Medium |
 | BR-WL-12 | Encrypted IP entry seq in edit URL | Security | `ip_entry_seq` encrypted via `IEncryptDecrypt` | Edit URL uses non-plain-integer seq value | High |

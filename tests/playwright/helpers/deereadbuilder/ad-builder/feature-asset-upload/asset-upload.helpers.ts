@@ -3,7 +3,7 @@ import { AssetUploadPage } from '../../../../pages/deereadbuilder/ad-builder/fea
 import testData from '../../../../data/deereadbuilder/ad-builder/feature-asset-upload/test-data.json';
 
 /**
- * Asset Upload Helpers — Reusable multi-step flows
+ * Asset Upload Helpers - Reusable multi-step flows
  */
 
 /**

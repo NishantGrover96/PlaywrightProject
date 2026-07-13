@@ -1,14 +1,14 @@
 import { defineConfig, devices } from '@playwright/test';
 
 /**
- * UI Analysis Config — Coop Submit Claim
+ * UI Analysis Config - Coop Submit Claim
  * Multi-client, multi-dealer session analysis.
  *
  * 4 projects (run sequentially, 1 worker):
- *   demoportal-dealer1  — DemoPortal UAT, first dealer account
- *   demoportal-dealer2  — DemoPortal UAT, second dealer account
- *   certainteed-dealer1 — CertainTeed UAT, first dealer account
- *   certainteed-dealer2 — CertainTeed UAT, second dealer account
+ *   demoportal-dealer1  - DemoPortal UAT, first dealer account
+ *   demoportal-dealer2  - DemoPortal UAT, second dealer account
+ *   certainteed-dealer1 - CertainTeed UAT, first dealer account
+ *   certainteed-dealer2 - CertainTeed UAT, second dealer account
  *
  * Run:
  *   npx playwright test scripts/ui-analysis-coop-submit-claim.spec.ts `
@@ -16,12 +16,12 @@ import { defineConfig, devices } from '@playwright/test';
  *     --headed --workers=1
  *
  * Credentials: entered live via page.pause() at each login screen.
- * No storageState — every session starts fresh and logs in manually.
+ * No storageState - every session starts fresh and logs in manually.
  */
 export default defineConfig({
   testDir: __dirname,
   testMatch: /ui-analysis-coop-submit-claim\.spec\.ts/,
-  timeout: 600_000,           // 10 min per test — allows for manual login + full wizard walk
+  timeout: 600_000,           // 10 min per test - allows for manual login + full wizard walk
   fullyParallel: false,
   workers: 1,
   use: {
@@ -30,10 +30,10 @@ export default defineConfig({
     trace:      'off',
     screenshot: 'only-on-failure',
     video:      'off',
-    // No storageState — login manually each session
+    // No storageState - login manually each session
   },
   projects: [
-    // ── DemoPortal UAT ────────────────────────────────────────────────
+    // -- DemoPortal UAT ------------------------------------------------
     {
       name: 'demoportal-dealer1',
       use: {
@@ -50,7 +50,7 @@ export default defineConfig({
         launchOptions: { args: ['--start-maximized'] },
       },
     },
-    // ── CertainTeed UAT ───────────────────────────────────────────────
+    // -- CertainTeed UAT -----------------------------------------------
     {
       name: 'certainteed-dealer1',
       use: {

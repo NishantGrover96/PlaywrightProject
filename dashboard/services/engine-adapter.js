@@ -1,6 +1,6 @@
 'use strict';
 /**
- * Engine Adapter — JavaScript bridge between dashboard/server.js and the
+ * Engine Adapter - JavaScript bridge between dashboard/server.js and the
  * TypeScript Execution Engine.
  *
  * Design:
@@ -24,7 +24,7 @@ try { require('./repository-service'); } catch (_) { /* optional */ }
 
 const ROOT = path.join(__dirname, '..', '..');
 
-// ── ID Generator ────────────────────────────────────────────────────────────
+// -- ID Generator ------------------------------------------------------------
 let _seq = 0;
 function generateExecutionId() {
   const ts  = Date.now().toString(36);
@@ -32,7 +32,7 @@ function generateExecutionId() {
   return `exec_${ts}_${rnd}`;
 }
 
-// ── Auth Resolution ──────────────────────────────────────────────────────────
+// -- Auth Resolution ----------------------------------------------------------
 
 const LEGACY_SHARED = new Set(['demoportal', 'certainteed', 'samsung']);
 
@@ -83,7 +83,7 @@ function resolveAuth(clientId, role, environment) {
   };
 }
 
-// ── Environment Resolution ───────────────────────────────────────────────────
+// -- Environment Resolution ---------------------------------------------------
 
 function loadClientConfig(clientId) {
   const p = path.join(ROOT, 'config', 'clients', `${clientId}.json`);
@@ -149,7 +149,7 @@ function resolveEnvironment(clientId, envName, flagOverrides) {
   return { baseUrl, apiUrl, envFileName: envCfg?.envFile ?? envName, timeouts, featureFlags };
 }
 
-// ── Artifact Paths ────────────────────────────────────────────────────────────
+// -- Artifact Paths ------------------------------------------------------------
 
 function formatDate(d) {
   const y = d.getFullYear();
@@ -173,7 +173,7 @@ function buildArtifactPaths(clientId, executionId, date) {
   };
 }
 
-// ── Spec Path Resolution ──────────────────────────────────────────────────────
+// -- Spec Path Resolution ------------------------------------------------------
 
 const TIER_TAGS = { smoke: '@smoke', regression: '@regression', e2e: '@e2e' };
 
@@ -185,7 +185,7 @@ function resolveSpecPaths(clientId, features, moduleId, warnings) {
   for (const fid of features) {
     const sp = catalogService.getSpecPath(fid, clientId) ?? catalogService.getSpecPath(fid, null);
     if (sp) { paths.push(sp); continue; }
-    warnings.push(`Feature '${fid}': no spec path in catalog — skipping.`);
+    warnings.push(`Feature '${fid}': no spec path in catalog - skipping.`);
   }
   return [...new Set(paths)];
 }
@@ -204,12 +204,12 @@ function resolveModulePath(clientId, moduleId, warnings) {
   if (moduleId) {
     const mod = path.join(legacyDir, moduleId.toLowerCase());
     if (fs.existsSync(path.join(ROOT, mod))) return [mod];
-    warnings.push(`Module dir not found: ${mod} — running all specs.`);
+    warnings.push(`Module dir not found: ${mod} - running all specs.`);
   }
   return [legacyDir];
 }
 
-// ── Plan Builder ───────────────────────────────────────────────────────────────
+// -- Plan Builder ---------------------------------------------------------------
 
 /**
  * Build a complete ExecutionPlan from an ExecutionRequest.
@@ -234,7 +234,7 @@ function buildPlan(request) {
   const features  = Array.isArray(request.features) ? request.features : (featureId ? [featureId] : []);
 
   const clientCfg = clientService.getClient(clientId);
-  if (!clientCfg) warnings.push(`Client '${clientId}' not found — using defaults.`);
+  if (!clientCfg) warnings.push(`Client '${clientId}' not found - using defaults.`);
 
   const auth        = resolveAuth(clientId, role, envName);
   const resolvedEnv = resolveEnvironment(clientId, envName, request.featureFlags);

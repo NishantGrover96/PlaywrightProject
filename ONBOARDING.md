@@ -1,4 +1,4 @@
-# DealerPlatform QA — Developer Onboarding Guide
+# DealerPlatform QA - Developer Onboarding Guide
 
 > **Last updated:** 2026-07-09
 > **Maintained by:** QA Team
@@ -11,10 +11,10 @@
 
 1. [Prerequisites](#1-prerequisites)
 2. [Complete Head-to-Toe Setup Flow](#2-complete-head-to-toe-setup-flow)
-3. [Phase A — Environment Setup (one-time, manual)](#3-phase-a--environment-setup-one-time-manual)
-4. [Phase B — Client Setup (once per new client)](#4-phase-b--client-setup-once-per-new-client)
-5. [Phase C — Feature Setup (once per new feature)](#5-phase-c--feature-setup-once-per-new-feature)
-6. [Phase D — Auth & Verification](#6-phase-d--auth--verification)
+3. [Phase A - Environment Setup (one-time, manual)](#3-phase-a--environment-setup-one-time-manual)
+4. [Phase B - Client Setup (once per new client)](#4-phase-b--client-setup-once-per-new-client)
+5. [Phase C - Feature Setup (once per new feature)](#5-phase-c--feature-setup-once-per-new-feature)
+6. [Phase D - Auth & Verification](#6-phase-d--auth--verification)
 7. [Which Skill Do I Need?](#7-which-skill-do-i-need)
 8. [Key Files Reference](#8-key-files-reference)
 9. [Folder Conventions](#9-folder-conventions)
@@ -30,10 +30,10 @@
 | Tool | Version | Download |
 |---|---|---|
 | **Node.js** | 20.x LTS | https://nodejs.org |
-| **npm** | bundled with Node | — |
+| **npm** | bundled with Node | - |
 | **Git** | any recent | https://git-scm.com |
 | **VS Code** | latest stable | https://code.visualstudio.com |
-| **PowerShell** | 5.1+ (Windows default) | — |
+| **PowerShell** | 5.1+ (Windows default) | - |
 
 ### 1.2 VS Code Extensions
 
@@ -46,7 +46,7 @@ Install these before opening the repo:
 | GitHub Copilot Chat | `GitHub.copilot-chat` |
 | ESLint | `dbaeumer.vscode-eslint` |
 
-> TypeScript support is built into VS Code — no extension needed.
+> TypeScript support is built into VS Code - no extension needed.
 
 ### 1.3 Access Required
 
@@ -64,16 +64,16 @@ Request the following from your team lead before starting:
 Use this as your checklist. Every step is detailed in the sections below.
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│  PHASE A — Environment Setup  (one-time, manual)                │
+┌-----------------------------------------------------------------┐
+│  PHASE A - Environment Setup  (one-time, manual)                │
 │                                                                  │
 │  A1. Install Node.js 20, Git, VS Code, VS Code extensions       │
 │  A2. git clone <qa-repo-url> d:\Leads\PlayWright                │
 │                                                                  │
-├─────────────────────────────────────────────────────────────────┤
-│  PHASE B — Client Setup  (once per new client)                  │
+├-----------------------------------------------------------------┤
+│  PHASE B - Client Setup  (once per new client)                  │
 │                                                                  │
-│  B1. Run: .\scripts\new-client.ps1   ← full interactive wizard  │
+│  B1. Run: .\scripts\new-client.ps1   <- full interactive wizard  │
 │      Handles automatically:                                      │
 │        npm install + Playwright Chromium                         │
 │        config/clients/{clientId}.json                            │
@@ -86,8 +86,8 @@ Use this as your checklist. Every step is detailed in the sections below.
 │        Dashboard API health check + auto-fix                     │
 │      Prints the exact Copilot Chat commands to run next          │
 │                                                                  │
-├─────────────────────────────────────────────────────────────────┤
-│  PHASE C — Feature Setup  (repeat for EACH feature to automate) │
+├-----------------------------------------------------------------┤
+│  PHASE C - Feature Setup  (repeat for EACH feature to automate) │
 │                                                                  │
 │  C1. Scaffold the feature:                                       │
 │      .\scripts\new-module.ps1 \                                  │
@@ -97,46 +97,46 @@ Use this as your checklist. Every step is detailed in the sections below.
 │               api spec / sql / catalog HTML placeholder          │
 │                                                                  │
 │  C2. Copilot Chat: /repo-analysis                                │
-│      Reads source code → extracts business rules, fields,        │
+│      Reads source code -> extracts business rules, fields,        │
 │      validation, endpoints, DB queries                           │
 │                                                                  │
 │  C3. Copilot Chat: /functional-test-catalog                      │
 │      Generates HTML catalog + test-catalog.md                    │
-│      ── GATE: review & approve the catalog before continuing ──  │
+│      -- GATE: review & approve the catalog before continuing --  │
 │                                                                  │
 │  C4. Copilot Chat: /playwright-test-generation                   │
 │      Implements Page Object + spec files from the catalog        │
 │      Updates dashboard/catalog-manifest.json                     │
 │                                                                  │
-│  Repeat C1→C4 for each additional feature                        │
+│  Repeat C1->C4 for each additional feature                        │
 │                                                                  │
-├─────────────────────────────────────────────────────────────────┤
-│  PHASE D — Auth & Verification  (once per client)               │
+├-----------------------------------------------------------------┤
+│  PHASE D - Auth & Verification  (once per client)               │
 │                                                                  │
 │  D1. Run auth setup:                                             │
 │      npx playwright test --project=setup-{clientId}              │
 │                                                                  │
 │  D2. Verify on dashboard:                                        │
-│      npm run dashboard  →  http://localhost:3333                  │
-│      Select client → confirm features appear                     │
+│      npm run dashboard  ->  http://localhost:3333                  │
+│      Select client -> confirm features appear                     │
 │                                                                  │
 │  D3. Run smoke tests:                                            │
 │      npx playwright test \                                       │
 │          --project=chromium-{clientId} --grep @smoke             │
-└─────────────────────────────────────────────────────────────────┘
+└-----------------------------------------------------------------┘
 ```
 
 ---
 
-## 3. Phase A — Environment Setup (one-time, manual)
+## 3. Phase A - Environment Setup (one-time, manual)
 
 ### A1. Install System Tools
 
 Install in this order:
-1. **Node.js 20 LTS** — https://nodejs.org (npm is bundled)
-2. **Git** — https://git-scm.com
-3. **VS Code** — https://code.visualstudio.com
-4. **VS Code extensions** — install all four listed in [Section 1.2](#12-vs-code-extensions)
+1. **Node.js 20 LTS** - https://nodejs.org (npm is bundled)
+2. **Git** - https://git-scm.com
+3. **VS Code** - https://code.visualstudio.com
+4. **VS Code extensions** - install all four listed in [Section 1.2](#12-vs-code-extensions)
 
 ### A2. Clone the Repo
 
@@ -150,7 +150,7 @@ cd d:\Leads\PlayWright
 
 ---
 
-## 4. Phase B — Client Setup (once per new client)
+## 4. Phase B - Client Setup (once per new client)
 
 ### B1. Run the Client Wizard
 
@@ -159,8 +159,8 @@ cd d:\Leads\PlayWright
 ```
 
 The wizard walks you through every question in two phases:
-- **Phase 0** — collects all inputs (client ID, display name, base URL, auth type, modules, credentials)
-- **Phase 1** — executes all setup steps and prints a final summary
+- **Phase 0** - collects all inputs (client ID, display name, base URL, auth type, modules, credentials)
+- **Phase 1** - executes all setup steps and prints a final summary
 
 **What the wizard creates automatically:**
 
@@ -174,7 +174,7 @@ The wizard walks you through every question in two phases:
 | Per-client catalog manifest | `dashboard/catalogs/{clientId}-manifest.json` |
 | Functional catalog folder | `docs/functional-catalogs/{clientId}/` |
 | Playwright folder structure | `tests/playwright/specs|pages|data/{clientId}/` |
-| Dashboard dropdown entry | `dashboard/index.html` — `sel-client` option added |
+| Dashboard dropdown entry | `dashboard/index.html` - `sel-client` option added |
 | Dashboard health check | Runs automatically, auto-fixes detectable issues |
 
 **At the end**, the wizard prints the exact Copilot Chat commands to run next (per module/feature).
@@ -185,11 +185,11 @@ The wizard walks you through every question in two phases:
 
 ---
 
-## 5. Phase C — Feature Setup (once per new feature)
+## 5. Phase C - Feature Setup (once per new feature)
 
 Repeat these four steps for **each** feature you want to automate.
 
-### C1. Scaffold the Feature — `new-module.ps1`
+### C1. Scaffold the Feature - `new-module.ps1`
 
 ```powershell
 .\scripts\new-module.ps1 `
@@ -261,7 +261,7 @@ Updates `dashboard/catalog-manifest.json` with the new feature entry.
 
 ---
 
-## 6. Phase D — Auth & Verification
+## 6. Phase D - Auth & Verification
 
 ### D1. Run Auth Setup (once per client)
 
@@ -278,7 +278,7 @@ Re-run any time you get authentication errors.
 npm run dashboard
 ```
 
-Open **http://localhost:3333** — select the client from the dropdown.  
+Open **http://localhost:3333** - select the client from the dropdown.  
 Confirm all features appear and "View Catalog" opens the HTML catalog.
 
 ### D3. Run Smoke Tests
@@ -299,17 +299,17 @@ Are you validating that a feature migrated from Legacy works correctly in Modern
 
 | Answer | Skill to use | When |
 |---|---|---|
-| **Yes** — comparing Legacy vs Modern | **migration-qa-framework** | After scaffold (C1) |
-| **No** — standalone feature QA | **functional-qa-test-generation** | After scaffold (C1) |
-| **Neither** — targeted operation | Other skills below | As needed |
+| **Yes** - comparing Legacy vs Modern | **migration-qa-framework** | After scaffold (C1) |
+| **No** - standalone feature QA | **functional-qa-test-generation** | After scaffold (C1) |
+| **Neither** - targeted operation | Other skills below | As needed |
 
 ### Other Available Skills
 
 | Skill | Copilot Command | When to Use |
 |---|---|---|
-| **Repo Analysis** | `/repo-analysis` | Step C2 — read source code only |
-| **Functional Test Catalog** | `/functional-test-catalog` | Step C3 — generate or update catalog |
-| **Playwright Test Generation** | `/playwright-test-generation` | Step C4 — implement tests from approved catalog |
+| **Repo Analysis** | `/repo-analysis` | Step C2 - read source code only |
+| **Functional Test Catalog** | `/functional-test-catalog` | Step C3 - generate or update catalog |
+| **Playwright Test Generation** | `/playwright-test-generation` | Step C4 - implement tests from approved catalog |
 | **Scaffold** | `/scaffold` | Alternative to `new-module.ps1` via Copilot Chat |
 | **API Verification** | `/api-verification` | Generate API-level test specs |
 | **Database Verification** | `/database-verification` | Generate SQL verification scripts |
@@ -323,13 +323,13 @@ Are you validating that a feature migrated from Legacy works correctly in Modern
 
 ## 8. Key Files Reference
 
-| File | Purpose | Edit when… |
+| File | Purpose | Edit when... |
 |---|---|---|
 | `playwright.config.ts` | Projects, timeouts, reporters, auth wiring | Adding a new client project/role |
 | `package.json` | All `npm run test:*` shortcuts | Adding a new module npm shortcut |
 | `config/clients/{clientId}.json` | Client config (URL, auth type, modules) | Auto-created by `new-client.ps1` |
 | `config/users/{clientId}/users.json` | Credentials for the client | Fill placeholders after wizard |
-| `dashboard/server.js` | Dashboard backend | Rarely — auto-maintained |
+| `dashboard/server.js` | Dashboard backend | Rarely - auto-maintained |
 | `dashboard/catalog-manifest.json` | Global feature registry + test health | Auto-updated by skills + health check |
 | `dashboard/catalogs/{clientId}-manifest.json` | Per-client feature registry | Auto-updated by skills |
 | `dashboard/index.html` | Dashboard UI | Auto-updated by `new-client.ps1` |
@@ -344,16 +344,16 @@ Every client / module / feature follows this identical layout:
 
 ```
 tests/playwright/
-  specs/{client}/{module}/feature-{name}/     ← .spec.ts test cases
-  pages/{client}/{module}/feature-{name}/     ← Page Object Model (.ts)
-  helpers/{client}/{module}/feature-{name}/   ← reusable helper functions
-  data/{client}/{module}/feature-{name}/      ← test-data.json
+  specs/{client}/{module}/feature-{name}/     <- .spec.ts test cases
+  pages/{client}/{module}/feature-{name}/     <- Page Object Model (.ts)
+  helpers/{client}/{module}/feature-{name}/   <- reusable helper functions
+  data/{client}/{module}/feature-{name}/      <- test-data.json
 
-tests/api/{client}/{module}/feature-{name}/   ← API spec files
-tests/database/{client}/{module}/feature-{name}/ ← SQL verification scripts
+tests/api/{client}/{module}/feature-{name}/   <- API spec files
+tests/database/{client}/{module}/feature-{name}/ <- SQL verification scripts
 
 docs/functional-catalogs/{client}/{module}/feature-{name}/
-  functional-units.html                       ← interactive catalog (view at /docs/ on dashboard)
+  functional-units.html                       <- interactive catalog (view at /docs/ on dashboard)
   test-catalog.md
   smoke-suite.md
   regression-suite.md
@@ -375,34 +375,34 @@ reports/test-results/{client}/{module}/feature-{name}/
 ## 10. Quick Command Reference
 
 ```powershell
-# ── Phase B — Client setup ─────────────────────────────────
+# -- Phase B - Client setup ---------------------------------
 .\scripts\new-client.ps1
 
-# ── Phase C1 — Feature scaffold ───────────────────────────
+# -- Phase C1 - Feature scaffold ---------------------------
 .\scripts\new-module.ps1 -Client {clientId} -Module {module} -Feature {feature} -Label "{Label}"
 
-# ── Phase D1 — Auth setup ──────────────────────────────────
+# -- Phase D1 - Auth setup ----------------------------------
 npx playwright test --project=setup-{clientId}
 
-# ── Phase D2 — Dashboard ───────────────────────────────────
-npm run dashboard                        # → http://localhost:3333
+# -- Phase D2 - Dashboard -----------------------------------
+npm run dashboard                        # -> http://localhost:3333
 
-# ── Phase D3 — Smoke tests ─────────────────────────────────
+# -- Phase D3 - Smoke tests ---------------------------------
 npx playwright test --project=chromium-{clientId} --grep @smoke
 
-# ── Run by tier ────────────────────────────────────────────
+# -- Run by tier --------------------------------------------
 npm run test:smoke
 npm run test:regression
 npm run test:e2e
 
-# ── Run by environment ─────────────────────────────────────
+# -- Run by environment -------------------------------------
 npm run test:uat
 npm run test:prod
 
-# ── TypeScript check (no emit) ─────────────────────────────
+# -- TypeScript check (no emit) -----------------------------
 npx tsc --noEmit
 
-# ── HTML report ────────────────────────────────────────────
+# -- HTML report --------------------------------------------
 npm run report
 ```
 
@@ -434,10 +434,10 @@ This file is divided into numbered phases so any section can be updated without 
 | Tool | Version | Download |
 |---|---|---|
 | **Node.js** | 20.x LTS | https://nodejs.org |
-| **npm** | bundled with Node | — |
+| **npm** | bundled with Node | - |
 | **Git** | any recent | https://git-scm.com |
 | **VS Code** | latest stable | https://code.visualstudio.com |
-| **PowerShell** | 5.1+ (Windows default) | — |
+| **PowerShell** | 5.1+ (Windows default) | - |
 
 ### 1.2 VS Code Extensions
 
@@ -450,7 +450,7 @@ Install these before opening the repo:
 | GitHub Copilot Chat | `GitHub.copilot-chat` |
 | ESLint | `dbaeumer.vscode-eslint` |
 
-> TypeScript support is built into VS Code — no extension needed.
+> TypeScript support is built into VS Code - no extension needed.
 
 ### 1.3 Access Required
 
@@ -483,7 +483,7 @@ npx playwright install chromium
 
 ### 2.3 Create Environment File
 
-Create `.env.production` in the repo root. **Never commit this file — it is gitignored.**
+Create `.env.production` in the repo root. **Never commit this file - it is gitignored.**
 
 ```env
 BASE_URL=https://demoportaluat.channel-fusion.com
@@ -499,7 +499,7 @@ For local dev, copy to `.env.dev` and update values.
 
 ### 2.4 Configure Local Repo Paths
 
-Create `config/repos.local.json` — **gitignored, your local copy only**.
+Create `config/repos.local.json` - **gitignored, your local copy only**.
 Use `config/repos.json` as the reference template.
 
 ```json
@@ -558,7 +558,7 @@ npm run dashboard
 
 Open in browser: **http://localhost:3333**
 
-Select module, feature, tier (smoke / regression / e2e), and role (dealer / admin) — results stream in real time without using the command line.
+Select module, feature, tier (smoke / regression / e2e), and role (dealer / admin) - results stream in real time without using the command line.
 
 ---
 
@@ -572,13 +572,13 @@ Are you validating that a feature migrated from Legacy works correctly in Modern
 
 | Answer | Skill to use | Go to |
 |---|---|---|
-| **Yes** — I have both a Legacy codebase and a Modern codebase and I need to compare them | **migration-qa-framework** | [Section 4](#4-skill-1--migration-qa-framework-legacy--modern) |
-| **No** — I just need full QA coverage for a standalone module/feature | **functional-qa-test-generation** | [Section 5](#5-skill-2--functional-qa-test-generation-independent-module) |
-| **Neither** — I need something else (scaffold, API tests, DB checks, gap analysis…) | Other skills | [Section 6](#6-other-available-skills) |
+| **Yes** - I have both a Legacy codebase and a Modern codebase and I need to compare them | **migration-qa-framework** | [Section 4](#4-skill-1--migration-qa-framework-legacy--modern) |
+| **No** - I just need full QA coverage for a standalone module/feature | **functional-qa-test-generation** | [Section 5](#5-skill-2--functional-qa-test-generation-independent-module) |
+| **Neither** - I need something else (scaffold, API tests, DB checks, gap analysis...) | Other skills | [Section 6](#6-other-available-skills) |
 
 ---
 
-## 4. Skill 1 — Migration QA Framework (Legacy → Modern)
+## 4. Skill 1 - Migration QA Framework (Legacy -> Modern)
 
 **Use this when:** You have a feature in the Legacy platform (DemoPortalV2 Razor Pages + DLL libraries) and you need to prove the Modern implementation behaves identically.
 
@@ -586,7 +586,7 @@ Are you validating that a feature migrated from Legacy works correctly in Modern
 
 ```
 Step 1   Scaffold (one-time)      creates folder structure for module/feature
-Step 2   Legacy Analysis          reads Legacy source — fields, rules, validation, DB
+Step 2   Legacy Analysis          reads Legacy source - fields, rules, validation, DB
 Step 2.5 Gap Analysis             compares Legacy vs Modern code side by side
 Step 2.6 Coverage Sign-Off Gate   you review gaps before automation starts
 Step 3   Playwright Test Gen      generates test files for both Legacy + Modern
@@ -596,10 +596,10 @@ Step 4   Test Execution           runs tests, diffs results, updates dashboard
 ### Inputs Required Before Starting
 
 Update `config/repos.local.json` with:
-- `legacy.root` — path to Legacy DemoPortalV2 on your machine
-- `legacy.webFolder` — e.g. `Presentation\Web`
+- `legacy.root` - path to Legacy DemoPortalV2 on your machine
+- `legacy.webFolder` - e.g. `Presentation\Web`
 - Feature entry with `featurePath` and `featureUrl`
-- `modern.root` — path to Modern repo (or `"none"` if not yet available)
+- `modern.root` - path to Modern repo (or `"none"` if not yet available)
 
 ### How to Start in Copilot Chat
 
@@ -629,18 +629,18 @@ Copilot will pause at **Step 2.6** for your gap review and sign-off before any t
 
 ---
 
-## 5. Skill 2 — Functional QA Test Generation (Independent Module)
+## 5. Skill 2 - Functional QA Test Generation (Independent Module)
 
-**Use this when:** You need full QA coverage for a standalone feature — no Legacy/Modern comparison needed. The feature exists in one codebase (e.g. EngageAds in DemoPortalV2) and you want comprehensive automated tests for it.
+**Use this when:** You need full QA coverage for a standalone feature - no Legacy/Modern comparison needed. The feature exists in one codebase (e.g. EngageAds in DemoPortalV2) and you want comprehensive automated tests for it.
 
 ### What It Does
 
 ```
-Step 1   Repo Analysis       reads source code — fields, business rules, validation
+Step 1   Repo Analysis       reads source code - fields, business rules, validation
 Step 2   UI Analysis         runs Playwright against live UAT URL, maps selectors
 Step 3   Business Rules      correlates code + UI to extract every testable rule
 Step 4   Test Catalog        generates HTML + Markdown catalog (smoke/regression/e2e)
-         ↓ [GATE — you review & approve the catalog before automation starts]
+         v [GATE - you review & approve the catalog before automation starts]
 Step 5   Test Generation     creates .spec.ts, Page Object, helpers, test-data.json
 Step 6   Verification        TypeScript compile check, runs tests
 Step 7   Dashboard update    updates catalog-manifest.json + server.js + index.html
@@ -700,14 +700,14 @@ Use these in Copilot Chat when you need a targeted operation rather than the ful
 | Skill | Copilot Command | When to Use |
 |---|---|---|
 | **Scaffold** | `/scaffold` | Create folder structure for a brand-new module/feature (run before migration-qa-framework) |
-| **Repo Analysis** | `/repo-analysis` | Read and document source code only — no tests generated |
+| **Repo Analysis** | `/repo-analysis` | Read and document source code only - no tests generated |
 | **UI Analysis** | `/ui-analysis` | Inspect live app and map selectors only |
 | **Functional Test Catalog** | `/functional-test-catalog` | Generate or update test catalog only |
 | **Playwright Test Generation** | `/playwright-test-generation` | Generate tests from an existing approved catalog |
 | **API Verification** | `/api-verification` | Generate API-level test specs |
 | **Database Verification** | `/database-verification` | Generate SQL verification scripts |
 | **Gap Analysis** | `/gap-analysis` | Compare Legacy vs Modern code side by side |
-| **Coverage Sign-Off** | `/coverage-signoff` | Gate check before automation — use after gap analysis |
+| **Coverage Sign-Off** | `/coverage-signoff` | Gate check before automation - use after gap analysis |
 | **Migration Comparison** | `/migration-comparison` | Compare test results between Legacy and Modern runs |
 
 > Full skill documentation: `.github/skills/{skill-name}/SKILL.md`
@@ -717,16 +717,16 @@ Use these in Copilot Chat when you need a targeted operation rather than the ful
 
 ## 7. Key Files Reference
 
-| File | Purpose | Edit when… |
+| File | Purpose | Edit when... |
 |---|---|---|
 | `playwright.config.ts` | Projects, timeouts, reporters, auth wiring | Adding a new project/role |
 | `package.json` | All `npm run test:*` shortcuts | Adding a new module npm shortcut |
 | `config/repos.local.json` | **Your local** source + UAT paths (gitignored) | Adding a new feature to the pipeline |
-| `config/repos.json` | Template — committed, no real values | Changing the config schema |
+| `config/repos.json` | Template - committed, no real values | Changing the config schema |
 | `dashboard/server.js` | Dashboard backend + `FEATURE_FOLDERS` map | Adding a new feature to the dashboard |
 | `dashboard/catalog-manifest.json` | Feature registry + test health tracking | Auto-updated by skill pipeline |
-| `dashboard/index.html` | Dashboard UI — feature checkboxes | Auto-updated by skill pipeline |
-| `AGENTS.md` | Skill index — which skill does what | Adding a new skill |
+| `dashboard/index.html` | Dashboard UI - feature checkboxes | Auto-updated by skill pipeline |
+| `AGENTS.md` | Skill index - which skill does what | Adding a new skill |
 | `ONBOARDING.md` | This file | Onboarding content changes |
 
 ---
@@ -737,16 +737,16 @@ Every module and feature follows this identical layout across all layers:
 
 ```
 tests/playwright/
-  specs/{module}/feature-{name}/        ← .spec.ts test cases
-  pages/{module}/feature-{name}/        ← Page Object Model (.ts)
-  helpers/{module}/feature-{name}/      ← reusable helper functions
-  data/{module}/feature-{name}/         ← test-data.json
+  specs/{module}/feature-{name}/        <- .spec.ts test cases
+  pages/{module}/feature-{name}/        <- Page Object Model (.ts)
+  helpers/{module}/feature-{name}/      <- reusable helper functions
+  data/{module}/feature-{name}/         <- test-data.json
 
-tests/api/{module}/feature-{name}/      ← API spec files
-tests/database/{module}/feature-{name}/ ← SQL verification scripts
+tests/api/{module}/feature-{name}/      <- API spec files
+tests/database/{module}/feature-{name}/ <- SQL verification scripts
 
 docs/functional-catalogs/{module}/feature-{name}/
-  functional-units.html                 ← interactive catalog (viewable at /docs/ on dashboard)
+  functional-units.html                 <- interactive catalog (viewable at /docs/ on dashboard)
   test-catalog.md
   smoke-suite.md
   regression-suite.md
@@ -758,7 +758,7 @@ docs/module-analysis/{module}/feature-{name}/
   business-rules.md
 
 docs/migration-reports/{module}/feature-{name}/
-  mapping.md                            ← Legacy vs Modern gap map (migration skill only)
+  mapping.md                            <- Legacy vs Modern gap map (migration skill only)
 
 reports/readiness/{module}/feature-{name}/
 reports/test-results/{module}/feature-{name}/
@@ -771,41 +771,41 @@ reports/test-results/{module}/feature-{name}/
 ## 9. Quick Command Reference
 
 ```powershell
-# ── Install ────────────────────────────────────────────────
+# -- Install ------------------------------------------------
 npm install
 npx playwright install chromium
 
-# ── Auth setup (run once per environment) ─────────────────
+# -- Auth setup (run once per environment) -----------------
 npx playwright test tests/playwright/specs/auth.setup.ts --project=setup
 npx playwright test tests/playwright/specs/auth.setup.admin.ts --project=setup-admin
 
-# ── Run all tests ──────────────────────────────────────────
+# -- Run all tests ------------------------------------------
 npm test
 
-# ── Run by tier ────────────────────────────────────────────
+# -- Run by tier --------------------------------------------
 npm run test:smoke
 npm run test:regression
 npm run test:e2e
 
-# ── Run by environment ─────────────────────────────────────
+# -- Run by environment -------------------------------------
 npm run test:uat
 npm run test:prod
 
-# ── Run by module ──────────────────────────────────────────
+# -- Run by module ------------------------------------------
 npm run test:coop
 npx playwright test tests/playwright/specs/engage-ads/
 npx playwright test tests/playwright/specs/popshop/
 
-# ── Run single feature ─────────────────────────────────────
+# -- Run single feature -------------------------------------
 npx playwright test tests/playwright/specs/engage-ads/feature-view-package/ --project=chromium
 
-# ── Dashboard ──────────────────────────────────────────────
-npm run dashboard                       # → http://localhost:3333
+# -- Dashboard ----------------------------------------------
+npm run dashboard                       # -> http://localhost:3333
 
-# ── HTML report ────────────────────────────────────────────
+# -- HTML report --------------------------------------------
 npm run report
 
-# ── TypeScript check (no emit) ─────────────────────────────
+# -- TypeScript check (no emit) -----------------------------
 npx tsc --noEmit
 ```
 

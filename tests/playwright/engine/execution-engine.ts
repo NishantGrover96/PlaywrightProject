@@ -1,21 +1,21 @@
 /**
- * Execution Engine — Principal Facade
+ * Execution Engine - Principal Facade
  *
  * The single entry point for all execution requests.
  * Orchestrates the full pipeline:
  *
  *   ExecutionRequest
- *     → validate
- *     → auth-resolver      → ResolvedAuth
- *     → environment-resolver → ResolvedEnvironment
- *     → artifact-manager   → ExecutionArtifacts
- *     → buildCliArgs       → cliArgs, envVars
- *     → ExecutionPlan
- *     → queue              → QueuedExecution
- *     → playwright-runtime → RawRunOutput
- *     → result-processor   → ExecutionResult
- *     → artifact-manager   → write logs + result JSON
- *     → emit events        → dashboard SSE
+ *     -> validate
+ *     -> auth-resolver      -> ResolvedAuth
+ *     -> environment-resolver -> ResolvedEnvironment
+ *     -> artifact-manager   -> ExecutionArtifacts
+ *     -> buildCliArgs       -> cliArgs, envVars
+ *     -> ExecutionPlan
+ *     -> queue              -> QueuedExecution
+ *     -> playwright-runtime -> RawRunOutput
+ *     -> result-processor   -> ExecutionResult
+ *     -> artifact-manager   -> write logs + result JSON
+ *     -> emit events        -> dashboard SSE
  *
  * The engine is an EventEmitter. Callers subscribe to receive live updates.
  * It does NOT know about HTTP, SSE, or the dashboard directly.
@@ -47,7 +47,7 @@ import type { RuntimeOptions               } from './playwright-runtime';
 
 const WORKSPACE_ROOT = path.join(__dirname, '..', '..', '..');
 
-// ── Constants ──────────────────────────────────────────────────────────────
+// -- Constants --------------------------------------------------------------
 
 const TIER_TAGS: Record<string, string> = {
   smoke:      '@smoke',
@@ -62,10 +62,10 @@ function generateExecutionId(): string {
   return `exec_${ts}_${rnd}`;
 }
 
-// ── Engine Options ─────────────────────────────────────────────────────────
+// -- Engine Options ---------------------------------------------------------
 
 export interface EngineOptions {
-  /** Called for each stdout line — wire this to your SSE broadcaster */
+  /** Called for each stdout line - wire this to your SSE broadcaster */
   onLine?:     (line: string, executionId: string) => void;
   /** Called for each test result line */
   onResult?:   (name: string, status: 'pass' | 'fail' | 'skip', duration?: string) => void;
@@ -75,7 +75,7 @@ export interface EngineOptions {
   bypass?: boolean;
 }
 
-// ── Catalog / Client Service Imports ──────────────────────────────────────
+// -- Catalog / Client Service Imports --------------------------------------
 // The engine reads catalog and client data the same way execution-resolver.js does,
 // but through Node.js require (since these are JS dashboard services).
 
@@ -86,7 +86,7 @@ const clientService  = require('../../dashboard/services/client-service');
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const repoService    = require('../../dashboard/services/repository-service');
 
-// ── Spec Path Resolution ───────────────────────────────────────────────────
+// -- Spec Path Resolution ---------------------------------------------------
 
 function resolveSpecPaths(
   clientId:  string,
@@ -104,7 +104,7 @@ function resolveSpecPaths(
     const specPath = catalogService.getSpecPath(fid, clientId)
                   ?? catalogService.getSpecPath(fid, null);
     if (specPath) { paths.push(specPath); continue; }
-    warnings.push(`Feature '${fid}': no spec path in catalog — skipping.`);
+    warnings.push(`Feature '${fid}': no spec path in catalog - skipping.`);
   }
 
   return [...new Set(paths)];
@@ -129,12 +129,12 @@ function resolveModulePath(
   if (moduleId) {
     const mod = path.join(legacyDir, moduleId.toLowerCase());
     if (fs.existsSync(path.join(WORKSPACE_ROOT, mod))) return [mod];
-    warnings.push(`Module dir not found: ${mod} — running all specs.`);
+    warnings.push(`Module dir not found: ${mod} - running all specs.`);
   }
   return [legacyDir];
 }
 
-// ── Scope Classifier ───────────────────────────────────────────────────────
+// -- Scope Classifier -------------------------------------------------------
 
 function classifyScope(req: ExecutionRequest): ExecutionScope {
   if (req.featureId)                return 'feature';
@@ -143,7 +143,7 @@ function classifyScope(req: ExecutionRequest): ExecutionScope {
   return 'platform';
 }
 
-// ── CLI Args Builder ───────────────────────────────────────────────────────
+// -- CLI Args Builder -------------------------------------------------------
 
 function buildCliArgs(
   specPaths:   string[],
@@ -185,7 +185,7 @@ function buildCliArgs(
   return args;
 }
 
-// ── Env Vars Builder ───────────────────────────────────────────────────────
+// -- Env Vars Builder -------------------------------------------------------
 
 function buildExtraEnvVars(
   req:  ExecutionRequest,
@@ -221,7 +221,7 @@ function buildExtraEnvVars(
   return extras;
 }
 
-// ── Plan Builder ───────────────────────────────────────────────────────────
+// -- Plan Builder -----------------------------------------------------------
 
 function buildPlan(req: ExecutionRequest): ExecutionPlan {
   const errors:   string[] = [];
@@ -240,7 +240,7 @@ function buildPlan(req: ExecutionRequest): ExecutionPlan {
 
   // 1. Validate client
   const clientCfg = clientService.getClient(clientId);
-  if (!clientCfg) warnings.push(`Client '${clientId}' config not found — using defaults.`);
+  if (!clientCfg) warnings.push(`Client '${clientId}' config not found - using defaults.`);
 
   // 2. Resolve auth
   const auth = resolveAuth(clientId, role, envName);
@@ -327,7 +327,7 @@ function buildPlan(req: ExecutionRequest): ExecutionPlan {
   };
 }
 
-// ── Execution Engine ───────────────────────────────────────────────────────
+// -- Execution Engine -------------------------------------------------------
 
 export class ExecutionEngine extends EventEmitter {
   constructor() {
@@ -400,7 +400,7 @@ export class ExecutionEngine extends EventEmitter {
     return defaultQueue.getAll();
   }
 
-  // ── Internal Runner ────────────────────────────────────────────────────
+  // -- Internal Runner ----------------------------------------------------
 
   private async _runPlan(
     plan: ExecutionPlan,
@@ -452,11 +452,11 @@ export class ExecutionEngine extends EventEmitter {
   }
 }
 
-// ── Singleton ──────────────────────────────────────────────────────────────
+// -- Singleton --------------------------------------------------------------
 
 export const engine = new ExecutionEngine();
 
-// ── Helpers ────────────────────────────────────────────────────────────────
+// -- Helpers ----------------------------------------------------------------
 
 interface ParsedResult {
   name:     string;
@@ -465,19 +465,19 @@ interface ParsedResult {
 }
 
 function parseResultLine(line: string): ParsedResult | null {
-  // Playwright list reporter format: "  ✓  test name (123ms)"
-  const passMatch = line.match(/^\s*[✓✔]\s+(.+?)(?:\s+\((\d+ms|\d+\.\ds)\))?$/);
+  // Playwright list reporter format: "    test name (123ms)"
+  const passMatch = line.match(/^\s*[✔]\s+(.+?)(?:\s+\((\d+ms|\d+\.\ds)\))?$/);
   if (passMatch) return { name: passMatch[1].trim(), status: 'pass', duration: passMatch[2] };
 
-  const failMatch = line.match(/^\s*[✕✗×]\s+(.+?)(?:\s+\((\d+ms|\d+\.\ds)\))?$/);
+  const failMatch = line.match(/^\s*[x✗×]\s+(.+?)(?:\s+\((\d+ms|\d+\.\ds)\))?$/);
   if (failMatch) return { name: failMatch[1].trim(), status: 'fail', duration: failMatch[2] };
 
-  const skipMatch = line.match(/^\s*[-–]\s+(.+?)\s+›\s+skipped/i);
+  const skipMatch = line.match(/^\s*[--]\s+(.+?)\s+›\s+skipped/i);
   if (skipMatch) return { name: skipMatch[1].trim(), status: 'skip' };
 
   return null;
 }
 
-// ── Named Exports ──────────────────────────────────────────────────────────
+// -- Named Exports ----------------------------------------------------------
 
 export { buildPlan };

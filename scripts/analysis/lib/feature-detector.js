@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Feature Detector — analyses scanned source files to discover modules,
+ * Feature Detector - analyses scanned source files to discover modules,
  * features, endpoints, forms, validation rules, roles, and business rules.
  *
  * Works pattern-based (deterministic). No LLM calls in Phase 2.
@@ -359,7 +359,7 @@ async function _detectGenericFeatures(moduleName, moduleFiles, repoPath, cfg, lo
       crudCapabilities: [],
       searchSupported:  false,
       exportSupported:  false,
-      warnings:         ['Generic detection used — consider adding project type patterns to analysis.config.json'],
+      warnings:         ['Generic detection used - consider adding project type patterns to analysis.config.json'],
       signals: {
         hasController: false, hasView: false, hasModel: false,
         hasService: false, hasEndpoints: false, hasValidation: false,
@@ -405,7 +405,7 @@ function _groupBySubfolder(files, repoPath) {
 }
 
 // ---------------------------------------------------------------------------
-// Extraction helpers — .NET
+// Extraction helpers - .NET
 // ---------------------------------------------------------------------------
 
 async function _readFilesContent(files) {
@@ -500,7 +500,7 @@ function _inferNavPath(content, moduleName, featureName) {
 }
 
 // ---------------------------------------------------------------------------
-// Extraction helpers — Node
+// Extraction helpers - Node
 // ---------------------------------------------------------------------------
 
 function _extractNodeEndpoints(content, nodeCfg) {

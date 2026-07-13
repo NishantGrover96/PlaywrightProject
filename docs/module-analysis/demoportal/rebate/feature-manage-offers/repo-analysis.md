@@ -1,4 +1,4 @@
-# Rebate Manage Offers — Repository Analysis Report
+# Rebate Manage Offers - Repository Analysis Report
 Generated: 2026-07-07
 
 ## Source Files Analyzed
@@ -14,8 +14,8 @@ Generated: 2026-07-07
 ## UI / Form Fields
 | Field Name | Type | Required | Label | Conditional | Notes |
 |---|---|---|---|---|---|
-| btnCreateNewOffer | button | — | Create Offer | — | Navigates to `CreateOffers` page |
-| Page size nav | paging component | — | — | — | `S=12` default; `TotalRecords` from API |
+| btnCreateNewOffer | button | - | Create Offer | - | Navigates to `CreateOffers` page |
+| Page size nav | paging component | - | - | - | `S=12` default; `TotalRecords` from API |
 
 ---
 
@@ -59,8 +59,8 @@ Generated: 2026-07-07
 ## Workflow / Status Transitions
 | From Status | To Status | Trigger | Notification |
 |---|---|---|---|
-| Existing | Deleted | Delete confirm → POST handler | Success/error via `_notificationService` |
-| — | Created | `btnCreateNewOffer` click | Navigates to `CreateOffers` |
+| Existing | Deleted | Delete confirm -> POST handler | Success/error via `_notificationService` |
+| - | Created | `btnCreateNewOffer` click | Navigates to `CreateOffers` |
 
 ---
 

@@ -1,4 +1,4 @@
-# DeerAd Builder — Asset Upload — Repository Analysis Report
+# DeerAd Builder - Asset Upload - Repository Analysis Report
 **Generated:** 2026-07-08  
 **Module:** DeerAd Builder (ad-builder)  
 **Feature:** Asset Upload (frmassetupload)  
@@ -23,25 +23,25 @@
 |---|---|---|---|---|---|---|
 | Display Name | Text Input | Yes | `assetName` | 140 | All | Alphanumeric + common symbols; AI auto-populated |
 | Additional Description | Text Input | No | `assetDec` | 140 | All | Optional metadata field |
-| Asset Type | Dropdown | Yes | `assetType` | — | All | Image (IM) or Video (VC); auto-detected by file extension |
+| Asset Type | Dropdown | Yes | `assetType` | - | All | Image (IM) or Video (VC); auto-detected by file extension |
 | Tracking # | Text Input | Yes* | `assetTracking` | 20 | Region 1 (NA) only | 5-20 alphanumeric; required for Region 1, hidden for Region 2 |
 | Model # | Text Input | Yes | `assetModel` | 20 | All | AI auto-populated for Region 1 |
-| Customer Segment | Dropdown | Yes* | `assetCustomerSeg` | — | Region 1 (NA) only | AI-matched; ≥75% word-match threshold |
-| Product Segment | Radio Button Group | Yes* | `lstProductSegment` | — | Region 1 (NA) only | Visible only for Region 1; multiple options |
-| Color | Dropdown | Yes* | `assetColor` | — | Region 1 (NA) + Images | Populated from client config; hidden for videos or Region 2; AI-detected |
+| Customer Segment | Dropdown | Yes* | `assetCustomerSeg` | - | Region 1 (NA) only | AI-matched; ≥75% word-match threshold |
+| Product Segment | Radio Button Group | Yes* | `lstProductSegment` | - | Region 1 (NA) only | Visible only for Region 1; multiple options |
+| Color | Dropdown | Yes* | `assetColor` | - | Region 1 (NA) + Images | Populated from client config; hidden for videos or Region 2; AI-detected |
 | Image ID / Media Bin # | Text Input (Repeating) | Yes* | `imageId` (5 fields) | 45 each | Images only | Region 1: "Image ID"; Region 2: "Media Bin #"; alphanumeric |
-| Setting | Dropdown | Yes* | `assetSetting` | — | Region 1 (NA) + Images | "Environment" (E) or "Studio" (S); hidden for Region 2 or videos; AI-suggested |
-| Status | Dropdown | Yes | `assetStatus` | — | All | Active (1), Inactive (0), Date Range (2) |
-| Release Date | Date Picker | Yes* | `txtpostdt` | — | All (if Date Range) | MM/DD/YYYY format; shown only if Status = 2 (Date Range); no past dates |
-| End Date | Date Picker | Yes* | `txtremdt` | — | All (if Date Range) | MM/DD/YYYY format; shown only if Status = 2; must be ≥ Release Date |
-| Admin Only | Checkbox | No | `isAdmin` | — | All | Restricts visibility to admin users only |
+| Setting | Dropdown | Yes* | `assetSetting` | - | Region 1 (NA) + Images | "Environment" (E) or "Studio" (S); hidden for Region 2 or videos; AI-suggested |
+| Status | Dropdown | Yes | `assetStatus` | - | All | Active (1), Inactive (0), Date Range (2) |
+| Release Date | Date Picker | Yes* | `txtpostdt` | - | All (if Date Range) | MM/DD/YYYY format; shown only if Status = 2 (Date Range); no past dates |
+| End Date | Date Picker | Yes* | `txtremdt` | - | All (if Date Range) | MM/DD/YYYY format; shown only if Status = 2; must be ≥ Release Date |
+| Admin Only | Checkbox | No | `isAdmin` | - | All | Restricts visibility to admin users only |
 | Keywords / Tags | Contenteditable Div | No | `suggKeyword` / `hiddenTags` | 1000 per tag | All | User-entered or AI-generated; comma-separated; tag management UI with remove buttons |
-| Locale | Checkbox Group | Yes | `assetLocale` | — | All | Multi-select; options from client config; defaults to all |
-| Division | Checkbox Group | Yes | `assetDivision` | — | All | Multi-select; AI auto-matched or user-selected; Region 1: smart-match, Region 2: first only |
-| Collection | Checkbox Group | No | `assetCollection` | — | All (if Collections exist) | Multi-select; populated dynamically per selected locale; optional |
+| Locale | Checkbox Group | Yes | `assetLocale` | - | All | Multi-select; options from client config; defaults to all |
+| Division | Checkbox Group | Yes | `assetDivision` | - | All | Multi-select; AI auto-matched or user-selected; Region 1: smart-match, Region 2: first only |
+| Collection | Checkbox Group | No | `assetCollection` | - | All (if Collections exist) | Multi-select; populated dynamically per selected locale; optional |
 | Asset File Upload | Dropzone | Yes | `dZUploadImageFile` (change: `dZChangeImageFile`) | 9999 MB | All | Single file; drag & drop or click to select; auto-detects type |
-| Notify Groups (UserControl) | Multi-Checkbox | No | `ucEmailNotification` | — | All (new assets) | Optional email notification recipients on asset creation |
-| Manually Add Email | Text Input | No | `assetManuallyEmail` | — | All (new assets) | Semicolon-separated email addresses; bypasses preset groups |
+| Notify Groups (UserControl) | Multi-Checkbox | No | `ucEmailNotification` | - | All (new assets) | Optional email notification recipients on asset creation |
+| Manually Add Email | Text Input | No | `assetManuallyEmail` | - | All (new assets) | Semicolon-separated email addresses; bypasses preset groups |
 
 ---
 
@@ -75,7 +75,7 @@
 - **Supported Image Formats:** `.jpg`, `.png`, `.jpeg`, `.tif`, `.tiff`, `.eps`, `.gif`
 - **Supported Video Formats:** `.avi`, `.mov`, `.mp4`, `.wmv`
 - **Max File Size:** 9,999 MB
-- **Auto-Detection:** Extension → "IM" (Image) or "VC" (Video)
+- **Auto-Detection:** Extension -> "IM" (Image) or "VC" (Video)
 - **Invalid Extensions:** `.exe`, `.bat`, `.asp`, etc. (rejected)
 
 ### Asset Type Conversion Rules
@@ -174,11 +174,11 @@
 
 | From Status | To Status | Trigger | Action | Notification |
 |---|---|---|---|---|
-| — | Active (1) | "Save & New" button | INSERT new asset with Active status | Email sent (if configured) |
-| — | Inactive (0) | "Save & New" button | INSERT new asset with Inactive status | Email sent (if configured) |
-| — | Date Range (2) | "Save & New" button + Release/End dates | INSERT new asset with Date Range status | Email sent (if configured) |
+| - | Active (1) | "Save & New" button | INSERT new asset with Active status | Email sent (if configured) |
+| - | Inactive (0) | "Save & New" button | INSERT new asset with Inactive status | Email sent (if configured) |
+| - | Date Range (2) | "Save & New" button + Release/End dates | INSERT new asset with Date Range status | Email sent (if configured) |
 | Active/Inactive/Date Range | Active/Inactive/Date Range | "Update" button (edit) | UPDATE existing asset status | No email |
-| (any) | — (Asset Deleted by Admin) | Admin action (external) | DELETE (not via this form) | Notification may vary |
+| (any) | - (Asset Deleted by Admin) | Admin action (external) | DELETE (not via this form) | Notification may vary |
 
 ---
 
@@ -238,10 +238,10 @@ After successful InsertAsset:
 
 | Source Format | Actions |
 |---|---|
-| EPS Conversion | Source JPG/PNG → `.eps` file via `CommonClass.Convertepsto_jpg()` |
-| TIFF Archive | Source non-TIF → `.tif` file for long-term archival |
-| JPG Web | Source non-JPG & non-GIF → `.jpg` for web delivery |
-| Low-Res Download | Source JPG → `{filename}_Download_lowres.jpg` (custom client config dimensions) |
+| EPS Conversion | Source JPG/PNG -> `.eps` file via `CommonClass.Convertepsto_jpg()` |
+| TIFF Archive | Source non-TIF -> `.tif` file for long-term archival |
+| JPG Web | Source non-JPG & non-GIF -> `.jpg` for web delivery |
+| Low-Res Download | Source JPG -> `{filename}_Download_lowres.jpg` (custom client config dimensions) |
 
 ### Email Notification (New Assets Only)
 - **Trigger:** On successful SaveAssetData if notification group or manual emails configured
@@ -371,10 +371,10 @@ After successful InsertAsset:
 | Document Load | URL param `Assetid` absent | Upload dropzone | Asset details form |
 | Asset Type Change | "Image" selected | Setting, Color, Image ID fields | Video-only fields |
 | Asset Type Change | "Video" selected | Video-only fields | Setting, Color, Image ID |
-| Status Dropdown | Status = 2 (Date Range) | Release Date, End Date pickers | — |
-| Status Dropdown | Status ≠ 2 | — | Release Date, End Date pickers |
-| Region Check | Region 2 (AU) | — | Customer Segment, Tracking #, Product Segment, Color, Setting, AI icons |
-| Locale Checkbox | Any locale checked | Collections for that locale | — |
+| Status Dropdown | Status = 2 (Date Range) | Release Date, End Date pickers | - |
+| Status Dropdown | Status ≠ 2 | - | Release Date, End Date pickers |
+| Region Check | Region 2 (AU) | - | Customer Segment, Tracking #, Product Segment, Color, Setting, AI icons |
+| Locale Checkbox | Any locale checked | Collections for that locale | - |
 
 ### Form Validation & Save Workflow
 1. **Validate Form:** jQuery Validate plugin checks all required fields against rules
@@ -388,8 +388,8 @@ After successful InsertAsset:
    - Concatenate metadata string for database searchability
 5. **AJAX POST to SaveAssetData**
 6. **Response Handling:**
-   - `""` (empty): New asset success → Toast "Saved successfully" → Show "Save & Duplicate" button
-   - `"0"`: Edit success → Toast "Updated successfully" → Redirect to asset list
+   - `""` (empty): New asset success -> Toast "Saved successfully" -> Show "Save & Duplicate" button
+   - `"0"`: Edit success -> Toast "Updated successfully" -> Redirect to asset list
    - Error: Show error toast with message
 
 ### "Save & Duplicate" Workflow

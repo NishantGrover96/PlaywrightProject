@@ -1,4 +1,4 @@
-# Coop — Submit Pre-Approval — Discovery Report
+# Coop - Submit Pre-Approval - Discovery Report
 
 > Module: `coop` | Feature: `submit-preapproval`
 > Generated: 2026-06-19 | Pipeline: Step 1 (Repository Discovery)
@@ -10,11 +10,11 @@
 
 | File | Purpose |
 |---|---|
-| `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\SubmitPreApproval.cshtml` | Main page template — 4-step wizard (fiscal year, dealer, media type, form submission) |
-| `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\SubmitPreapproval.cshtml.cs` | Page model — all handlers, business logic, service calls (67,602 bytes) |
+| `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\SubmitPreApproval.cshtml` | Main page template - 4-step wizard (fiscal year, dealer, media type, form submission) |
+| `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\SubmitPreapproval.cshtml.cs` | Page model - all handlers, business logic, service calls (67,602 bytes) |
 | `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\SubmitPreapproval.cshtml.Email.cs` | Email sending partial class (12,122 bytes) |
 | `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\_PreApprovalMediaType.cshtml` | Step 2: Media type tile selection + dealer type dropdown |
-| `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\_PreApprovalFormSubmission.cshtml` | Step 3: Full submission form — all branch-specific field blocks (36,187 bytes) |
+| `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\_PreApprovalFormSubmission.cshtml` | Step 3: Full submission form - all branch-specific field blocks (36,187 bytes) |
 | `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\_PreApprovalProcess.cshtml` | Legacy process form partial (additional field layout) |
 | `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\_PreApprovalProcessHeader.cshtml` | Process header partial |
 | `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\_PreapprovalFields1.cshtml` | Extended fields partial (program-specific) |
@@ -39,7 +39,7 @@
 | File | Purpose |
 |---|---|
 | `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\SubmitPreApproval.cshtml` | Same view template (identical .cshtml files) |
-| `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\SubmitPreapproval.cshtml.cs` | Modern page model — replaces direct DB services with API clients (71,715 bytes) |
+| `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\SubmitPreapproval.cshtml.cs` | Modern page model - replaces direct DB services with API clients (71,715 bytes) |
 | `Presentation\Web\Pages\CoopManagement\PreApproval\Submit\SubmitPreapproval.cshtml.Email.cs` | Email sending partial class (11,890 bytes) |
 | `Presentation\Web\Infrastructure\ApiClients\Coop\` | Coop API client interfaces and implementations |
 | `Presentation\Web\Models\PreApproval\` | Modern view models |
@@ -51,17 +51,17 @@
 ## UI Components (Legacy)
 
 ### Wizard Steps
-- **Step 0** (conditional): `#hdnShowFiscalYearSelection` — fiscal year radio buttons (`.fiscalYearRadio`); `#ContinueAfterZero` button
+- **Step 0** (conditional): `#hdnShowFiscalYearSelection` - fiscal year radio buttons (`.fiscalYearRadio`); `#ContinueAfterZero` button
 - **Step 1** (conditional): `_SearchDealer.cshtml` + `_DealerSearchList.cshtml` shared partials; shown when no dealer pre-selected
-- **Step 2**: `_PreApprovalMediaType.cshtml` — `#PreapprovalMediaList` ul; `.clsSelectMediaType` tiles; `#programDealerTypeDropdown`; `#btnContinue`
-- **Step 3**: `_PreApprovalFormSubmission.cshtml` — all form fields; `#btnSubmitPreApproval`
+- **Step 2**: `_PreApprovalMediaType.cshtml` - `#PreapprovalMediaList` ul; `.clsSelectMediaType` tiles; `#programDealerTypeDropdown`; `#btnContinue`
+- **Step 3**: `_PreApprovalFormSubmission.cshtml` - all form fields; `#btnSubmitPreApproval`
 
 ### Key Form Fields
 | Field ID | Label | Type | Max | Required |
 |---|---|---|---|---|
 | `#txtCampaingTitle` | Campaign Title | text | 100 | Yes (campaign) |
-| `#chkAdOfferCampaign` / `#chkAdOffer` | This Ad Includes an Offer | checkbox | — | No |
-| `#hdtxtCalExpirationDateCampaign` | Earliest Expiration Date | date | — | When offer checked |
+| `#chkAdOfferCampaign` / `#chkAdOffer` | This Ad Includes an Offer | checkbox | - | No |
+| `#hdtxtCalExpirationDateCampaign` | Earliest Expiration Date | date | - | When offer checked |
 | `#txtAdLandingURL` | Ad Landing Page URL | text | 550 | Per media config |
 | `#txtAdLandingURLMultiple` | Ad Landing Page URL (multiple) | textarea | 550 | Per media config |
 | `#txtAdTitle` | Ad Title | text | 100 | Yes (mainbranch) |
@@ -70,23 +70,23 @@
 | `#txtShowsLocationCity` | City | text | 25 | Yes (show) |
 | `#txtShowsLocationState` | State/Province | text | 25 | Yes (show) |
 | `#txtShowsLocationZip` | Zip/Postal Code | text | 7 | Yes (show) |
-| `#hdtxtCalShowsStartDate` | Start Date | date | — | Yes (show) |
-| `#hdtxtCalShowsEndDate` | End Date | date | — | Yes (show) |
+| `#hdtxtCalShowsStartDate` | Start Date | date | - | Yes (show) |
+| `#hdtxtCalShowsEndDate` | End Date | date | - | Yes (show) |
 | `#txtShowsEligibleCost` | Expected Eligible Show Cost | text | 12 | Yes (show) |
 | `#txtGroupDealerNumber` | Participating Dealer Number | text | 50 | Yes (grpshow) |
 | `#txtEquipmentName` | Equipment to be Displayed | text | 50 | No |
 | `#txtSponsorshipAdTitle` | Name of Sponsorship | text | 100 | Yes (sponsor) |
-| `#hdtxtCalSponsorShipStartDate` | Sponsorship Start Date | date | — | Yes (sponsor) |
-| `#hdtxtCalSponsorShipEndDate` | Sponsorship End Date | date | — | Yes (sponsor) |
+| `#hdtxtCalSponsorShipStartDate` | Sponsorship Start Date | date | - | Yes (sponsor) |
+| `#hdtxtCalSponsorShipEndDate` | Sponsorship End Date | date | - | Yes (sponsor) |
 | `#txtDealerIdText` | Dealer ID | text | 100 | Per media config |
-| `#dropzone_fuBGImage` | File Upload (Dropzone) | file | — | Yes (per media config) |
+| `#dropzone_fuBGImage` | File Upload (Dropzone) | file | - | Yes (per media config) |
 | `#txtMainComment` | Submission Comment | textarea | 500 | No |
-| `#txtEmailMe` | Me (email) | text (readonly) | — | Yes |
-| `.clsDealerShipContact` | Dealership Contacts | checkbox | — | No |
-| `#txtOtherMediaContact` | Other Contacts | text | — | No |
+| `#txtEmailMe` | Me (email) | text (readonly) | - | Yes |
+| `.clsDealerShipContact` | Dealership Contacts | checkbox | - | No |
+| `#txtOtherMediaContact` | Other Contacts | text | - | No |
 
 ### Success Panel
-- `#CompleteConfirmationModel` — confirmation number (`#spnPreApprovalConfirmationNumber`), email instructions, activity link, "Submit Another"/"Submit New" buttons
+- `#CompleteConfirmationModel` - confirmation number (`#spnPreApprovalConfirmationNumber`), email instructions, activity link, "Submit Another"/"Submit New" buttons
 
 ---
 
@@ -94,8 +94,8 @@
 
 | Handler | Method | Purpose |
 |---|---|---|
-| `OnGet` | GET | Page initialization — fiscal year, media types, dealer setup |
-| `OnGetDealerTypeList` | GET | AJAX — populate dealer type dropdown |
+| `OnGet` | GET | Page initialization - fiscal year, media types, dealer setup |
+| `OnGetDealerTypeList` | GET | AJAX - populate dealer type dropdown |
 | `OnPostProcessPreApproval` | POST | Submit preapproval (main flow) |
 | `OnPostUploadFile` | POST | Stage uploaded file |
 | `OnPostRemoveFile` | POST | Remove staged file |
@@ -140,19 +140,19 @@
 
 ---
 
-## Key Architectural Differences (New Findings — 2026-06-19)
+## Key Architectural Differences (New Findings - 2026-06-19)
 
 ### 1. Media Type Re-load on POST (Modern Only)
-**Legacy** `OnPostProcessPreApproval`: Processes submitted `PreApprovalInformation` directly — no media type reload.
+**Legacy** `OnPostProcessPreApproval`: Processes submitted `PreApprovalInformation` directly - no media type reload.
 **Modern** `OnPostProcessPreApproval`: Calls `GetMediaType(Convert.ToInt32(SelectedFiscalYear))` at the START of the handler to populate `MediaTypes` list, which is then used by `MapToSubmitPreapprovalApiModel`. This results in an additional API call during form submission.
 
 This creates a new FU (COOP-PA-FU-047) and a test assertion: the submission must complete successfully even if media types must be re-fetched from the API during POST.
 
-### 2. Shows & Events Gap (Confirmed — unchanged from prior analysis)
+### 2. Shows & Events Gap (Confirmed - unchanged from prior analysis)
 `LinkShowToPreapprovalAsync` signature accepts only 6 parameters: `(preApprovalSeqOut, dealerSeq, showDate, title, showLocation, showType)`.
 Missing: `EquipmentList`, `Dealers` (group), `Cost`, `DlrRacf`, `Email`, `DlrFormStatus`.
 
-### 3. N+1 API Calls for Media Requirements (Confirmed — unchanged)
+### 3. N+1 API Calls for Media Requirements (Confirmed - unchanged)
 Modern makes one HTTP call per media type for requirements vs. legacy single batch call.
 
 ---
@@ -176,5 +176,5 @@ Modern makes one HTTP call per media type for requirements vs. legacy single bat
 | Gap | Severity | Description |
 |---|---|---|
 | Shows & Events fields missing | Medium | `LinkShowToPreapprovalAsync` does not pass EquipmentList, Dealers (group), Cost, DlrRacf, Email |
-| N+1 media requirements | Low | Performance regression — modern makes N API calls vs. 1 batch |
-| Media re-load on POST | Low | Modern re-fetches media types during POST — additional API call dependency |
+| N+1 media requirements | Low | Performance regression - modern makes N API calls vs. 1 batch |
+| Media re-load on POST | Low | Modern re-fetches media types during POST - additional API call dependency |

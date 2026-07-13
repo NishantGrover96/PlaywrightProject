@@ -5,13 +5,13 @@
  *
  * Layout:
  *   reports/{clientId}/{YYYY-MM-DD}/{executionId}/
- *     html/          — Playwright HTML report
- *     results.json   — JSON reporter output
- *     junit.xml      — JUnit XML
- *     traces/        — Playwright trace files
- *     screenshots/   — Failure screenshots
- *     videos/        — Test videos
- *     logs/          — Execution logs (stdout, stderr)
+ *     html/          - Playwright HTML report
+ *     results.json   - JSON reporter output
+ *     junit.xml      - JUnit XML
+ *     traces/        - Playwright trace files
+ *     screenshots/   - Failure screenshots
+ *     videos/        - Test videos
+ *     logs/          - Execution logs (stdout, stderr)
  *
  * All paths are workspace-relative strings for portability.
  */
@@ -22,7 +22,7 @@ import type { ExecutionArtifacts } from './execution-plan';
 
 const WORKSPACE_ROOT = path.join(__dirname, '..', '..', '..');
 
-// ── Path Helpers ───────────────────────────────────────────────────────────
+// -- Path Helpers -----------------------------------------------------------
 
 function toRelative(absPath: string): string {
   return path.relative(WORKSPACE_ROOT, absPath).replace(/\\/g, '/');
@@ -39,7 +39,7 @@ function formatDate(d: Date): string {
   return `${year}-${month}-${day}`;
 }
 
-// ── Artifact Path Builder ──────────────────────────────────────────────────
+// -- Artifact Path Builder --------------------------------------------------
 
 /**
  * Build all artifact paths for an execution.

@@ -71,7 +71,7 @@ foreach (functional-units.html in functional-units.html functional-units.html fu
 
      = (Get-Item functional-units.html.FullName).Length
 
-    # ── PLACEHOLDER FILES (< 2KB) ──────────────────────────────────────────
+    # -- PLACEHOLDER FILES (< 2KB) ------------------------------------------
     if ( -lt 2000) {
         # Extract title, h1, and meta info from existing content
          = [regex]::Match(<!DOCTYPE html>
@@ -201,7 +201,7 @@ foreach (functional-units.html in functional-units.html functional-units.html fu
   <div class="alert alert-warning d-flex align-items-center" role="alert">
     <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
     <div>
-      <strong>Catalog Not Yet Generated</strong> — Run the <strong>functional-test-catalog</strong> Copilot skill to populate this file.
+      <strong>Catalog Not Yet Generated</strong> - Run the <strong>functional-test-catalog</strong> Copilot skill to populate this file.
     </div>
   </div>
 

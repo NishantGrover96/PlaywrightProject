@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * API Logger — lightweight structured logger for dashboard API requests,
+ * API Logger - lightweight structured logger for dashboard API requests,
  * execution decisions, and metadata resolution.
  *
  * Writes to:
@@ -41,7 +41,7 @@ function _write(level, context, message, extra) {
   // Append to daily log file (non-blocking best-effort)
   try {
     fs.appendFileSync(_todayFile(), line + '\n', 'utf8');
-  } catch { /* disk full / permission — graceful */ }
+  } catch { /* disk full / permission - graceful */ }
 
   // Console output
   if (level === 'ERROR') console.error(`[api] ${line}`);

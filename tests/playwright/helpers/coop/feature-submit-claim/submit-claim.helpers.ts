@@ -7,10 +7,10 @@ import testData from '@data/coop/feature-submit-claim/test-data.json';
 export const DATA_DIR    = path.resolve(__dirname, '../../data/coop/feature-submit-claim');
 export const INVOICE_PDF = path.join(DATA_DIR, 'sample-invoice.pdf');
 
-/** True when no sample invoice exists — skip upload-dependent tests with this flag. */
+/** True when no sample invoice exists - skip upload-dependent tests with this flag. */
 export const INVOICE_MISSING = !existsSync(INVOICE_PDF);
 
-// ── Navigation ────────────────────────────────────────────────────────────────
+// -- Navigation ----------------------------------------------------------------
 
 export async function goToSubmitClaim(page: Page): Promise<SubmitClaimPage> {
   const claim = new SubmitClaimPage(page);
@@ -18,11 +18,11 @@ export async function goToSubmitClaim(page: Page): Promise<SubmitClaimPage> {
   return claim;
 }
 
-// ── Wizard navigation helpers ─────────────────────────────────────────────────
+// -- Wizard navigation helpers -------------------------------------------------
 
 /**
  * Navigate the claim wizard to Step 4 (activity form).
- * Path: Step 1 (No-PA, continue) → Step 3 (select tile) → Step 4 (activity form visible).
+ * Path: Step 1 (No-PA, continue) -> Step 3 (select tile) -> Step 4 (activity form visible).
  */
 export async function navigateToActivityForm(
   page: Page,
@@ -37,12 +37,12 @@ export async function navigateToActivityForm(
   return claim;
 }
 
-// ── Full-flow helpers (used by 2+ tests) ──────────────────────────────────────
+// -- Full-flow helpers (used by 2+ tests) --------------------------------------
 
 /**
  * Navigate to the activity form, fill one activity, upload invoice, and return
  * the page object ready for save or submit.
- * Skips if sample invoice is missing — caller should guard with INVOICE_MISSING.
+ * Skips if sample invoice is missing - caller should guard with INVOICE_MISSING.
  */
 export async function setupActivityReady(page: Page): Promise<SubmitClaimPage> {
   const claim = await navigateToActivityForm(page);
@@ -55,7 +55,7 @@ export async function setupActivityReady(page: Page): Promise<SubmitClaimPage> {
   return claim;
 }
 
-/** Full draft-save flow: setup activity → save for later → return page object at success panel. */
+/** Full draft-save flow: setup activity -> save for later -> return page object at success panel. */
 export async function setupDraftSaved(page: Page): Promise<{ claim: SubmitClaimPage; tempNumber: string }> {
   const claim = await setupActivityReady(page);
   await claim.saveForLater();
@@ -64,7 +64,7 @@ export async function setupDraftSaved(page: Page): Promise<{ claim: SubmitClaimP
   return { claim, tempNumber };
 }
 
-/** Full submit flow: setup activity → submit → return page object at success panel. */
+/** Full submit flow: setup activity -> submit -> return page object at success panel. */
 export async function setupClaimSubmitted(page: Page): Promise<{ claim: SubmitClaimPage; claimNumber: string }> {
   const claim = await setupActivityReady(page);
   await claim.submitClaim();
@@ -73,7 +73,7 @@ export async function setupClaimSubmitted(page: Page): Promise<{ claim: SubmitCl
   return { claim, claimNumber };
 }
 
-// ── Assertion helpers ─────────────────────────────────────────────────────────
+// -- Assertion helpers ---------------------------------------------------------
 
 export async function assertPageText(page: Page, ...fragments: string[]): Promise<void> {
   const body = await page.textContent('body') ?? '';

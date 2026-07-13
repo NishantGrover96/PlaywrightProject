@@ -1,7 +1,7 @@
-# Coop — Submit Claim : Discovery Report
+# Coop - Submit Claim : Discovery Report
 
 > Generated: 2026-06-17
-> Pipeline step: Step 1 — Repository Discovery
+> Pipeline step: Step 1 - Repository Discovery
 > Module: `coop` | Feature: `submit-claim`
 
 ---
@@ -21,10 +21,10 @@
 
 | File | Purpose |
 |---|---|
-| `Pages\CoopManagement\Claims\Submit\SubmitClaim.cshtml` | Identical UI — same 4-step wizard (shared CSHTML) |
-| `Pages\CoopManagement\Claims\Submit\SubmitClaim.cshtml.cs` | Async page model — all service calls replaced with API client calls |
+| `Pages\CoopManagement\Claims\Submit\SubmitClaim.cshtml` | Identical UI - same 4-step wizard (shared CSHTML) |
+| `Pages\CoopManagement\Claims\Submit\SubmitClaim.cshtml.cs` | Async page model - all service calls replaced with API client calls |
 | `Pages\CoopManagement\Claims\Submit\SubmitClaim.cshtml.Email.cs` | Email partial class (new in modern) |
-| `Infrastructure\ApiClients\Coop\CoopApiService.cs` | HTTP client → `{Gateway}coop/api/SubmitClaim/*` |
+| `Infrastructure\ApiClients\Coop\CoopApiService.cs` | HTTP client -> `{Gateway}coop/api/SubmitClaim/*` |
 | `Infrastructure\ApiClients\Coop\ClaimActivityApiService.cs` | HTTP client: media, preapproval, contacts, documents |
 | `Infrastructure\ApiClients\Dealer\IDealerInfoApiService.cs` | HTTP client: dealer contacts and address |
 | `BackendAPI\src\modules\coop\Coop.API\Controllers\` | API endpoint controllers |
@@ -83,7 +83,7 @@
 | `programDealerTypeDropdown` | Select | Populated via `OnGetDealerTypeList`; filters media type grid |
 | Media type icons (`.clsSelectMediaType`) | Clickable li | Sets `media-id`, `program_dealer_type_seq`, `dealeridtext`, `dealeridtextrequiredflag` |
 
-### Step 4 — _ClaimProcess Fields
+### Step 4 - _ClaimProcess Fields
 
 | Field ID | Type | Required | Notes |
 |---|---|---|---|
@@ -99,7 +99,7 @@
 | `txtMediaName` | Text | Yes | maxlength=100; hidden when vendor mode |
 | `txtDealerIdText` | Text | Conditional | Per media `dealeridtextrequiredflag` |
 
-### Step 4 — _DealerShipContactDetail Fields
+### Step 4 - _DealerShipContactDetail Fields
 
 | Field ID | Type | Required | Notes |
 |---|---|---|---|
@@ -125,7 +125,7 @@
 
 ---
 
-## API Endpoints (Modern — CoopApiService → BackendAPI)
+## API Endpoints (Modern - CoopApiService -> BackendAPI)
 
 | Method | Route | Purpose |
 |---|---|---|
@@ -151,7 +151,7 @@
 | POST | `coop/api/SubmitClaim/InsertActivityMediaTypeRequirement` | Creative type link |
 | POST | `coop/api/SubmitClaim/UpdateOnlineActivityProduct` | Product line per activity |
 | POST | `coop/api/SubmitClaim/InsertCurrencyConversionLog` | Log currency conversion |
-| POST | `coop/api/SubmitClaim/CreateClaimAndActivityRecords` | Finalize temp → Claim |
+| POST | `coop/api/SubmitClaim/CreateClaimAndActivityRecords` | Finalize temp -> Claim |
 | POST | `coop/api/SubmitClaim/InsertActivityProductSaaS` | Budget deduction |
 | POST | `coop/api/SubmitClaim/UpdateClaimDealerNumber` | Claim dealer number (split) |
 | POST | `coop/api/SubmitClaim/DeleteTempClaimDealerNumber` | Cleanup temp dealer |
@@ -189,7 +189,7 @@
 | `IDivisionService.GetDivisionByProgramSeq` | `CoopApiService.GetDivisionByProgramSeqAsync` |
 | `IProgramService.GetProgramData` | `CoopApiService.GetProgramDataAsync` |
 | `IProgramService.GetCurrencyConversionLogbyDate` | `CoopApiService.GetCurrencyConversionLogByDateAsync` |
-| `IAddressService.GetCoopVendorContact` | **NOT MIGRATED** — still `_addressService` direct call |
+| `IAddressService.GetCoopVendorContact` | **NOT MIGRATED** - still `_addressService` direct call |
 | `IReportService.GetStates` | `CoopApiService.GetStatesByCountrySeqAsync` |
 
 ---
@@ -203,7 +203,7 @@
 | `USP_ONLINE_ACTIVITY_PRODUCT_U01` | Upsert product line for activity |
 | `USP_ONLINE_ACTIVITY_DATE_U01` | Upsert activity date |
 | `USP_DOCUMENT_IMAGE_U01` | Upsert file reference record |
-| `USP_CREATE_CLAIM_AND_ACTIVITY_RECORDS` | Promote temp records → CLAIM + ACTIVITY |
+| `USP_CREATE_CLAIM_AND_ACTIVITY_RECORDS` | Promote temp records -> CLAIM + ACTIVITY |
 | `USP_INSERT_ACTIVITY_PRODUCT_SAAS` | Budget deduction post-submit |
 | `CLAIM` (read) | Retrieve `process_number` after finalization |
 | `USP_CLAIM_DEALER_NUMBER_U01` | Split/group claim dealer number |
@@ -220,7 +220,7 @@
 | Product line | `DataSet` | `SubmitClaimOnlineActivityProductApiModel` |
 | Media type | `MediaTypeModel` | `MediaTypeModel` (mapped from API response) |
 | Pre-approval | `PreApprovalModel` | `PreapprovalSearchApiModel` |
-| Vendor info | `VendorInformation` (CommonEntity) | `VendorInformation` (local — NOT on API yet) |
+| Vendor info | `VendorInformation` (CommonEntity) | `VendorInformation` (local - NOT on API yet) |
 | Claim info | `ClaimInformation` (CommonEntity) | `ClaimInformation` (local model) |
 
 ---
@@ -232,5 +232,5 @@
 | G-01 | `OnGetVendorInformation` + `OnGetVendorList` still call legacy `_addressService` directly | High |
 | G-02 | Modern `OnPostSaveClaim` removed future activity date validation present in legacy | Medium |
 | G-03 | Modern `OnPostSaveClaim` removed duplicate activity date check present in legacy | Medium |
-| G-04 | `SendClaimEmailToUser` (Email.cs) — verify full API migration of email send | Medium |
-| G-05 | File upload storage path — verify `OnPostUploadFile` uses same path strategy in modern | Medium |
+| G-04 | `SendClaimEmailToUser` (Email.cs) - verify full API migration of email send | Medium |
+| G-05 | File upload storage path - verify `OnPostUploadFile` uses same path strategy in modern | Medium |

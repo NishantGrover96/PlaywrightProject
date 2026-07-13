@@ -1,4 +1,4 @@
-# Rebate Create Offers — Repository Analysis Report
+# Rebate Create Offers - Repository Analysis Report
 Generated: 2026-07-07
 
 ## Source Files Analyzed
@@ -16,17 +16,17 @@ Generated: 2026-07-07
 | Field Name | Type | Required | Label | Conditional | Notes |
 |---|---|---|---|---|---|
 | LanguageSeq (`zrebateProductLanguage_language_seq`) | select | Yes | Language | Hidden when `rebate_product_seq > 0` (lang variants mode) | Populated from `LanguageList` |
-| ProductCode (`zrebateProductLanguage_product_code`) | text | Yes | Offer Code | — | `maxlength=50` |
+| ProductCode (`zrebateProductLanguage_product_code`) | text | Yes | Offer Code | - | `maxlength=50` |
 | ddproduct | select | No | Offers | `hideimp` (existing offers list) | Load existing product for language variant |
 | Description (`zrebateProductLanguage_description`) | text | Yes | Offer Name | `hide` (shown via JS) | `maxlength=200` |
 | Description2 (`zrebateProductLanguage_description2`) | textarea | Yes | Product Description | `hide` (shown via JS) | `maxlength=200` |
 | DivisionBrandSeq (`zrebateProductLanguage_division_brand_seq`) | select | No | Brands | Shown only when `BrandList.Count > 1` | Defaults hidden if single brand |
 | ProductType (`zrebateProductLanguage_product_type`) | select | No | Offer Type | `hidden="hidden"` | Default value: `"Offer"` |
-| ImagePath (Bannerfile1) | file (Dropzone) | No | Upload Offer Image | — | Stored path returned in `result.ImagePath` |
-| hdnRebateProductSeq | hidden | — | — | — | `rebate_product_seq` for edit mode |
-| hdnSubDivisionSeq | hidden | — | — | — | `subdivisionDel` |
-| rebate_prod_seq / rebate_prod_lang_seq | hidden | — | — | — | Tracks product / language seq |
-| division_brand_seq | hidden | — | — | — | Brand assignment |
+| ImagePath (Bannerfile1) | file (Dropzone) | No | Upload Offer Image | - | Stored path returned in `result.ImagePath` |
+| hdnRebateProductSeq | hidden | - | - | - | `rebate_product_seq` for edit mode |
+| hdnSubDivisionSeq | hidden | - | - | - | `subdivisionDel` |
+| rebate_prod_seq / rebate_prod_lang_seq | hidden | - | - | - | Tracks product / language seq |
+| division_brand_seq | hidden | - | - | - | Brand assignment |
 
 ---
 
@@ -66,8 +66,8 @@ Generated: 2026-07-07
 ## Workflow / Status Transitions
 | From Status | To Status | Trigger | Notification |
 |---|---|---|---|
-| — | Created | Save button → `OnPostSaveProductLang` | `TempData["Message"]` success |
-| — | Duplicate | Save (duplicate code) | `TempData["Duplicate"] = "Yes"` → UI message |
+| - | Created | Save button -> `OnPostSaveProductLang` | `TempData["Message"]` success |
+| - | Duplicate | Save (duplicate code) | `TempData["Duplicate"] = "Yes"` -> UI message |
 | Existing | Updated | Save with `rebate_product_seq > 0` | Language variant updated |
 
 ---

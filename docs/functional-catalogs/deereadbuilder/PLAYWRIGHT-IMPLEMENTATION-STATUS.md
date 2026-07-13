@@ -1,4 +1,4 @@
-# Playwright Test Generation — Implementation Status & Structure
+# Playwright Test Generation - Implementation Status & Structure
 
 **Date:** 2026-07-08  
 **Client:** deereadbuilder  
@@ -23,7 +23,7 @@ All three features now have:
 
 ---
 
-## Asset-Upload — COMPLETE ✅
+## Asset-Upload - COMPLETE ✅
 
 ### Files Generated (6 files)
 
@@ -40,7 +40,7 @@ All three features now have:
 
 **Smoke (5 tests)** @smoke @critical
 - Page load & authentication
-- Happy path: upload → fill → save
+- Happy path: upload -> fill -> save
 - Database record creation
 - Notification email
 
@@ -51,9 +51,9 @@ All three features now have:
 - Security (4): File upload, session, scoping
 
 **E2E (11 tests)** @e2e
-- Full workflows: upload → library → download
-- Error recovery: invalid file → retry
-- Lifecycle: create → edit → duplicate → archive
+- Full workflows: upload -> library -> download
+- Error recovery: invalid file -> retry
+- Lifecycle: create -> edit -> duplicate -> archive
 - Regional variations: Region 1 vs Region 2
 
 ### Locators Strategy
@@ -81,7 +81,7 @@ All three features now have:
 
 ---
 
-## Load-RTR2o — STRUCTURED FOR IMPLEMENTATION 🔄
+## Load-RTR2o - STRUCTURED FOR IMPLEMENTATION 🔄
 
 ### Test Catalog Reference
 - **82 test cases**: 6 Smoke + 64 Regression + 12 E2E
@@ -92,29 +92,29 @@ All three features now have:
 
 ```
 tests/playwright/pages/deereadbuilder/ad-builder/feature-load-rtr2o/
-  ├── LoadRTR2oPage.ts (Page Object)
-  │   └── Locators for: Template Type, Media Type, Size, ADIX, PDF upload, 
+  ├-- LoadRTR2oPage.ts (Page Object)
+  │   └-- Locators for: Template Type, Media Type, Size, ADIX, PDF upload, 
   │       Video upload, File processing, Status, Dates, Chili fields
   
 tests/playwright/helpers/deereadbuilder/ad-builder/feature-load-rtr2o/
-  ├── load-rtr2o.helpers.ts (Helpers)
-  │   └── uploadRTR2oTemplate(), uploadMediaSpecific(), editTemplate(), etc.
+  ├-- load-rtr2o.helpers.ts (Helpers)
+  │   └-- uploadRTR2oTemplate(), uploadMediaSpecific(), editTemplate(), etc.
   
 tests/playwright/specs/deereadbuilder/ad-builder/feature-load-rtr2o/
-  ├── load-rtr2o.spec.ts (Spec file)
-  │   └── All 82 tests organized by: Smoke, Validation, Media Types, Workflow, E2E
+  ├-- load-rtr2o.spec.ts (Spec file)
+  │   └-- All 82 tests organized by: Smoke, Validation, Media Types, Workflow, E2E
   
 tests/playwright/data/deereadbuilder/ad-builder/feature-load-rtr2o/
-  ├── test-data.json
-  │   └── Test data for each media type with valid/invalid/boundary cases
+  ├-- test-data.json
+  │   └-- Test data for each media type with valid/invalid/boundary cases
   
 tests/database/deereadbuilder/ad-builder/feature-load-rtr2o/
-  ├── verify-records.sql
-  │   └── SQL queries for: Template records, file conversions, Chili integration, multi-locale
+  ├-- verify-records.sql
+  │   └-- SQL queries for: Template records, file conversions, Chili integration, multi-locale
   
 tests/api/deereadbuilder/ad-builder/feature-load-rtr2o/
-  ├── load-rtr2o.api.spec.ts
-  │   └── API tests for: hnLoadRTR2o.ashx actions (SaveTemplate, GetTemplate, etc.)
+  ├-- load-rtr2o.api.spec.ts
+  │   └-- API tests for: hnLoadRTR2o.ashx actions (SaveTemplate, GetTemplate, etc.)
 ```
 
 ### Key Locators & Fields (from repo-analysis.md)
@@ -133,41 +133,41 @@ tests/api/deereadbuilder/ad-builder/feature-load-rtr2o/
 
 ```
 SMOKE Tests (6)
-├─ Page load, auth, media type detection
-├─ Upload PDF + save (DM/LT)
-├─ Upload Video + save (VC/TV)
-└─ Notification email
+├- Page load, auth, media type detection
+├- Upload PDF + save (DM/LT)
+├- Upload Video + save (VC/TV)
+└- Notification email
 
 REGRESSION Tests (64)
-├─ Validation (14): ADIX format, PDF pages, file upload, date range
-├─ Business Logic by Media (35):
-│  ├─ DM: 2-page validation, no sub-categories
-│  ├─ LT: Variable pages, sub-category selection
-│  ├─ VC: Video conversion (640x480), spot length
-│  ├─ TV: Video + script ZIP, MPEG-4 encoding
-│  ├─ RO: Audio ZIP, default thumbnail
-│  ├─ WB: HTML5 ZIP, static/hybrid variants
-│  └─ NS: 2 native variants, mobile-optimized
-├─ Workflow (10): Status transitions, multi-preview, email notifications
-└─ Security (5): File extension, session, Chili job encryption
+├- Validation (14): ADIX format, PDF pages, file upload, date range
+├- Business Logic by Media (35):
+│  ├- DM: 2-page validation, no sub-categories
+│  ├- LT: Variable pages, sub-category selection
+│  ├- VC: Video conversion (640x480), spot length
+│  ├- TV: Video + script ZIP, MPEG-4 encoding
+│  ├- RO: Audio ZIP, default thumbnail
+│  ├- WB: HTML5 ZIP, static/hybrid variants
+│  └- NS: 2 native variants, mobile-optimized
+├- Workflow (10): Status transitions, multi-preview, email notifications
+└- Security (5): File extension, session, Chili job encryption
 
 E2E Tests (12)
-├─ Full workflows for each media type
-├─ Multi-locale template creation
-├─ Chili integration verification
-└─ Concurrent template uploads
+├- Full workflows for each media type
+├- Multi-locale template creation
+├- Chili integration verification
+└- Concurrent template uploads
 ```
 
 ### Implementation Priority
 
-1. **Phase 1**: DM (Direct Mail) — Simplest (2-page PDF validation)
-2. **Phase 2**: LT (Literature) — Medium (variable pages)
-3. **Phase 3**: VC (Video Commercial) — Complex (video conversion, spot length)
+1. **Phase 1**: DM (Direct Mail) - Simplest (2-page PDF validation)
+2. **Phase 2**: LT (Literature) - Medium (variable pages)
+3. **Phase 3**: VC (Video Commercial) - Complex (video conversion, spot length)
 4. **Phase 4**: Remaining media types
 
 ---
 
-## Creative-Library — STRUCTURED FOR IMPLEMENTATION 🔄
+## Creative-Library - STRUCTURED FOR IMPLEMENTATION 🔄
 
 ### Test Catalog Reference
 - **71 test cases**: 5 Smoke + 54 Regression + 12 E2E
@@ -178,31 +178,31 @@ E2E Tests (12)
 
 ```
 tests/playwright/pages/deereadbuilder/ad-builder/feature-creative-library/
-  ├── CreativeLibraryPage.ts (Page Object)
-  │   └── Locators for: Search box, Filter panel (Asset Type, Status, Division, 
+  ├-- CreativeLibraryPage.ts (Page Object)
+  │   └-- Locators for: Search box, Filter panel (Asset Type, Status, Division, 
   │       Locale, Date Range, DPI, Dimensions, Co-op), Grid, Pagination, 
   │       Sort controls, Cart, Download modal, Share modal
   
 tests/playwright/helpers/deereadbuilder/ad-builder/feature-creative-library/
-  ├── creative-library.helpers.ts (Helpers)
-  │   └── searchAssets(), filterByType(), bulkSelect(), batchDownload(), shareAsset()
+  ├-- creative-library.helpers.ts (Helpers)
+  │   └-- searchAssets(), filterByType(), bulkSelect(), batchDownload(), shareAsset()
   
 tests/playwright/specs/deereadbuilder/ad-builder/feature-creative-library/
-  ├── creative-library.spec.ts (Spec file)
-  │   └── All 71 tests organized by: Smoke, Search/Filter, Pagination/Sort, 
+  ├-- creative-library.spec.ts (Spec file)
+  │   └-- All 71 tests organized by: Smoke, Search/Filter, Pagination/Sort, 
   │       Download, Bulk Ops, Sharing, UI, E2E
   
 tests/playwright/data/deereadbuilder/ad-builder/feature-creative-library/
-  ├── test-data.json
-  │   └── Test data: Search queries, filter combinations, asset IDs for bulk ops
+  ├-- test-data.json
+  │   └-- Test data: Search queries, filter combinations, asset IDs for bulk ops
   
 tests/database/deereadbuilder/ad-builder/feature-creative-library/
-  ├── verify-records.sql
-  │   └── SQL queries for: Asset visibility, cart records, sharing permissions, usage tracking
+  ├-- verify-records.sql
+  │   └-- SQL queries for: Asset visibility, cart records, sharing permissions, usage tracking
   
 tests/api/deereadbuilder/ad-builder/feature-creative-library/
-  ├── creative-library.api.spec.ts
-  │   └── API tests for: Search, Filter, Sort, Download, Bulk ops, Share
+  ├-- creative-library.api.spec.ts
+  │   └-- API tests for: Search, Filter, Sort, Download, Bulk ops, Share
 ```
 
 ### Filter Matrix Tests (Critical)
@@ -211,28 +211,28 @@ tests/api/deereadbuilder/ad-builder/feature-creative-library/
 Filter Combination Tests (8 critical test vectors)
 
 Vector 1: Asset Type (Image) + Division (Div1) + Status (Active)
-→ Verify: Only active images from Div1
+-> Verify: Only active images from Div1
 
 Vector 2: Locale (en-US) + Date Range (Last 30 days) + DPI (≥300)
-→ Verify: High-res US-locale images from past month
+-> Verify: High-res US-locale images from past month
 
 Vector 3: Status (Scheduled) + Co-op Eligible (Yes)
-→ Verify: Future-scheduled co-op assets
+-> Verify: Future-scheduled co-op assets
 
 Vector 4: Shared Assets (Yes) + Divisions (Div1, Div2)
-→ Verify: Shared assets from either division
+-> Verify: Shared assets from either division
 
 Vector 5: Search "summer" + Filter Type (Video)
-→ Verify: Videos containing "summer" in title/description/keywords
+-> Verify: Videos containing "summer" in title/description/keywords
 
 Vector 6: Empty search + Filter Status (Inactive)
-→ Verify: All inactive assets (pagination)
+-> Verify: All inactive assets (pagination)
 
 Vector 7: Sort by Downloads (descending)
-→ Verify: Most downloaded first
+-> Verify: Most downloaded first
 
 Vector 8: Bulk select + Status Change + Verify DB
-→ Verify: Batch operations update correctly
+-> Verify: Batch operations update correctly
 ```
 
 ### Key Locators & Fields

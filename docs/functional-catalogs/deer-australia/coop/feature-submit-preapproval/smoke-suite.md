@@ -1,4 +1,4 @@
-# Smoke Suite — Submit Preapproval (Deer Australia)
+# Smoke Suite - Submit Preapproval (Deer Australia)
 
 **Client:** deer-australia | **Module:** coop | **Feature:** submit-preapproval  
 **Tier:** Smoke | **Count:** 3 | **Run Order:** Sequential

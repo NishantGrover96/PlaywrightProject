@@ -5,7 +5,7 @@ export class NewOrderPage {
 
   readonly url = '/popshop/new-order';
 
-  // Form fields â€” replace with actual locators
+  // Form fields - replace with actual locators
   readonly primaryButton: Locator;
   readonly successMessage: Locator;
   readonly errorSummary: Locator;

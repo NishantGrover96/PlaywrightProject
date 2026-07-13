@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Config Loader — reads and validates config/analysis.config.json.
+ * Config Loader - reads and validates config/analysis.config.json.
  *
  * Returns the validated config object.
  * Throws a descriptive error if the file is missing or malformed.

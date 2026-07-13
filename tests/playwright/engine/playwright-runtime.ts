@@ -4,7 +4,7 @@
  * Sole responsibility: spawn the Playwright CLI, stream output, and return
  * the raw process result. No business logic.
  *
- * Input:  ExecutionPlan  (fully resolved — no further resolution happens here)
+ * Input:  ExecutionPlan  (fully resolved - no further resolution happens here)
  * Output: RawRunOutput   (exit code + captured stdout/stderr + timing)
  *
  * The Runtime:
@@ -24,7 +24,7 @@ import type { RawRunOutput  } from './result-processor';
 
 const WORKSPACE_ROOT = path.join(__dirname, '..', '..', '..');
 
-// ── Binary Resolution ──────────────────────────────────────────────────────
+// -- Binary Resolution ------------------------------------------------------
 
 function resolvePlaywrightBin(): string {
   // Prefer local node_modules/.bin
@@ -36,7 +36,7 @@ function resolvePlaywrightBin(): string {
   return 'playwright';
 }
 
-// ── Runtime Options ────────────────────────────────────────────────────────
+// -- Runtime Options --------------------------------------------------------
 
 export interface RuntimeOptions {
   /** Called for every stdout line (for streaming to SSE clients) */
@@ -49,7 +49,7 @@ export interface RuntimeOptions {
   cwd?:          string;
 }
 
-// ── Spawn Helper ───────────────────────────────────────────────────────────
+// -- Spawn Helper -----------------------------------------------------------
 
 /**
  * Run Playwright with the plan's CLI args and env vars.
@@ -63,7 +63,7 @@ export async function spawnPlaywright(
   opts: RuntimeOptions = {},
 ): Promise<RawRunOutput> {
   const bin  = resolvePlaywrightBin();
-  const args = plan.cliArgs; // already starts with 'test …'
+  const args = plan.cliArgs; // already starts with 'test ...'
   const env  = { ...plan.envVars };
   const cwd  = opts.cwd ?? WORKSPACE_ROOT;
 
@@ -89,7 +89,7 @@ export async function spawnPlaywright(
       return;
     }
 
-    // ── stdout ─────────────────────────────────────────────────────────
+    // -- stdout ---------------------------------------------------------
     let stdoutRemainder = '';
     proc.stdout?.on('data', (chunk: Buffer) => {
       const text = stdoutRemainder + chunk.toString('utf8');
@@ -102,7 +102,7 @@ export async function spawnPlaywright(
       }
     });
 
-    // ── stderr ─────────────────────────────────────────────────────────
+    // -- stderr ---------------------------------------------------------
     let stderrRemainder = '';
     proc.stderr?.on('data', (chunk: Buffer) => {
       const text = stderrRemainder + chunk.toString('utf8');
@@ -115,14 +115,14 @@ export async function spawnPlaywright(
       }
     });
 
-    // ── kill watchdog ───────────────────────────────────────────────────
+    // -- kill watchdog ---------------------------------------------------
     const watchdog = setTimeout(() => {
       killed = true;
       proc.kill('SIGKILL');
       stderrBuf += `\n[runtime] Execution killed after ${killMs}ms timeout\n`;
     }, killMs);
 
-    // ── process exit ───────────────────────────────────────────────────
+    // -- process exit ---------------------------------------------------
     proc.on('error', (err) => {
       clearTimeout(watchdog);
       reject(new Error(`Failed to spawn Playwright: ${err.message}`));
@@ -148,7 +148,7 @@ export function killProcess(proc: ChildProcess): void {
   try { proc.kill('SIGTERM'); } catch { /* already dead */ }
 }
 
-// ── Active Run Registry ────────────────────────────────────────────────────
+// -- Active Run Registry ----------------------------------------------------
 // Tracks in-flight processes so the engine can cancel them on demand.
 
 const activeProcesses = new Map<string, ChildProcess>();

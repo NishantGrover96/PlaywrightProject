@@ -1,9 +1,9 @@
-# Co-op Submit Claim — Repository Discovery
+# Co-op Submit Claim - Repository Discovery
 
 **Module:** Co-op
 **Feature:** Submit Claim
 **Page Path:** `/Coop/SubmitClaim`
-**Phase:** 1 — Repository Analysis
+**Phase:** 1 - Repository Analysis
 
 > **Note:** This document is a template populated with representative discovery findings.
 > Update sections marked `[POPULATE FROM SOURCE]` after running analysis against actual repositories.
@@ -29,11 +29,11 @@
 - `IList<AttachmentVM> Attachments`
 
 **Page Handlers**
-- `OnGetAsync()` — Load claim form, populate dropdowns
-- `OnPostSaveDraftAsync()` — Save as draft
-- `OnPostSubmitAsync()` — Submit claim
-- `OnPostUploadAttachmentAsync()` — Handle file upload
-- `OnPostDeleteAttachmentAsync()` — Remove attachment
+- `OnGetAsync()` - Load claim form, populate dropdowns
+- `OnPostSaveDraftAsync()` - Save as draft
+- `OnPostSubmitAsync()` - Submit claim
+- `OnPostUploadAttachmentAsync()` - Handle file upload
+- `OnPostDeleteAttachmentAsync()` - Remove attachment
 
 ---
 
@@ -127,9 +127,9 @@
 ### Status Transitions (Legacy)
 
 ```
-[Draft] → [Submitted] → [Under Review] → [Approved] → [Payment Pending] → [Paid]
-                      → [Returned]     → [Draft]     (can re-submit)
-                      → [Rejected]
+[Draft] -> [Submitted] -> [Under Review] -> [Approved] -> [Payment Pending] -> [Paid]
+                      -> [Returned]     -> [Draft]     (can re-submit)
+                      -> [Rejected]
 ```
 
 ---
@@ -212,7 +212,7 @@
 | Risk | Level | Notes |
 |---|---|---|
 | Business rule parity between DLL and API | High | Must verify each rule individually |
-| Stored procedure behavioral changes | Medium | Some SPs were "refactored" — verify outputs |
+| Stored procedure behavioral changes | Medium | Some SPs were "refactored" - verify outputs |
 | Fund availability calculation | High | Financial impact if incorrect |
 | Duplicate claim detection logic | Medium | Was in DLL, must be in API |
 | Audit record completeness | Medium | Must verify same fields captured |

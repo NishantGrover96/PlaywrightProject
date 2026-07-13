@@ -1,4 +1,4 @@
-# Rebate Whitelist / Blacklist IP Management — Repository Analysis Report
+# Rebate Whitelist / Blacklist IP Management - Repository Analysis Report
 Generated: 2026-07-07
 
 ## Source Files Analyzed
@@ -14,24 +14,24 @@ Generated: 2026-07-07
 
 ---
 
-## UI / Form Fields — WhiteList (Search Page)
+## UI / Form Fields - WhiteList (Search Page)
 | Field Name | Type | Required | Label | Conditional | Notes |
 |---|---|---|---|---|---|
-| IPAddress | text | No | IP Address | — | Filter by IP (partial or exact) |
-| SecurityListType | select | No | Security List Type | — | Options: All, `Y`=Whitelist, `N`=Blacklist |
-| Status | select | No | Status | — | Options: All, `Y`=Active, `N`=Inactive |
-| hdn_size (S) | hidden | — | — | — | Page size for pagination |
+| IPAddress | text | No | IP Address | - | Filter by IP (partial or exact) |
+| SecurityListType | select | No | Security List Type | - | Options: All, `Y`=Whitelist, `N`=Blacklist |
+| Status | select | No | Status | - | Options: All, `Y`=Active, `N`=Inactive |
+| hdn_size (S) | hidden | - | - | - | Page size for pagination |
 
 ---
 
-## UI / Form Fields — CreateWhiteList (Create / Edit Form)
+## UI / Form Fields - CreateWhiteList (Create / Edit Form)
 | Field Name | Type | Required | Label | Conditional | Notes |
 |---|---|---|---|---|---|
-| WhiteList.ip_whiteList_seq | hidden | — | — | — | `0` for create, existing seq for edit |
+| WhiteList.ip_whiteList_seq | hidden | - | - | - | `0` for create, existing seq for edit |
 | WhiteList.IPAddress | text | Yes | IP Address | Readonly in Edit mode (JS) | IPv4 or IPv6; `placeholder=_EnterIPAddress`; note text `_IPAddressNote` |
-| WhiteList.SecurityListType | select | Yes | Security List Type | — | Options: `Y`=Whitelist, `N`=Blacklist |
-| WhiteList.Status | select | Yes | Status | — | Options: `Y`=Active, `N`=Inactive |
-| WhiteList.Comment | textarea | Yes | Comment | — | `maxlength=500`; `placeholder=_EnterCommentForThisIPAddress` |
+| WhiteList.SecurityListType | select | Yes | Security List Type | - | Options: `Y`=Whitelist, `N`=Blacklist |
+| WhiteList.Status | select | Yes | Status | - | Options: `Y`=Active, `N`=Inactive |
+| WhiteList.Comment | textarea | Yes | Comment | - | `maxlength=500`; `placeholder=_EnterCommentForThisIPAddress` |
 
 ---
 
@@ -50,7 +50,7 @@ Generated: 2026-07-07
 ## Business Rules
 | Rule ID | Description | Source | Logic Summary |
 |---|---|---|---|
-| BR-WL01 | Whitelist vs Blacklist | Data model | `SecurityListType = "Y"` → Whitelist; `"N"` → Blacklist; displayed accordingly |
+| BR-WL01 | Whitelist vs Blacklist | Data model | `SecurityListType = "Y"` -> Whitelist; `"N"` -> Blacklist; displayed accordingly |
 | BR-WL02 | IP readonly on edit | `WhiteList.js` | `pageMode === 'Edit'` sets `#WhiteList_IPAddress` to `readonly`; background `#f8f9fa` |
 | BR-WL03 | Duplicate IP check (create only) | `OnPostCheckIPDuplicate` | API lookup by IP in same program; blocks save if match found |
 | BR-WL04 | IPv4 and IPv6 supported | `WhiteList.js` `isValidIPv4` / `isValidIPv6` | Both formats accepted; custom JS regex validation |
@@ -77,7 +77,7 @@ Generated: 2026-07-07
 ## Workflow / Status Transitions
 | From Status | To Status | Trigger | Notification |
 |---|---|---|---|
-| — | Created (Active/Inactive) | `OnPostSave` (create) | `_WhiteListEntrySavedSuccessfully` |
+| - | Created (Active/Inactive) | `OnPostSave` (create) | `_WhiteListEntrySavedSuccessfully` |
 | Existing | Updated | `OnPostSave` (edit, `ip_whiteList_seq != 0`) | `_WhiteListEntryUpdatedSuccessfully` |
 | Any | Save failed | API returns `false` | `_FailedToSaveWhiteListEntry` or `_FailedToUpdateWhiteListEntry` |
 | Any | Save exception | Exception caught | `_ErrorOccurredWhileSavingWhiteListEntry` |
@@ -120,7 +120,7 @@ Generated: 2026-07-07
 ## Client-Side Behaviors
 | Behavior | Trigger | Logic |
 |---|---|---|
-| Real-time IP format validation | `#WhiteList_IPAddress` input event | `validateIPAddress(value)` — shows/hides `#ipValidationMessage` |
+| Real-time IP format validation | `#WhiteList_IPAddress` input event | `validateIPAddress(value)` - shows/hides `#ipValidationMessage` |
 | Block non-IP keystrokes | `keydown` on IP field | Allows only: digits, dots, colons, backspace, Ctrl+A/C/V/X, arrows |
 | Readonly IP on edit | Page load (`pageMode === 'Edit'`) | Sets field `readonly`, grey background |
 | Duplicate check on submit | Form submit (Create mode) | AJAX POST `?handler=CheckIPDuplicate`; blocks submit if duplicate found (`#ipDuplicateMessage` shown) |

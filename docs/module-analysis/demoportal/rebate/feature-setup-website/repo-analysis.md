@@ -1,4 +1,4 @@
-# Rebate Setup Website — Repository Analysis Report
+# Rebate Setup Website - Repository Analysis Report
 Generated: 2026-07-07
 
 ## Source Files Analyzed
@@ -23,14 +23,14 @@ Generated: 2026-07-07
 | banner_file_path (Bannerfile) | file (Dropzone) | No | Upload Banner Image | `hide` (hidden section) | Stored via file path |
 | congratulations_image_path | file (Dropzone) | No | Congratulations Image | `editors` section | Post-submit image |
 | address | textarea | No | Address | `editors` section | Business address display |
-| country_seq | hidden | — | — | — | Pre-set via `_rebateWebsiteDetailsonEdit.country_seq` |
-| state_seq | hidden | — | — | `state_seq` hidden input | Pre-set |
+| country_seq | hidden | - | - | - | Pre-set via `_rebateWebsiteDetailsonEdit.country_seq` |
+| state_seq | hidden | - | - | `state_seq` hidden input | Pre-set |
 | phone_number | text | No | Phone Number | `editors` section | Contact number displayed on site |
 | privacy_statement | textarea/editor | No | Privacy Statement | `editors` section | Legal text (inline or PDF path) |
 | privacy_statement_path | file | No | Privacy Statement PDF | `editors` section | PDF upload |
 | terms_conditions | textarea/editor | No | Terms & Conditions | `editors` section | Legal text (inline or PDF path) |
 | terms_conditions_path | file | No | T&C PDF | `editors` section | PDF upload |
-| refund_status | select/checkbox | No | Refund Status | — | |
+| refund_status | select/checkbox | No | Refund Status | - | |
 | Theme selection | visual tabs (.clsLayout) | No | Choose your theme | `row hide` (hidden in current UI) | Mapped to `theme_name` in master data type "T" |
 | Version selection | visual tabs (.clsVersion) | No | Choose your Version | `row hide` (hidden in current UI) | Mapped to `version` in master data type "CO" |
 
@@ -52,7 +52,7 @@ Generated: 2026-07-07
 | BR-SW01 | Language-scoped content | `OnGetAsync` | Website content stored per language; each language variant saved independently |
 | BR-SW02 | Default language seq | `OnGetAsync` | If `language_seq` not in query string, defaults to `2` (primary language) |
 | BR-SW03 | Encrypted language seq | `encryptalanguageSeq` field | Language seq is encrypted in URL/dropdown value; decrypted on GET |
-| BR-SW04 | Master data typed | `_rebateWebsiteDetails.masterData` | `type = "T"` → themes; `type = "CO"` → versions; currently hidden in UI |
+| BR-SW04 | Master data typed | `_rebateWebsiteDetails.masterData` | `type = "T"` -> themes; `type = "CO"` -> versions; currently hidden in UI |
 | BR-SW05 | Content pre-populated | `GetHomeContentAsync` | If `websiteContent != null`, all fields pre-populated for editing |
 | BR-SW06 | Country/region driven | `GetCountryByProgramSeqAsync` | Countries loaded from Coop API; region defaults to `UserSession.DefaultRegion` |
 
@@ -108,7 +108,7 @@ Generated: 2026-07-07
 ## Client-Side Behaviors
 | Behavior | Trigger | Logic |
 |---|---|---|
-| Language change → reload content | `#ddllanguage` change | AJAX GET `?handler=GetWebsiteContent` with encrypted language seq |
+| Language change -> reload content | `#ddllanguage` change | AJAX GET `?handler=GetWebsiteContent` with encrypted language seq |
 | Logo upload | Dropzone on `#UploadLogo` | Uploads file; sets `#Logofile` hidden input; shows `#dvuploadLogoPath` preview |
 | Banner upload | Dropzone on `#UploadBanner` | Uploads file; sets `#Bannerfile` hidden input; shows preview |
 | Theme selection | `.clsLayout` click | Adds `active` class; sets `theme_name` hidden field |

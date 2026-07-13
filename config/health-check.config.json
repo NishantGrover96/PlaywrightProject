@@ -1,9 +1,9 @@
 {
-  "_readme": "Phase 5.5 — Pre-flight Validation Config. Override per-machine in health-check.local.json (gitignored).",
+  "_readme": "Phase 5.5 - Pre-flight Validation Config. Override per-machine in health-check.local.json (gitignored).",
 
   "scope": {
     "clients": "all",
-    "_clientsComment": "'all' | ['demoportal', 'certainteed'] — which clients to validate",
+    "_clientsComment": "'all' | ['demoportal', 'certainteed'] - which clients to validate",
     "environments": ["production"],
     "_environmentsComment": "Which environments to run URL reachability checks against"
   },
@@ -63,7 +63,7 @@
       "severity": "MEDIUM",
       "timeoutMs": 8000,
       "environments": ["production"],
-      "_comment": "HTTP GET against each configured baseUrl — expects 2xx or 3xx (redirect to login is fine)"
+      "_comment": "HTTP GET against each configured baseUrl - expects 2xx or 3xx (redirect to login is fine)"
     },
 
     "dashboardServices": {
@@ -77,7 +77,7 @@
         "dashboard/services/repository-service",
         "dashboard/services/engine-adapter"
       ],
-      "_comment": "require() each service — catches syntax errors, missing dependencies, bad paths"
+      "_comment": "require() each service - catches syntax errors, missing dependencies, bad paths"
     }
 
   },

@@ -19,12 +19,12 @@ import type {
   ExecutionArtifacts,
 } from './execution-plan';
 
-// ── Constants ──────────────────────────────────────────────────────────────
+// -- Constants --------------------------------------------------------------
 
 /** Max chars of stdout/stderr kept in memory per execution */
 const MAX_OUTPUT_CHARS = 4_096;
 
-// ── Duration Formatter ─────────────────────────────────────────────────────
+// -- Duration Formatter -----------------------------------------------------
 
 function formatDuration(ms: number): string {
   if (ms < 1_000)   return `${ms}ms`;
@@ -34,7 +34,7 @@ function formatDuration(ms: number): string {
   return `${min}m ${sec}s`;
 }
 
-// ── Test Count Extraction ──────────────────────────────────────────────────
+// -- Test Count Extraction --------------------------------------------------
 
 interface TestCounts {
   passed:  number;
@@ -68,7 +68,7 @@ function extractCounts(stdout: string): TestCounts {
   return counts;
 }
 
-// ── Error Collection ───────────────────────────────────────────────────────
+// -- Error Collection -------------------------------------------------------
 
 function extractErrors(stdout: string, stderr: string): string[] {
   const errors: string[] = [];
@@ -84,7 +84,7 @@ function extractErrors(stdout: string, stderr: string): string[] {
   }
 
   // Extract Playwright error headlines from stdout
-  const errorLines = stdout.split(/\r?\n/).filter(l => /^\s+(✕|✗|FAILED|Error:)/.test(l));
+  const errorLines = stdout.split(/\r?\n/).filter(l => /^\s+(x|✗|FAILED|Error:)/.test(l));
   for (const line of errorLines.slice(0, 10)) {
     errors.push(line.trim().slice(0, 300));
   }
@@ -101,7 +101,7 @@ function extractWarnings(stdout: string): string[] {
   return warnings;
 }
 
-// ── Status Classification ──────────────────────────────────────────────────
+// -- Status Classification --------------------------------------------------
 
 function classifyStatus(exitCode: number, counts: TestCounts): ExecutionStatus {
   if (exitCode === 0)              return 'passed';
@@ -112,15 +112,15 @@ function classifyStatus(exitCode: number, counts: TestCounts): ExecutionStatus {
   return 'error';
 }
 
-// ── Trim Helper ────────────────────────────────────────────────────────────
+// -- Trim Helper ------------------------------------------------------------
 
 function trim(s: string): string {
   if (s.length <= MAX_OUTPUT_CHARS) return s;
-  // Keep the tail — most useful for diagnosing failures
-  return '…[truncated]…\n' + s.slice(-MAX_OUTPUT_CHARS);
+  // Keep the tail - most useful for diagnosing failures
+  return '...[truncated]...\n' + s.slice(-MAX_OUTPUT_CHARS);
 }
 
-// ── Public API ─────────────────────────────────────────────────────────────
+// -- Public API -------------------------------------------------------------
 
 export interface RawRunOutput {
   exitCode: number;

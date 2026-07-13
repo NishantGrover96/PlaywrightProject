@@ -2,15 +2,15 @@ import { test, expect, request } from '@playwright/test';
 import testData from '../../../playwright/data/admin/feature-feature-list/test-data.json';
 
 /**
- * API Verification Tests — Admin / Feature List
+ * API Verification Tests - Admin / Feature List
  *
  * Tests all JSON endpoints for the FeatureList and ModuleList pages.
  * Verifies response shapes are consistent between legacy and modern.
  */
 
-test.describe('Admin Feature List — API Verification', () => {
+test.describe('Admin Feature List - API Verification', () => {
 
-    // ── GET /Admin/Feature/FeatureList?handler=FeatureProgram ──────────
+    // -- GET /Admin/Feature/FeatureList?handler=FeatureProgram ----------
     test('@api ADMIN-API-FL-001: FeatureProgram returns array with module and feature fields', async ({ request }) => {
         const response = await request.get(
             `/Admin/Feature/FeatureList?handler=FeatureProgram&moduleValue=${testData.modules.first}`
@@ -27,7 +27,7 @@ test.describe('Admin Feature List — API Verification', () => {
         }
     });
 
-    // ── GET /Admin/Feature/FeatureList?handler=FeatureCounts ──────────
+    // -- GET /Admin/Feature/FeatureList?handler=FeatureCounts ----------
     test('@api ADMIN-API-FL-002: FeatureCounts returns per-module totals', async ({ request }) => {
         const response = await request.get(
             `/Admin/Feature/FeatureList?handler=FeatureCounts&searchText=&statusFilter=`
@@ -57,7 +57,7 @@ test.describe('Admin Feature List — API Verification', () => {
         }
     });
 
-    // ── GET /Admin/Feature/FeatureList?handler=UserList ──────────
+    // -- GET /Admin/Feature/FeatureList?handler=UserList ----------
     test('@api ADMIN-API-FL-004: UserList returns array for a given masterConfigId', async ({ request }) => {
         const response = await request.get(
             `/Admin/Feature/FeatureList?handler=UserList&masterConfigId=${testData.api.sampleMasterConfigId}`
@@ -68,7 +68,7 @@ test.describe('Admin Feature List — API Verification', () => {
         expect(Array.isArray(list)).toBe(true);
     });
 
-    // ── GET /Admin/Feature/FeatureList?handler=AllUserGroupListDetail ──
+    // -- GET /Admin/Feature/FeatureList?handler=AllUserGroupListDetail --
     test('@api ADMIN-API-FL-005: AllUserGroupListDetail returns key-value role list including All', async ({ request }) => {
         const response = await request.get(
             `/Admin/Feature/FeatureList?handler=AllUserGroupListDetail`
@@ -81,7 +81,7 @@ test.describe('Admin Feature List — API Verification', () => {
         expect(allEntry).toBeTruthy();
     });
 
-    // ── GET /Admin/Feature/FeatureList?handler=DivisionList ──────────
+    // -- GET /Admin/Feature/FeatureList?handler=DivisionList ----------
     test('@api ADMIN-API-FL-006: DivisionList returns array with value and label', async ({ request }) => {
         const response = await request.get(
             `/Admin/Feature/FeatureList?handler=DivisionList`
@@ -95,7 +95,7 @@ test.describe('Admin Feature List — API Verification', () => {
         }
     });
 
-    // ── GET /Admin/Feature/FeatureList?handler=CountryList ──────────
+    // -- GET /Admin/Feature/FeatureList?handler=CountryList ----------
     test('@api ADMIN-API-FL-007: CountryList returns array with value and label', async ({ request }) => {
         const response = await request.get(
             `/Admin/Feature/FeatureList?handler=CountryList`
@@ -109,7 +109,7 @@ test.describe('Admin Feature List — API Verification', () => {
         }
     });
 
-    // ── POST ValidateUserPin ──────────────────────────────────────────
+    // -- POST ValidateUserPin ------------------------------------------
     test('@api ADMIN-API-FL-008: ValidateUserPin with wrong pin returns status 2', async ({ request }) => {
         const response = await request.post(
             `/Admin/Feature/FeatureList?handler=ValidateUserPin`,
@@ -120,12 +120,12 @@ test.describe('Admin Feature List — API Verification', () => {
         expect(body.data?.status ?? body.status).toBe(2);
     });
 
-    // ── POST ProgramFeatureActiveFlag (shape check) ──────────────────
+    // -- POST ProgramFeatureActiveFlag (shape check) ------------------
     test.fixme('@api ADMIN-API-FL-009: ToggleFeature returns status 200 and valid seq on success', async ({ request }) => {
-        // Requires authenticated session with valid programDataId — mark fixme until test environment confirmed
+        // Requires authenticated session with valid programDataId - mark fixme until test environment confirmed
     });
 
-    // ── POST AddFeature (duplicate key) ──────────────────────────────
+    // -- POST AddFeature (duplicate key) ------------------------------
     test('@api ADMIN-API-FL-010: AddFeature with duplicate FeatureKey returns status -1', async ({ request }) => {
         const response = await request.post(
             `/Admin/Feature/FeatureList?handler=AddFeature`,
@@ -146,7 +146,7 @@ test.describe('Admin Feature List — API Verification', () => {
         expect(body.field).toBe('featureKey');
     });
 
-    // ── Module List: GET ──────────────────────────────────────────────
+    // -- Module List: GET ----------------------------------------------
     test('@api ADMIN-API-FL-011: ModuleList UpdateModuleStatus returns success:true on valid toggle', async ({ request }) => {
         const response = await request.post(
             `/Admin/Feature/ModuleList?handler=UpdateModuleStatus`,
@@ -164,7 +164,7 @@ test.describe('Admin Feature List — API Verification', () => {
         expect(body.success).toBe(true);
     });
 
-    // ── Legacy vs Modern response shape parity ────────────────────────
+    // -- Legacy vs Modern response shape parity ------------------------
     test('@api ADMIN-API-FL-012: FeatureCounts response shape matches between legacy and modern', async ({ request }) => {
         const response = await request.get(
             `/Admin/Feature/FeatureList?handler=FeatureCounts&searchText=&statusFilter=`

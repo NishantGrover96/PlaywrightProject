@@ -3,7 +3,7 @@ name: playwright-test-generation
 description: Generate Playwright test assets including page objects, spec files, helpers, and API and database verification scripts from functional catalogs.
 ---
 
-# Playwright Test Generation — Prompt 3: Generate Test Assets
+# Playwright Test Generation - Prompt 3: Generate Test Assets
 
 ## Purpose
 
@@ -17,7 +17,7 @@ Using the Functional Unit Catalog and Test Catalog from Prompt 2, generate all t
 ## When to Use
 
 - After Prompt 2 (Functional Unit Catalog + Test Catalog) is complete
-- User says "generate Playwright tests for…", "implement automation for…", "generate test assets for…"
+- User says "generate Playwright tests for...", "implement automation for...", "generate test assets for..."
 
 ## Inputs
 
@@ -27,7 +27,7 @@ Using the Functional Unit Catalog and Test Catalog from Prompt 2, generate all t
 - **Smoke Suite**: `docs/functional-catalogs/{module}/feature-{feature}/smoke-suite.md`
 - **Regression Suite**: `docs/functional-catalogs/{module}/feature-{feature}/regression-suite.md`
 - **E2E Suite**: `docs/functional-catalogs/{module}/feature-{feature}/e2e-suite.md`
-- **Existing DemoPortalV2 tests**: `D:\...\DemoPortalV2\tests\playwright\coop\` — reuse proven selectors and patterns
+- **Existing DemoPortalV2 tests**: `D:\...\DemoPortalV2\tests\playwright\coop\` - reuse proven selectors and patterns
 
 ## Output Files
 
@@ -44,7 +44,7 @@ tests/database/{module}/feature-{feature}/compare-legacy-vs-modern.sql
 ## Page Object Standards
 
 ```typescript
-// {Feature}Page.ts — never contains test logic
+// {Feature}Page.ts - never contains test logic
 export class SubmitClaimPage {
   readonly page: Page;
   readonly url = '/CoopManagement/Claims/Submit/SubmitClaim';
@@ -77,7 +77,7 @@ export class SubmitClaimPage {
 ## Helpers Standards
 
 ```typescript
-// {feature}.helpers.ts — reusable multi-step flows
+// {feature}.helpers.ts - reusable multi-step flows
 import { Page } from '@playwright/test';
 import { SubmitClaimPage } from '../../pages/coop/feature-submit-claim/SubmitClaimPage';
 import testData from '../../data/coop/feature-submit-claim/test-data.json';
@@ -98,13 +98,13 @@ export async function setupClaimForSubmit(page: Page): Promise<SubmitClaimPage> 
 ## Spec File Standards
 
 ```typescript
-// {feature}.spec.ts — organized by test suite sections
+// {feature}.spec.ts - organized by test suite sections
 import { test, expect } from '@playwright/test';
 import { SubmitClaimPage } from '../../../pages/coop/feature-submit-claim/SubmitClaimPage';
 import { setupClaimForSubmit } from '../../../helpers/coop/feature-submit-claim/submit-claim.helpers';
 import testData from '../../../data/coop/feature-submit-claim/test-data.json';
 
-test.describe('Coop — Submit Claim', () => {
+test.describe('Coop - Submit Claim', () => {
 
   test.describe('Smoke', () => {
     test('COOP-SMOKE-001 - page loads @smoke', async ({ page }) => { ... });
@@ -144,19 +144,19 @@ test.describe('Coop — Submit Claim', () => {
 
 ## Selector Strategy (priority order)
 
-1. `page.getByLabel(…)` — accessible label (preferred)
-2. `page.getByRole(…)` — ARIA role
-3. `page.getByTestId(…)` — `data-testid` attribute
-4. `page.locator('css')` — CSS selector (last resort, use `.cshtml` as source)
+1. `page.getByLabel(...)` - accessible label (preferred)
+2. `page.getByRole(...)` - ARIA role
+3. `page.getByTestId(...)` - `data-testid` attribute
+4. `page.locator('css')` - CSS selector (last resort, use `.cshtml` as source)
 
 When reading DemoPortalV2 sources:
 - Check `.cshtml` for `id=`, `name=`, `asp-for=` attributes as selector hints
-- Check `js*.js` files for jQuery selectors (e.g. `$('#txtContactName1')`) → convert to Playwright
+- Check `js*.js` files for jQuery selectors (e.g. `$('#txtContactName1')`) -> convert to Playwright
 
 ## Environment Pattern
 
 ```typescript
-// Never hardcode URLs — always use BASE_URL
+// Never hardcode URLs - always use BASE_URL
 // Auth state loaded from storageState, never re-login per test
 use: {
   baseURL: process.env.BASE_URL,

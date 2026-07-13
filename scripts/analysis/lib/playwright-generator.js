@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Playwright Generator — generates Playwright test artifacts for Approved features.
+ * Playwright Generator - generates Playwright test artifacts for Approved features.
  *
  * Generates per feature:
  *   tests/playwright/clients/{clientId}/specs/{module}/feature-{kebab}/{kebab}.spec.ts
@@ -13,7 +13,7 @@
  * Rules:
  *   - Only generates for features with status === 'Approved'
  *   - Skips (logs reason) for all other statuses
- *   - Compares file timestamps — skips if generated file is newer than feature.json
+ *   - Compares file timestamps - skips if generated file is newer than feature.json
  *   - NEVER overwrites a manually modified file (detected by checking for placeholder tokens)
  *   - Modular: can generate for one feature, one module, or entire client
  */
@@ -62,7 +62,7 @@ async function generate(clientId, features, logger, options = {}) {
 
     // Status gate
     if (feature.status !== 'Approved') {
-      const reason = `status is '${feature.status}' — must be 'Approved' to generate`;
+      const reason = `status is '${feature.status}' - must be 'Approved' to generate`;
       logger.skip(feature.featureId, reason);
       report.skipped.push({ featureId: feature.featureId, reason });
       continue;
@@ -203,9 +203,9 @@ import testData from '../../data/${feature.module.toLowerCase()}/feature-${kebab
 
 test.describe('${feature.module} - ${displayName}', () => {
 
-  // ────────────────────────────────────────────────────────
+  // --------------------------------------------------------
   // Smoke Suite
-  // ────────────────────────────────────────────────────────
+  // --------------------------------------------------------
 
   test.describe('Smoke', () => {
 
@@ -217,9 +217,9 @@ test.describe('${feature.module} - ${displayName}', () => {
 
   });
 
-  // ────────────────────────────────────────────────────────
+  // --------------------------------------------------------
   // Happy Path
-  // ────────────────────────────────────────────────────────
+  // --------------------------------------------------------
 
   test.describe('Happy Path', () => {
 
@@ -231,9 +231,9 @@ test.describe('${feature.module} - ${displayName}', () => {
 
   });
 
-  // ────────────────────────────────────────────────────────
+  // --------------------------------------------------------
   // Validation Tests (auto-generated from detected rules)
-  // ────────────────────────────────────────────────────────
+  // --------------------------------------------------------
 
   test.describe('Validation', () => {
 ${validationTests || `
@@ -245,9 +245,9 @@ ${validationTests || `
 
   });
 
-  // ────────────────────────────────────────────────────────
+  // --------------------------------------------------------
   // Role-Based Access
-  // ────────────────────────────────────────────────────────
+  // --------------------------------------------------------
 
   test.describe('Authorization', () => {
 ${roleTests || `
@@ -290,7 +290,7 @@ export class ${pascal}Page {
   // Update this to match the actual navigation URL
   readonly url = '${feature.navigationPath || `/${feature.module.toLowerCase()}/${kebab}`}';
 
-  // ── Locators — replace with actual selectors from the UI ────────────────
+  // -- Locators - replace with actual selectors from the UI ----------------
   readonly pageTitle:     Locator;
   readonly loadingSpinner: Locator;
   readonly primaryButton: Locator;
@@ -317,7 +317,7 @@ export class ${pascal}Page {
     try {
       await expect(this.loadingSpinner).toBeHidden({ timeout: 10000 });
     } catch {
-      // Spinner may not be present — continue
+      // Spinner may not be present - continue
     }
   }
 
@@ -391,7 +391,7 @@ export { expect };
 function _buildReadme(feature, clientId) {
   const displayName = _toDisplayName(feature.featureName);
 
-  return `# ${displayName} — Playwright Tests
+  return `# ${displayName} - Playwright Tests
 
 **Feature ID:** \`${feature.featureId}\`
 **Module:** ${feature.module}
@@ -430,7 +430,7 @@ npx playwright test tests/playwright/clients/${clientId}/specs/${feature.module.
 - [ ] Authorization tests implemented
 
 ---
-_Generated from Approved catalog entry — ${new Date().toISOString()}_
+_Generated from Approved catalog entry - ${new Date().toISOString()}_
 `;
 }
 
@@ -450,7 +450,7 @@ async function _walkCatalog(dir, features) {
         const feat = JSON.parse(raw);
         features.push(feat);
       } catch {
-        // corrupt feature.json — skip
+        // corrupt feature.json - skip
       }
     }
   }

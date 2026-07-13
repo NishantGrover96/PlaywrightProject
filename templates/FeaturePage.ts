@@ -5,7 +5,7 @@ export class FeaturePage {
 
   readonly url = '/{{MODULE}}/{{FEATURE}}';
 
-  // Form fields — replace with actual locators
+  // Form fields - replace with actual locators
   readonly primaryButton: Locator;
   readonly successMessage: Locator;
   readonly errorSummary: Locator;

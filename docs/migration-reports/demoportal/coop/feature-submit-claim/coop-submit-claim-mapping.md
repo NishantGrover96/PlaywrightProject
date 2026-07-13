@@ -1,8 +1,8 @@
-# Co-op Submit Claim — Migration Mapping
+# Co-op Submit Claim - Migration Mapping
 
 **Module:** Co-op
 **Feature:** Submit Claim
-**Phase:** 3 — Migration Mapping
+**Phase:** 3 - Migration Mapping
 
 ---
 
@@ -22,14 +22,14 @@ This document maps every Legacy component to its Modern equivalent and assesses 
 |---|---|---|---|---|---|
 | Submit Claim Page | `Pages/Coop/SubmitClaim.cshtml` | `Pages/Coop/SubmitClaim.cshtml` | Low | Mapped | Same page; backend calls changed |
 | Page Model | `SubmitClaim.cshtml.cs::SubmitClaimModel` | `SubmitClaim.cshtml.cs::SubmitClaimModel` | Medium | Partial | DLL calls replaced with `ICoopApiClient` injections |
-| Save Draft Handler | `OnPostSaveDraftAsync()` | `OnPostSaveDraftAsync()` → `PUT /api/coop/claims/{id}/draft` | Low | Mapped | |
-| Submit Handler | `OnPostSubmitAsync()` | `OnPostSubmitAsync()` → `POST /api/coop/claims/{id}/submit` | High | Mapped | Entire submit pipeline moved to API |
-| Upload Attachment | `OnPostUploadAttachmentAsync()` | `OnPostUploadAttachmentAsync()` → `POST /api/coop/claims/{id}/attachments` | Medium | Mapped | |
-| Delete Attachment | `OnPostDeleteAttachmentAsync()` | `OnPostDeleteAttachmentAsync()` → `DELETE /api/coop/claims/{id}/attachments/{id}` | Low | Mapped | |
+| Save Draft Handler | `OnPostSaveDraftAsync()` | `OnPostSaveDraftAsync()` -> `PUT /api/coop/claims/{id}/draft` | Low | Mapped | |
+| Submit Handler | `OnPostSubmitAsync()` | `OnPostSubmitAsync()` -> `POST /api/coop/claims/{id}/submit` | High | Mapped | Entire submit pipeline moved to API |
+| Upload Attachment | `OnPostUploadAttachmentAsync()` | `OnPostUploadAttachmentAsync()` -> `POST /api/coop/claims/{id}/attachments` | Medium | Mapped | |
+| Delete Attachment | `OnPostDeleteAttachmentAsync()` | `OnPostDeleteAttachmentAsync()` -> `DELETE /api/coop/claims/{id}/attachments/{id}` | Low | Mapped | |
 
 ---
 
-## Business Logic DLL → REST API Mapping
+## Business Logic DLL -> REST API Mapping
 
 | Functional Unit | Legacy: DLL Method | Modern: API Endpoint | Risk | Status | Notes |
 |---|---|---|---|---|---|
@@ -103,17 +103,17 @@ This document maps every Legacy component to its Modern equivalent and assesses 
 
 ## Gap Analysis
 
-### Gaps — Legacy Features Not Yet Confirmed in Modern
+### Gaps - Legacy Features Not Yet Confirmed in Modern
 
 | ID | Description | Priority |
 |---|---|---|
-| GAP-001 | Annual cap enforcement — verify `ClaimValidationService` has full logic | Blocker |
-| GAP-002 | Duplicate claim detection — verify 24-hour window logic | High |
-| GAP-003 | Workflow routing table — verify approver assignment rules | Blocker |
-| GAP-004 | Email notification content — verify templates match | Medium |
-| GAP-005 | Fund balance decrement — verify updated after submit | High |
+| GAP-001 | Annual cap enforcement - verify `ClaimValidationService` has full logic | Blocker |
+| GAP-002 | Duplicate claim detection - verify 24-hour window logic | High |
+| GAP-003 | Workflow routing table - verify approver assignment rules | Blocker |
+| GAP-004 | Email notification content - verify templates match | Medium |
+| GAP-005 | Fund balance decrement - verify updated after submit | High |
 
-### Gaps — Modern Features Without Legacy Equivalent
+### Gaps - Modern Features Without Legacy Equivalent
 
 | ID | Description | Notes |
 |---|---|---|
@@ -135,4 +135,4 @@ This document maps every Legacy component to its Modern equivalent and assesses 
 
 *Mapping completed: [DATE]*
 *Reviewer: [NAME]*
-*Status: DRAFT — Requires source code verification*
+*Status: DRAFT - Requires source code verification*

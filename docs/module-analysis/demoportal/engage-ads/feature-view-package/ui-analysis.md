@@ -1,4 +1,4 @@
-# EngageAds — View Package (BundledAdPackages) UI Analysis Report
+# EngageAds - View Package (BundledAdPackages) UI Analysis Report
 
 Generated: 2026-06-18T16:20:47.888+05:30  
 Environment: DemoPortal UAT  
@@ -84,10 +84,10 @@ Auth State: `tests/playwright/fixtures/.auth/user.json` (Dealer)
 | Package | Subtitle / Positioning | Price | Interval | Channels listed | Description groups / highlights | Buttons | Notes / badge |
 |---|---|---:|---|---|---|---|---|
 | **Custom Package** | Work with the Digital Fusion team to build a fully managed campaign with a tailored channel mix | Starting at **$2500** | `/campaign` | Google Search Ads, Google Display Ads, Meta ads, Meta Retargeting, Direct Mail Postcard, Direct Mail with IP Targeting, Tiktok, LinkedIn Ads, OTT/CTV, YouTube Ads | `Campaign Length: Varies`; `What's Included`: campaign setup/configuration, optimizations, creative assets; `Best For`: tailored digital mix | `Talk To An Expert` | Badge: `CUSTOM PACKAGE`; note: `*Requires a brief consultation to determine the best mix of services.` |
-| **Local Lead Starter** | Balanced starting point for visibility across search and social | **$2875** | `/campaign` | Facebook & Instagram, Google Search Ads | `Campaign Length: 1–8 Weeks`; `What's Included`: Campaign Setup & Configuration, Campaign Optimizations, Creative Assets, Monthly Reporting; `Best For`: steady pipeline of high-intent leads; reach homeowners via social + search | `View Details`, `Select Package` | Badge: `LOCAL LEAD STARTER` |
-| **Meta Leads Ads** | Quick lead capture using low-friction, mobile-friendly forms with retargeting | **$2530** | `/campaign` | Facebook & Instagram, Meta Retargeting | `Campaign Length: 1–8 Weeks`; same 4 standard included items; `Best For`: steady social-media lead flow; re-engaging warm audiences | `View Details`, `Select Package` | Badge: `META LEADS ADS` |
-| **Google Growth Starter** | Streamlined Google-only option for lead momentum without cross-platform complexity | **$2760** | `/campaign` | Google Search Ads, Google Display Ads | `Campaign Length: 1–8 Weeks`; same 4 standard included items; `Best For`: Google search visibility and focused entry-level program | `View Details`, `Select Package` | Badge: `GOOGLE GROWTH STARTER` |
-| **Storm Response/Seasonal Boost** | Fast high-intent leads for storm/seasonal demand spikes | **$2875** | `/campaign` | Google Paid Search, Meta (FB & IG) Lead Ads | `Campaign Length: 7–14 Days`; same 4 standard included items; `Best For`: urgent or weather-driven demand, quick warm-audience re-engagement | `View Details`, `Select Package` | Badge: `STORM RESPONSE/SEASONAL BOOST` |
+| **Local Lead Starter** | Balanced starting point for visibility across search and social | **$2875** | `/campaign` | Facebook & Instagram, Google Search Ads | `Campaign Length: 1-8 Weeks`; `What's Included`: Campaign Setup & Configuration, Campaign Optimizations, Creative Assets, Monthly Reporting; `Best For`: steady pipeline of high-intent leads; reach homeowners via social + search | `View Details`, `Select Package` | Badge: `LOCAL LEAD STARTER` |
+| **Meta Leads Ads** | Quick lead capture using low-friction, mobile-friendly forms with retargeting | **$2530** | `/campaign` | Facebook & Instagram, Meta Retargeting | `Campaign Length: 1-8 Weeks`; same 4 standard included items; `Best For`: steady social-media lead flow; re-engaging warm audiences | `View Details`, `Select Package` | Badge: `META LEADS ADS` |
+| **Google Growth Starter** | Streamlined Google-only option for lead momentum without cross-platform complexity | **$2760** | `/campaign` | Google Search Ads, Google Display Ads | `Campaign Length: 1-8 Weeks`; same 4 standard included items; `Best For`: Google search visibility and focused entry-level program | `View Details`, `Select Package` | Badge: `GOOGLE GROWTH STARTER` |
+| **Storm Response/Seasonal Boost** | Fast high-intent leads for storm/seasonal demand spikes | **$2875** | `/campaign` | Google Paid Search, Meta (FB & IG) Lead Ads | `Campaign Length: 7-14 Days`; same 4 standard included items; `Best For`: urgent or weather-driven demand, quick warm-audience re-engagement | `View Details`, `Select Package` | Badge: `STORM RESPONSE/SEASONAL BOOST` |
 | **Direct Mail Performance Package** | Reach homeowners through targeted, printed postcard mailers | **$2150** | `/mailing` | Direct Mail Postcard | `Campaign Length: One Mailing`; includes postcard & mailing, gloss cover standard mail, purchased mail list, mail processing/delivery coordination; `Best For`: neighborhood targeting and offline awareness | `View Details`, `Select Package` | Badge: `DIRECT MAIL PERFORMANCE PACKAGE` |
 | **Direct Mail Performance w/ IP Targeting Package** | Reinforced direct mail with supporting digital advertising | **$2500** | `/mailing` | Direct Mail Postcard, IP Targeting for display & social ads | `Campaign Length: One Mailing`; includes postcard & mailing, gloss cover standard mail, purchased mail list, IP targeting ads, mail processing/delivery coordination, tracking options | `View Details`, `Select Package` | Badge: `DIRECT MAIL PERFORMANCE W/ IP TARGETING PACKAGE` |
 
@@ -106,7 +106,7 @@ The package selected in the captured flow is **Local Lead Starter**.
 - Price: `$2875 /campaign`
 - Selected-state button text: `Packaged Confirmed`
 - Sections visible:
-  - `CAMPAIGN LENGTH` → `1–8 Weeks`
+  - `CAMPAIGN LENGTH` -> `1-8 Weeks`
   - `WHATS INCLUDED`
     - Campaign Setup & Configuration
     - Campaign Optimizations
@@ -119,13 +119,13 @@ The package selected in the captured flow is **Local Lead Starter**.
 
 #### Cost summary panel (right)
 
-- `Estimated start timeframe` → `3–5 Business Days`
+- `Estimated start timeframe` -> `3-5 Business Days`
 - `Cost Estimation` breakdown:
-  - Meta (FB & IG) Lead Ads → `$1000`
-  - Google search Ads → `$1500`
-  - Management Fee → `$375`
-  - Package price → `$2875`
-  - **Total Plan Cost** → `$2875`
+  - Meta (FB & IG) Lead Ads -> `$1000`
+  - Google search Ads -> `$1500`
+  - Management Fee -> `$375`
+  - Package price -> `$2875`
+  - **Total Plan Cost** -> `$2875`
 
 #### Before terms acceptance
 
@@ -220,7 +220,7 @@ The package selected in the captured flow is **Local Lead Starter**.
 
 ## 6. User Journeys Observed
 
-### Journey 1 — Page load → view packages
+### Journey 1 - Page load -> view packages
 
 **Observed live**
 
@@ -229,7 +229,7 @@ The package selected in the captured flow is **Local Lead Starter**.
 3. Wizard shows step 1 active.
 4. Custom and standard packages are visible together.
 
-### Journey 2 — Select Package → cost summary → accept T&C → payment button enabled
+### Journey 2 - Select Package -> cost summary -> accept T&C -> payment button enabled
 
 **Observed live**
 
@@ -239,7 +239,7 @@ The package selected in the captured flow is **Local Lead Starter**.
 4. Payment CTA is disabled until T&C is accepted.
 5. After checking T&C, CTA becomes enabled.
 
-### Journey 3 — Select Package → apply COOP funds → payment
+### Journey 3 - Select Package -> apply COOP funds -> payment
 
 **Partially observed live / inferred from source code**
 
@@ -257,7 +257,7 @@ The package selected in the captured flow is **Local Lead Starter**.
   7. if card amount remains `> 0`, Stripe-session flow is used
   8. if card amount becomes `0`, co-op-only order flow is used
 
-### Journey 4 — Click `Talk To An Expert` → fill modal → submit
+### Journey 4 - Click `Talk To An Expert` -> fill modal -> submit
 
 **Observed live**
 
@@ -276,7 +276,7 @@ The package selected in the captured flow is **Local Lead Starter**.
 
 - Submit uses HTML5 validation (`checkValidity()` / `reportValidity()`) before AJAX `SubmitInquiry`.
 
-### Journey 5 — Click `View Details` → navigate to detail page
+### Journey 5 - Click `View Details` -> navigate to detail page
 
 **Observed live**
 
@@ -296,8 +296,8 @@ Detail page for `Local Lead Starter` includes:
   - Monthly Reporting
 - `Creative Layouts` carousel
 - `Campaign Details`
-  - `Campaign Duration: 1–8 Weeks`
-  - `Setup Time: 3–5 Business Days`
+  - `Campaign Duration: 1-8 Weeks`
+  - `Setup Time: 3-5 Business Days`
 - `How It Works?`
   - `1. Select`
   - `2. Launch`
@@ -305,7 +305,7 @@ Detail page for `Local Lead Starter` includes:
 - warning banner:
   - `Campaign configuration, targeting, channels, and creative are fixed and cannot be modified by contractors`
 
-### Journey 6 — Deep-link with `?packageSeq=`
+### Journey 6 - Deep-link with `?packageSeq=`
 
 **Inferred from source code**
 

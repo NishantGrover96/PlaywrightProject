@@ -1,5 +1,5 @@
 /**
- * EngageAds — View Package — API Spec
+ * EngageAds - View Package - API Spec
  * Module: engage-ads | Feature: view-package
  * Generated: 2026-06-18 | Pipeline: Step 3 (Playwright Test Generation)
  *
@@ -48,7 +48,7 @@ function extractPackageSeq(markup: string): string {
   return hrefMatch?.[1] ?? '';
 }
 
-test.describe('EngageAds — View Package — API Handlers', () => {
+test.describe('EngageAds - View Package - API Handlers', () => {
   let dealerRequest: APIRequestContext;
 
   test.beforeAll(async ({ playwright }) => {
@@ -63,14 +63,14 @@ test.describe('EngageAds — View Package — API Handlers', () => {
     await dealerRequest.dispose();
   });
 
-  test('ENGAGEADS-API-001 @smoke — GET /EngageAds/BundledAdPackages returns 200 for authenticated dealer', async () => {
+  test('ENGAGEADS-API-001 @smoke - GET /EngageAds/BundledAdPackages returns 200 for authenticated dealer', async () => {
     test.skip(DEALER_AUTH_MISSING, 'Dealer auth state is required for authenticated API assertions.');
     const response = await dealerRequest.get(BASE_PAGE);
     expect(response.status()).toBe(200);
     expect(await response.text()).toContain('Bundled Ad Packages');
   });
 
-  test('ENGAGEADS-API-002 @smoke — GET /EngageAds/BundledAdPackages returns 302 redirect for unauthenticated', async ({ request }) => {
+  test('ENGAGEADS-API-002 @smoke - GET /EngageAds/BundledAdPackages returns 302 redirect for unauthenticated', async ({ request }) => {
     const response = await request.get(BASE_PAGE, { maxRedirects: 0 });
     expect([302, 401, 403]).toContain(response.status());
     if (response.status() === 302) {
@@ -78,7 +78,7 @@ test.describe('EngageAds — View Package — API Handlers', () => {
     }
   });
 
-  test('ENGAGEADS-API-003 @regression — POST ?handler=LoadPackageData with valid packageSeq returns package JSON', async () => {
+  test('ENGAGEADS-API-003 @regression - POST ?handler=LoadPackageData with valid packageSeq returns package JSON', async () => {
     test.skip(DEALER_AUTH_MISSING, 'Dealer auth state is required for authenticated API assertions.');
     const pageResponse = await dealerRequest.get(BASE_PAGE, { headers: { Accept: 'text/html' } });
     const packageSeq = extractPackageSeq(await pageResponse.text());
@@ -94,7 +94,7 @@ test.describe('EngageAds — View Package — API Handlers', () => {
     expect(body).toHaveProperty('PackageName');
   });
 
-  test('ENGAGEADS-API-004 @regression — GET ?handler=BusinessGoals returns array of business goal objects', async () => {
+  test('ENGAGEADS-API-004 @regression - GET ?handler=BusinessGoals returns array of business goal objects', async () => {
     test.skip(DEALER_AUTH_MISSING, 'Dealer auth state is required for authenticated API assertions.');
     const response = await dealerRequest.get(`${BASE_PAGE}?handler=BusinessGoals`);
     expect(response.status()).toBe(200);
@@ -105,8 +105,8 @@ test.describe('EngageAds — View Package — API Handlers', () => {
     expect(firstItem.LookupValueCode ?? firstItem.lookupValueCode ?? '').not.toBe('');
   });
 
-  test('ENGAGEADS-API-005 @regression @mutation — POST ?handler=SubmitInquiry with valid payload returns success', async () => {
-    test.skip(IS_PROD, 'Mutation test — skip on production.');
+  test('ENGAGEADS-API-005 @regression @mutation - POST ?handler=SubmitInquiry with valid payload returns success', async () => {
+    test.skip(IS_PROD, 'Mutation test - skip on production.');
     test.skip(DEALER_AUTH_MISSING, 'Dealer auth state is required for authenticated API assertions.');
 
     const pageResponse = await dealerRequest.get(BASE_PAGE, { headers: { Accept: 'text/html' } });
@@ -140,8 +140,8 @@ test.describe('EngageAds — View Package — API Handlers', () => {
     expect(body.success).toBeTruthy();
   });
 
-  test('ENGAGEADS-API-006 @regression @mutation — POST ?handler=CreateStripeSession with valid payload returns redirectUrl', async () => {
-    test.skip(IS_PROD, 'Mutation test — skip on production.');
+  test('ENGAGEADS-API-006 @regression @mutation - POST ?handler=CreateStripeSession with valid payload returns redirectUrl', async () => {
+    test.skip(IS_PROD, 'Mutation test - skip on production.');
     test.skip(DEALER_AUTH_MISSING, 'Dealer auth state is required for authenticated API assertions.');
 
     const pageResponse = await dealerRequest.get(BASE_PAGE, { headers: { Accept: 'text/html' } });
@@ -168,8 +168,8 @@ test.describe('EngageAds — View Package — API Handlers', () => {
     expect(body.redirectUrl ?? '').toContain(testData.redirects.payment);
   });
 
-  test('ENGAGEADS-API-007 @regression @mutation — POST ?handler=CreatePayment with valid COOP-only payload returns order confirmation redirect', async () => {
-    test.skip(IS_PROD, 'Mutation test — skip on production.');
+  test('ENGAGEADS-API-007 @regression @mutation - POST ?handler=CreatePayment with valid COOP-only payload returns order confirmation redirect', async () => {
+    test.skip(IS_PROD, 'Mutation test - skip on production.');
     test.skip(DEALER_AUTH_MISSING, 'Dealer auth state is required for authenticated API assertions.');
 
     const pageResponse = await dealerRequest.get(BASE_PAGE, { headers: { Accept: 'text/html' } });

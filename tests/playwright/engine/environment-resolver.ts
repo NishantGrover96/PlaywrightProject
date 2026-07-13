@@ -24,7 +24,7 @@ import type {
 
 const WORKSPACE_ROOT = path.join(__dirname, '..', '..', '..');
 
-// ── Defaults ───────────────────────────────────────────────────────────────
+// -- Defaults ---------------------------------------------------------------
 
 const DEFAULT_TIMEOUTS: TimeoutConfig = {
   global:     90_000,
@@ -41,7 +41,7 @@ const DEFAULT_FLAGS: ExecutionFeatureFlags = {
   smokeOnly:      false,
 };
 
-// ── Client Config Loader ───────────────────────────────────────────────────
+// -- Client Config Loader ---------------------------------------------------
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function loadClientConfig(clientId: string): Record<string, any> | null {
@@ -54,11 +54,11 @@ function loadClientConfig(clientId: string): Record<string, any> | null {
   }
 }
 
-// ── .env File Parser ───────────────────────────────────────────────────────
+// -- .env File Parser -------------------------------------------------------
 
 /**
  * Parses a .env file into a plain object.
- * Handles quoted values ("…" and '…'), inline comments, and blank lines.
+ * Handles quoted values ("..." and '...'), inline comments, and blank lines.
  */
 function parseEnvFile(filePath: string): Record<string, string> {
   const result: Record<string, string> = {};
@@ -95,7 +95,7 @@ function loadEnvFile(envName: string): Record<string, string> {
   return {};
 }
 
-// ── Timeout Merging ────────────────────────────────────────────────────────
+// -- Timeout Merging --------------------------------------------------------
 
 function mergeTimeouts(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -110,7 +110,7 @@ function mergeTimeouts(
   };
 }
 
-// ── Feature Flag Merging ───────────────────────────────────────────────────
+// -- Feature Flag Merging ---------------------------------------------------
 
 function mergeFeatureFlags(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -126,7 +126,7 @@ function mergeFeatureFlags(
   };
 }
 
-// ── Main Resolver ──────────────────────────────────────────────────────────
+// -- Main Resolver ----------------------------------------------------------
 
 /**
  * Resolve the full runtime environment for a client × environment pair.
@@ -143,7 +143,7 @@ export function resolveEnvironment(
   const cfg     = loadClientConfig(clientId);
   const envFile = loadEnvFile(envName);
 
-  // ── URL resolution ──
+  // -- URL resolution --
   const envCfg  = cfg?.environments?.[envName];
   const baseUrl = (
     envCfg?.baseUrl ||
@@ -159,16 +159,16 @@ export function resolveEnvironment(
   );
   const envFileName = envCfg?.envFile ?? envName;
 
-  // ── Timeouts ──
+  // -- Timeouts --
   const clientTimeouts = cfg?.execution?.timeouts ?? cfg?.timeouts;
   const envTimeouts    = envCfg?.timeouts;
   const timeouts       = mergeTimeouts(clientTimeouts, envTimeouts);
 
-  // ── Feature flags ──
+  // -- Feature flags --
   const clientFlags  = cfg?.execution?.featureFlags ?? cfg?.featureFlags;
   const featureFlags = mergeFeatureFlags(clientFlags, overrides);
 
-  // ── Extra headers / cookies ──
+  // -- Extra headers / cookies --
   const extraHeaders = cfg?.execution?.extraHeaders ?? cfg?.extraHeaders ?? undefined;
   const cookies      = cfg?.execution?.cookies      ?? cfg?.cookies      ?? undefined;
 

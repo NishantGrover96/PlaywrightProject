@@ -2,7 +2,7 @@
 'use strict';
 
 /**
- * Repository Analysis Pipeline — Entry Point
+ * Repository Analysis Pipeline - Entry Point
  *
  * Usage:
  *   node scripts/analysis/analyze.js --client <clientId>
@@ -76,7 +76,7 @@ function parseArgs(argv) {
 function printHelp() {
   console.log(`
 Repository Analysis Pipeline
-─────────────────────────────────────────────────────────────
+-------------------------------------------------------------
 Usage:
   node scripts/analysis/analyze.js --client <clientId>
   node scripts/analysis/analyze.js --client <clientId> --module <module>
@@ -109,7 +109,7 @@ Pipeline flow:
 
 After analysis, review review.md files and update feature.json status to "Approved"
 before running --generate.
-─────────────────────────────────────────────────────────────
+-------------------------------------------------------------
 `);
 }
 
@@ -134,7 +134,7 @@ async function main() {
   const runId = new Date().toISOString().replace(/[:.]/g, '-').replace('T', '_');
   const log   = createLogger(args.clientId, runId);
 
-  log.section(`Repository Analysis — ${args.clientId.toUpperCase()}`);
+  log.section(`Repository Analysis - ${args.clientId.toUpperCase()}`);
   log.info(`Run ID : ${runId}`);
   log.info(`Mode   : ${args.generateOnly ? 'Generate only' : 'Full analysis'}${args.dryRun ? ' (dry-run)' : ''}`);
   if (args.filterModule)  log.info(`Module filter  : ${args.filterModule}`);
@@ -275,8 +275,8 @@ async function main() {
   _printDiscoveredFeatures(scoredFeatures, log);
 
   log.section('Analysis Complete');
-  log.info('Next step: review docs/functional-catalogs/{clientId}/ — open each review.md');
-  log.info('Set feature.json → status to "Approved" then run:');
+  log.info('Next step: review docs/functional-catalogs/{clientId}/ - open each review.md');
+  log.info('Set feature.json -> status to "Approved" then run:');
   log.info(`  node scripts/analysis/analyze.js --client ${args.clientId} --generate`);
 
   await log.close();

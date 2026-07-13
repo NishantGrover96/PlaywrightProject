@@ -1,4 +1,4 @@
-# DeerAd Builder — Load RTR2o — Repository Analysis Report
+# DeerAd Builder - Load RTR2o - Repository Analysis Report
 **Generated:** 2026-07-08  
 **Module:** DeerAd Builder (ad-builder)  
 **Feature:** Load RTR2o (frmloadrtr2o)  
@@ -62,7 +62,7 @@
 | `CustomerSegment` | Text | AI classification (Color, B&W, Studio, Environment) | N/A | Yes (Region 1) |
 | `Category1, Category2, Category3` | Dropdown | Content categorization (Campaign, Topic, etc.) | N/A | No |
 | `displayname1, displayname2, displayname3` | Text Input | Display names for template variants | N/A | No |
-| `price_type`, `price_details` | JSON/XML | Price matrix for POS materials | N/A | JSON → XML on save |
+| `price_type`, `price_details` | JSON/XML | Price matrix for POS materials | N/A | JSON -> XML on save |
 | `ADIXNo` / `Tracking #` | Text Input | Advertising ID tracking (5-20 alphanumeric) | 20 | No |
 | `MdlNoFeatured` | Text Input | Model number associated | N/A | No |
 | `IncentiveType` | Text Input | Promotion / incentive code | N/A | No |
@@ -135,7 +135,7 @@ Keywords, CustomerSegment, Aikeyword: AI data
 ADIXNo, MdlNoFeatured, IncentiveType: tracking
 Division, productGroup, productSegment: classification
 Category1-3: content categories
-price_type, price_details: POS pricing (JSON → XML)
+price_type, price_details: POS pricing (JSON -> XML)
 UserType: access control (CFA, CA, AY, TLCA)
 NotificationGroup, manuallyemail: notification
 coopEligible, bundleAd, paperOnDemand: flags
@@ -243,7 +243,7 @@ Examples:
 ### **Video & Audio Processing**
 
 **Video Conversion (FFMpeg):**
-- Input formats: `.wmv`→`asf`, `.avi`→`avi`, `.mov`→`mov`, others→`mp4`
+- Input formats: `.wmv`->`asf`, `.avi`->`avi`, `.mov`->`mov`, others->`mp4`
 - Output: Low-res MP4 at 640x480 resolution
 - Failure handling: Error logged; template creation continues
 
@@ -357,7 +357,7 @@ if (cat_type in ["WBH", "WBS", "WBR"] || mediaKey == "NS") {
 
 #### XML/JSON Serialization Validation
 ```csharp
-// Preview Details: JSON → XML on save
+// Preview Details: JSON -> XML on save
 List<Template_DTO.MultiplePreview> previews = 
   JavaScriptSerializer.Deserialize<List<...>>(json_preview_string);
 
@@ -370,7 +370,7 @@ List<Template_DTO.MultiplePreview> previews =
 //   </multipreview_detail>
 // </multipreview>
 
-// Price Details: JSON → XML similar structure
+// Price Details: JSON -> XML similar structure
 ```
 
 ---
@@ -429,28 +429,28 @@ public DateTime created_date { get; set; } // Audit: creation timestamp
 ### **Email Notification Data (On Save)**
 
 **Notification Types:**
-- `LORTR` — Load RTR (new)
-- `EDITRTR` — Edit RTR (update)
-- `LO_B_RTR` — Load Banner RTR
-- `EDIT_B_RTR` — Edit Banner RTR
-- `LO_N_RTR` — Load Native RTR
-- `EDIT_N_RTR` — Edit Native RTR
+- `LORTR` - Load RTR (new)
+- `EDITRTR` - Edit RTR (update)
+- `LO_B_RTR` - Load Banner RTR
+- `EDIT_B_RTR` - Edit Banner RTR
+- `LO_N_RTR` - Load Native RTR
+- `EDIT_N_RTR` - Edit Native RTR
 
 **Template Parameters Passed to Email:**
-- `<<Uploaded_By>>` — User name
-- `<<Title>>` — Template name
-- `<<DESC>>` — Description/headline
-- `<<AD_Codes>>` — ADIX numbers
-- `<<Topic>>` — Campaign name
-- `<<Language>>` — Locale
-- `<<Build_Type>>` — RTR or Hybrid
-- `<<Media_Type>>` — Media type FK
-- `<<Division>>` — Division
-- `<<Model_Number>>` — Model #
-- `<<Start_Date>>` / `<<End_Date>>` — Posting/expiration dates
-- `<<Online_Status>>` — Active/Scheduled
-- `<<img_thumbnail>>` — Thumbnail URL(s)
-- `<<ImgTemplateFileReplace>>` — Template file URL
+- `<<Uploaded_By>>` - User name
+- `<<Title>>` - Template name
+- `<<DESC>>` - Description/headline
+- `<<AD_Codes>>` - ADIX numbers
+- `<<Topic>>` - Campaign name
+- `<<Language>>` - Locale
+- `<<Build_Type>>` - RTR or Hybrid
+- `<<Media_Type>>` - Media type FK
+- `<<Division>>` - Division
+- `<<Model_Number>>` - Model #
+- `<<Start_Date>>` / `<<End_Date>>` - Posting/expiration dates
+- `<<Online_Status>>` - Active/Scheduled
+- `<<img_thumbnail>>` - Thumbnail URL(s)
+- `<<ImgTemplateFileReplace>>` - Template file URL
 
 ---
 
@@ -493,7 +493,7 @@ public DateTime created_date { get; set; } // Audit: creation timestamp
 | Step | Trigger | Action | Response |
 |---|---|---|---|
 | 1 | File selected on `dZUploadTemplateFile1` | Send AJAX POST to `RTR_FileUpload` | Receive file metadata (JSON) |
-| 2 | Upload complete (100%) | Show loader overlay | — |
+| 2 | Upload complete (100%) | Show loader overlay | - |
 | 3 | Response received | Parse AssetDTO-like JSON | File name, thumbnail, low-res, metadata |
 | 4 | Metadata parsed | Display file info (name, size, format) | Show thumbnail preview |
 | 5 | Secondary file (if required) | User uploads to `dZUploadTemplateFile2` | Send POST to `uploadFile2` |
@@ -507,11 +507,11 @@ public DateTime created_date { get; set; } // Audit: creation timestamp
 | Media Type Change | "LT" selected | Page count selector | Video/audio controls |
 | Media Type Change | "VC" or "TV" | Spot length dropdown, script upload | Print controls |
 | Media Type Change | "WB" (Web) | HTML5 ZIP upload, banner image upload | Print controls |
-| Sub-Category Change | Sub-category has sub-types | Sub-format dropdown | — |
+| Sub-Category Change | Sub-category has sub-types | Sub-format dropdown | - |
 | Template Type = Hybrid | Is_Hybrid = 1 | Variable default fields (Image, Headline, etc.) | Display Name field (hidden) |
-| Notification Checkbox | Checked | Notification group dropdown, email list | — |
-| Status = Scheduled | Status = 2 | Posting Date, Expiration Date pickers | — |
-| Status ≠ Scheduled | Status = 1 | — | Posting Date, Expiration Date pickers |
+| Notification Checkbox | Checked | Notification group dropdown, email list | - |
+| Status = Scheduled | Status = 2 | Posting Date, Expiration Date pickers | - |
+| Status ≠ Scheduled | Status = 1 | - | Posting Date, Expiration Date pickers |
 
 ### **Form Validation & Save Workflow**
 
@@ -530,8 +530,8 @@ public DateTime created_date { get; set; } // Audit: creation timestamp
    - Determine changed attributes for notifications
 5. **AJAX POST to SaveAITemplate action**
 6. **Response Handling:**
-   - Status `"0"`: Success (new template) → Toast → Show "Save & New" button
-   - Status `""`: Success (edit) → Toast → Redirect to template list
+   - Status `"0"`: Success (new template) -> Toast -> Show "Save & New" button
+   - Status `""`: Success (edit) -> Toast -> Redirect to template list
    - Error: Show error toast with message
 
 ---

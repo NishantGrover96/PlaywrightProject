@@ -4,23 +4,23 @@ export class PackageBuilderPage {
   readonly page: Page;
   readonly url = '/EngageAds/Admin/PackageBuilder';
 
-  // ── Hidden state fields ──────────────────────────────────────────────────
+  // -- Hidden state fields --------------------------------------------------
   readonly hdnPackageSeq: Locator;
   readonly hdnProgramSeq: Locator;
   readonly hdnAntiforgery: Locator;
 
-  // ── Identity strip (always visible) ────────────────────────────────────
+  // -- Identity strip (always visible) ------------------------------------
   readonly stripName: Locator;
   readonly stripSub: Locator;
   readonly stripStatus: Locator;
   readonly stripBilling: Locator;
   readonly stripIconEl: Locator;
 
-  // ── Save controls ───────────────────────────────────────────────────────
+  // -- Save controls -------------------------------------------------------
   readonly btnSavePackage: Locator;
   readonly saveStatusBanner: Locator;
 
-  // ── Tab navigation ───────────────────────────────────────────────────────
+  // -- Tab navigation -------------------------------------------------------
   readonly tabOverview: Locator;
   readonly tabPricing: Locator;
   readonly tabChannels: Locator;
@@ -30,7 +30,7 @@ export class PackageBuilderPage {
   readonly tabPaneChannels: Locator;
   readonly tabPaneFeatures: Locator;
 
-  // ── Overview tab fields ──────────────────────────────────────────────────
+  // -- Overview tab fields --------------------------------------------------
   readonly pkgName: Locator;
   readonly pkgSubtitle: Locator;
   readonly pkgBillingTerm: Locator;
@@ -42,7 +42,7 @@ export class PackageBuilderPage {
   readonly pkgIconKey: Locator;
   readonly iconOptions: Locator;
 
-  // ── Live preview ─────────────────────────────────────────────────────────
+  // -- Live preview ---------------------------------------------------------
   readonly prevNameBadge: Locator;
   readonly prevSubtitle: Locator;
   readonly prevPrice: Locator;
@@ -53,7 +53,7 @@ export class PackageBuilderPage {
   readonly prevFeaturesContainer: Locator;
   readonly prevChannels: Locator;
 
-  // ── Pricing tab ──────────────────────────────────────────────────────────
+  // -- Pricing tab ----------------------------------------------------------
   readonly pricingRecordCards: Locator;
   readonly btnAddPricingRecord: Locator;
   readonly prcAmountFirst: Locator;
@@ -61,13 +61,13 @@ export class PackageBuilderPage {
   readonly costBreakdownRows: Locator;
   readonly btnAddBreakdownRow: Locator;
 
-  // ── Channels tab ─────────────────────────────────────────────────────────
+  // -- Channels tab ---------------------------------------------------------
   readonly channelCheckItems: Locator;
   readonly channelCheckboxes: Locator;
   readonly creativeAssetsGrid: Locator;
   readonly caEmptyState: Locator;
 
-  // ── Features tab ─────────────────────────────────────────────────────────
+  // -- Features tab ---------------------------------------------------------
   readonly btnAddFeature: Locator;
   readonly descSections: Locator;
 

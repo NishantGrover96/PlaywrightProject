@@ -1,5 +1,5 @@
 /**
- * ViewPackagePage.ts — EngageAds BundledAdPackages Page Object
+ * ViewPackagePage.ts - EngageAds BundledAdPackages Page Object
  * DOM verified: 2026-06-29 on https://demoportaluat.channel-fusion.com/EngageAds/BundledAdPackages
  *
  * Locator Validation Report
@@ -30,7 +30,7 @@
  * | #txtCity                         | input#txtCity in expert modal     | Confirmed ID from DOM            | High   |
  * | #ddlState                        | select#ddlState in expert modal   | Confirmed ID from DOM            | High   |
  * | #submitExpertConsultation        | button ("Request Consultation")   | Confirmed ID from DOM            | High   |
- * | #coopFunds                       | NOT IN DOM — REMOVED              | No such ID exists on UAT         | N/A    |
+ * | #coopFunds                       | NOT IN DOM - REMOVED              | No such ID exists on UAT         | N/A    |
  */
 import { expect, type Locator, type Page } from '@playwright/test';
 
@@ -131,7 +131,7 @@ export class ViewPackagePage {
     this.termsError = page.locator('#lblTermsAndConditions');
     this.paymentButton = page.locator('.btnPayment');
     this.cancelPlanButton = page.locator('.btnCancelPlan');
-    // Co-op section — #coopFunds does NOT exist in DOM (verified 2026-06-29)
+    // Co-op section - #coopFunds does NOT exist in DOM (verified 2026-06-29)
     this.coopFundsAvailableBalance = page.locator('.dvWithCoop .availableFunds .costValue'); // ✅ confirmed
     this.budgetTypesSection = page.locator('.budgetTypes');                                  // ✅ confirmed (hidden until balance > 0)
     this.ddlBudgetTypeNames = page.locator('#ddlBudgetTypeNames');
@@ -222,7 +222,7 @@ export class ViewPackagePage {
   }
 
   /**
-   * Guideline 1 — Page Readiness:
+   * Guideline 1 - Page Readiness:
    * Waits for the loading spinner to disappear, then confirms the wizard
    * container is visible before any test interaction begins.
    * URL assertion is omitted: a dealer with an in-progress order is redirected

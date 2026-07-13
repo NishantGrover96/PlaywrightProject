@@ -1,27 +1,27 @@
 import { Page, Locator, expect } from '@playwright/test';
 
 /**
- * SubmitClaimPage — Page Object Model
+ * SubmitClaimPage - Page Object Model
  * URL: /CoopManagement/Claims/Submit/SubmitClaim
  *
  * Selectors sourced from:
- *   SubmitClaim.cshtml (legacy + modern — identical files, 2026-06-17)
+ *   SubmitClaim.cshtml (legacy + modern - identical files, 2026-06-17)
  *   Live audit: PlatformToAPIWorkspace ClaimPage.ts (2026-06-09/15)
  *
  * Wizard steps for dealer role (no dealer-search step shown):
- *   Step 1 — Pre-approval type + contact info
- *   Step 3 — Media type tile selection
- *   Step 4 — Activity form + confirmation emails
- *   Step 5 — Success / Draft-saved panel
+ *   Step 1 - Pre-approval type + contact info
+ *   Step 3 - Media type tile selection
+ *   Step 4 - Activity form + confirmation emails
+ *   Step 5 - Success / Draft-saved panel
  */
 export class SubmitClaimPage {
   readonly page: Page;
   readonly url = '/CoopManagement/Claims/Submit/SubmitClaim';
 
-  // ── Wizard container ─────────────────────────────────────────────────────────
+  // -- Wizard container ---------------------------------------------------------
   readonly wizardContainer: Locator;
 
-  // ── Step 1 — Claim type ──────────────────────────────────────────────────────
+  // -- Step 1 - Claim type ------------------------------------------------------
   // Radios are CSS-hidden; click adjacent div.selectBlock, not the input itself.
   readonly radioNoPreapproval:        Locator;
   readonly radioNoPreapprovalTrigger: Locator;
@@ -33,7 +33,7 @@ export class SubmitClaimPage {
   readonly btnStep1Continue:          Locator;  // #btnClaimStep1
   readonly btnStep1Clear:             Locator;  // #btnclearpreapproval
 
-  // ── Step 1 — Contact detail ──────────────────────────────────────────────────
+  // -- Step 1 - Contact detail --------------------------------------------------
   readonly contactNameInput:  Locator;
   readonly contactEmailInput: Locator;
   readonly contactPhoneInput: Locator;
@@ -42,12 +42,12 @@ export class SubmitClaimPage {
   readonly errContactPhone:   Locator;
   readonly btnStep1bContinue: Locator;  // #btnClaimStep2 (no-PA step 1b)
 
-  // ── Step 3 — Media type ──────────────────────────────────────────────────────
+  // -- Step 3 - Media type ------------------------------------------------------
   readonly mediaTiles:         Locator;  // ul.IconListRow li
   readonly dealerTypeDropdown: Locator;  // #programDealerTypeDropdown
   readonly btnMediaContinue:   Locator;  // #btnmediaselect
 
-  // ── Step 4 — Activity form ───────────────────────────────────────────────────
+  // -- Step 4 - Activity form ---------------------------------------------------
   readonly invoiceAmountInput:   Locator;  // #txtInvoiceAmt maxlength=15
   readonly invoiceNumberInput:   Locator;  // #txtInvoiceNumber maxlength=20
   readonly mediaNameInput:       Locator;  // #txtMediaName maxlength=100
@@ -57,35 +57,35 @@ export class SubmitClaimPage {
   readonly dealerIdInput:        Locator;  // #txtDealerIdText (conditional)
   readonly activityCreativeType: Locator;  // #activityCreativeType (conditional)
 
-  // ── Product lines (conditional on DisplayProductBlock config) ────────────────
+  // -- Product lines (conditional on DisplayProductBlock config) ----------------
   readonly productCodeDropdown: Locator;  // #drpProductCodes
   readonly productMeasurement:  Locator;  // #txtProductMeasurement
   readonly btnAddProduct:       Locator;  // #btnAddProduct
   readonly productLinesBody:    Locator;  // #tblProductLineBody
   readonly errProductLine:      Locator;  // #spnProductLineError
 
-  // ── File uploads ─────────────────────────────────────────────────────────────
+  // -- File uploads -------------------------------------------------------------
   readonly invoiceFileInput:    Locator;  // first input[type=file]
   readonly supportingFileInput: Locator;  // second input[type=file]
   readonly errInvoiceFile:      Locator;  // #spnInvoiceErrorFile
 
-  // ── Activity table + controls ────────────────────────────────────────────────
-  readonly btnAddToClaim:     Locator;  // #btnAddActivity — live text "Add to Claim"
+  // -- Activity table + controls ------------------------------------------------
+  readonly btnAddToClaim:     Locator;  // #btnAddActivity - live text "Add to Claim"
   readonly btnCancelActivity: Locator;  // #btnCancelActivity
   readonly activityTableBody: Locator;  // #tblAdMediaBody
 
-  // ── Step 4 — Confirmation emails ─────────────────────────────────────────────
+  // -- Step 4 - Confirmation emails ---------------------------------------------
   readonly emailMeInput:       Locator;  // #txtEmailMe (readonly, pre-filled)
   readonly otherContactInput:  Locator;  // #txtOtherMediaContact
   readonly btnAddOtherContact: Locator;  // #btnAddOtherContact
   readonly commentTextarea:    Locator;  // #txtMainComment maxlength=500
 
-  // ── Submit / Save ─────────────────────────────────────────────────────────────
+  // -- Submit / Save -------------------------------------------------------------
   readonly btnSaveForLater: Locator;  // #btnSubmitLater
   readonly btnSubmit:       Locator;  // #btnSubmit
   readonly btnBack:         Locator;  // #btnClaimWizardBack
 
-  // ── Step 5 — Success panels ───────────────────────────────────────────────────
+  // -- Step 5 - Success panels ---------------------------------------------------
   readonly panelSubmitSuccess: Locator;  // #dvClaimSubmit
   readonly panelDraftSaved:    Locator;  // #dvClaimSubmitLater
   readonly claimConfirmNumber: Locator;  // #spnClaimConfirmationNumber
@@ -93,7 +93,7 @@ export class SubmitClaimPage {
   readonly btnSubmitNewClaim:  Locator;  // .clsSubmitNewClaim (hidden for BMDLR/DIST/BMDIST)
   readonly btnSubmitAnother:   Locator;  // .clsSubmitNewClaimSame
 
-  // ── Budget display ────────────────────────────────────────────────────────────
+  // -- Budget display ------------------------------------------------------------
   readonly budgetDisplay: Locator;  // #spnDealerBudget
 
   constructor(page: Page) {
@@ -165,7 +165,7 @@ export class SubmitClaimPage {
     this.budgetDisplay = page.locator('#spnDealerBudget');
   }
 
-  // ── Navigation ───────────────────────────────────────────────────────────────
+  // -- Navigation ---------------------------------------------------------------
 
   async navigate(): Promise<void> {
     await this.page.goto(this.url, { waitUntil: 'domcontentloaded' });
@@ -177,7 +177,7 @@ export class SubmitClaimPage {
     await expect(this.wizardContainer).toBeVisible({ timeout: 20_000 });
   }
 
-  // ── Step 1 ───────────────────────────────────────────────────────────────────
+  // -- Step 1 -------------------------------------------------------------------
 
   async selectNoPreapproval(): Promise<void> {
     await this.radioNoPreapprovalTrigger.click();
@@ -201,7 +201,7 @@ export class SubmitClaimPage {
     }
   }
 
-  // ── Step 3 ───────────────────────────────────────────────────────────────────
+  // -- Step 3 -------------------------------------------------------------------
 
   async selectMediaTile(tileName: string): Promise<void> {
     const tile = this.mediaTiles.filter({ hasText: tileName }).first();
@@ -214,7 +214,7 @@ export class SubmitClaimPage {
     await expect(this.btnAddToClaim).toBeVisible({ timeout: 20_000 });
   }
 
-  // ── Step 4 ───────────────────────────────────────────────────────────────────
+  // -- Step 4 -------------------------------------------------------------------
 
   async fillActivity(opts: {
     mediaName:     string;
@@ -242,7 +242,7 @@ export class SubmitClaimPage {
     await this.btnSubmit.click();
   }
 
-  // ── Assertions ───────────────────────────────────────────────────────────────
+  // -- Assertions ---------------------------------------------------------------
 
   async expectWizardVisible(): Promise<void> {
     await expect(this.wizardContainer).toBeVisible();

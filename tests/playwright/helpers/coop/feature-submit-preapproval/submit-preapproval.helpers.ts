@@ -7,10 +7,10 @@ import testData from '../../../data/coop/feature-submit-preapproval/test-data.js
 export const DATA_DIR      = path.resolve(__dirname, '../../../data/coop/feature-submit-preapproval');
 export const SAMPLE_FILE   = path.join(DATA_DIR, 'sample-preapproval.pdf');
 
-/** True when no sample file exists — skip upload-dependent tests with this flag. */
+/** True when no sample file exists - skip upload-dependent tests with this flag. */
 export const FILE_MISSING = !existsSync(SAMPLE_FILE);
 
-// ── Navigation ────────────────────────────────────────────────────────────────
+// -- Navigation ----------------------------------------------------------------
 
 export async function goToSubmitPreapproval(page: Page): Promise<SubmitPreapprovalPage> {
   const preapproval = new SubmitPreapprovalPage(page);
@@ -18,11 +18,11 @@ export async function goToSubmitPreapproval(page: Page): Promise<SubmitPreapprov
   return preapproval;
 }
 
-// ── Wizard navigation helpers ─────────────────────────────────────────────────
+// -- Wizard navigation helpers -------------------------------------------------
 
 /**
  * Navigate to the form submission step for a standard mainbranch media type.
- * Path: Page → media tile selection → form step.
+ * Path: Page -> media tile selection -> form step.
  */
 export async function navigateToFormStep(
   page: Page,
@@ -57,11 +57,11 @@ export async function navigateToCampaignFormStep(page: Page): Promise<SubmitPrea
   return navigateToFormStep(page, testData.valid.campaignMediaName);
 }
 
-// ── Full-flow helpers (used by 2+ tests) ──────────────────────────────────────
+// -- Full-flow helpers (used by 2+ tests) --------------------------------------
 
 /**
  * Navigate to form step, fill ad title, upload file, and return page ready for submit.
- * Skips if sample file is missing — caller should guard with FILE_MISSING.
+ * Skips if sample file is missing - caller should guard with FILE_MISSING.
  */
 export async function setupMainbranchReady(page: Page): Promise<SubmitPreapprovalPage> {
   const preapproval = await navigateToFormStep(page);
@@ -71,7 +71,7 @@ export async function setupMainbranchReady(page: Page): Promise<SubmitPreapprova
 }
 
 /**
- * Full mainbranch preapproval submit: navigate → fill → upload → submit → return page at success.
+ * Full mainbranch preapproval submit: navigate -> fill -> upload -> submit -> return page at success.
  * Skips upload if FILE_MISSING.
  */
 export async function submitMainbranchPreapproval(

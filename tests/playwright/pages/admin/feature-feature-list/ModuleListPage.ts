@@ -61,7 +61,7 @@ export class ModuleListPage {
     async searchModules(moduleName: string, status: string = ''): Promise<void> {
         await this.moduleNameInput.fill(moduleName);
         if (status) await this.statusSelect.selectOption(status);
-        // Search triggers GET form navigation — await it before checking the table
+        // Search triggers GET form navigation - await it before checking the table
         await Promise.all([
             this.page.waitForNavigation({ waitUntil: 'commit', timeout: 60000 }),
             this.searchButton.click(),

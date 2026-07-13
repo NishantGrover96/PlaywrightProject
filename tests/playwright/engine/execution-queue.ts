@@ -23,7 +23,7 @@ import type {
   ExecutionStatus,
 } from './execution-plan';
 
-// ── ID Generator ──────────────────────────────────────────────────────────
+// -- ID Generator ----------------------------------------------------------
 
 let _seq = 0;
 function generateId(): string {
@@ -32,7 +32,7 @@ function generateId(): string {
   return `exec_${ts}_${seq}`;
 }
 
-// ── Deduplication Key ──────────────────────────────────────────────────────
+// -- Deduplication Key ------------------------------------------------------
 
 function dedupeKey(req: ExecutionRequest): string {
   return [
@@ -44,7 +44,7 @@ function dedupeKey(req: ExecutionRequest): string {
   ].join('::');
 }
 
-// ── Queue Store Interface (extension point for persistence) ───────────────
+// -- Queue Store Interface (extension point for persistence) ---------------
 
 export interface QueueStore {
   getAll():              QueuedExecution[];
@@ -66,14 +66,14 @@ class InMemoryStore implements QueueStore {
   }
 }
 
-// ── Execution Queue ────────────────────────────────────────────────────────
+// -- Execution Queue --------------------------------------------------------
 
 export type QueueCallback = (job: QueuedExecution) => Promise<ExecutionResult>;
 
 export class ExecutionQueue extends EventEmitter {
   private readonly store:    QueueStore;
   private readonly running   = new Map<string, QueuedExecution>();
-  private readonly dedupeMap = new Map<string, string>(); // dedupeKey → jobId
+  private readonly dedupeMap = new Map<string, string>(); // dedupeKey -> jobId
   private          processing = false;
   private          maxConcurrent: number;
 
@@ -83,7 +83,7 @@ export class ExecutionQueue extends EventEmitter {
     this.store = store ?? new InMemoryStore();
   }
 
-  // ── Public API ─────────────────────────────────────────────────────────
+  // -- Public API ---------------------------------------------------------
 
   /**
    * Enqueue a new execution request.
@@ -100,7 +100,7 @@ export class ExecutionQueue extends EventEmitter {
       if (existingId) {
         const existing = this.store.getAll().find(j => j.id === existingId);
         if (existing && (existing.status === 'queued' || existing.status === 'running')) {
-          // Return existing job — do not enqueue a duplicate
+          // Return existing job - do not enqueue a duplicate
           return existing;
         }
       }
@@ -161,7 +161,7 @@ export class ExecutionQueue extends EventEmitter {
     return this.running.size;
   }
 
-  // ── Internal ───────────────────────────────────────────────────────────
+  // -- Internal -----------------------------------------------------------
 
   private _runner?: QueueCallback;
 
@@ -239,17 +239,17 @@ export class ExecutionQueue extends EventEmitter {
     this.running.delete(job.id);
     this.emit('queue:completed', finished);
 
-    // Drain again — there may be more queued jobs
+    // Drain again - there may be more queued jobs
     this._drainQueue();
   }
 }
 
-// ── Default Export ─────────────────────────────────────────────────────────
+// -- Default Export ---------------------------------------------------------
 
 /** Singleton queue used by the execution engine */
 export const defaultQueue = new ExecutionQueue(1);
 
-// ── Helpers ────────────────────────────────────────────────────────────────
+// -- Helpers ----------------------------------------------------------------
 
 function buildEmptyArtifacts() {
   return {

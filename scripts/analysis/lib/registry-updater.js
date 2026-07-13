@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Registry Updater — updates config/repos.local.json after analysis.
+ * Registry Updater - updates config/repos.local.json after analysis.
  *
  * Updates the following fields for the analysed client:
  *   - lastSync       (ISO timestamp of this run)
@@ -35,7 +35,7 @@ async function updateRegistry(clientId, repoContext, status, logger) {
     const raw = await fs.promises.readFile(REPOS_LOCAL_PATH, 'utf8');
     registry  = JSON.parse(raw);
   } catch (err) {
-    logger.warn(`Could not read repos.local.json: ${err.message} — skipping registry update.`);
+    logger.warn(`Could not read repos.local.json: ${err.message} - skipping registry update.`);
     return;
   }
 
@@ -45,7 +45,7 @@ async function updateRegistry(clientId, repoContext, status, logger) {
   let entry = registry.clients?.[clientId] || registry[clientId];
 
   if (!entry) {
-    logger.warn(`No registry entry found for '${clientId}' — skipping update.`);
+    logger.warn(`No registry entry found for '${clientId}' - skipping update.`);
     return;
   }
 

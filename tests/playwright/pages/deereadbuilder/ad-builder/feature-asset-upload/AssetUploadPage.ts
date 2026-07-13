@@ -11,26 +11,26 @@ export class AssetUploadPage {
   readonly page: Page;
   readonly url = '/DAL/frmAssetUpload.aspx';
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // LOCATORS — Upload Section
-  // ─────────────────────────────────────────────────────────────────────────────
+  // -----------------------------------------------------------------------------
+  // LOCATORS - Upload Section
+  // -----------------------------------------------------------------------------
 
   readonly uploadDropzone: Locator;
   readonly uploadProgressBar: Locator;
   readonly uploadedThumbnail: Locator;
   readonly fileInput: Locator;
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // LOCATORS — Left Sidebar (Asset Tree)
-  // ─────────────────────────────────────────────────────────────────────────────
+  // -----------------------------------------------------------------------------
+  // LOCATORS - Left Sidebar (Asset Tree)
+  // -----------------------------------------------------------------------------
 
   readonly assetTreeContainer: Locator;
   readonly folderCheckboxes: Locator;
   readonly selectedFolderLabel: Locator;
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // LOCATORS — Asset Metadata Form (Right Panel)
-  // ─────────────────────────────────────────────────────────────────────────────
+  // -----------------------------------------------------------------------------
+  // LOCATORS - Asset Metadata Form (Right Panel)
+  // -----------------------------------------------------------------------------
 
   readonly displayNameInput: Locator;
   readonly assetTypeSelect: Locator;
@@ -50,9 +50,9 @@ export class AssetUploadPage {
   readonly manualEmailsInput: Locator;
   readonly adminOnlyCheckbox: Locator;
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // LOCATORS — Buttons
-  // ─────────────────────────────────────────────────────────────────────────────
+  // -----------------------------------------------------------------------------
+  // LOCATORS - Buttons
+  // -----------------------------------------------------------------------------
 
   readonly saveButton: Locator;
   readonly updateButton: Locator;
@@ -60,9 +60,9 @@ export class AssetUploadPage {
   readonly saveDuplicateButton: Locator;
   readonly cancelButton: Locator;
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // LOCATORS — Messages & Validation
-  // ─────────────────────────────────────────────────────────────────────────────
+  // -----------------------------------------------------------------------------
+  // LOCATORS - Messages & Validation
+  // -----------------------------------------------------------------------------
 
   readonly successToast: Locator;
   readonly errorToast: Locator;
@@ -116,9 +116,9 @@ export class AssetUploadPage {
     this.fieldErrorMessages = page.locator('.field-validation-error, .text-danger');
   }
 
-  // ─────────────────────────────────────────────────────────────────────────────
+  // -----------------------------------------------------------------------------
   // Navigation
-  // ─────────────────────────────────────────────────────────────────────────────
+  // -----------------------------------------------------------------------------
 
   async navigate(assetId?: string): Promise<void> {
     if (assetId) {
@@ -129,9 +129,9 @@ export class AssetUploadPage {
     await this.page.waitForLoadState('networkidle');
   }
 
-  // ─────────────────────────────────────────────────────────────────────────────
+  // -----------------------------------------------------------------------------
   // Upload Actions
-  // ─────────────────────────────────────────────────────────────────────────────
+  // -----------------------------------------------------------------------------
 
   async uploadFile(filePath: string): Promise<void> {
     await this.fileInput.setInputFiles(filePath);
@@ -154,9 +154,9 @@ export class AssetUploadPage {
     return this.uploadedThumbnail.getAttribute('src');
   }
 
-  // ─────────────────────────────────────────────────────────────────────────────
+  // -----------------------------------------------------------------------------
   // Form Filling Actions
-  // ─────────────────────────────────────────────────────────────────────────────
+  // -----------------------------------------------------------------------------
 
   async fillDisplayName(name: string): Promise<void> {
     await this.displayNameInput.fill(name);
@@ -254,9 +254,9 @@ export class AssetUploadPage {
     await this.adminOnlyCheckbox.check();
   }
 
-  // ─────────────────────────────────────────────────────────────────────────────
+  // -----------------------------------------------------------------------------
   // Form Submission
-  // ─────────────────────────────────────────────────────────────────────────────
+  // -----------------------------------------------------------------------------
 
   async save(): Promise<void> {
     await this.saveButton.click();
@@ -283,9 +283,9 @@ export class AssetUploadPage {
     await this.page.waitForLoadState('networkidle');
   }
 
-  // ─────────────────────────────────────────────────────────────────────────────
+  // -----------------------------------------------------------------------------
   // Validation & Assertions
-  // ─────────────────────────────────────────────────────────────────────────────
+  // -----------------------------------------------------------------------------
 
   async getValidationErrors(): Promise<string[]> {
     const errorMessages = await this.fieldErrorMessages.allTextContents();
@@ -342,9 +342,9 @@ export class AssetUploadPage {
     return aiIcon.isVisible();
   }
 
-  // ─────────────────────────────────────────────────────────────────────────────
+  // -----------------------------------------------------------------------------
   // Data Retrieval
-  // ─────────────────────────────────────────────────────────────────────────────
+  // -----------------------------------------------------------------------------
 
   async getDisplayName(): Promise<string> {
     return this.displayNameInput.inputValue();

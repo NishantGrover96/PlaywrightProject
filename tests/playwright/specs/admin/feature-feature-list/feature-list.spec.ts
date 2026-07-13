@@ -14,10 +14,10 @@ import {
 import testData from '../../../data/admin/feature-feature-list/test-data.json';
 
 // ════════════════════════════════════════════════════════════════════
-// SMOKE TESTS — FU-01, FU-02, FU-03, FU-04, FU-10
+// SMOKE TESTS - FU-01, FU-02, FU-03, FU-04, FU-10
 // ════════════════════════════════════════════════════════════════════
 
-test.describe('Admin Feature List — Smoke Tests', () => {
+test.describe('Admin Feature List - Smoke Tests', () => {
 
     test.beforeEach(async ({ page }) => {
         await page.goto('/Admin/Feature/FeatureList', { waitUntil: 'commit' });
@@ -61,7 +61,7 @@ test.describe('Admin Feature List — Smoke Tests', () => {
     });
 
     test.fixme('@smoke ADMIN-FU-FL-005: Correct PIN enables edit mode and reveals action/status columns', async ({ page }) => {
-        // ACTION REQUIRED: Set correct admin PIN in test-data.json → admin.pin
+        // ACTION REQUIRED: Set correct admin PIN in test-data.json -> admin.pin
         // PIN is a per-user code stored in the DB (crc_user.code). Ask admin for their PIN.
         const featurePage = new FeatureListPage(page);
         await featurePage.waitForPageLoad();
@@ -71,7 +71,7 @@ test.describe('Admin Feature List — Smoke Tests', () => {
 
     // FU-04: Feature Toggle
     test.fixme('@smoke ADMIN-FU-FL-006: Toggle feature Off to On returns success (edit mode required)', async ({ page }) => {
-        // Depends on FL-005 (PIN must be correct in test-data.json → admin.pin)
+        // Depends on FL-005 (PIN must be correct in test-data.json -> admin.pin)
         const featurePage = new FeatureListPage(page);
         await featurePage.waitForPageLoad();
         await enableEditMode(page, featurePage, testData.admin.pin);
@@ -111,7 +111,7 @@ test.describe('Admin Feature List — Smoke Tests', () => {
             const initialStatus = await moduleListPage.tableRows.first().locator('td').nth(1).innerText();
             await moduleListPage.toggleModule(0);
             await expect(moduleListPage.confirmModal).toBeVisible();
-            // Click confirm; page reloads after AJAX success — wait for navigation
+            // Click confirm; page reloads after AJAX success - wait for navigation
             await Promise.all([
                 page.waitForURL('**/Admin/Feature/**', { timeout: 30000 }),
                 moduleListPage.confirmButton.click(),
@@ -126,7 +126,7 @@ test.describe('Admin Feature List — Smoke Tests', () => {
 // REGRESSION TESTS
 // ════════════════════════════════════════════════════════════════════
 
-test.describe('Admin Feature List — Regression Tests', () => {
+test.describe('Admin Feature List - Regression Tests', () => {
 
     test.beforeEach(async ({ page }) => {
         await page.goto('/Admin/Feature/FeatureList', { waitUntil: 'commit' });
@@ -184,7 +184,7 @@ test.describe('Admin Feature List — Regression Tests', () => {
     });
 
     test.fixme('@regression ADMIN-FU-FL-014: Status filter "On" shows only active features', async ({ page }) => {
-        // test.fixme: requires admin PIN from crc_user.code — set testData.admin.pin before enabling
+        // test.fixme: requires admin PIN from crc_user.code - set testData.admin.pin before enabling
         const featurePage = new FeatureListPage(page);
         await featurePage.waitForPageLoad();
         await enableEditMode(page, featurePage, testData.admin.pin);
@@ -201,7 +201,7 @@ test.describe('Admin Feature List — Regression Tests', () => {
     });
 
     test.fixme('@regression ADMIN-FU-FL-015: Status filter "Off" shows only inactive features', async ({ page }) => {
-        // test.fixme: requires admin PIN from crc_user.code — set testData.admin.pin before enabling
+        // test.fixme: requires admin PIN from crc_user.code - set testData.admin.pin before enabling
         const featurePage = new FeatureListPage(page);
         await featurePage.waitForPageLoad();
         await enableEditMode(page, featurePage, testData.admin.pin);
@@ -252,7 +252,7 @@ test.describe('Admin Feature List — Regression Tests', () => {
     });
 
     test.fixme('@regression ADMIN-FU-FL-019: Disabling edit mode hides action/status columns', async ({ page }) => {
-        // test.fixme: requires admin PIN from crc_user.code — set testData.admin.pin before enabling
+        // test.fixme: requires admin PIN from crc_user.code - set testData.admin.pin before enabling
         const featurePage = new FeatureListPage(page);
         await featurePage.waitForPageLoad();
         await enableEditMode(page, featurePage, testData.admin.pin);
@@ -271,7 +271,7 @@ test.describe('Admin Feature List — Regression Tests', () => {
 
     // FU-07: Description Edit
     test.fixme('@regression ADMIN-FU-FL-021: Empty description shows required validation error', async ({ page }) => {
-        // test.fixme: requires admin PIN from crc_user.code — set testData.admin.pin before enabling
+        // test.fixme: requires admin PIN from crc_user.code - set testData.admin.pin before enabling
         const featurePage = new FeatureListPage(page);
         await featurePage.waitForPageLoad();
         await enableEditMode(page, featurePage, testData.admin.pin);
@@ -286,7 +286,7 @@ test.describe('Admin Feature List — Regression Tests', () => {
 
     // FU-08: Add Feature
     test.fixme('@regression ADMIN-FU-FL-022: Add Feature modal opens in edit mode', async ({ page }) => {
-        // test.fixme: requires admin PIN from crc_user.code — set testData.admin.pin before enabling
+        // test.fixme: requires admin PIN from crc_user.code - set testData.admin.pin before enabling
         const featurePage = new FeatureListPage(page);
         await featurePage.waitForPageLoad();
         await enableEditMode(page, featurePage, testData.admin.pin);
@@ -300,7 +300,7 @@ test.describe('Admin Feature List — Regression Tests', () => {
     });
 
     test.fixme('@regression ADMIN-FU-FL-023: Add Feature required field validation shows errors', async ({ page }) => {
-        // test.fixme: requires admin PIN from crc_user.code — set testData.admin.pin before enabling
+        // test.fixme: requires admin PIN from crc_user.code - set testData.admin.pin before enabling
         const featurePage = new FeatureListPage(page);
         await featurePage.waitForPageLoad();
         await enableEditMode(page, featurePage, testData.admin.pin);
@@ -313,7 +313,7 @@ test.describe('Admin Feature List — Regression Tests', () => {
     });
 
     test.fixme('@regression ADMIN-FU-FL-024: Duplicate Feature Key rejected with field error', async ({ page }) => {
-        // test.fixme: requires admin PIN from crc_user.code — set testData.admin.pin before enabling
+        // test.fixme: requires admin PIN from crc_user.code - set testData.admin.pin before enabling
         const featurePage = new FeatureListPage(page);
         await featurePage.waitForPageLoad();
         await enableEditMode(page, featurePage, testData.admin.pin);
@@ -335,7 +335,7 @@ test.describe('Admin Feature List — Regression Tests', () => {
     });
 
     test.fixme('@regression ADMIN-FU-FL-025: Duplicate Property Name rejected with field error', async ({ page }) => {
-        // test.fixme: requires admin PIN from crc_user.code — set testData.admin.pin before enabling
+        // test.fixme: requires admin PIN from crc_user.code - set testData.admin.pin before enabling
         const featurePage = new FeatureListPage(page);
         await featurePage.waitForPageLoad();
         await enableEditMode(page, featurePage, testData.admin.pin);
@@ -358,7 +358,7 @@ test.describe('Admin Feature List — Regression Tests', () => {
 
     // FU-09: Excel Export
     test.fixme('@regression ADMIN-FU-FL-026: Download Excel initiates file download', async ({ page }) => {
-        // test.fixme: requires admin PIN from crc_user.code — set testData.admin.pin before enabling
+        // test.fixme: requires admin PIN from crc_user.code - set testData.admin.pin before enabling
         const featurePage = new FeatureListPage(page);
         await featurePage.waitForPageLoad();
         await enableEditMode(page, featurePage, testData.admin.pin);
@@ -369,18 +369,18 @@ test.describe('Admin Feature List — Regression Tests', () => {
     });
 
     test.fixme('@regression ADMIN-FU-FL-027: Import rejects empty file selection', async ({ page }) => {
-        // test.fixme: requires admin PIN from crc_user.code — set testData.admin.pin before enabling
+        // test.fixme: requires admin PIN from crc_user.code - set testData.admin.pin before enabling
         const featurePage = new FeatureListPage(page);
         await featurePage.waitForPageLoad();
         await enableEditMode(page, featurePage, testData.admin.pin);
-        // Trigger upload click — no file selected
+        // Trigger upload click - no file selected
         await featurePage.uploadButton.click();
         // File input should become visible (no file = no request)
         await expect(featurePage.fileImportInput).toBeAttached();
     });
 
     test.fixme('@regression ADMIN-FU-FL-028: Import rejects non-xlsx file', async ({ page }) => {
-        // test.fixme: requires admin PIN from crc_user.code — set testData.admin.pin before enabling
+        // test.fixme: requires admin PIN from crc_user.code - set testData.admin.pin before enabling
         const featurePage = new FeatureListPage(page);
         await featurePage.waitForPageLoad();
         await enableEditMode(page, featurePage, testData.admin.pin);
@@ -436,7 +436,7 @@ test.describe('Admin Feature List — Regression Tests', () => {
 
     // FU-05: User Group Modal
     test.fixme('@regression ADMIN-FU-FL-032: User Role modal loads with roles, division, country sections', async ({ page }) => {
-        // test.fixme: requires admin PIN from crc_user.code — set testData.admin.pin before enabling
+        // test.fixme: requires admin PIN from crc_user.code - set testData.admin.pin before enabling
         const featurePage = new FeatureListPage(page);
         await featurePage.waitForPageLoad();
         await enableEditMode(page, featurePage, testData.admin.pin);
@@ -450,7 +450,7 @@ test.describe('Admin Feature List — Regression Tests', () => {
     });
 
     test.fixme('@regression ADMIN-FU-FL-033: All checkbox in role group checks all role options', async ({ page }) => {
-        // Requires edit mode + row with role button accessible — mark fixme until selectors confirmed
+        // Requires edit mode + row with role button accessible - mark fixme until selectors confirmed
     });
 
     // FU-06: Scope Modal

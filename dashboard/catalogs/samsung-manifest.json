@@ -1,5 +1,5 @@
 {
-  "_readme": "Samsung HVAC per-client catalog manifest — Phase 6 scaffold. Populate features as test coverage is built.",
+  "_readme": "Samsung HVAC per-client catalog manifest - Phase 6 scaffold. Populate features as test coverage is built.",
   "_createdAt": "2026-07-07T00:00:00Z",
   "_schema": "v2",
   "_stub": true,
@@ -8,7 +8,7 @@
   "clientName": "Samsung HVAC",
   "platform": "demoportal",
 
-  "_inheritanceNote": "Samsung inherits DemoPortal feature catalog via platform field (coop module only — engageAds and popshop disabled). Add client-specific overrides in the features map below.",
+  "_inheritanceNote": "Samsung inherits DemoPortal feature catalog via platform field (coop module only - engageAds and popshop disabled). Add client-specific overrides in the features map below.",
 
   "features": {
 

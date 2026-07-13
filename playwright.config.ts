@@ -12,17 +12,17 @@ import {
 /**
  * Metadata-driven Playwright configuration.
  *
- * Projects are built dynamically from config/clients/*.json — no code
+ * Projects are built dynamically from config/clients/*.json - no code
  * change is needed when a new client is added.
  *
  * Key env vars (set by the execution engine at runtime):
- *   CLIENT_ID     — restrict execution to a single client
- *   TEST_ENV      — target environment (production | uat | testing | dev)
- *   AUTH_PROJECT  — which setup project to use (set per run by engine)
- *   BASE_URL      — explicit URL override
+ *   CLIENT_ID     - restrict execution to a single client
+ *   TEST_ENV      - target environment (production | uat | testing | dev)
+ *   AUTH_PROJECT  - which setup project to use (set per run by engine)
+ *   BASE_URL      - explicit URL override
  */
 
-// ── Environment setup ────────────────────────────────────────────────────────
+// -- Environment setup --------------------------------------------------------
 
 type EnvironmentName = 'dev' | 'testing' | 'uat' | 'production';
 
@@ -34,7 +34,7 @@ dotenv.config({ path: path.resolve(__dirname, `.env.${TEST_ENV}`) });
 const BASE_URL     = process.env.BASE_URL     || '';
 const API_BASE_URL = process.env.API_BASE_URL || BASE_URL;
 
-// ── Client discovery ─────────────────────────────────────────────────────────
+// -- Client discovery ---------------------------------------------------------
 
 /**
  * Discover all configured client IDs.
@@ -47,7 +47,7 @@ function getActiveClients(): string[] {
   return all;
 }
 
-// ── Project builders ──────────────────────────────────────────────────────────
+// -- Project builders ----------------------------------------------------------
 
 /**
  * Convert a ProjectDescriptor into a Playwright project config object.
@@ -99,7 +99,7 @@ function buildPlaywrightProject(
   }
 }
 
-// ── Global timeouts from active client ────────────────────────────────────────
+// -- Global timeouts from active client ----------------------------------------
 
 function resolveGlobalTimeout(): number {
   if (!CLIENT_ID) return 90_000;
@@ -113,7 +113,7 @@ function resolveGlobalTimeout(): number {
   return 90_000;
 }
 
-// ── Output folder ─────────────────────────────────────────────────────────────
+// -- Output folder -------------------------------------------------------------
 
 function resolveOutputFolder(): string {
   // When running via the engine, it injects artifact paths via reporter CLI args.
@@ -122,13 +122,13 @@ function resolveOutputFolder(): string {
   return `reports/${TEST_ENV}-html`;
 }
 
-// ── Build project list ────────────────────────────────────────────────────────
+// -- Build project list --------------------------------------------------------
 
 const activeClients    = getActiveClients();
 const descriptors      = buildProjectDescriptors(activeClients, ['chromium']);
 const playwrightProjects = descriptors.map(buildPlaywrightProject);
 
-// ── Playwright Configuration ──────────────────────────────────────────────────
+// -- Playwright Configuration --------------------------------------------------
 
 export default defineConfig({
   testDir:       './tests/playwright/specs',

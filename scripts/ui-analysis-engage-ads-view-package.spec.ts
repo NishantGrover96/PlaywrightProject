@@ -294,7 +294,7 @@ async function captureModalFields(page: Page) {
   return { exists, visible, fields, formValid: formValidity, invalidFields };
 }
 
-test('UI Analysis — EngageAds View Package', async ({ page }) => {
+test('UI Analysis - EngageAds View Package', async ({ page }) => {
   fs.mkdirSync(SCREENSHOTS_DIR, { recursive: true });
 
   let phase = 'initial-load';

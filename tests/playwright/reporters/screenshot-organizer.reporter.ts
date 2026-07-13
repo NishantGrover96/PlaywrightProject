@@ -31,8 +31,8 @@ const SCREENSHOT_FOLDER = 'Test_Case_Screenshot';
 function sanitize(name: string): string {
   return name
     .replace(/\x1B\[[0-9;]*m/g, '')   // ANSI colour codes
-    .replace(/[^\w\s-]/g, ' ')         // non-word chars → space
-    .replace(/\s+/g, '-')              // whitespace → dash
+    .replace(/[^\w\s-]/g, ' ')         // non-word chars -> space
+    .replace(/\s+/g, '-')              // whitespace -> dash
     .replace(/-{2,}/g, '-')            // collapse repeated dashes
     .replace(/^-|-$/g, '')             // trim leading/trailing dashes
     .toLowerCase()
@@ -73,7 +73,7 @@ export default class ScreenshotOrganizerReporter implements Reporter {
       try {
         fs.copyFileSync(srcPath, destPath);
       } catch (err) {
-        // Non-fatal — don't break the test run
+        // Non-fatal - don't break the test run
         console.error(`[screenshot-organizer] Failed to copy screenshot: ${err}`);
       }
     });

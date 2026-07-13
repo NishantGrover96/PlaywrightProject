@@ -1,17 +1,17 @@
 'use strict';
 
 /**
- * Client Service — loads and caches all client configurations from
+ * Client Service - loads and caches all client configurations from
  * config/clients/*.json.
  *
  * Provides:
- *   clientService.getClients()               → all clients
- *   clientService.getClient(clientId)         → single client config
- *   clientService.getModules(clientId)        → module list (from catalog)
- *   clientService.getRoles(clientId)          → role list
- *   clientService.getEnvironments(clientId)   → environment map
- *   clientService.getRepoInfo(clientId)       → repo metadata
- *   clientService.getAuthInfo(clientId)       → authentication config
+ *   clientService.getClients()               -> all clients
+ *   clientService.getClient(clientId)         -> single client config
+ *   clientService.getModules(clientId)        -> module list (from catalog)
+ *   clientService.getRoles(clientId)          -> role list
+ *   clientService.getEnvironments(clientId)   -> environment map
+ *   clientService.getRepoInfo(clientId)       -> repo metadata
+ *   clientService.getAuthInfo(clientId)       -> authentication config
  *
  * Caches configs in memory; watches config/clients/ for changes.
  */
@@ -27,7 +27,7 @@ const USERS_DIR   = path.join(ROOT, 'config', 'users');
 // In-memory cache
 // ---------------------------------------------------------------------------
 
-/** @type {Map<string, object>}  clientId → parsed client config */
+/** @type {Map<string, object>}  clientId -> parsed client config */
 let _cache = new Map();
 let _watcherStarted = false;
 
@@ -109,7 +109,7 @@ const clientService = {
     _ensureLoaded();
     const cfg = _cache.get(clientId);
 
-    // Check client-level role → project override
+    // Check client-level role -> project override
     const roleProjects = cfg?.roleProjects || cfg?.authentication?.roleProjects;
     if (roleProjects && roleProjects[role]) return roleProjects[role];
 
@@ -199,7 +199,7 @@ const clientService = {
     try {
       fs.watch(CLIENTS_DIR, { persistent: false }, (event, filename) => {
         if (filename && filename.endsWith('.json')) {
-          console.log(`[client-service] Config changed: ${filename} — reloading.`);
+          console.log(`[client-service] Config changed: ${filename} - reloading.`);
           clearTimeout(clientService._reloadTimer);
           clientService._reloadTimer = setTimeout(() => _cache.clear(), 1500);
         }
@@ -233,7 +233,7 @@ function _load() {
       const id = cfg.clientId || file.replace('.json', '');
       _cache.set(id, { ...cfg, clientId: id });
     } catch (err) {
-      console.warn(`[client-service] Cannot parse ${file}: ${err.message} — skipping.`);
+      console.warn(`[client-service] Cannot parse ${file}: ${err.message} - skipping.`);
     }
   }
 }

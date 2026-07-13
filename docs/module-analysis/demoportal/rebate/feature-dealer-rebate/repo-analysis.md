@@ -1,10 +1,10 @@
-# Rebate Dealer Rebate — Repository Analysis Report
+# Rebate Dealer Rebate - Repository Analysis Report
 Generated: 2026-07-07
 
 ## Source Files Analyzed
 | File | Layer | Purpose |
 |---|---|---|
-| `Presentation/Web/Pages/Rebate/DealerRebate/Index.cshtml` | UI | Dealer portal — view current/future promotions, submit claims |
+| `Presentation/Web/Pages/Rebate/DealerRebate/Index.cshtml` | UI | Dealer portal - view current/future promotions, submit claims |
 | `Presentation/Web/Pages/Rebate/DealerRebate/Index.cshtml.cs` | Handler | GET (load promotions), POST (dealer lookup, claim submission) |
 | `Presentation/Web/Pages/Rebate/DealerRebate/CreateClaim.cshtml` | UI | Claim submission form |
 | `Presentation/Web/Pages/Rebate/DealerRebate/CreateClaim.cshtml.cs` | Handler | GET (load campaign config), POST (validate + submit claim) |
@@ -14,21 +14,21 @@ Generated: 2026-07-07
 
 ---
 
-## UI / Form Fields — Index (Dealer Gate)
+## UI / Form Fields - Index (Dealer Gate)
 | Field Name | Type | Required | Label | Conditional | Notes |
 |---|---|---|---|---|---|
 | SearchType | radio | Yes | Dealer Name / Dealer # | Non-dealer role only | `value="name"` or `value="number"` |
 | OnBehalfOfDealerNumber | text | Yes | Dealer # / Name | Non-dealer gate only | Input for lookup |
-| ActiveTab | hidden | — | — | — | `"current"` or `"future"` |
-| DnSeq | hidden | — | — | — | Encrypted dealer number seq (set after selection) |
-| SelectDealer | hidden | — | — | — | Boolean; triggers dealer gate display |
+| ActiveTab | hidden | - | - | - | `"current"` or `"future"` |
+| DnSeq | hidden | - | - | - | Encrypted dealer number seq (set after selection) |
+| SelectDealer | hidden | - | - | - | Boolean; triggers dealer gate display |
 
 ---
 
-## UI / Form Fields — Index (Campaign Tabs)
+## UI / Form Fields - Index (Campaign Tabs)
 | Field Name | Type | Required | Label | Notes |
 |---|---|---|---|---|
-| ActiveTab | tab selector | — | Current / Future | Drives campaign list shown |
+| ActiveTab | tab selector | - | Current / Future | Drives campaign list shown |
 
 ---
 
@@ -51,7 +51,7 @@ Generated: 2026-07-07
 | BR-DR03 | Territory validation | `IsDealerInUserTerritory(seq)` | Non-dealer user can only submit for dealers in their territory |
 | BR-DR04 | Dealer must have payment info | `DealerHasPaymentInfoAsync` | Bug 141323: dealers with no payment info excluded from search results; error shown |
 | BR-DR05 | Multiple dealer name matches | `OnPostLookupDealerAsync` | If name search returns >1 result, selection table shown before proceeding |
-| BR-DR06 | Single match by number | `OnPostLookupDealerAsync` | Exact match by dealer number → auto-select and redirect with `dnseq=` |
+| BR-DR06 | Single match by number | `OnPostLookupDealerAsync` | Exact match by dealer number -> auto-select and redirect with `dnseq=` |
 | BR-DR07 | Tab memory | `ActiveTab` bind | Default `"current"`; `"future"` tab shows upcoming campaigns |
 | BR-DR08 | On-behalf banner | `hasDealerSelected` | When non-dealer has selected dealer, blue banner shows "Submitting on behalf of: [Dealer Name]" |
 | BR-DR09 | Campaign claim validation | `ValidateDealerClaimAsync` | Line items validated via API before final submit |
@@ -63,10 +63,10 @@ Generated: 2026-07-07
 | Field | Rule | Error Message | Client/Server |
 |---|---|---|---|
 | OnBehalfOfDealerNumber | Required | `_PleaseEnterDealerName` or `_PleaseEnterDealerNumber` | Server |
-| Dealer lookup — no results by number | Not found | `_NoDealerFoundByNumber` (formatted with input) | Server |
-| Dealer lookup — no results by name | Not found | `_NoDealerFoundByName` (formatted with input) | Server |
-| Dealer — no payment info by number | No payment info | `_DealerNoPaymentInfoByNumber` | Server |
-| Dealer — no payment info by name | No payment info | `_DealerNoPaymentInfoByName` | Server |
+| Dealer lookup - no results by number | Not found | `_NoDealerFoundByNumber` (formatted with input) | Server |
+| Dealer lookup - no results by name | Not found | `_NoDealerFoundByName` (formatted with input) | Server |
+| Dealer - no payment info by number | No payment info | `_DealerNoPaymentInfoByNumber` | Server |
+| Dealer - no payment info by name | No payment info | `_DealerNoPaymentInfoByName` | Server |
 | DnSeq (territory) | Must be in user territory | Redirect to Index if not | Server redirect |
 
 ---
@@ -74,7 +74,7 @@ Generated: 2026-07-07
 ## Workflow / Status Transitions
 | From Status | To Status | Trigger | Notification |
 |---|---|---|---|
-| — | Gate shown | Non-dealer loads page without dealer | Yellow `_SelectDealerToClaim` banner |
+| - | Gate shown | Non-dealer loads page without dealer | Yellow `_SelectDealerToClaim` banner |
 | Gate | Dealer selected | Dealer lookup + select | Blue `_SubmittingOnBehalfOf` banner |
 | Dealer selected | Claim submitted | Submit via `CreateClaim` handler | Redirect to `SubmitConfirmation` |
 | Claim | Received (system status) | API `SubmitDealerClaimAsync` | Email/notification per campaign config |
@@ -98,7 +98,7 @@ Generated: 2026-07-07
 ## Security Rules
 | Rule | Enforcement | Role / Scope |
 |---|---|---|
-| Auth + role gate | `IsAllowedRole()` → dealer, distributor, TM, admin roles | `AccessDeniedView()` on failure |
+| Auth + role gate | `IsAllowedRole()` -> dealer, distributor, TM, admin roles | `AccessDeniedView()` on failure |
 | Non-dealer territory check | `IsDealerInUserTerritory(seq)` | TM/Admin can only submit for their territory dealers |
 | Encrypted dealer seq | `DnSeq` in URL is encrypted; decrypted via `_encrypt` | Plain dealer IDs never in URL |
 | Payment info gate | `DealerHasPaymentInfoAsync` | Prevents claims for dealers without payment setup |

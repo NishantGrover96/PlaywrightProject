@@ -1,4 +1,4 @@
-# Rebate Create Offers — Business Rule Catalog
+# Rebate Create Offers - Business Rule Catalog
 Generated: 2026-07-07
 
 | BR ID | Title | Category | Source (Code) | Evidence (UI) | Test Priority |
@@ -13,10 +13,10 @@ Generated: 2026-07-07
 | BR-CO-08 | Product Description max 200 characters | Validation | `maxlength="200"` on textarea | Textarea truncated at 200 chars | Medium |
 | BR-CO-09 | Duplicate offer code detection | Business Logic | `UpsertProductAsync` returns `-2` on duplicate | `TempData["Duplicate"] = "Yes"` triggers client error message | Critical |
 | BR-CO-10 | Multi-language variant support | Business Logic | `OnPostSaveProductLang` iterates `RebateProductLanguageModel` list | Multiple language variants saved per offer; each independently editable | High |
-| BR-CO-11 | First variant creates product; subsequent add languages | Business Logic | `i == 0 && RebateProductSeq == 0` → `UpsertProductAsync` first | Second+ language records reuse `_rebateProdSeq` | High |
+| BR-CO-11 | First variant creates product; subsequent add languages | Business Logic | `i == 0 && RebateProductSeq == 0` -> `UpsertProductAsync` first | Second+ language records reuse `_rebateProdSeq` | High |
 | BR-CO-12 | Sub-division scoping on save | Business Logic | `_rebate_product.SubDivisionSeq = HttpContext.Session.GetInt32("sub_division_seq")` | Offer associated to active sub-division | High |
 | BR-CO-13 | Product type defaults to "Offer" | Business Logic | `_rebateProductLanguage.ProductType = "Offer"` in `OnGetAsync` | ProductType field hidden; defaults set server-side | Medium |
-| BR-CO-14 | Image path normalization ("output" → empty) | Business Logic | `if (result.ImagePath == "output") result.ImagePath = ""` | Legacy "output" placeholder treated as no image | Medium |
+| BR-CO-14 | Image path normalization ("output" -> empty) | Business Logic | `if (result.ImagePath == "output") result.ImagePath = ""` | Legacy "output" placeholder treated as no image | Medium |
 | BR-CO-15 | Brands dropdown conditional (shown only if >1 brand) | UI | `if (Model.BrandList.Count() > 1)` in cshtml | Brand dropdown hidden for single-brand programs | Medium |
 | BR-CO-16 | Encrypted product seq in URLs | Security | `_encryptDecrypt.Encrypt` on all ID params | Product seq never exposed as plain integer in URL/attributes | High |
 | BR-CO-17 | Image upload via Dropzone (optional) | UI | `Dropzone` on `#UploadBanner1` | Image optional; form submits without image | Low |

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Submit Preapproval — Functional Unit Catalog (Deer Australia)</title>
+  <title>Submit Preapproval - Functional Unit Catalog (Deer Australia)</title>
   
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous" defer></script>
@@ -21,7 +21,7 @@
 <body>
 
 <header>
-  <h1>Submit Preapproval — Functional Unit Catalog</h1>
+  <h1>Submit Preapproval - Functional Unit Catalog</h1>
   <div class="meta">
     <span>Client: deer-australia</span>
     <span>Module: coop</span>
@@ -59,7 +59,7 @@
     <option value="ErrorHandling">Error Handling</option>
   </select>
   <label for="filterSearch">Search:</label>
-  <input type="text" id="filterSearch" placeholder="BR ID or keyword…" oninput="applyFilters()" />
+  <input type="text" id="filterSearch" placeholder="BR ID or keyword..." oninput="applyFilters()" />
   <button class="print-btn" onclick="window.print()">🖨 Print</button>
 </div>
 
@@ -76,7 +76,7 @@
   <!-- SMOKE -->
   <div class="section tier-smoke" id="sec-smoke">
     <div class="section-header" onclick="toggleSection('sec-smoke')">
-      <div class="section-title"><span class="tier-badge badge-smoke">SMOKE</span>Smoke Suite — Critical Path Verification</div>
+      <div class="section-title"><span class="tier-badge badge-smoke">SMOKE</span>Smoke Suite - Critical Path Verification</div>
       <div style="display:flex;align-items:center;gap:12px"><span class="section-count">3 tests</span><span class="chevron">▼</span></div>
     </div>
     <div class="section-body">
@@ -147,7 +147,7 @@
   <!-- REGRESSION -->
   <div class="section tier-regression" id="sec-regression">
     <div class="section-header" onclick="toggleSection('sec-regression')">
-      <div class="section-title"><span class="tier-badge badge-regression">REGRESSION</span>Regression Suite — Full Functional Coverage</div>
+      <div class="section-title"><span class="tier-badge badge-regression">REGRESSION</span>Regression Suite - Full Functional Coverage</div>
       <div style="display:flex;align-items:center;gap:12px"><span class="section-count">40 tests</span><span class="chevron">▼</span></div>
     </div>
     <div class="section-body">
@@ -155,7 +155,7 @@
       <div class="tc" data-tier="regression" data-priority="P2-High" data-category="Validation" data-br="">
         <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-001</div></div>
         <div class="tc-right">
-          <div class="tc-title">Submit without Advertisement Type → "* Required"</div>
+          <div class="tc-title">Submit without Advertisement Type -> "* Required"</div>
           <div class="tags"><span class="tag p2">P2-High</span><span class="tag cat-validation">Validation</span></div>
           <div class="tc-detail">
             <strong>Steps:</strong> Leave drpMediaCategory unselected; submit<br>
@@ -168,7 +168,7 @@
       <div class="tc" data-tier="regression" data-priority="P2-High" data-category="Validation" data-br="">
         <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-002</div></div>
         <div class="tc-right">
-          <div class="tc-title">Submit without Segment → "* Required"</div>
+          <div class="tc-title">Submit without Segment -> "* Required"</div>
           <div class="tags"><span class="tag p2">P2-High</span><span class="tag cat-validation">Validation</span></div>
           <div class="tc-detail">
             <strong>Steps:</strong> Leave drpSegment at default (0); submit<br>
@@ -181,7 +181,7 @@
       <div class="tc" data-tier="regression" data-priority="P2-High" data-category="Validation" data-br="">
         <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-003</div></div>
         <div class="tc-right">
-          <div class="tc-title">Submit with empty Vendor Name → "* Required"</div>
+          <div class="tc-title">Submit with empty Vendor Name -> "* Required"</div>
           <div class="tags"><span class="tag p2">P2-High</span><span class="tag cat-validation">Validation</span></div>
           <div class="tc-detail">
             <strong>Steps:</strong> Leave txtVendorName empty; submit<br>
@@ -193,7 +193,7 @@
       <div class="tc" data-tier="regression" data-priority="P2-High" data-category="Validation" data-br="BR-PA-030">
         <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-004</div></div>
         <div class="tc-right">
-          <div class="tc-title">Submit without First Placement Date → "* Required"</div>
+          <div class="tc-title">Submit without First Placement Date -> "* Required"</div>
           <div class="tags"><span class="tag p2">P2-High</span><span class="tag cat-validation">Validation</span></div>
           <div class="tc-detail">
             <strong>Steps:</strong> Leave calStartDate empty; submit<br>
@@ -206,7 +206,7 @@
       <div class="tc" data-tier="regression" data-priority="P2-High" data-category="Validation" data-br="">
         <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-005</div></div>
         <div class="tc-right">
-          <div class="tc-title">Submit with empty Preapproval Amount → "* Required"</div>
+          <div class="tc-title">Submit with empty Preapproval Amount -> "* Required"</div>
           <div class="tags"><span class="tag p2">P2-High</span><span class="tag cat-validation">Validation</span></div>
           <div class="tc-detail">
             <strong>Steps:</strong> Leave txtPreapprovalAmt empty; submit<br>
@@ -218,7 +218,7 @@
       <div class="tc" data-tier="regression" data-priority="P1-Critical" data-category="Validation" data-br="BR-PA-005">
         <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-007</div></div>
         <div class="tc-right">
-          <div class="tc-title">Preapproval amount exceeds fund balance → blocked</div>
+          <div class="tc-title">Preapproval amount exceeds fund balance -> blocked</div>
           <div class="tags"><span class="tag p1">P1-Critical</span><span class="tag cat-validation">Validation</span></div>
           <div class="tc-detail">
             <strong>Precondition:</strong> Fund balance = $100<br>
@@ -233,7 +233,7 @@
       <div class="tc" data-tier="regression" data-priority="P2-High" data-category="Validation" data-br="">
         <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-009</div></div>
         <div class="tc-right">
-          <div class="tc-title">Invalid email format → "Please enter a valid email address"</div>
+          <div class="tc-title">Invalid email format -> "Please enter a valid email address"</div>
           <div class="tags"><span class="tag p2">P2-High</span><span class="tag cat-validation">Validation</span></div>
           <div class="tc-detail">
             <strong>Steps:</strong> Enter "notanemail" in txtEmail; submit<br>
@@ -245,7 +245,7 @@
       <div class="tc" data-tier="regression" data-priority="P1-Critical" data-category="Validation" data-br="BR-PA-006">
         <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-010</div></div>
         <div class="tc-right">
-          <div class="tc-title">Non-admin submit without document AND without link → error</div>
+          <div class="tc-title">Non-admin submit without document AND without link -> error</div>
           <div class="tags"><span class="tag p1">P1-Critical</span><span class="tag cat-validation">Validation</span></div>
           <div class="tc-detail">
             <strong>Steps:</strong> Leave Dropzone and txtAddLink empty; submit<br>
@@ -259,7 +259,7 @@
       <div class="tc" data-tier="regression" data-priority="P2-High" data-category="Validation" data-br="BR-PA-006">
         <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-011</div></div>
         <div class="tc-right">
-          <div class="tc-title">Non-admin provides link only → accepted (no upload required)</div>
+          <div class="tc-title">Non-admin provides link only -> accepted (no upload required)</div>
           <div class="tags"><span class="tag p2">P2-High</span><span class="tag cat-validation">Validation</span></div>
           <div class="tc-detail">
             <strong>Steps:</strong> Enter URL in txtAddLink; no file uploaded; submit<br>
@@ -272,7 +272,7 @@
       <div class="tc" data-tier="regression" data-priority="P2-High" data-category="Validation" data-br="BR-PA-007">
         <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-012</div></div>
         <div class="tc-right">
-          <div class="tc-title">JDFADMIN submit without JDF Finance selected → blocked</div>
+          <div class="tc-title">JDFADMIN submit without JDF Finance selected -> blocked</div>
           <div class="tags"><span class="tag p2">P2-High</span><span class="tag cat-validation">Validation</span></div>
           <div class="tc-detail">
             <strong>Precondition:</strong> Authenticated as JDFADMIN<br>
@@ -286,7 +286,7 @@
       <div class="tc" data-tier="regression" data-priority="P2-High" data-category="Validation" data-br="BR-PA-008">
         <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-013</div></div>
         <div class="tc-right">
-          <div class="tc-title">Sponsorship visible but none checked → "At least one sponsorship must be selected"</div>
+          <div class="tc-title">Sponsorship visible but none checked -> "At least one sponsorship must be selected"</div>
           <div class="tags"><span class="tag p2">P2-High</span><span class="tag cat-validation">Validation</span></div>
           <div class="tc-detail">
             <strong>Precondition:</strong> Media type that shows sponsorship grid<br>
@@ -342,7 +342,7 @@
       <div class="tc" data-tier="regression" data-priority="P3-Medium" data-category="Validation" data-br="BR-PA-015">
         <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-018</div></div>
         <div class="tc-right">
-          <div class="tc-title">Add duplicate dealer → blocked</div>
+          <div class="tc-title">Add duplicate dealer -> blocked</div>
           <div class="tags"><span class="tag p3">P3-Medium</span><span class="tag cat-validation">Validation</span></div>
           <div class="tc-detail">
             <strong>Steps:</strong> Add dealer X; attempt to add dealer X again<br>
@@ -407,7 +407,7 @@
       <div class="tc" data-tier="regression" data-priority="P2-High" data-category="Workflow" data-br="BR-PA-010">
         <div class="tc-left"><div class="tc-id">COOP-PA<br>TC-026</div></div>
         <div class="tc-right">
-          <div class="tc-title">BMADMIN non-JDF submit auto-approves → status APPROVED</div>
+          <div class="tc-title">BMADMIN non-JDF submit auto-approves -> status APPROVED</div>
           <div class="tags"><span class="tag p2">P2-High</span><span class="tag cat-workflow">Workflow</span></div>
           <div class="tc-detail">
             <strong>Precondition:</strong> Authenticated as BMADMIN; non-JDF finance<br>
@@ -504,7 +504,7 @@
   <!-- E2E -->
   <div class="section tier-e2e" id="sec-e2e">
     <div class="section-header" onclick="toggleSection('sec-e2e')">
-      <div class="section-title"><span class="tier-badge badge-e2e">E2E</span>E2E Suite — Full Workflow Scenarios</div>
+      <div class="section-title"><span class="tier-badge badge-e2e">E2E</span>E2E Suite - Full Workflow Scenarios</div>
       <div style="display:flex;align-items:center;gap:12px"><span class="section-count">5 tests</span><span class="chevron">▼</span></div>
     </div>
     <div class="section-body">
@@ -512,7 +512,7 @@
       <div class="tc" data-tier="e2e" data-priority="P1-Critical" data-category="Workflow" data-br="BR-PA-009 BR-PA-024 BR-PA-025">
         <div class="tc-left"><div class="tc-id">COOP-PA<br>E2E-001</div></div>
         <div class="tc-right">
-          <div class="tc-title">Full workflow: dealer submits → appears in pending preapprovals with PENDING REVIEW status</div>
+          <div class="tc-title">Full workflow: dealer submits -> appears in pending preapprovals with PENDING REVIEW status</div>
           <div class="tags"><span class="tag p1">P1-Critical</span><span class="tag cat-workflow">Workflow</span></div>
           <div class="tc-detail">
             <strong>Steps:</strong>
@@ -529,7 +529,7 @@
       <div class="tc" data-tier="e2e" data-priority="P2-High" data-category="Workflow" data-br="BR-PA-010 BR-PA-019">
         <div class="tc-left"><div class="tc-id">COOP-PA<br>E2E-003</div></div>
         <div class="tc-right">
-          <div class="tc-title">Admin auto-approves non-JDF preapproval → dealer sees APPROVED status</div>
+          <div class="tc-title">Admin auto-approves non-JDF preapproval -> dealer sees APPROVED status</div>
           <div class="tags"><span class="tag p2">P2-High</span><span class="tag cat-workflow">Workflow</span></div>
           <div class="tc-detail">
             <strong>Steps:</strong>
@@ -563,7 +563,7 @@
       <div class="tc" data-tier="e2e" data-priority="P2-High" data-category="DataPersistence" data-br="BR-PA-025">
         <div class="tc-left"><div class="tc-id">COOP-PA<br>E2E-005</div></div>
         <div class="tc-right">
-          <div class="tc-title">Multiple dealers on one preapproval — all linked in tblPreapprovalDealer</div>
+          <div class="tc-title">Multiple dealers on one preapproval - all linked in tblPreapprovalDealer</div>
           <div class="tags"><span class="tag p2">P2-High</span><span class="tag cat-data">DataPersistence</span></div>
           <div class="tc-detail">
             <strong>Steps:</strong>

@@ -24,7 +24,7 @@ export const DEALER_B = {
   dealerId: process.env.DEALER_B_ID || '',
 } as const;
 
-// ── Submit Claim fixtures ─────────────────────────────────────
+// -- Submit Claim fixtures -------------------------------------
 
 export const CLAIM = {
   mediaTypes: {
@@ -42,7 +42,7 @@ export const CLAIM = {
   descriptionMaxChars: 500,
 } as const;
 
-// ── Submit Preapproval fixtures ───────────────────────────────
+// -- Submit Preapproval fixtures -------------------------------
 
 export const PREAPPROVAL = {
   mediaTypes: {
@@ -51,7 +51,7 @@ export const PREAPPROVAL = {
   maxCost: 999_999_999.99,
 } as const;
 
-// ── Dashboard fixtures ────────────────────────────────────────
+// -- Dashboard fixtures ----------------------------------------
 
 export const DASHBOARD = {
   dealer: {
@@ -62,7 +62,7 @@ export const DASHBOARD = {
   },
 } as const;
 
-// ── Timeouts ──────────────────────────────────────────────────
+// -- Timeouts --------------------------------------------------
 
 export const TIMEOUTS = {
   pageLoad:     30_000,
@@ -70,7 +70,7 @@ export const TIMEOUTS = {
   fileUpload:   15_000,
 } as const;
 
-// ── Known issues ──────────────────────────────────────────────
+// -- Known issues ----------------------------------------------
 // Track open bugs so tests can be correctly annotated with test.fixme()
 
 export const KNOWN_ISSUES = {

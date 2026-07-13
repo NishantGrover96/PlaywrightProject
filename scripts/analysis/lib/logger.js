@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Logger — writes structured entries to console and to a per-run log file.
+ * Logger - writes structured entries to console and to a per-run log file.
  *
  * Consumers call:
  *   const log = require('./logger').createLogger(clientId, runId);
@@ -111,7 +111,7 @@ function createLogger(clientId, runId) {
     },
 
     section(title) {
-      const line = `${'─'.repeat(60)}`;
+      const line = `${'-'.repeat(60)}`;
       append('INFO',  line);
       append('INFO',  `  ${title}`);
       append('INFO',  line);
@@ -129,7 +129,7 @@ function createLogger(clientId, runId) {
     },
 
     skip(featureId, reason) {
-      const msg = `SKIP  ${featureId}  — ${reason}`;
+      const msg = `SKIP  ${featureId}  - ${reason}`;
       append('SKIP', msg);
       consoleOut('SKIP ', msg, C.dim);
     },

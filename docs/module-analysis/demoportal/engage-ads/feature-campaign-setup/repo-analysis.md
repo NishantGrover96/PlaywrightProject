@@ -1,4 +1,4 @@
-# EngageAds — Campaign Setup — Repository Analysis
+# EngageAds - Campaign Setup - Repository Analysis
 
 Generated: 2026-06-19 | Pipeline: Step 1 (Repository Analysis)
 
@@ -19,7 +19,7 @@ Generated: 2026-06-19 | Pipeline: Step 1 (Repository Analysis)
 
 ## 2. Authentication & Authorization
 
-- **Auth Required**: Yes — inherits `BasePageModel`; unauthenticated users redirected to `/Account/Login`
+- **Auth Required**: Yes - inherits `BasePageModel`; unauthenticated users redirected to `/Account/Login`
 - **Role-Based Access**:
   - `Admin` and `ChannelFusionAdmin` can access any order's campaign setup
   - `Dealer` can only access orders belonging to their own `dealer_number_seq`
@@ -29,24 +29,24 @@ Generated: 2026-06-19 | Pipeline: Step 1 (Repository Analysis)
 
 | Step | Partial | Required Fields |
 |---|---|---|
-| 1 — Primary Contact | `_Step1PrimaryContact.cshtml` | FirstName, LastName, PrimaryContactEmail, ContactPhoneNumber |
-| 2 — Business Details | `_Step2BusinessDetails.cshtml` | BusinessName, StreetAddress, City, StateProvince, ZipCode, Email, WebsiteUrl |
-| 3 — Campaign Details | `_Step3CampaignDetails.cshtml` | ServiceArea, WebsiteAccuracyConfirmed |
-| 4 — Review & Submit | `_Step4ReviewSubmit.cshtml` | TermsAccepted |
+| 1 - Primary Contact | `_Step1PrimaryContact.cshtml` | FirstName, LastName, PrimaryContactEmail, ContactPhoneNumber |
+| 2 - Business Details | `_Step2BusinessDetails.cshtml` | BusinessName, StreetAddress, City, StateProvince, ZipCode, Email, WebsiteUrl |
+| 3 - Campaign Details | `_Step3CampaignDetails.cshtml` | ServiceArea, WebsiteAccuracyConfirmed |
+| 4 - Review & Submit | `_Step4ReviewSubmit.cshtml` | TermsAccepted |
 
-## 4. Bound Model — `CampaignIntakeModel`
+## 4. Bound Model - `CampaignIntakeModel`
 
-### Step 1 — Primary Contact
+### Step 1 - Primary Contact
 | Field | Type | Required | Max Length | Notes |
 |---|---|---|---|---|
 | FirstName | string | ✅ | 50 | |
 | LastName | string | ✅ | 50 | |
 | PrimaryContactEmail | string (email) | ✅ | 100 | |
-| ContactPhoneNumber | string | ✅ | — | Phone mask (clsPhoneMaskMobileLandline); cleaned via `CleanPhoneNumber()` |
+| ContactPhoneNumber | string | ✅ | - | Phone mask (clsPhoneMaskMobileLandline); cleaned via `CleanPhoneNumber()` |
 | LeadDestinationEmail | string (email) | ❌ | 100 | Falls back to PrimaryContactEmail in review |
-| PhoneNumberToDisplayInAds | string | ❌ | — | Falls back to ContactPhoneNumber in review |
+| PhoneNumberToDisplayInAds | string | ❌ | - | Falls back to ContactPhoneNumber in review |
 
-### Step 2 — Business Details
+### Step 2 - Business Details
 | Field | Type | Required | Max Length | Notes |
 |---|---|---|---|---|
 | BusinessName | string | ✅ | 100 | Appears in ads |
@@ -56,22 +56,22 @@ Generated: 2026-06-19 | Pipeline: Step 1 (Repository Analysis)
 | StateProvince | string | ✅ | 2 | |
 | ZipCode | string | ✅ | 10 | |
 | Email | string (email) | ✅ | 100 | Business email |
-| BusinessLogoFileName | string (hidden) | ❌ | — | Set by UploadLogo handler |
-| BusinessLogoPath | string (hidden) | ❌ | — | Permanent URL after submit |
+| BusinessLogoFileName | string (hidden) | ❌ | - | Set by UploadLogo handler |
+| BusinessLogoPath | string (hidden) | ❌ | - | Permanent URL after submit |
 | WebsiteUrl | string (url) | ✅ | 200 | Pattern: `https?://.+` |
 
-### Step 3 — Campaign Details
+### Step 3 - Campaign Details
 | Field | Type | Required | Max Length | Notes |
 |---|---|---|---|---|
-| DesiredCampaignStartDate | DateTime? | ❌ | — | Datepicker, MM/DD/YYYY |
+| DesiredCampaignStartDate | DateTime? | ❌ | - | Datepicker, MM/DD/YYYY |
 | ServiceArea | string | ✅ | 2400 | Defaults to 15-mile radius if blank |
-| WebsiteAccuracyConfirmed | bool | ✅ | — | Must check to continue |
-| PreferredLandingPageUrls | string | ❌ | — | One URL per line |
-| HasFacebookBusinessPage | bool | ❌ | — | Shown only when `HasFacebookChannel=true` |
-| FacebookBusinessPageUrl | string (url) | Conditional | — | Required when `HasFacebookBusinessPage=true` |
+| WebsiteAccuracyConfirmed | bool | ✅ | - | Must check to continue |
+| PreferredLandingPageUrls | string | ❌ | - | One URL per line |
+| HasFacebookBusinessPage | bool | ❌ | - | Shown only when `HasFacebookChannel=true` |
+| FacebookBusinessPageUrl | string (url) | Conditional | - | Required when `HasFacebookBusinessPage=true` |
 | AdditionalNotes | string | ❌ | 2000 | Character counter shown |
 
-### Step 4 — Review & Submit
+### Step 4 - Review & Submit
 | Field | Type | Required | Notes |
 |---|---|---|---|
 | TermsAccepted | bool | ✅ | Terms and Conditions checkbox; enables submit |
@@ -97,11 +97,11 @@ Generated: 2026-06-19 | Pipeline: Step 1 (Repository Analysis)
 
 | Service Method | When Called |
 |---|---|
-| `GetOrderDetailsBySeqAsync(orderSeq)` | GET — load order info, verify authorization |
-| `GetCampaignSetupByOrderSeqAsync(orderSeq)` | GET — check if setup exists; load for edit |
-| `GetPackageChannelsByOrderSeqAsync(orderSeq)` | GET — determine Facebook/Instagram channel availability |
-| `SubmitCampaignSetupAsync(request)` | POST — create new campaign setup |
-| `UpdateCampaignSetupAsync(request)` | POST — update existing campaign setup |
+| `GetOrderDetailsBySeqAsync(orderSeq)` | GET - load order info, verify authorization |
+| `GetCampaignSetupByOrderSeqAsync(orderSeq)` | GET - check if setup exists; load for edit |
+| `GetPackageChannelsByOrderSeqAsync(orderSeq)` | GET - determine Facebook/Instagram channel availability |
+| `SubmitCampaignSetupAsync(request)` | POST - create new campaign setup |
+| `UpdateCampaignSetupAsync(request)` | POST - update existing campaign setup |
 
 ## 7. Entry Points
 
@@ -136,15 +136,15 @@ Generated: 2026-06-19 | Pipeline: Step 1 (Repository Analysis)
 ## 10. Edit Window Logic
 
 - Edit window duration: 72 hours from `SubmittedDate` (configurable via `EditWindowHours`)
-- Within window + submitted → `IsEditMode=true`, `CanEdit=true`, edit alert shown
-- Beyond window → `IsExpired=true`, countdown timer → auto-redirect to OrderHistory after 5 seconds
-- Not yet submitted → always editable (`CanEdit=true`, no expiry)
+- Within window + submitted -> `IsEditMode=true`, `CanEdit=true`, edit alert shown
+- Beyond window -> `IsExpired=true`, countdown timer -> auto-redirect to OrderHistory after 5 seconds
+- Not yet submitted -> always editable (`CanEdit=true`, no expiry)
 - Both Admin and Dealer users subject to same 72-hour window
 
 ## 11. Security Controls
 
 - `IEncryptDecrypt` used for `orderSeq` in query string
 - Phone numbers sanitized by `CleanPhoneNumber()` before persistence
-- Logo filename sanitized (regex strips special chars, spaces → underscores)
+- Logo filename sanitized (regex strips special chars, spaces -> underscores)
 - `ModelState.IsValid` checked before POST processing
 - Authorization double-checked: server-side (`GetOrderDetailsBySeqAsync`) + frontend (`DealerNumberSeq` comparison)

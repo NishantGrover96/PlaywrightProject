@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Automation Workspace — QA Dashboard</title>
+<title>Automation Workspace - QA Dashboard</title>
 <style>
-/* ── Reset & Variables (mirrors index.html exactly) ──────────────────────── */
+/* -- Reset & Variables (mirrors index.html exactly) ------------------------ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
   --bg:        #0f1117;
@@ -53,7 +53,7 @@ body {
   overflow: hidden;
 }
 
-/* ── Accessibility ───────────────────────────────────────────────────────── */
+/* -- Accessibility --------------------------------------------------------- */
 .sr-only {
   position: absolute; width: 1px; height: 1px; padding: 0;
   margin: -1px; overflow: hidden; clip: rect(0,0,0,0);
@@ -71,18 +71,18 @@ body {
   outline-offset: 2px;
 }
 
-/* ── Scrollbar ───────────────────────────────────────────────────────────── */
+/* -- Scrollbar ------------------------------------------------------------- */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #3e4560; }
 
-/* ── Animations ──────────────────────────────────────────────────────────── */
+/* -- Animations ------------------------------------------------------------ */
 @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
 @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 @keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
 
-/* ── Toolbar ─────────────────────────────────────────────────────────────── */
+/* -- Toolbar --------------------------------------------------------------- */
 .ws-toolbar {
   display: flex;
   align-items: center;
@@ -100,7 +100,7 @@ body {
 .ws-toolbar-sep   { flex: 1; }
 .ws-toolbar-divider { width: 1px; height: 24px; background: var(--border); margin: 0 4px; }
 
-/* ── Buttons ─────────────────────────────────────────────────────────────── */
+/* -- Buttons --------------------------------------------------------------- */
 .btn {
   display: inline-flex; align-items: center; justify-content: center;
   gap: 5px; padding: 7px 14px; border: none; border-radius: var(--radius);
@@ -142,7 +142,7 @@ body {
 }
 .btn-icon { position: relative; }
 
-/* ── Form Controls ───────────────────────────────────────────────────────── */
+/* -- Form Controls --------------------------------------------------------- */
 select, input[type=text], input[type=number], input[type=password] {
   width: 100%;
   background: var(--bg3);
@@ -158,13 +158,13 @@ select:focus, input:focus { border-color: var(--accent); }
 select option { background: var(--bg3); }
 label.field-label { display: block; font-size: 11px; color: var(--text-dim); margin-bottom: 3px; font-weight: 500; }
 
-/* ── Section Title ───────────────────────────────────────────────────────── */
+/* -- Section Title --------------------------------------------------------- */
 .section-title {
   font-size: 10px; font-weight: 700; letter-spacing: 0.8px;
   text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px;
 }
 
-/* ── Badges ──────────────────────────────────────────────────────────────── */
+/* -- Badges ---------------------------------------------------------------- */
 .badge {
   display: inline-flex; align-items: center; gap: 3px;
   padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600;
@@ -206,7 +206,7 @@ label.field-label { display: block; font-size: 11px; color: var(--text-dim); mar
 .env-testing    { background: rgba(59,130,246,0.18);  color: #60a5fa; border: 1px solid rgba(59,130,246,0.4); }
 .env-dev        { background: rgba(34,197,94,0.18);   color: #4ade80; border: 1px solid rgba(34,197,94,0.4); }
 
-/* ── Main 3-column Layout ────────────────────────────────────────────────── */
+/* -- Main 3-column Layout -------------------------------------------------- */
 .ws-layout {
   display: grid;
   grid-template-columns: 260px 1fr 290px;
@@ -215,7 +215,7 @@ label.field-label { display: block; font-size: 11px; color: var(--text-dim); mar
   min-height: 0;
 }
 
-/* ── Left Sidebar ────────────────────────────────────────────────────────── */
+/* -- Left Sidebar ---------------------------------------------------------- */
 .ws-sidebar {
   background: var(--bg2);
   border-right: 1px solid var(--border);
@@ -253,7 +253,7 @@ label.field-label { display: block; font-size: 11px; color: var(--text-dim); mar
 }
 .quick-action-btn:hover { background: var(--bg3); color: var(--text); border-color: var(--border); }
 
-/* ── Center Panel ────────────────────────────────────────────────────────── */
+/* -- Center Panel ---------------------------------------------------------- */
 .ws-center {
   display: flex;
   flex-direction: column;
@@ -340,7 +340,7 @@ label.field-label { display: block; font-size: 11px; color: var(--text-dim); mar
 .conf-med    { color: var(--yellow); }
 .conf-low    { color: var(--red); }
 
-/* ── Execution Panel ─────────────────────────────────────────────────────── */
+/* -- Execution Panel ------------------------------------------------------- */
 .ws-execution-panel {
   background: var(--bg2);
   border-top: 1px solid var(--border);
@@ -388,7 +388,7 @@ label.field-label { display: block; font-size: 11px; color: var(--text-dim); mar
   background: var(--bg3); border: 1px solid var(--border);
 }
 
-/* ── Right Panel ─────────────────────────────────────────────────────────── */
+/* -- Right Panel ----------------------------------------------------------- */
 .ws-right {
   background: var(--bg2);
   border-left: 1px solid var(--border);
@@ -486,7 +486,7 @@ label.field-label { display: block; font-size: 11px; color: var(--text-dim); mar
 .meta-table td { padding: 5px 8px; color: var(--text); word-break: break-all; }
 .repo-actions  { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
 
-/* ── Bottom Panel ────────────────────────────────────────────────────────── */
+/* -- Bottom Panel ---------------------------------------------------------- */
 .ws-bottom {
   background: var(--bg2);
   border-top: 2px solid var(--border);
@@ -571,7 +571,7 @@ label.field-label { display: block; font-size: 11px; color: var(--text-dim); mar
 .msg-warn  { background: rgba(245,158,11,0.1); color: var(--yellow); border: 1px solid rgba(245,158,11,0.2); }
 .msg-error { background: rgba(239,68,68,0.1);  color: var(--red);    border: 1px solid rgba(239,68,68,0.2); }
 
-/* ── Empty State ─────────────────────────────────────────────────────────── */
+/* -- Empty State ----------------------------------------------------------- */
 .empty-state {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   padding: 32px 16px; text-align: center; gap: 8px;
@@ -583,7 +583,7 @@ label.field-label { display: block; font-size: 11px; color: var(--text-dim); mar
 .feature-empty-row td { padding: 0 !important; }
 .mt-8 { margin-top: 8px; }
 
-/* ── Notifications ───────────────────────────────────────────────────────── */
+/* -- Notifications --------------------------------------------------------- */
 .ws-notifications {
   position: fixed; top: 60px; right: 16px; z-index: 9000;
   display: flex; flex-direction: column; gap: 6px; pointer-events: none;
@@ -605,7 +605,7 @@ label.field-label { display: block; font-size: 11px; color: var(--text-dim); mar
 .notif-icon       { font-size: 14px; flex-shrink: 0; }
 .notif-msg        { flex: 1; }
 
-/* ── Modals ──────────────────────────────────────────────────────────────── */
+/* -- Modals ---------------------------------------------------------------- */
 .ws-modal-backdrop {
   position: fixed; inset: 0; z-index: 8000;
   background: rgba(0,0,0,0.6); backdrop-filter: blur(2px);
@@ -661,7 +661,7 @@ label.field-label { display: block; font-size: 11px; color: var(--text-dim); mar
 .sr-sub       { font-size: 11px; color: var(--text-dim); }
 .search-no-results { padding: 20px; text-align: center; color: var(--text-dim); font-size: 13px; }
 
-/* ── Responsive (tablet landscape) ──────────────────────────────────────── */
+/* -- Responsive (tablet landscape) ---------------------------------------- */
 @media (max-width: 1200px) {
   .ws-layout { grid-template-columns: 230px 1fr 260px; }
 }
@@ -670,7 +670,7 @@ label.field-label { display: block; font-size: 11px; color: var(--text-dim); mar
   .ws-right  { display: none; }
 }
 
-/* ── Utility ─────────────────────────────────────────────────────────────── */
+/* -- Utility --------------------------------------------------------------- */
 .text-dim { color: var(--text-dim) !important; }
 </style>
 </head>
@@ -682,42 +682,42 @@ label.field-label { display: block; font-size: 11px; color: var(--text-dim); mar
 <!-- Notification container -->
 <div id="ws-notifications" class="ws-notifications" aria-live="polite" aria-atomic="false"></div>
 
-<!-- ── Toolbar ──────────────────────────────────────────────────────────── -->
+<!-- -- Toolbar ------------------------------------------------------------ -->
 <header class="ws-toolbar" role="banner">
   <div class="ws-toolbar-brand">
-    <span class="ws-toolbar-logo" aria-hidden="true">🎭</span>
+    <span class="ws-toolbar-logo" aria-hidden="true">QA</span>
     <span class="ws-toolbar-title">Automation Workspace</span>
   </div>
 
   <div class="ws-toolbar-divider" role="separator" aria-hidden="true"></div>
 
-  <button class="btn-icon" id="btn-search-open" aria-label="Global search (Ctrl+K)" title="Search (Ctrl+K)">🔍</button>
-  <button class="btn-icon" id="btn-refresh" aria-label="Refresh all data" title="Refresh">↻</button>
+  <button class="btn-icon" id="btn-search-open" aria-label="Global search (Ctrl+K)" title="Search (Ctrl+K)"></button>
+  <button class="btn-icon" id="btn-refresh" aria-label="Refresh all data" title="Refresh">~></button>
 
   <div class="ws-toolbar-divider" role="separator" aria-hidden="true"></div>
 
   <nav aria-label="Workspace actions" style="display:flex;gap:6px;align-items:center;">
-    <button class="btn btn-toolbar-action" id="btn-sync"     aria-label="Sync repository">⇅ Sync</button>
-    <button class="btn btn-toolbar-action" id="btn-analyze"  aria-label="Run repository analysis">⚙ Analyze</button>
-    <button class="btn btn-generate"       id="btn-generate" aria-label="Generate tests for approved features">✦ Generate</button>
+    <button class="btn btn-toolbar-action" id="btn-sync"     aria-label="Sync repository">^v Sync</button>
+    <button class="btn btn-toolbar-action" id="btn-analyze"  aria-label="Run repository analysis"> Analyze</button>
+    <button class="btn btn-generate"       id="btn-generate" aria-label="Generate tests for approved features">* Generate</button>
   </nav>
 
   <span class="ws-toolbar-sep"></span>
 
   <button class="btn-icon" id="btn-notifications" aria-label="Notifications" title="Notifications">
-    🔔
+    
     <span class="notif-badge" id="notif-badge" aria-hidden="true" hidden>0</span>
   </button>
-  <a href="/"   class="btn-icon" aria-label="Classic dashboard" title="Classic dashboard">⎇</a>
+  <a href="/"   class="btn-icon" aria-label="Classic dashboard" title="Classic dashboard"></a>
   <button class="btn-icon" id="btn-theme" aria-label="Toggle light/dark theme" title="Toggle theme">
-    <span id="theme-icon">☀</span>
+    <span id="theme-icon"></span>
   </button>
 </header>
 
-<!-- ── Main 3-column grid ──────────────────────────────────────────────── -->
+<!-- -- Main 3-column grid ------------------------------------------------ -->
 <div class="ws-layout">
 
-  <!-- ── Left Sidebar ────────────────────────────────────────────────── -->
+  <!-- -- Left Sidebar -------------------------------------------------- -->
   <aside class="ws-sidebar" aria-label="Configuration and repository status">
 
     <!-- Client -->
@@ -754,7 +754,7 @@ label.field-label { display: block; font-size: 11px; color: var(--text-dim); mar
     <div class="ws-sidebar-section">
       <div class="section-title">Repository</div>
       <div class="repo-card" id="repo-card" aria-live="polite">
-        <div class="repo-loading">Loading…</div>
+        <div class="repo-loading">Loading...</div>
       </div>
       <div style="display:flex;gap:6px;margin-top:8px;">
         <button class="btn btn-sm btn-secondary" id="btn-repo-sync" aria-label="Sync repository" style="flex:1">Sync</button>
@@ -766,16 +766,16 @@ label.field-label { display: block; font-size: 11px; color: var(--text-dim); mar
     <div class="ws-sidebar-section">
       <div class="section-title">Quick Actions</div>
       <div class="quick-actions">
-        <button class="quick-action-btn" id="btn-open-repo">📁 Open Repository</button>
-        <button class="quick-action-btn" id="btn-view-catalog">📋 View Catalog</button>
-        <a href="/docs" class="quick-action-btn">📖 Documentation</a>
-        <a href="/"     class="quick-action-btn">⎇ Classic Dashboard</a>
+        <button class="quick-action-btn" id="btn-open-repo"> Open Repository</button>
+        <button class="quick-action-btn" id="btn-view-catalog"> View Catalog</button>
+        <a href="/docs" class="quick-action-btn"> Documentation</a>
+        <a href="/"     class="quick-action-btn"> Classic Dashboard</a>
       </div>
     </div>
 
   </aside>
 
-  <!-- ── Center Panel ─────────────────────────────────────────────────── -->
+  <!-- -- Center Panel --------------------------------------------------- -->
   <main class="ws-center" id="ws-center" aria-label="Feature workspace">
 
     <!-- Module tabs -->
@@ -785,7 +785,7 @@ label.field-label { display: block; font-size: 11px; color: var(--text-dim); mar
       </div>
       <div class="module-bar-actions">
         <input type="text" id="feature-search" class="feature-search-input"
-          placeholder="Search features…" autocomplete="off"
+          placeholder="Search features..." autocomplete="off"
           aria-label="Search features" />
         <select id="feature-status-filter" aria-label="Filter by status">
           <option value="">All Status</option>
@@ -821,7 +821,7 @@ label.field-label { display: block; font-size: 11px; color: var(--text-dim); mar
           <tr class="feature-empty-row">
             <td colspan="5">
               <div class="empty-state">
-                <div class="empty-icon">📦</div>
+                <div class="empty-icon"></div>
                 <div class="empty-title">Select a client to load features</div>
                 <div class="empty-sub">Features will load automatically</div>
               </div>
@@ -886,8 +886,8 @@ label.field-label { display: block; font-size: 11px; color: var(--text-dim); mar
         </div>
       </div>
       <div class="exec-run-row">
-        <button class="btn btn-run btn-run-lg" id="btn-run">▶ Run Tests</button>
-        <button class="btn btn-stop" id="btn-stop" disabled>■ Stop</button>
+        <button class="btn btn-run btn-run-lg" id="btn-run">> Run Tests</button>
+        <button class="btn btn-stop" id="btn-stop" disabled> Stop</button>
         <div class="run-status-pill">
           <div class="status-dot" id="ws-status-dot"></div>
           <span id="ws-status-text">Idle</span>
@@ -898,7 +898,7 @@ label.field-label { display: block; font-size: 11px; color: var(--text-dim); mar
 
   </main>
 
-  <!-- ── Right Panel ──────────────────────────────────────────────────── -->
+  <!-- -- Right Panel ---------------------------------------------------- -->
   <aside class="ws-right" aria-label="Feature details and metadata">
 
     <div class="ws-right-tabs" role="tablist" aria-label="Detail panels">
@@ -912,7 +912,7 @@ label.field-label { display: block; font-size: 11px; color: var(--text-dim); mar
     <div id="right-panel-details" class="ws-right-panel active" role="tabpanel">
       <div id="feature-details">
         <div class="empty-state">
-          <div class="empty-icon">👆</div>
+          <div class="empty-icon"></div>
           <div class="empty-title">No feature selected</div>
           <div class="empty-sub">Select a feature from the list</div>
         </div>
@@ -923,7 +923,7 @@ label.field-label { display: block; font-size: 11px; color: var(--text-dim); mar
     <div id="right-panel-coverage" class="ws-right-panel" role="tabpanel">
       <div id="coverage-panel">
         <div class="empty-state">
-          <div class="empty-icon">📊</div>
+          <div class="empty-icon"></div>
           <div class="empty-title">No coverage data</div>
           <div class="empty-sub">Load a client to view coverage</div>
         </div>
@@ -934,7 +934,7 @@ label.field-label { display: block; font-size: 11px; color: var(--text-dim); mar
     <div id="right-panel-catalog" class="ws-right-panel" role="tabpanel">
       <div id="catalog-status-panel">
         <div class="empty-state">
-          <div class="empty-icon">📋</div>
+          <div class="empty-icon"></div>
           <div class="empty-title">No catalog loaded</div>
           <div class="empty-sub">Run repository analysis to build the catalog</div>
         </div>
@@ -945,7 +945,7 @@ label.field-label { display: block; font-size: 11px; color: var(--text-dim); mar
     <div id="right-panel-repo" class="ws-right-panel" role="tabpanel">
       <div id="repo-detail-panel">
         <div class="empty-state">
-          <div class="empty-icon">📁</div>
+          <div class="empty-icon"></div>
           <div class="empty-title">No repository info</div>
           <div class="empty-sub">Select a client to view repository details</div>
         </div>
@@ -956,26 +956,26 @@ label.field-label { display: block; font-size: 11px; color: var(--text-dim); mar
 
 </div><!-- /.ws-layout -->
 
-<!-- ── Bottom Panel ────────────────────────────────────────────────────── -->
+<!-- -- Bottom Panel ------------------------------------------------------ -->
 <section class="ws-bottom" aria-label="Execution output and history">
   <div class="ws-bottom-resize" id="ws-bottom-resize" role="separator" aria-label="Resize bottom panel" tabindex="0"></div>
   <div class="ws-bottom-header">
     <div class="ws-bottom-tabs" role="tablist" aria-label="Output panels">
-      <button class="ws-bottom-tab active" role="tab" aria-selected="true"  data-tab="logs">📝 Logs</button>
+      <button class="ws-bottom-tab active" role="tab" aria-selected="true"  data-tab="logs"> Logs</button>
       <button class="ws-bottom-tab"        role="tab" aria-selected="false" data-tab="runs">
-        ⏱ Runs <span class="bottom-tab-badge" id="runs-badge" hidden>0</span>
+         Runs <span class="bottom-tab-badge" id="runs-badge" hidden>0</span>
       </button>
       <button class="ws-bottom-tab" role="tab" aria-selected="false" data-tab="warnings">
-        ⚠ Warnings <span class="bottom-tab-badge warn-badge" id="warnings-badge" hidden>0</span>
+        [!] Warnings <span class="bottom-tab-badge warn-badge" id="warnings-badge" hidden>0</span>
       </button>
       <button class="ws-bottom-tab" role="tab" aria-selected="false" data-tab="errors">
-        ✕ Errors <span class="bottom-tab-badge error-badge" id="errors-badge" hidden>0</span>
+        x Errors <span class="bottom-tab-badge error-badge" id="errors-badge" hidden>0</span>
       </button>
     </div>
     <div class="ws-bottom-controls">
       <div class="run-summary-mini" id="run-summary-bar" aria-live="polite"></div>
-      <button class="btn-icon" id="btn-clear-logs" aria-label="Clear logs" title="Clear logs">⌫</button>
-      <button class="btn-icon" id="btn-bottom-toggle" aria-label="Toggle bottom panel" aria-expanded="true" title="Toggle panel">▾</button>
+      <button class="btn-icon" id="btn-clear-logs" aria-label="Clear logs" title="Clear logs"></button>
+      <button class="btn-icon" id="btn-bottom-toggle" aria-label="Toggle bottom panel" aria-expanded="true" title="Toggle panel">v</button>
     </div>
   </div>
   <div class="ws-bottom-body" id="ws-bottom-body">
@@ -985,14 +985,14 @@ label.field-label { display: block; font-size: 11px; color: var(--text-dim); mar
       <div class="log-area" id="log-area">
         <span class="log-empty log-dim" id="log-empty">No active run. Select features and click Run Tests.</span>
       </div>
-      <button class="console-autoscroll active" id="btn-autoscroll" aria-label="Scroll to bottom" aria-pressed="true">↓ Auto</button>
+      <button class="console-autoscroll active" id="btn-autoscroll" aria-label="Scroll to bottom" aria-pressed="true">v Auto</button>
     </div>
 
     <!-- Runs -->
     <div id="bottom-runs" class="bottom-panel" role="region" aria-label="Recent test runs">
       <div class="runs-list" id="runs-list">
         <div class="empty-state">
-          <div class="empty-icon">🏃</div>
+          <div class="empty-icon"></div>
           <div class="empty-title">No recent runs</div>
         </div>
       </div>
@@ -1011,32 +1011,32 @@ label.field-label { display: block; font-size: 11px; color: var(--text-dim); mar
   </div>
 </section>
 
-<!-- ── Run Confirm Modal ────────────────────────────────────────────────── -->
+<!-- -- Run Confirm Modal -------------------------------------------------- -->
 <div id="modal-run" class="ws-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-run-title" hidden>
   <div class="ws-modal-content">
     <h2 id="modal-run-title" class="ws-modal-title">Confirm Test Run</h2>
     <div id="modal-run-body" class="ws-modal-body"></div>
     <div class="ws-modal-footer">
       <button class="btn btn-secondary" id="btn-modal-cancel">Cancel</button>
-      <button class="btn btn-run" id="btn-modal-confirm">▶ Run Tests</button>
+      <button class="btn btn-run" id="btn-modal-confirm">> Run Tests</button>
     </div>
   </div>
 </div>
 
-<!-- ── Global Search Modal ──────────────────────────────────────────────── -->
+<!-- -- Global Search Modal ------------------------------------------------ -->
 <div id="modal-search" class="ws-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="search-modal-title" hidden>
   <div class="ws-modal-content ws-search-modal">
     <div class="ws-search-header">
       <h2 id="search-modal-title" class="sr-only">Global Search</h2>
       <input type="text" id="global-search-input" class="ws-search-input"
-        placeholder="Search features, modules, business rules, endpoints…"
+        placeholder="Search features, modules, business rules, endpoints..."
         autocomplete="off" aria-label="Search workspace" />
-      <button class="btn-icon" id="btn-search-close" aria-label="Close search (Escape)">✕</button>
+      <button class="btn-icon" id="btn-search-close" aria-label="Close search (Escape)">x</button>
     </div>
     <div id="search-results" class="ws-search-results" role="listbox" aria-label="Search results" aria-live="polite"></div>
     <div class="ws-search-footer">
       <span class="search-hint">
-        <kbd>↑</kbd><kbd>↓</kbd> navigate &nbsp;
+        <kbd>^</kbd><kbd>v</kbd> navigate &nbsp;
         <kbd>Enter</kbd> select &nbsp;
         <kbd>Esc</kbd> close
       </span>
@@ -1047,11 +1047,11 @@ label.field-label { display: block; font-size: 11px; color: var(--text-dim); mar
 <script>
 'use strict';
 /* ============================================================
-   Automation Workspace — Phase 4
+   Automation Workspace - Phase 4
    Vanilla JS, no dependencies, matches index.html CSS system
    ============================================================ */
 
-/* ── State ─────────────────────────────────────────────────────────────── */
+/* -- State --------------------------------------------------------------- */
 const S = {
   clientId:    'demoportal',
   environment: 'production',
@@ -1092,7 +1092,7 @@ const S = {
   searchIdx:    -1,
 };
 
-/* ── DOM helpers ────────────────────────────────────────────────────────── */
+/* -- DOM helpers ---------------------------------------------------------- */
 const $ = id  => document.getElementById(id);
 const $$ = (sel, ctx) => (ctx || document).querySelectorAll(sel);
 function ce(tag, cls) { const e = document.createElement(tag); if (cls) e.className = cls; return e; }
@@ -1110,7 +1110,7 @@ function relTime(d) {
   return new Date(d).toLocaleDateString();
 }
 
-/* ── API ────────────────────────────────────────────────────────────────── */
+/* -- API ------------------------------------------------------------------ */
 const api = {
   async get(url) {
     const r = await fetch(url);
@@ -1137,14 +1137,14 @@ function qstr(obj) {
     .map(([k,v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v)).join('&');
 }
 
-/* ── Notifications ──────────────────────────────────────────────────────── */
+/* -- Notifications -------------------------------------------------------- */
 const notify = {
   show(type, msg, dur) {
     const c  = $('ws-notifications');
     const el = ce('div', 'ws-notif ws-notif-' + type);
-    const icons = { success:'✓', error:'✕', warning:'⚠', info:'ℹ' };
+    const icons = { success:'', error:'x', warning:'[!]', info:'(i)' };
     el.setAttribute('role', 'alert');
-    el.innerHTML = '<span class="notif-icon" aria-hidden="true">' + (icons[type]||'ℹ') + '</span>'
+    el.innerHTML = '<span class="notif-icon" aria-hidden="true">' + (icons[type]||'(i)') + '</span>'
                  + '<span class="notif-msg">' + esc(msg) + '</span>';
     c.appendChild(el);
     el.offsetHeight; // reflow
@@ -1161,7 +1161,7 @@ const notify = {
   info(m)    { this.show('info',    m); },
 };
 
-/* ── Render: Clients ────────────────────────────────────────────────────── */
+/* -- Render: Clients ------------------------------------------------------ */
 function renderClients() {
   const sel = $('sel-client');
   if (!S.clients.length) { sel.innerHTML = '<option value="">No clients found</option>'; return; }
@@ -1179,7 +1179,7 @@ function renderClientMeta() {
   $('client-meta').innerHTML = '<span class="badge ' + cls + '">' + esc(type) + '</span>';
 }
 
-/* ── Render: Environments ───────────────────────────────────────────────── */
+/* -- Render: Environments ------------------------------------------------- */
 function renderEnvironments() {
   const c   = S.currentClient;
   const sel = $('sel-env');
@@ -1196,7 +1196,7 @@ function renderEnvironments() {
   }
 }
 
-/* ── Render: Roles ──────────────────────────────────────────────────────── */
+/* -- Render: Roles -------------------------------------------------------- */
 function renderRoles() {
   const c   = S.currentClient;
   const sel = $('sel-role');
@@ -1212,7 +1212,7 @@ function renderRoles() {
   if (!roles.includes(S.role)) { S.role = roles[0]; sel.value = S.role; }
 }
 
-/* ── Render: Module Tabs ────────────────────────────────────────────────── */
+/* -- Render: Module Tabs -------------------------------------------------- */
 function renderModules() {
   const wrap = $('module-tabs');
   const tabs = [
@@ -1237,7 +1237,7 @@ function renderModules() {
   );
 }
 
-/* ── Render: Feature List ───────────────────────────────────────────────── */
+/* -- Render: Feature List ------------------------------------------------- */
 const STATUS_COLOR = { Discovered:'badge-dim', Approved:'badge-blue', Generated:'badge-green', Review:'badge-yellow', 'Needs Review':'badge-yellow' };
 
 function applyFilters() {
@@ -1275,7 +1275,7 @@ function renderFeatureList() {
     const empty = !S.allFeatures.length;
     tbody.innerHTML = '<tr class="feature-empty-row"><td colspan="5">'
       + '<div class="empty-state">'
-      + '<div class="empty-icon">' + (empty ? '📦' : '🔍') + '</div>'
+      + '<div class="empty-icon">' + (empty ? '' : '') + '</div>'
       + '<div class="empty-title">' + (empty ? 'No features found' : 'No matching features') + '</div>'
       + '<div class="empty-sub">' + (empty ? 'Run repository analysis to discover features' : 'Try adjusting your search or filters') + '</div>'
       + (empty ? '<button class="btn btn-sm btn-primary mt-8" id="btn-empty-analyze">Run Analysis</button>' : '')
@@ -1299,9 +1299,9 @@ function renderFeatureList() {
       + (f.specPath ? '<span class="feature-spec-path">' + esc(f.specPath.split('/').pop() || f.specPath) + '</span>' : '')
       + '</td>'
       + '<td class="col-module"><span class="module-chip">' + esc(fmod) + '</span></td>'
-      + '<td class="col-coverage">' + (fcov !== null ? miniBar(fcov) : '<span class="text-dim">—</span>') + '</td>'
+      + '<td class="col-coverage">' + (fcov !== null ? miniBar(fcov) : '<span class="text-dim">-</span>') + '</td>'
       + '<td class="col-confidence">'
-      + (fconf !== null ? '<span class="conf-score conf-' + (fconf >= 70 ? 'high' : fconf >= 40 ? 'med' : 'low') + '">' + fconf + '%</span>' : '<span class="text-dim">—</span>')
+      + (fconf !== null ? '<span class="conf-score conf-' + (fconf >= 70 ? 'high' : fconf >= 40 ? 'med' : 'low') + '">' + fconf + '%</span>' : '<span class="text-dim">-</span>')
       + '</td></tr>';
   }).join('');
   $$('.feature-row', tbody).forEach(row => {
@@ -1314,12 +1314,12 @@ function renderFeatureList() {
   });
 }
 
-/* ── Render: Feature Details ────────────────────────────────────────────── */
+/* -- Render: Feature Details ---------------------------------------------- */
 function renderFeatureDetails() {
   const panel = $('feature-details');
   const f = S.selectedFeature;
   if (!f) {
-    panel.innerHTML = '<div class="empty-state"><div class="empty-icon">👆</div><div class="empty-title">No feature selected</div><div class="empty-sub">Select a feature from the list</div></div>';
+    panel.innerHTML = '<div class="empty-state"><div class="empty-icon"></div><div class="empty-title">No feature selected</div><div class="empty-sub">Select a feature from the list</div></div>';
     return;
   }
   const fstat = f.status || 'Discovered';
@@ -1363,30 +1363,30 @@ function renderFeatureDetails() {
     + (f.module ? ' <span class="module-chip">' + esc(f.module) + '</span>' : '')
     + (conf != null ? ' <span class="conf-score conf-' + (conf>=70?'high':conf>=40?'med':'low') + '">' + conf + '%</span>' : '')
     + '</div></div>'
-    + sec('Description',     f.description ? '<p class="fd-desc">' + esc(f.description) + '</p>' : null, '📝')
-    + sec('Navigation',      list(f.navigation),  '🗺')
-    + sec('Business Rules',  list(f.businessRules || f.rules), '📋')
-    + sec('Validation Rules',list(f.validationRules), '✓')
-    + sec('Endpoints',       endpoints(f.endpoints), '🔗')
-    + sec('Supported Roles', list(f.roles), '👤')
-    + sec('Dependencies',    list(f.dependencies), '🔧')
-    + sec('Coverage',        covBars(f.coverage), '📊')
+    + sec('Description',     f.description ? '<p class="fd-desc">' + esc(f.description) + '</p>' : null, '')
+    + sec('Navigation',      list(f.navigation),  '')
+    + sec('Business Rules',  list(f.businessRules || f.rules), '')
+    + sec('Validation Rules',list(f.validationRules), '')
+    + sec('Endpoints',       endpoints(f.endpoints), '')
+    + sec('Supported Roles', list(f.roles), '')
+    + sec('Dependencies',    list(f.dependencies), '')
+    + sec('Coverage',        covBars(f.coverage), '')
     + sec('Spec Files',
         f.specPath ? '<code class="fd-spec-path">' + esc(f.specPath) + '</code>'
-                   : list(f.specFiles && f.specFiles.smoke ? [f.specFiles.smoke] : null), '🧪')
+                   : list(f.specFiles && f.specFiles.smoke ? [f.specFiles.smoke] : null), '')
     + sec('Generation',
         f.generated
           ? '<span class="badge badge-green">Generated</span>'
-          : '<span class="badge badge-dim">Not Generated</span>', '⚡')
-    + sec('Source', f.sourcePath ? '<code class="fd-spec-path">' + esc(f.sourcePath) + '</code>' : null, '📁');
+          : '<span class="badge badge-dim">Not Generated</span>', '!')
+    + sec('Source', f.sourcePath ? '<code class="fd-spec-path">' + esc(f.sourcePath) + '</code>' : null, '');
 }
 
-/* ── Render: Coverage ───────────────────────────────────────────────────── */
+/* -- Render: Coverage ----------------------------------------------------- */
 function renderCoveragePanel() {
   const panel = $('coverage-panel');
   const cov   = S.coverage;
   if (!cov) {
-    panel.innerHTML = '<div class="empty-state"><div class="empty-icon">📊</div><div class="empty-title">No coverage data</div><div class="empty-sub">Load a client to view coverage</div></div>';
+    panel.innerHTML = '<div class="empty-state"><div class="empty-icon"></div><div class="empty-title">No coverage data</div><div class="empty-sub">Load a client to view coverage</div></div>';
     return;
   }
   const data = cov.coverage || cov;
@@ -1407,17 +1407,17 @@ function renderCoveragePanel() {
             + '<div class="cov-bar-wrap"><div class="cov-bar-fill" style="width:' + Math.min(100,d[k]||0) + '%;background:' + c + '"></div></div>'
             + '<span class="cov-pct">' + (d[k]||0) + '%</span></div>';
         }).join('')
-      + (d.totalFeatures != null ? '<div class="cov-totals">' + d.totalFeatures + ' features · ' + (d.approved||0) + ' approved · ' + (d.generated||0) + ' generated</div>' : '')
+      + (d.totalFeatures != null ? '<div class="cov-totals">' + d.totalFeatures + ' features . ' + (d.approved||0) + ' approved . ' + (d.generated||0) + ' generated</div>' : '')
       + '</div>';
   }).join('');
 }
 
-/* ── Render: Catalog Status ─────────────────────────────────────────────── */
+/* -- Render: Catalog Status ----------------------------------------------- */
 function renderCatalogStatus() {
   const panel = $('catalog-status-panel');
   const cat   = S.catalog;
   if (!cat || !cat.length) {
-    panel.innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div>'
+    panel.innerHTML = '<div class="empty-state"><div class="empty-icon"></div>'
       + '<div class="empty-title">No catalog loaded</div>'
       + '<div class="empty-sub">Run repository analysis to build the catalog</div>'
       + '<button class="btn btn-sm btn-primary mt-8" id="btn-cat-analyze">Run Analysis</button></div>';
@@ -1454,11 +1454,11 @@ function renderCatalogStatus() {
       }).join('');
 }
 
-/* ── Render: Repo Card (sidebar) ────────────────────────────────────────── */
+/* -- Render: Repo Card (sidebar) ------------------------------------------ */
 function renderRepoCard() {
   const card = $('repo-card');
   const rs   = S.repoStatus;
-  if (!rs) { card.innerHTML = '<div class="repo-loading text-dim">Loading…</div>'; return; }
+  if (!rs) { card.innerHTML = '<div class="repo-loading text-dim">Loading...</div>'; return; }
   const h    = rs.health || rs;
   const ok   = h.exists && h.isGitRepo && h.accessible;
   card.innerHTML = '<div class="repo-status-row">'
@@ -1471,20 +1471,20 @@ function renderRepoCard() {
     + (rs.lastAnalysis ? '<div class="repo-meta-row"><span class="repo-meta-key">Analysis</span><span class="repo-meta-val">' + relTime(rs.lastAnalysis) + '</span></div>' : '');
 }
 
-/* ── Render: Repo Detail (right panel) ─────────────────────────────────── */
+/* -- Render: Repo Detail (right panel) ----------------------------------- */
 function renderRepoDetail() {
   const panel = $('repo-detail-panel');
   const rs    = S.repoStatus;
   if (!rs) {
-    panel.innerHTML = '<div class="empty-state"><div class="empty-icon">📁</div><div class="empty-title">No repository info</div></div>';
+    panel.innerHTML = '<div class="empty-state"><div class="empty-icon"></div><div class="empty-title">No repository info</div></div>';
     return;
   }
   const h  = rs.health || rs;
   const ok = h.exists && h.isGitRepo && h.accessible;
   const rows = [
-    ['Path',     rs.localPath   || '—'],
-    ['Branch',   rs.branch      || '—'],
-    ['Commit',   rs.lastCommit  || '—'],
+    ['Path',     rs.localPath   || '-'],
+    ['Branch',   rs.branch      || '-'],
+    ['Commit',   rs.lastCommit  || '-'],
     ['Sync',     relTime(rs.lastSync)],
     ['Analysis', relTime(rs.lastAnalysis)],
     ['Status',   h.analysisStatus || 'not-run'],
@@ -1496,14 +1496,14 @@ function renderRepoDetail() {
     + '<div class="fd-meta"><span class="badge ' + (ok ? 'badge-green' : 'badge-red') + '">' + (ok ? 'Healthy' : 'Unavailable') + '</span></div></div>'
     + '<table class="meta-table">' + rows.map(([k,v]) => '<tr><th scope="row">' + esc(k) + '</th><td>' + esc(v) + '</td></tr>').join('') + '</table>'
     + '<div class="repo-actions">'
-    + '<button class="btn btn-sm btn-secondary" id="btn-rep-sync">⇅ Sync</button>'
-    + '<button class="btn btn-sm btn-secondary" id="btn-rep-analyze">⚙ Analyze</button>'
+    + '<button class="btn btn-sm btn-secondary" id="btn-rep-sync">^v Sync</button>'
+    + '<button class="btn btn-sm btn-secondary" id="btn-rep-analyze"> Analyze</button>'
     + '</div>';
   on($('btn-rep-sync'),    'click', triggerSync);
   on($('btn-rep-analyze'), 'click', triggerAnalyze);
 }
 
-/* ── Render: Exec Preview ───────────────────────────────────────────────── */
+/* -- Render: Exec Preview ------------------------------------------------- */
 function renderExecPreview() {
   const chips = [
     S.clientId    && '<span class="ep-chip">'            + esc(S.clientId) + '</span>',
@@ -1515,24 +1515,24 @@ function renderExecPreview() {
   $('exec-plan-preview').innerHTML = chips.join('');
 }
 
-/* ── Render: Run Summary bar ────────────────────────────────────────────── */
+/* -- Render: Run Summary bar ---------------------------------------------- */
 function renderRunSummary(sum) {
   const html = [
-    sum.passed  != null ? '<span class="rs-pass">✓ ' + sum.passed  + '</span>' : '',
-    sum.failed  != null ? '<span class="rs-fail">✕ ' + sum.failed  + '</span>' : '',
-    sum.skipped != null ? '<span class="rs-skip">⊘ ' + sum.skipped + '</span>' : '',
+    sum.passed  != null ? '<span class="rs-pass"> ' + sum.passed  + '</span>' : '',
+    sum.failed  != null ? '<span class="rs-fail">x ' + sum.failed  + '</span>' : '',
+    sum.skipped != null ? '<span class="rs-skip"> ' + sum.skipped + '</span>' : '',
     sum.duration ? '<span class="rs-dur">' + esc(sum.duration) + '</span>' : '',
   ].join('');
   $('run-summary-mini').innerHTML = html;
   $('run-summary-bar').innerHTML  = html;
 }
 
-/* ── Render: Run History ────────────────────────────────────────────────── */
+/* -- Render: Run History -------------------------------------------------- */
 function renderRunHistory() {
   const list  = $('runs-list');
   const badge = $('runs-badge');
   if (!S.history.length) {
-    list.innerHTML = '<div class="empty-state"><div class="empty-icon">🏃</div><div class="empty-title">No recent runs</div></div>';
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon"></div><div class="empty-title">No recent runs</div></div>';
     badge.hidden = true; return;
   }
   badge.textContent = S.history.length; badge.hidden = false;
@@ -1547,30 +1547,30 @@ function renderRunHistory() {
       + (cfg.environment || cfg.testEnv ? '<span class="ep-chip ep-chip-env">' + esc(cfg.environment || cfg.testEnv) + '</span>' : '')
       + '</div>'
       + '<div class="rhi-stats">'
-      + (s.passed  != null ? '<span class="rs-pass">✓ ' + s.passed  + '</span>' : '')
-      + (s.failed  != null ? '<span class="rs-fail">✕ ' + s.failed  + '</span>' : '')
-      + (s.skipped != null ? '<span class="rs-skip">⊘ ' + s.skipped + '</span>' : '')
+      + (s.passed  != null ? '<span class="rs-pass"> ' + s.passed  + '</span>' : '')
+      + (s.failed  != null ? '<span class="rs-fail">x ' + s.failed  + '</span>' : '')
+      + (s.skipped != null ? '<span class="rs-skip"> ' + s.skipped + '</span>' : '')
       + '</div>'
       + '<span class="badge ' + (ok ? 'badge-green' : 'badge-red') + '">' + (ok ? 'PASS' : 'FAIL') + '</span>'
       + '</div>';
   }).join('');
 }
 
-/* ── Render: Warnings / Errors ──────────────────────────────────────────── */
+/* -- Render: Warnings / Errors -------------------------------------------- */
 function renderWarnings() {
   const el = $('warnings-list'), b = $('warnings-badge');
   if (!S.warnings.length) { el.innerHTML = '<div class="empty-state"><div class="empty-title">No warnings</div></div>'; b.hidden = true; return; }
   b.textContent = S.warnings.length; b.hidden = false;
-  el.innerHTML = S.warnings.map(w => '<div class="msg-item msg-warn"><span aria-hidden="true">⚠</span>' + esc(w) + '</div>').join('');
+  el.innerHTML = S.warnings.map(w => '<div class="msg-item msg-warn"><span aria-hidden="true">[!]</span>' + esc(w) + '</div>').join('');
 }
 function renderErrors() {
   const el = $('errors-list'), b = $('errors-badge');
   if (!S.errors.length) { el.innerHTML = '<div class="empty-state"><div class="empty-title">No errors</div></div>'; b.hidden = true; return; }
   b.textContent = S.errors.length; b.hidden = false;
-  el.innerHTML = S.errors.map(e => '<div class="msg-item msg-error"><span aria-hidden="true">✕</span>' + esc(e) + '</div>').join('');
+  el.innerHTML = S.errors.map(e => '<div class="msg-item msg-error"><span aria-hidden="true">x</span>' + esc(e) + '</div>').join('');
 }
 
-/* ── Tab Switching ──────────────────────────────────────────────────────── */
+/* -- Tab Switching -------------------------------------------------------- */
 function switchRightTab(tab) {
   S.rightTab = tab;
   $$('.ws-right-tab').forEach(b => { const a = b.dataset.tab === tab; b.classList.toggle('active',a); b.setAttribute('aria-selected', a); });
@@ -1581,7 +1581,7 @@ function switchBottomTab(tab) {
   $$('.bottom-panel').forEach(p => p.classList.toggle('active', p.id === 'bottom-' + tab));
 }
 
-/* ── Log helpers ────────────────────────────────────────────────────────── */
+/* -- Log helpers ---------------------------------------------------------- */
 function appendLog(text, cls) {
   const area = $('log-area');
   const empty = $('log-empty');
@@ -1595,7 +1595,7 @@ function clearLogs() {
   $('log-area').innerHTML = '<span class="log-empty log-dim" id="log-empty">Logs cleared.</span>';
 }
 
-/* ── SSE ────────────────────────────────────────────────────────────────── */
+/* -- SSE ------------------------------------------------------------------ */
 function startSSE() {
   if (S.eventSource) { S.eventSource.close(); S.eventSource = null; }
   const es = new EventSource('/api/events');
@@ -1605,7 +1605,7 @@ function startSSE() {
 
   listen('start', d => {
     S.running = true; updateRunState();
-    appendLog('▶ Run started — ' + (d.args || ''), 'log-start');
+    appendLog('> Run started - ' + (d.args || ''), 'log-start');
     switchBottomTab('logs');
     if (!$('ws-bottom-body').style.height) $('ws-bottom-body').style.height = '220px';
   });
@@ -1613,8 +1613,8 @@ function startSSE() {
   listen('line', d => {
     const t = d.text || '';
     let c = 'log-dim';
-    if (/✓|passed/i.test(t))        c = 'log-pass';
-    else if (/✕|failed|error/i.test(t)) c = 'log-fail';
+    if (/|passed/i.test(t))        c = 'log-pass';
+    else if (/x|failed|error/i.test(t)) c = 'log-fail';
     else if (/skipped/i.test(t))    c = 'log-skip';
     else if (/\[dashboard\]/.test(t)) c = 'log-info';
     appendLog(t, c);
@@ -1622,7 +1622,7 @@ function startSSE() {
 
   listen('result', d => {
     const c = d.status === 'pass' ? 'log-pass' : d.status === 'fail' ? 'log-fail' : 'log-skip';
-    const i = d.status === 'pass' ? '  ✓' : d.status === 'fail' ? '  ✕' : '  ⊘';
+    const i = d.status === 'pass' ? '  ' : d.status === 'fail' ? '  x' : '  ';
     appendLog(i + ' ' + (d.name || '') + (d.duration ? ' (' + d.duration + ')' : ''), c);
   });
 
@@ -1634,25 +1634,25 @@ function startSSE() {
     renderRunHistory();
     const s = d.summary || {};
     const ok = d.exitCode === 0;
-    appendLog((ok ? '✓' : '✕') + ' Run complete — passed:' + (s.passed||0) + ' failed:' + (s.failed||0), ok ? 'log-pass' : 'log-fail');
+    appendLog((ok ? '' : 'x') + ' Run complete - passed:' + (s.passed||0) + ' failed:' + (s.failed||0), ok ? 'log-pass' : 'log-fail');
     renderRunSummary(s);
-    if (ok) notify.success('Run complete — ' + (s.passed||0) + ' passed');
-    else    notify.error('Run complete — ' + (s.failed||0) + ' failed');
+    if (ok) notify.success('Run complete - ' + (s.passed||0) + ' passed');
+    else    notify.error('Run complete - ' + (s.failed||0) + ' failed');
   });
 
   listen('error', d => {
-    appendLog('✕ ' + (d.message || 'Error'), 'log-err');
+    appendLog('x ' + (d.message || 'Error'), 'log-err');
     S.errors.push(d.message || 'Unknown error');
     renderErrors();
     S.running = false; updateRunState();
   });
 
   // Compare events
-  listen('compare-start', d => appendLog('⇄ Compare started — legacy:' + d.legacyUrl, 'log-start'));
-  listen('compare-phase', d => appendLog('── ' + (d.label || d.phase), 'log-info'));
+  listen('compare-start', d => appendLog('<-> Compare started - legacy:' + d.legacyUrl, 'log-start'));
+  listen('compare-phase', d => appendLog('-- ' + (d.label || d.phase), 'log-info'));
   listen('compare-done',  d => {
     const r = d.diff && d.diff.summary ? d.diff.summary : {};
-    appendLog('⇄ Compare done — regressions:' + (r.regression||0) + ' fixed:' + (r.fixed||0), (r.regression||0) > 0 ? 'log-fail' : 'log-pass');
+    appendLog('<-> Compare done - regressions:' + (r.regression||0) + ' fixed:' + (r.fixed||0), (r.regression||0) > 0 ? 'log-fail' : 'log-pass');
     S.running = false; updateRunState();
   });
 
@@ -1665,22 +1665,22 @@ function startSSE() {
   es.onerror = () => { /* SSE auto-reconnects */ };
 }
 
-/* ── Run State UI ───────────────────────────────────────────────────────── */
+/* -- Run State UI --------------------------------------------------------- */
 function updateRunState() {
   $('btn-run').disabled  = S.running;
   $('btn-stop').disabled = !S.running;
   $('ws-status-dot').className  = 'status-dot' + (S.running ? ' running' : '');
-  $('ws-status-text').textContent = S.running ? 'Running…' : 'Idle';
+  $('ws-status-text').textContent = S.running ? 'Running...' : 'Idle';
 }
 
-/* ── Run Modal ──────────────────────────────────────────────────────────── */
+/* -- Run Modal ------------------------------------------------------------ */
 function showRunModal() {
   const feats = S.featureId ? [S.featureId] : (S.moduleId ? ['all in ' + S.moduleId] : ['all features']);
   $('modal-run-body').innerHTML = '<table class="run-plan-table">'
     + '<tr><th>Client</th><td>' + esc(S.clientId) + '</td></tr>'
     + '<tr><th>Environment</th><td><span class="env-badge env-' + esc(S.environment) + '">' + esc(S.environment).toUpperCase() + '</span></td></tr>'
     + '<tr><th>Role</th><td>' + esc(S.role) + '</td></tr>'
-    + '<tr><th>Module</th><td>' + esc(S.moduleId || '— all —') + '</td></tr>'
+    + '<tr><th>Module</th><td>' + esc(S.moduleId || '- all -') + '</td></tr>'
     + '<tr><th>Feature</th><td>' + feats.map(esc).join(', ') + '</td></tr>'
     + '<tr><th>Browser</th><td>' + esc(S.browser) + '</td></tr>'
     + '<tr><th>Workers</th><td>' + S.workers + '</td></tr>'
@@ -1726,7 +1726,7 @@ async function executeRun() {
   }
 }
 
-/* ── Feature Selection ──────────────────────────────────────────────────── */
+/* -- Feature Selection ---------------------------------------------------- */
 function selectFeature(fid) {
   S.featureId      = fid;
   S.selectedFeature = S.allFeatures.find(f => f.featureId === fid || f.id === fid) || null;
@@ -1736,38 +1736,38 @@ function selectFeature(fid) {
   switchRightTab('details');
 }
 
-/* ── Actions ────────────────────────────────────────────────────────────── */
+/* -- Actions -------------------------------------------------------------- */
 function triggerSync() {
-  notify.info('Repository sync started…');
-  appendLog('⇅ Syncing repository…', 'log-info');
+  notify.info('Repository sync started...');
+  appendLog('^v Syncing repository...', 'log-info');
   switchBottomTab('logs');
   setTimeout(async () => {
     await loadRepoStatus();
     notify.success('Repository synced');
-    appendLog('✓ Repository sync complete', 'log-pass');
+    appendLog(' Repository sync complete', 'log-pass');
   }, 1500);
 }
 function triggerAnalyze() {
-  notify.info('Repository analysis started…');
-  appendLog('⚙ Running repository analysis…', 'log-info');
+  notify.info('Repository analysis started...');
+  appendLog(' Running repository analysis...', 'log-info');
   switchBottomTab('logs');
   setTimeout(async () => {
     notify.success('Analysis complete');
-    appendLog('✓ Analysis complete — refresh to see updated catalog', 'log-pass');
+    appendLog(' Analysis complete - refresh to see updated catalog', 'log-pass');
     await loadClientData();
   }, 2000);
 }
 function triggerGenerate() {
-  notify.info('Generating tests for approved features…');
-  appendLog('✦ Generating tests…', 'log-info');
+  notify.info('Generating tests for approved features...');
+  appendLog('* Generating tests...', 'log-info');
   switchBottomTab('logs');
   setTimeout(() => {
     notify.success('Test generation complete');
-    appendLog('✓ Test generation complete', 'log-pass');
+    appendLog(' Test generation complete', 'log-pass');
   }, 2000);
 }
 
-/* ── Data Loading ───────────────────────────────────────────────────────── */
+/* -- Data Loading --------------------------------------------------------- */
 async function loadClients() {
   try {
     S.clients = await api.clients();
@@ -1831,14 +1831,14 @@ async function loadClientData() {
   renderExecPreview();
 }
 
-/* ── Global Search ──────────────────────────────────────────────────────── */
+/* -- Global Search -------------------------------------------------------- */
 let searchIndex = [];
 function buildSearchIndex() {
   searchIndex = [
     ...S.allFeatures.map(f => ({
       type: 'feature', id: f.featureId || f.id,
       label: f.feature || f.featureName || f.featureId,
-      sub: (f.module || '') + ' · ' + (f.status || ''), data: f,
+      sub: (f.module || '') + ' . ' + (f.status || ''), data: f,
     })),
     ...S.modules.map(m => {
       const mid = typeof m === 'string' ? m : m.moduleId || m.id || m;
@@ -1860,7 +1860,7 @@ function renderSearchResults(q) {
   if (!hits.length) { el.innerHTML = '<div class="search-no-results">No results for "' + esc(q) + '"</div>'; return; }
   el.innerHTML = hits.map((h, i) =>
     '<div class="search-result" role="option" aria-selected="false" data-idx="' + i + '" data-type="' + esc(h.type) + '" data-id="' + esc(h.id) + '">'
-    + '<span class="sr-type-icon" aria-hidden="true">' + (h.type === 'module' ? '📦' : '🧪') + '</span>'
+    + '<span class="sr-type-icon" aria-hidden="true">' + (h.type === 'module' ? '' : '') + '</span>'
     + '<span class="sr-label">' + esc(h.label) + '</span>'
     + '<span class="sr-sub">' + esc(h.sub) + '</span></div>'
   ).join('');
@@ -1891,7 +1891,7 @@ function closeSearch() {
   $('btn-search-open').focus();
 }
 
-/* ── Focus Trap ─────────────────────────────────────────────────────────── */
+/* -- Focus Trap ----------------------------------------------------------- */
 function trapFocus(modal) {
   const sel = 'button:not([disabled]),input,select,a[href],[tabindex]:not([tabindex="-1"])';
   const nodes = modal.querySelectorAll(sel);
@@ -1910,7 +1910,7 @@ function trapFocus(modal) {
   modal.addEventListener('keydown', handler);
 }
 
-/* ── Bottom Resize ──────────────────────────────────────────────────────── */
+/* -- Bottom Resize -------------------------------------------------------- */
 function initResize() {
   const handle = $('ws-bottom-resize');
   let dragging = false, startY = 0, startH = 0;
@@ -1933,16 +1933,16 @@ function initResize() {
   });
 }
 
-/* ── Theme ──────────────────────────────────────────────────────────────── */
+/* -- Theme ---------------------------------------------------------------- */
 function toggleTheme() {
   const html = document.documentElement;
   const dark = html.dataset.theme !== 'light';
   html.dataset.theme = dark ? 'light' : 'dark';
-  $('theme-icon').textContent = dark ? '🌙' : '☀';
+  $('theme-icon').textContent = dark ? '' : '';
   try { localStorage.setItem('ws-theme', html.dataset.theme); } catch(_) {}
 }
 
-/* ── Sort Headers ───────────────────────────────────────────────────────── */
+/* -- Sort Headers --------------------------------------------------------- */
 function initSort() {
   $$('.th-sort-btn').forEach(btn => on(btn, 'click', () => {
     const k = btn.dataset.sort;
@@ -1953,7 +1953,7 @@ function initSort() {
   }));
 }
 
-/* ── All Event Handlers ─────────────────────────────────────────────────── */
+/* -- All Event Handlers --------------------------------------------------- */
 function initHandlers() {
   // Client
   on($('sel-client'), 'change', async e => {
@@ -1980,7 +1980,7 @@ function initHandlers() {
   on($('btn-run'),  'click', showRunModal);
   on($('btn-stop'), 'click', async () => {
     await api.stop(); S.running = false; updateRunState();
-    appendLog('■ Stopped by user', 'log-fail'); notify.warning('Run stopped');
+    appendLog(' Stopped by user', 'log-fail'); notify.warning('Run stopped');
   });
   // Modal
   on($('btn-modal-confirm'), 'click', executeRun);
@@ -2013,17 +2013,17 @@ function initHandlers() {
     const open = body.hidden;
     body.hidden = !open;
     $('btn-bottom-toggle').setAttribute('aria-expanded', open);
-    $('btn-bottom-toggle').textContent = open ? '▾' : '▴';
+    $('btn-bottom-toggle').textContent = open ? 'v' : '^';
   });
   on($('btn-clear-logs'), 'click', clearLogs);
   on($('btn-autoscroll'), 'click', () => {
     S.autoScroll = !S.autoScroll;
     $('btn-autoscroll').setAttribute('aria-pressed', S.autoScroll);
     $('btn-autoscroll').classList.toggle('active', S.autoScroll);
-    $('btn-autoscroll').textContent = S.autoScroll ? '↓ Auto' : '↓ Manual';
+    $('btn-autoscroll').textContent = S.autoScroll ? 'v Auto' : 'v Manual';
   });
   // Toolbar
-  on($('btn-refresh'),  'click', async () => { notify.info('Refreshing…'); await loadClientData(); notify.success('Refreshed'); });
+  on($('btn-refresh'),  'click', async () => { notify.info('Refreshing...'); await loadClientData(); notify.success('Refreshed'); });
   on($('btn-sync'),     'click', triggerSync);
   on($('btn-analyze'),  'click', triggerAnalyze);
   on($('btn-generate'), 'click', triggerGenerate);
@@ -2040,12 +2040,12 @@ function initHandlers() {
   });
 }
 
-/* ── Init ───────────────────────────────────────────────────────────────── */
+/* -- Init ----------------------------------------------------------------- */
 async function init() {
   // Theme
   try {
     const t = localStorage.getItem('ws-theme');
-    if (t) { document.documentElement.dataset.theme = t; $('theme-icon').textContent = t === 'light' ? '🌙' : '☀'; }
+    if (t) { document.documentElement.dataset.theme = t; $('theme-icon').textContent = t === 'light' ? '' : ''; }
   } catch(_) {}
 
   initHandlers();

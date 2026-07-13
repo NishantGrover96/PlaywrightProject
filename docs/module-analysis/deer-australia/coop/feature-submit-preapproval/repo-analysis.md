@@ -1,4 +1,4 @@
-# Coop — Submit Preapproval — Repository Analysis Report
+# Coop - Submit Preapproval - Repository Analysis Report
 
 **Client:** Deer Australia  
 **Module:** CoopManagement  
@@ -12,12 +12,12 @@
 
 | File | Layer | Purpose |
 |---|---|---|
-| `CoopManagement/Preapprovals/Submit/OnlinePreapprovalForm.aspx` | UI | Submit Preapproval form — fields, layout, document upload, dealer selection |
+| `CoopManagement/Preapprovals/Submit/OnlinePreapprovalForm.aspx` | UI | Submit Preapproval form - fields, layout, document upload, dealer selection |
 | `CoopManagement/Preapprovals/Submit/OnlinePreapprovalForm.aspx.vb` | Business Logic | Page_Load, validation, submission logic, email triggers, auto-approval |
 | `Classes/ClaimInformation.vb` | Data Model | ClaimInformation session object (shared with claims) |
 | `Classes/clsBudget.vb` | Business Logic | Budget retrieval, fund balance checks |
-| `Classes/clsDatabaseSelect.vb` | Data Access | Select SP calls — dealer, media type, segment queries |
-| `Classes/clsDatabaseUpdate.vb` | Data Access | Update SP calls — preapproval, document, contact writes |
+| `Classes/clsDatabaseSelect.vb` | Data Access | Select SP calls - dealer, media type, segment queries |
+| `Classes/clsDatabaseUpdate.vb` | Data Access | Update SP calls - preapproval, document, contact writes |
 | `Classes/clsSession.vb` | Security | Session management, role enforcement |
 | `App_GlobalResources/GlobalResources.resx` | Localization | Validation messages, field labels |
 | `Scripts/AjaxCall.js` | Client-side | AJAX wrapper, session timeout handling |
@@ -29,32 +29,32 @@
 
 | Field ID | Type | Required | Label | Conditional | Notes |
 |---|---|---|---|---|---|
-| `txtEmail` | TextBox | Yes | Email Address | — | Max 250 chars; pre-populated from `clsSession.UserEmailAddress` |
-| `drpMediaCategory` | DropDownList | Yes | Advertisement Type | — | Bound from `getMediaTypeByProgramSeq()`; triggers document type binding |
+| `txtEmail` | TextBox | Yes | Email Address | - | Max 250 chars; pre-populated from `clsSession.UserEmailAddress` |
+| `drpMediaCategory` | DropDownList | Yes | Advertisement Type | - | Bound from `getMediaTypeByProgramSeq()`; triggers document type binding |
 | `rblMediatype` | RadioButtonList | Conditional | Media Type | Visible=false initially | Alternative media type selection |
-| `drpSegment` | DropDownList | Yes | Segment / Market Category | — | Value 0 = unselected; bound from `GetMarketCategoryByDivisionSeq()` |
+| `drpSegment` | DropDownList | Yes | Segment / Market Category | - | Value 0 = unselected; bound from `GetMarketCategoryByDivisionSeq()` |
 | `txtTitle` | TextBox | Conditional | Pre-approval Title | Visible=false | Required when shown |
-| `calStartDate` | Calendar | Yes | First Placement Date | — | No future dates |
-| `calEndDate` | Calendar | No | Last Placement Date | — | Optional |
-| `txtComments` | TextBox | No | Additional Comments to Reviewer | — | Max 250 chars; multiline; 6 rows |
-| `txtPreapprovalAmt` | TextBox | Yes | Pre-approval Amount incl. GST | — | Max 10 chars; format $X.XX; must be numeric and > 0 and ≤ available funds |
-| `txtAdvAmt` | TextBox (hidden) | — | Total Advertisement Amount | — | Calculated; hidden |
-| `txtVendorName` | TextBox | Yes | Vendor / Media Name | — | Trimmed; required |
-| `txtAddLink` | TextBox | No | Link / URL for additional documents | — | Optional |
+| `calStartDate` | Calendar | Yes | First Placement Date | - | No future dates |
+| `calEndDate` | Calendar | No | Last Placement Date | - | Optional |
+| `txtComments` | TextBox | No | Additional Comments to Reviewer | - | Max 250 chars; multiline; 6 rows |
+| `txtPreapprovalAmt` | TextBox | Yes | Pre-approval Amount incl. GST | - | Max 10 chars; format $X.XX; must be numeric and > 0 and ≤ available funds |
+| `txtAdvAmt` | TextBox (hidden) | - | Total Advertisement Amount | - | Calculated; hidden |
+| `txtVendorName` | TextBox | Yes | Vendor / Media Name | - | Trimmed; required |
+| `txtAddLink` | TextBox | No | Link / URL for additional documents | - | Optional |
 | `drpFinance` | DropDownList | JDFADMIN only | Finance Type | Visible for JDFADMIN | Loaded from `FinanceOptions.xml`; must select JDF Consumer or Commercial Finance |
-| `radFinance` | RadioButton | Conditional | Finance selection | — | Alternative to dropdown |
-| `drpDocumentType` | DropDownList | Yes (when uploading) | Document Type | — | Bound from `GetDocumentTypeMediaTypeWise()` where `preapproval_required='Y'` |
+| `radFinance` | RadioButton | Conditional | Finance selection | - | Alternative to dropdown |
+| `drpDocumentType` | DropDownList | Yes (when uploading) | Document Type | - | Bound from `GetDocumentTypeMediaTypeWise()` where `preapproval_required='Y'` |
 | `my-awesome-dropzone` | File Upload (Dropzone) | Yes (unless link provided) | Document Upload | Non-admin required | Max 100 MB per file; accepted formats: .xls, .xlsx, .pdf, .jpg, .tif, .wmv, .mpeg, .png, .ppt, .zip, .rar, .avi, .mdi, .wav, .ppsx, .html, .msg, .mht, .xps, .mpg, .rtf, .vsd, .mp3, .mp4, .txt, .bmp, .jpeg, .doc, .docx |
-| `documentList` | Hidden | — | Uploaded file names | — | Semicolon-separated; persists between postbacks |
-| `dgrdUploadFiles` | DataGrid | — | Uploaded documents list | — | Shows filename + Delete button |
-| `txtDealerNumber` | TextBox | No | Dealer account # | — | Used to add dealers to selection |
-| `dgrdDealers` | DataGrid | — | Selected dealers | — | Auto-includes current dealer |
-| `btnSelectDealers` | Button | — | Open dealer selection panel | — | Opens dealer search UI |
-| `btnAddDealer` | Button | — | Add dealer | — | Adds dealer from `txtDealerNumber` |
+| `documentList` | Hidden | - | Uploaded file names | - | Semicolon-separated; persists between postbacks |
+| `dgrdUploadFiles` | DataGrid | - | Uploaded documents list | - | Shows filename + Delete button |
+| `txtDealerNumber` | TextBox | No | Dealer account # | - | Used to add dealers to selection |
+| `dgrdDealers` | DataGrid | - | Selected dealers | - | Auto-includes current dealer |
+| `btnSelectDealers` | Button | - | Open dealer selection panel | - | Opens dealer search UI |
+| `btnAddDealer` | Button | - | Add dealer | - | Adds dealer from `txtDealerNumber` |
 | `gvSponsorshipDetails` | GridView | Conditional | Sponsorship details | Visible for sponsorship media types | Media type, dates, amounts |
 | `chkMediaselect` | CheckBox (per row) | Conditional | Select sponsorship item | Required if sponsorships visible | At least one must be checked |
-| `btnSubmit` | Button | — | Submit / Submit and Approve | — | Admin: "Submit and Approve" unless JDF Finance; Dealer: "Submit" |
-| `lblConversionRate` | Label | — | AUD→NZD exchange rate | NZL dealers only | Currency conversion display |
+| `btnSubmit` | Button | - | Submit / Submit and Approve | - | Admin: "Submit and Approve" unless JDF Finance; Dealer: "Submit" |
+| `lblConversionRate` | Label | - | AUD->NZD exchange rate | NZL dealers only | Currency conversion display |
 
 ---
 
@@ -74,16 +74,16 @@
 
 | Rule ID | Description | Source | Logic Summary |
 |---|---|---|---|
-| BR-PA-001 | Role enforcement | `Page_Load` | Only BMDLR and BMAGDLR may access. Unauthorized → redirect |
-| BR-PA-002 | Disabled dealer block | `Page_Load` | If BMDLR + `IsDisableDealerActivity()` = true → redirect to `DealerDisable.aspx` |
+| BR-PA-001 | Role enforcement | `Page_Load` | Only BMDLR and BMAGDLR may access. Unauthorized -> redirect |
+| BR-PA-002 | Disabled dealer block | `Page_Load` | If BMDLR + `IsDisableDealerActivity()` = true -> redirect to `DealerDisable.aspx` |
 | BR-PA-003 | No-cache headers | `Page_Load` | Sets HTTP response headers: NoCache, ServerAndNoCache, no-store |
-| BR-PA-004 | Zero fund balance block | `GetAvailableFunds()` | If `current_budget <= 0` → show "You have $0 remaining balance so you can not submit Pre-approval request" |
+| BR-PA-004 | Zero fund balance block | `GetAvailableFunds()` | If `current_budget <= 0` -> show "You have $0 remaining balance so you can not submit Pre-approval request" |
 | BR-PA-005 | Preapproval amount cap | `btnSubmit_Click()` | `txtPreapprovalAmt` must be ≤ available fund balance |
 | BR-PA-006 | Document OR link required (non-admin) | `btnSubmit_Click()` | Non-admin must upload at least one document OR provide a link in `txtAddLink`; error: "Please select at least one option upload document or provide the link" |
 | BR-PA-007 | JDF Finance selection enforcement | `btnSubmit_Click()` | If JDFADMIN: must select "John Deere Financial - Consumer Finance" or "John Deere Financial - Commercial Finance" |
 | BR-PA-008 | Sponsorship checkbox required | `btnSubmit_Click()` | If `gvSponsorshipDetails` is visible: at least one `chkMediaselect` must be checked; error: "At least one sponsorship must be selected" |
 | BR-PA-009 | Preapproval status on submit | `btnSubmit_Click()` | All new preapprovals saved with status = "PENDING REVIEW" |
-| BR-PA-010 | Admin auto-approve (non-JDF) | `btnSubmit_Click()` | If BMADMIN submits without JDF finance (no checkbox): calls `AutoApprovePreapproval()` → status set to "APPROVED" immediately |
+| BR-PA-010 | Admin auto-approve (non-JDF) | `btnSubmit_Click()` | If BMADMIN submits without JDF finance (no checkbox): calls `AutoApprovePreapproval()` -> status set to "APPROVED" immediately |
 | BR-PA-011 | Admin submit and approve button | `Page_Load` | `btnSubmit.Text = "Submit and Approve"` for BMADMIN unless JDF Finance type selected |
 | BR-PA-012 | Document file rename on upload | `btnSubmit_Click()` | Uploaded files renamed to `{preapproval_number}_{original_filename}` before record creation |
 | BR-PA-013 | Country-based currency display | `getDealerCountry()` | NZL dealers see NZD labels and AUD conversion rate |
@@ -109,13 +109,13 @@
 | `txtPreapprovalAmt` | Must be numeric | `lblpreapprovalAmtError` | Server |
 | `txtPreapprovalAmt` | Must be > 0 | `lblZeroAmount` | Server |
 | `txtPreapprovalAmt` | Must be ≤ available funds | `diverrorpreapproval` | Server |
-| `txtPreapprovalAmt` | Max 10 chars | — | Client |
+| `txtPreapprovalAmt` | Max 10 chars | - | Client |
 | Fund balance | Must be > $0 to submit | `lblZeroAmount`: "You have $0 remaining balance so you can not submit Pre-approval request" | Server |
 | Document upload | Required for non-admin (unless link provided) | `dropzoneError`: "* Required" / `lblUploadErrorMsg`: "Please select at least one option upload document or provide the link" | Server |
 | `drpDocumentType` | Required when uploading | `lblUploadErrorMsg` | Server |
 | `drpFinance` | Required for JDFADMIN | `litDrpFinanceError` | Server |
 | Sponsorship | At least one checked (when visible) | `dvSposnorshipError`: "At least one sponsorship must be selected" | Server |
-| `txtDealerNumber` | Not empty before add | — | Server |
+| `txtDealerNumber` | Not empty before add | - | Server |
 | Document upload | File size max 100 MB | Client-side Dropzone | Client |
 | Document upload | File type whitelist | `.xls, .xlsx, .pdf, .jpg, .tif, .wmv, .mpeg, .png, .ppt, .zip, .rar, .avi, .mdi, .wav, .ppsx, .html, .msg, .mht, .xps, .mpg, .rtf, .vsd, .mp3, .mp4, .txt, .bmp, .jpeg, .doc, .docx` | Client |
 | `calStartDate` | No future dates | Calendar control | Client |
@@ -126,10 +126,10 @@
 
 | From Status | To Status | Trigger | Who | Notification |
 |---|---|---|---|---|
-| — | PENDING REVIEW | `btnSubmit_Click()` (dealer/agency) | BMDLR / BMAGDLR | `SendEmail()` to admin |
-| — | APPROVED | `AutoApprovePreapproval()` (admin, non-JDF) | BMADMIN | Optional `SendApprovedEmail()` |
+| - | PENDING REVIEW | `btnSubmit_Click()` (dealer/agency) | BMDLR / BMAGDLR | `SendEmail()` to admin |
+| - | APPROVED | `AutoApprovePreapproval()` (admin, non-JDF) | BMADMIN | Optional `SendApprovedEmail()` |
 | PENDING REVIEW | APPROVED | Admin approves later | BMADMIN | `SendApprovedEmail()` |
-| — | PENDING REVIEW (JDF pending) | `btnSubmit_Click()` (JDFADMIN with JDF Finance) | JDFADMIN | `SendEmail()` |
+| - | PENDING REVIEW (JDF pending) | `btnSubmit_Click()` (JDFADMIN with JDF Finance) | JDFADMIN | `SendEmail()` |
 | PENDING REVIEW | APPROVED (admin with checkbox) | `btnSubmit_Click()` + checkbox checked | BMADMIN | `SendAdminRequestedEmail()` or `SendApprovedEmail()` |
 
 **JDF Status tracking:**
@@ -164,9 +164,9 @@
 |---|---|---|
 | Authentication required | `Page_Load` role check | All roles |
 | Dealer-only access | UserLevel must be BMDLR or BMAGDLR | BMDLR / BMAGDLR |
-| Disabled dealer block | `IsDisableDealerActivity()` → redirect | BMDLR |
+| Disabled dealer block | `IsDisableDealerActivity()` -> redirect | BMDLR |
 | No-cache headers | Set in `Page_Load` | All requests |
-| Email pre-populated from session | `txtEmail = clsSession.UserEmailAddress` — prevents spoofing | BMDLR / BMAGDLR |
+| Email pre-populated from session | `txtEmail = clsSession.UserEmailAddress` - prevents spoofing | BMDLR / BMAGDLR |
 | Dealer data scope | Dealer in `dgrdDealers` must match valid dealer from `getDealerByDealerNumber()` | All roles |
 | File upload type restriction | Dropzone client-side whitelist + server rename | All roles |
 | File rename security | Files renamed to `{preapproval_number}_{filename}` preventing path traversal | Server |
@@ -200,9 +200,9 @@
 | Dealer remove | Remove button in `dgrdDealers` | Remove from dealer grid DataTable |
 | Finance dropdown visibility | JDFADMIN role | `drpFinance` and related panel shown only for JDFADMIN |
 | Sponsorship grid toggle | Media category selection | `gvSponsorshipDetails` visible when media type = sponsorship |
-| Currency conversion display | NZL dealers | Show `lblConversionRate` with AUD→NZD rate |
+| Currency conversion display | NZL dealers | Show `lblConversionRate` with AUD->NZD rate |
 | Session timeout | AJAX 419 | Redirect to login page |
-| Session validation | AJAX 400 | GET `/Index/ValidateUserSession` → `/Account/Logout` if invalid |
+| Session validation | AJAX 400 | GET `/Index/ValidateUserSession` -> `/Account/Logout` if invalid |
 
 ---
 

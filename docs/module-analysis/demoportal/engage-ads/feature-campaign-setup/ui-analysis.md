@@ -1,4 +1,4 @@
-# EngageAds — Campaign Setup — UI Analysis
+# EngageAds - Campaign Setup - UI Analysis
 
 Generated: 2026-06-19 | Pipeline: Step 2 (UI Analysis)
 
@@ -8,7 +8,7 @@ Generated: 2026-06-19 | Pipeline: Step 2 (UI Analysis)
 |---|---|---|
 | Page Title | `ViewData["Title"]` | "Campaign Setup" |
 | Block Heading | `.a_Header .LeftSec h4` | "Bundled Ad Packages" |
-| Sub-heading | `.a_Header .LeftSec p.sub-heading` | "Complete this form to activate your advertising campaign…" |
+| Sub-heading | `.a_Header .LeftSec p.sub-heading` | "Complete this form to activate your advertising campaign..." |
 
 ## 2. Package Info Header
 
@@ -16,7 +16,7 @@ Generated: 2026-06-19 | Pipeline: Step 2 (UI Analysis)
 |---|---|---|
 | Package Name | `.packageInfoHeader .packageName` | Bound from `Model.CampaignIntake.PackageName` |
 | Package Price | `.packageInfoHeader .packagePrice` | `$X,XXX.XX` format |
-| Paid Badge | `.packageInfoHeader .badge-success` | "PAID ✓" — always visible when page loads |
+| Paid Badge | `.packageInfoHeader .badge-success` | "PAID " - always visible when page loads |
 
 ## 3. Edit Window Status Alerts
 
@@ -37,7 +37,7 @@ Container: `.wrapperWithSteps > .commonWizard`
 | 3 | "Campaign Details" | `_Step3CampaignDetails.cshtml` |
 | 4 | "Review & Submit" | `_Step4ReviewSubmit.cshtml` |
 
-## 5. Step 1 — Primary Contact Selectors
+## 5. Step 1 - Primary Contact Selectors
 
 | Field | ID / Name | Type | Notes |
 |---|---|---|---|
@@ -48,7 +48,7 @@ Container: `.wrapperWithSteps > .commonWizard`
 | Lead Destination Email | `#LeadDestinationEmail` | email | optional, maxlength=100 |
 | Phone Number to Display in Ads | `#PhoneNumberToDisplayInAds` | text | optional, mask `.clsPhoneMaskMobileLandlineAds` |
 
-## 6. Step 2 — Business Details Selectors
+## 6. Step 2 - Business Details Selectors
 
 | Field | ID / Name | Type | Notes |
 |---|---|---|---|
@@ -65,7 +65,7 @@ Container: `.wrapperWithSteps > .commonWizard`
 | Business Logo Path | `#BusinessLogoPath` | hidden | set after upload |
 | Website URL | `#WebsiteUrl` | url | required, maxlength=200, pattern=https?://.+ |
 
-## 7. Step 3 — Campaign Details Selectors
+## 7. Step 3 - Campaign Details Selectors
 
 | Field | ID / Name | Type | Notes |
 |---|---|---|---|
@@ -73,8 +73,8 @@ Container: `.wrapperWithSteps > .commonWizard`
 | Service Area | `#ServiceArea` | textarea | required, rows=3, maxlength=2400 |
 | Website Accuracy Confirmed | `#WebsiteAccuracyConfirmed` | checkbox | required |
 | Preferred Landing Page URLs | `#PreferredLandingPageUrls` | textarea | optional, rows=4 |
-| Has Facebook Business Page — Yes | `#HasFacebookYes` | radio | `value="true"` |
-| Has Facebook Business Page — No | `#HasFacebookNo` | radio | `value="false"` |
+| Has Facebook Business Page - Yes | `#HasFacebookYes` | radio | `value="true"` |
+| Has Facebook Business Page - No | `#HasFacebookNo` | radio | `value="false"` |
 | Facebook Business Page URL | `#FacebookBusinessPageUrl` | url | shown in `#facebookUrlSection` when Yes selected |
 | Facebook URL Section | `#facebookUrlSection` | div | visible when HasFacebookBusinessPage=true |
 | Additional Notes | `#AdditionalNotes` | textarea | optional, rows=4, maxlength=2000 |
@@ -82,7 +82,7 @@ Container: `.wrapperWithSteps > .commonWizard`
 
 > **Note**: The entire Facebook section (`.facebookSection`) is only rendered when `Model.HasFacebookChannel = true`. Instagram references exist in the model but no separate UI section was found in `_Step3CampaignDetails.cshtml`.
 
-## 8. Step 4 — Review & Submit Selectors
+## 8. Step 4 - Review & Submit Selectors
 
 | Element | Selector | Notes |
 |---|---|---|
@@ -103,7 +103,7 @@ Container: `.wrapperWithSteps > .commonWizard`
 | Review: Package Name | `#review_PackageName` | |
 | Review: Start Date | `#review_StartDate` | "MMMM dd, yyyy" or "-" |
 | Review: Service Area | `#review_ServiceArea` | |
-| Review: Accuracy | `#review_WebsiteAccuracyConfirmed` | ✓ icon + "Yes" / ✗ icon + "No" |
+| Review: Accuracy | `#review_WebsiteAccuracyConfirmed` |  icon + "Yes" / ✗ icon + "No" |
 | Review: Landing URLs | `#review_PreferredLandingPageUrls` | |
 | Review: Facebook | `#review_FacebookBusinessPage` | "Yes" / "No" |
 | Review: Facebook URL | `#review_FacebookBusinessPageUrl` | Only shown if HasFacebook=true |
@@ -144,9 +144,9 @@ Submit button label:
 
 ## 12. Key JavaScript Behaviours
 
-- `initializeCampaignSetupWizard(countryCodes, phoneMasks, mobileMasks, selectedCountry)` — initializes wizard and phone masking
+- `initializeCampaignSetupWizard(countryCodes, phoneMasks, mobileMasks, selectedCountry)` - initializes wizard and phone masking
 - Wizard steps are jQuery Steps plugin (`$(".commonWizard").steps(...)`)
-- `goToStep(index)` — jump directly to a wizard step (used by review edit buttons)
+- `goToStep(index)` - jump directly to a wizard step (used by review edit buttons)
 - `#facebookUrlSection` toggled based on `#HasFacebookYes` / `#HasFacebookNo` radio selection
 - `#additionalNotesCount` updated on keyup of `#AdditionalNotes`
 - Auto-redirect countdown via `setInterval` in expired state

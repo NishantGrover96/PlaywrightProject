@@ -1,16 +1,16 @@
 'use strict';
 
 /**
- * Confidence Scorer — assigns a 0-100 confidence score to each RawFeature
+ * Confidence Scorer - assigns a 0-100 confidence score to each RawFeature
  * based on the signals detected during feature detection.
  *
- * Weights come from analysis.config.json → confidenceWeights.
+ * Weights come from analysis.config.json -> confidenceWeights.
  *
  * Score bands:
- *   >= 85  — High confidence     (complete discovery)
- *   70–84  — Medium confidence   (minor uncertainty)
- *   50–69  — Low confidence      (needs review — auto-adds warning)
- *   <  50  — Very low confidence (significant gaps — auto-adds warning)
+ *   >= 85  - High confidence     (complete discovery)
+ *   70-84  - Medium confidence   (minor uncertainty)
+ *   50-69  - Low confidence      (needs review - auto-adds warning)
+ *   <  50  - Very low confidence (significant gaps - auto-adds warning)
  */
 
 'use strict';

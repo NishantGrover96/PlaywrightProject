@@ -1,9 +1,9 @@
-# Discovery — Admin / Feature List
+# Discovery - Admin / Feature List
 
 **Generated:** 2026-06-19  
 **Module:** admin  
 **Feature:** feature-list  
-**URL:** `/Admin/Feature/FeatureList` · `/Admin/Feature/ModuleList`
+**URL:** `/Admin/Feature/FeatureList` . `/Admin/Feature/ModuleList`
 
 ---
 
@@ -30,7 +30,7 @@
 
 ## Page Handlers Summary
 
-### FeatureList — Legacy
+### FeatureList - Legacy
 | Handler | Method | Description |
 |---------|--------|-------------|
 | `OnGet` | GET | Load feature list grouped by modules |
@@ -50,15 +50,15 @@
 | `OnPostImportFeatureFlags(importFile)` | POST | Bulk import/update feature flags from Excel |
 | `OnPostEditDescription(MasterConfigurationSeq, description)` | POST | Update a feature's description |
 
-### FeatureList — Modern (Delta from Legacy)
+### FeatureList - Modern (Delta from Legacy)
 | Change | Detail |
 |--------|--------|
 | All handlers are `async Task<IActionResult>` | Async/await throughout |
-| Data source | Direct DB via `IProgramService` → API via `IFeatureApiService` |
-| User groups | `IUserLoginService` + `IDivisionService` + `IAddressService` → `INotificationApiService` + `ICommonSupportService` |
+| Data source | Direct DB via `IProgramService` -> API via `IFeatureApiService` |
+| User groups | `IUserLoginService` + `IDivisionService` + `IAddressService` -> `INotificationApiService` + `ICommonSupportService` |
 | `IUserLoginService` removed | Not injected in modern constructor |
 
-### ModuleList (Legacy = Modern — identical code)
+### ModuleList (Legacy = Modern - identical code)
 | Handler | Method | Description |
 |---------|--------|-------------|
 | `OnGet` | GET | Load paginated module list |
@@ -105,6 +105,6 @@
 | Description edit | Row edit icon | Opens `#DescriptionModal` |
 | Save description | `#DescriptionBtnSubmit` | `POST /FeatureList/EditDescription` |
 | Download Excel | `#btnDownloadFeatureFlags` | `GET /FeatureList/ExportFeatureFlags` |
-| Upload Excel | `#btnUploadFeatureFlags` → `#FeatureFlagImportFile` | `POST /FeatureList/ImportFeatureFlags` |
+| Upload Excel | `#btnUploadFeatureFlags` -> `#FeatureFlagImportFile` | `POST /FeatureList/ImportFeatureFlags` |
 | Add feature | `#btnAddFeature` | Opens `#AddFeatureModal` |
 | Save new feature | `#afSubmitBtn` | `POST /FeatureList/AddFeature` with validation |

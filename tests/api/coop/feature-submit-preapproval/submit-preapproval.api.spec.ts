@@ -1,7 +1,7 @@
 /**
- * Coop — Submit Pre-Approval — API Spec
+ * Coop - Submit Pre-Approval - API Spec
  * Module: coop | Feature: submit-preapproval
- * Generated: 2026-06-19 | Pipeline: Step 3 (Playwright Test Generation — Re-run)
+ * Generated: 2026-06-19 | Pipeline: Step 3 (Playwright Test Generation - Re-run)
  *
  * Tests the modern API endpoints that back the submit-preapproval feature.
  * These tests call the BackendAPI endpoints directly via HTTP.
@@ -13,7 +13,7 @@ import { test, expect, APIRequestContext } from '@playwright/test';
 const BASE_URL = process.env.BASE_URL ?? '';
 const IS_PROD  = (process.env.TEST_ENV ?? 'production') === 'production';
 
-test.describe('Coop — Submit Pre-Approval — API', () => {
+test.describe('Coop - Submit Pre-Approval - API', () => {
 
   let request: APIRequestContext;
 
@@ -27,10 +27,10 @@ test.describe('Coop — Submit Pre-Approval — API', () => {
     await request.dispose();
   });
 
-  // ── OnGetDealerTypeList endpoint ──────────────────────────────────────────
+  // -- OnGetDealerTypeList endpoint ------------------------------------------
 
   // FU-027
-  test('COOP-PA-API-001 @smoke — DealerTypeList returns array for valid dealer', async () => {
+  test('COOP-PA-API-001 @smoke - DealerTypeList returns array for valid dealer', async () => {
     const response = await request.get(
       '/CoopManagement/PreApproval/Submit/SubmitPreapproval?handler=DealerTypeList',
     );
@@ -39,11 +39,11 @@ test.describe('Coop — Submit Pre-Approval — API', () => {
     expect(Array.isArray(body)).toBeTruthy();
   });
 
-  // ── OnPostProcessPreApproval endpoint ────────────────────────────────────
+  // -- OnPostProcessPreApproval endpoint ------------------------------------
 
   // FU-032, FU-039
-  test('COOP-PA-API-002 @regression @mutation — ProcessPreApproval returns 200 with confirmation number', async () => {
-    test.skip(IS_PROD, 'Mutation test — skip on production');
+  test('COOP-PA-API-002 @regression @mutation - ProcessPreApproval returns 200 with confirmation number', async () => {
+    test.skip(IS_PROD, 'Mutation test - skip on production');
 
     const payload = {
       PreApprovalData: JSON.stringify({
@@ -91,20 +91,20 @@ test.describe('Coop — Submit Pre-Approval — API', () => {
     }
   });
 
-  // ── IPreapprovalSubmissionApiService ─────────────────────────────────────
+  // -- IPreapprovalSubmissionApiService -------------------------------------
 
-  // FU-039 — verify the underlying API service is reachable
-  test('COOP-PA-API-003 @smoke — preapproval submission API service is reachable', async () => {
+  // FU-039 - verify the underlying API service is reachable
+  test('COOP-PA-API-003 @smoke - preapproval submission API service is reachable', async () => {
     // Ping the submission API endpoint indirectly via the page model endpoint
     const response = await request.get(
       '/CoopManagement/PreApproval/Submit/SubmitPreapproval',
     );
-    // Should render page or redirect to login — not 500
+    // Should render page or redirect to login - not 500
     expect([200, 302, 401]).toContain(response.status());
   });
 
-  // FU-028 — media types loaded from API
-  test('COOP-PA-API-004 @regression — media types API returns list for current fiscal year', async () => {
+  // FU-028 - media types loaded from API
+  test('COOP-PA-API-004 @regression - media types API returns list for current fiscal year', async () => {
     const currentYear = new Date().getFullYear().toString();
     const response = await request.get(
       `/CoopManagement/PreApproval/Submit/SubmitPreapproval?SelectedFiscalYear=${currentYear}`,

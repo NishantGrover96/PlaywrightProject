@@ -195,12 +195,12 @@
   },
   "concurrencyTestData": {
     "dealer1Assets": [
-      { "displayName": "Asset by Dealer 1 — 1", "divisions": ["Division1"] },
-      { "displayName": "Asset by Dealer 1 — 2", "divisions": ["Division2"] }
+      { "displayName": "Asset by Dealer 1 - 1", "divisions": ["Division1"] },
+      { "displayName": "Asset by Dealer 1 - 2", "divisions": ["Division2"] }
     ],
     "dealer2Assets": [
-      { "displayName": "Asset by Dealer 2 — 1", "divisions": ["Division1"] },
-      { "displayName": "Asset by Dealer 2 — 2", "divisions": ["Division3"] }
+      { "displayName": "Asset by Dealer 2 - 1", "divisions": ["Division1"] },
+      { "displayName": "Asset by Dealer 2 - 2", "divisions": ["Division3"] }
     ]
   }
 }

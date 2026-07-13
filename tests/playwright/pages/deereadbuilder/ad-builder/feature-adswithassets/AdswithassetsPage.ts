@@ -5,7 +5,7 @@ export class AdswithassetsPage {
 
   readonly url = '/ad-builder/adswithassets';
 
-  // Form fields â€” replace with actual locators
+  // Form fields - replace with actual locators
   readonly primaryButton: Locator;
   readonly successMessage: Locator;
   readonly errorSummary: Locator;

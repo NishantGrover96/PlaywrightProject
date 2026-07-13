@@ -1,4 +1,4 @@
-# Rebate Dashboard — Repository Analysis Report
+# Rebate Dashboard - Repository Analysis Report
 Generated: 2026-07-07
 
 ## Source Files Analyzed
@@ -14,8 +14,8 @@ Generated: 2026-07-07
 ## UI / Form Fields
 | Field Name | Type | Required | Label | Conditional | Notes |
 |---|---|---|---|---|---|
-| ddrebates | select | No | Promotions | — | Populated via AJAX `OnGetCampaign`; filters dashboard stats |
-| ddyear (fiscalyear) | select | No | Year | — | Populated from `FiscalYearList`; defaults to current year |
+| ddrebates | select | No | Promotions | - | Populated via AJAX `OnGetCampaign`; filters dashboard stats |
+| ddyear (fiscalyear) | select | No | Year | - | Populated from `FiscalYearList`; defaults to current year |
 
 ---
 
@@ -42,7 +42,7 @@ Generated: 2026-07-07
 ## Validation Rules
 | Field | Rule | Error Message | Client/Server |
 |---|---|---|---|
-| fiscalyear | Defaults to 0 (all years) | — | Server |
+| fiscalyear | Defaults to 0 (all years) | - | Server |
 
 ---
 
@@ -96,7 +96,7 @@ Generated: 2026-07-07
 |---|---|---|
 | Auth required | `BasePageModel` session validation | Authenticated users only |
 | Division scoping | `_webHelper.GetActiveDivision()` | Stats filtered to user's active division |
-| Admin roles permitted | `IsAuthorize()` → Admin, AdminLevel1/2, RebateAdmin, ChannelFusionAdmin | See base model role switch |
+| Admin roles permitted | `IsAuthorize()` -> Admin, AdminLevel1/2, RebateAdmin, ChannelFusionAdmin | See base model role switch |
 
 ---
 
@@ -127,4 +127,4 @@ Generated: 2026-07-07
 - **Business rules extracted**: 4
 - **API handlers documented**: 4
 - **Security rules documented**: 3
-- **No form submission** — read-only dashboard
+- **No form submission** - read-only dashboard

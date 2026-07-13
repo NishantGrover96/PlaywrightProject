@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Repo Resolver — locates and validates a client's repository from
+ * Repo Resolver - locates and validates a client's repository from
  * config/repos.local.json.
  *
  * Returns a RepoContext object:
@@ -16,7 +16,7 @@
  * }
  *
  * Throws a descriptive AnalysisError on any validation failure.
- * Does NOT modify any files — that is registry-updater.js's job.
+ * Does NOT modify any files - that is registry-updater.js's job.
  */
 
 'use strict';
@@ -146,7 +146,7 @@ function _validateBranch(localPath, branch, warn) {
       return;
     }
 
-    // Branch not found — warn rather than throw so analysis can still run on HEAD
+    // Branch not found - warn rather than throw so analysis can still run on HEAD
     warn(`Branch '${branch}' not found. Analysis will continue on current HEAD.`);
   } catch (err) {
     warn(`Could not verify branch '${branch}': ${err.message}`);

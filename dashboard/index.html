@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>DealerPlatform QA Dashboard</title>
 <style>
-/* ── Reset & Base ─────────────────────────────────────────────────────────── */
+/* -- Reset & Base ----------------------------------------------------------- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
   --bg:        #0f1117;
@@ -24,7 +24,7 @@
   --radius:    8px;
 }
 
-/* ── Light Theme (v2.1.0) ────────────────────────────────────────────────── */
+/* -- Light Theme (v2.1.0) -------------------------------------------------- */
 [data-theme="light"] {
   --bg:        #f8fafc;
   --bg2:       #ffffff;
@@ -57,7 +57,7 @@ body {
   overflow: hidden;
 }
 
-/* ── Header ─────────────────────────────────────────────────────────────── */
+/* -- Header --------------------------------------------------------------- */
 header {
   background: var(--bg2);
   border-bottom: 1px solid var(--border);
@@ -96,7 +96,7 @@ header .status-dot.fail    { background: var(--red); }
   50%       { opacity: 0.3; }
 }
 
-/* ── Environment badge ───────────────────────────────────────────────────── */
+/* -- Environment badge ----------------------------------------------------- */
 .env-badge {
   display: inline-block;
   font-size: 10px;
@@ -112,14 +112,14 @@ header .status-dot.fail    { background: var(--red); }
 .env-testing { background: rgba(59,130,246,0.18);  color: #60a5fa; border: 1px solid rgba(59,130,246,0.4); }
 .env-dev     { background: rgba(34,197,94,0.18);   color: #4ade80; border: 1px solid rgba(34,197,94,0.4); }
 
-/* ── Main layout ─────────────────────────────────────────────────────────── */
+/* -- Main layout ----------------------------------------------------------- */
 .main {
   display: flex;
   flex: 1;
   overflow: hidden;
 }
 
-/* ── Left panel — config ─────────────────────────────────────────────────── */
+/* -- Left panel - config --------------------------------------------------- */
 .panel-config {
   width: 280px;
   flex-shrink: 0;
@@ -224,7 +224,7 @@ select option { background: var(--bg3); }
 .btn-stop { background: var(--red);    color: #fff; }
 .btn-clear { background: var(--bg3); color: var(--text-dim); border: 1px solid var(--border); flex: 0; padding: 9px 14px; }
 
-/* ── Catalog Info Panel ───────────────────────────────────────────────────── */
+/* -- Catalog Info Panel ----------------------------------------------------- */
 #catalog-panel {
   background: var(--bg3);
   border: 1px solid var(--border);
@@ -249,7 +249,7 @@ select option { background: var(--bg3); }
 .cat-stat-total { color: var(--text-dim); }
 .cat-link { color: var(--accent); text-decoration: none; font-size: 10px; }
 .cat-link:hover { text-decoration: underline; }
-/* ── Last Run tier results ───────────────────────────────────────────────── */
+/* -- Last Run tier results ------------------------------------------------- */
 .cat-tiers { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
 .cat-tier-pill {
   display: flex; align-items: center; gap: 5px;
@@ -265,7 +265,7 @@ select option { background: var(--bg3); }
 .cat-tier-e2e        .cat-tier-label { color: var(--cyan); }
 .cat-run-date { font-size: 9px; color: var(--text-dim); margin-top: 3px; }
 
-/* ── Right panel ─────────────────────────────────────────────────────────── */
+/* -- Right panel ----------------------------------------------------------- */
 .panel-right {
   flex: 1;
   display: flex;
@@ -301,7 +301,7 @@ select option { background: var(--bg3); }
 .stat-skip    .stat-value { color: var(--yellow); }
 .stat-dur     .stat-value { color: var(--blue); font-size: 16px; }
 
-/* ── Tab bar ─────────────────────────────────────────────────────────────── */
+/* -- Tab bar --------------------------------------------------------------- */
 .tab-bar {
   display: flex;
   background: var(--bg2);
@@ -320,7 +320,7 @@ select option { background: var(--bg3); }
 .tab:hover { color: var(--text); }
 .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
 
-/* ── Tab content ─────────────────────────────────────────────────────────── */
+/* -- Tab content ----------------------------------------------------------- */
 .tab-content { flex: 1; overflow: hidden; display: none; }
 .tab-content.active { display: flex; flex-direction: column; overflow: hidden; }
 
@@ -351,7 +351,7 @@ td.td-name { max-width: 420px; }
 .test-name-suite { font-size: 11px; color: var(--text-dim); display: block; }
 td.td-dur  { width: 80px; color: var(--text-dim); font-size: 12px; text-align: right; padding-right: 16px; }
 
-/* ── Expandable detail rows ───────────────────────────────────────────────── */
+/* -- Expandable detail rows ------------------------------------------------- */
 tr.result-row          { cursor: pointer; }
 tr.result-row:hover td { background: var(--bg3); }
 
@@ -411,7 +411,7 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
 .badge-skip  { background: rgba(245,158,11,0.15); color: var(--yellow); }
 .badge-run   { background: rgba(79,135,255,0.15); color: var(--accent); animation: pulse 1s infinite; }
 
-/* ── Console panel ───────────────────────────────────────────────────────── */
+/* -- Console panel --------------------------------------------------------- */
 .console-wrap { flex: 1; overflow: hidden; position: relative; }
 #console {
   height: 100%;
@@ -445,7 +445,7 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
   user-select: none;
 }
 
-/* ── History panel ───────────────────────────────────────────────────────── */
+/* -- History panel --------------------------------------------------------- */
 .history-wrap { flex: 1; overflow-y: auto; padding: 12px; }
 .history-item {
   background: var(--bg2);
@@ -470,7 +470,7 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #3e4560; }
 
-/* ── Test Result Analytics Tab ───────────────────────────────────────────── */
+/* -- Test Result Analytics Tab --------------------------------------------- */
 #tab-report { display:flex; flex-direction:column; overflow-y:auto; padding:16px; gap:14px; }
 .rpt-hero { display:flex; gap:10px; flex-wrap:wrap; }
 .rpt-metric {
@@ -531,7 +531,7 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
 .rpt-rate-fill { height:5px; border-radius:3px; background:var(--green); }
 .rpt-empty { text-align:center; color:var(--text-dim); padding:28px; font-size:13px; }
 
-/* ── Analytics bottom panel ──────────────────────────────────────────────── */
+/* -- Analytics bottom panel ------------------------------------------------ */
 .analytics-panel {
   background: var(--bg2);
   border-top: 2px solid var(--border);
@@ -579,9 +579,9 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
 </head>
 <body>
 
-<!-- ── Header ──────────────────────────────────────────────────────────────── -->
+<!-- -- Header ---------------------------------------------------------------- -->
 <header>
-  <div class="logo">🎭</div>
+  <div class="logo">QA</div>
   <div>
     <h1>DealerPlatform QA Dashboard</h1>
     <div class="subtitle">
@@ -594,17 +594,17 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
   <button id="theme-toggle" onclick="toggleTheme()" title="Toggle light / dark theme"
     style="background:none;border:1px solid var(--border);border-radius:20px;padding:5px 12px;
            cursor:pointer;font-size:15px;color:var(--text-dim);transition:border-color 0.2s,color 0.2s;
-           line-height:1;margin-left:auto;">☀️</button>
+           line-height:1;margin-left:auto;">Theme</button>
   <div class="status-pill" style="margin-left:0;">
     <div class="status-dot" id="status-dot"></div>
     <span id="status-text">Idle</span>
   </div>
 </header>
 
-<!-- ── Main ────────────────────────────────────────────────────────────────── -->
+<!-- -- Main ------------------------------------------------------------------ -->
 <div class="main">
 
-  <!-- ── Left: Config Panel ──────────────────────────────────────────────── -->
+  <!-- -- Left: Config Panel ------------------------------------------------ -->
   <div class="panel-config">
 
     <!-- Client -->
@@ -615,6 +615,7 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
         <option value="demoportal">Demo Portal</option>
         <option value="deer-australia">Deer Australia</option>
         <option value="deereadbuilder">Deere Adbuilder</option>
+              <option value="samsung">Samsung HVAC</option>
       </select>
     </div>
 
@@ -632,7 +633,7 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
         <label class="field-label" for="inp-base-url">
           Base URL
           <span style="font-size:10px;color:var(--text-dim);font-weight:400;margin-left:4px;">
-            (overrides .env — leave blank to use .env.{tier})
+            (overrides .env - leave blank to use .env.{tier})
           </span>
         </label>
         <input type="text" id="inp-base-url"
@@ -649,16 +650,16 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
     <div>
       <div class="section-title">Test User</div>
 
-      <!-- Role dropdown — populated dynamically from client config -->
+      <!-- Role dropdown - populated dynamically from client config -->
       <label class="field-label" for="sel-role">Role</label>
       <select id="sel-role" onchange="onRoleChange()">
-        <option value="dealer">Dealer — Saved Session</option>
-        <option value="dealer-custom">Dealer — Custom Credentials</option>
-        <option value="admin">Admin — Saved Session</option>
-        <option value="admin-custom">Admin — Custom Credentials</option>
+        <option value="dealer">Dealer - Saved Session</option>
+        <option value="dealer-custom">Dealer - Custom Credentials</option>
+        <option value="admin">Admin - Saved Session</option>
+        <option value="admin-custom">Admin - Custom Credentials</option>
       </select>
 
-      <!-- Custom credential inputs — shown when a "custom" role is selected -->
+      <!-- Custom credential inputs - shown when a "custom" role is selected -->
       <div id="cred-section">
         <div>
           <label class="field-label" for="inp-user">Username / Email</label>
@@ -666,7 +667,7 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
         </div>
         <div>
           <label class="field-label" for="inp-pass">Password</label>
-          <input type="password" id="inp-pass" placeholder="••••••••" autocomplete="off" />
+          <input type="password" id="inp-pass" placeholder="--------" autocomplete="off" />
         </div>
         <div style="font-size:10px;color:var(--text-dim);line-height:1.5;">
           Playwright re-authenticates before running. Session lasts this run only.
@@ -674,7 +675,7 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
       </div>
     </div>
 
-    <!-- Module & Features — populated dynamically from /api/catalog?clientId=X -->
+    <!-- Module & Features - populated dynamically from /api/catalog?clientId=X -->
     <div>
       <div class="section-title">Module</div>
       <label class="field-label" for="sel-module">Select Module</label>
@@ -695,9 +696,9 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
       </div>
     </div>
 
-    <!-- Campaign Setup — OrderSeq (shown only when Campaign Setup is selected) -->
+    <!-- Campaign Setup - OrderSeq (shown only when Campaign Setup is selected) -->
     <div id="campaign-order-seq-field" style="display:none;" aria-live="polite">
-      <div class="section-title">Campaign Setup — OrderSeq</div>
+      <div class="section-title">Campaign Setup - OrderSeq</div>
       <label class="field-label" for="inp-campaign-order-seq" id="inp-campaign-order-seq-label">
         Encrypted OrderSeq <span style="color:var(--red);" aria-label="required">*</span>
       </label>
@@ -737,8 +738,8 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
     <div>
       <div class="section-title">Actions</div>
       <div class="btn-row" style="margin-bottom:8px;">
-        <button class="btn btn-run"  id="btn-run"  onclick="runTests()">▶ Run Tests</button>
-        <button class="btn btn-stop" id="btn-stop" onclick="stopTests()" disabled>■ Stop</button>
+        <button class="btn btn-run"  id="btn-run"  onclick="runTests()"> Run Tests</button>
+        <button class="btn btn-stop" id="btn-stop" onclick="stopTests()" disabled> Stop</button>
       </div>
       <div class="btn-row">
         <button class="btn btn-clear" onclick="clearConsole()">Clear Output</button>
@@ -758,7 +759,7 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
       <div class="section-title" style="display:flex;align-items:center;justify-content:space-between;">
         Catalog Coverage
         <select id="catalog-select" onchange="onCatalogSelect()" style="background:var(--bg3);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-size:11px;cursor:pointer;">
-          <option value="">— select feature —</option>
+          <option value="">- select feature -</option>
         </select>
       </div>
       <div id="catalog-panel"></div>
@@ -766,7 +767,7 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
 
   </div><!-- /panel-config -->
 
-  <!-- ── Right: Output Panel ─────────────────────────────────────────────── -->
+  <!-- -- Right: Output Panel ----------------------------------------------- -->
   <div class="panel-right">
 
     <!-- Stats -->
@@ -775,7 +776,7 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
       <div class="stat-card stat-pass">   <div class="stat-value" id="st-pass">0</div>   <div class="stat-label">Passed</div></div>
       <div class="stat-card stat-fail">   <div class="stat-value" id="st-fail">0</div>   <div class="stat-label">Failed</div></div>
       <div class="stat-card stat-skip">   <div class="stat-value" id="st-skip">0</div>   <div class="stat-label">Skipped</div></div>
-      <div class="stat-card stat-dur">    <div class="stat-value" id="st-dur">—</div>    <div class="stat-label">Duration</div></div>
+      <div class="stat-card stat-dur">    <div class="stat-value" id="st-dur">-</div>    <div class="stat-label">Duration</div></div>
     </div>
 
     <!-- Tabs -->
@@ -814,7 +815,7 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
     <div class="tab-content" id="tab-console">
       <div class="console-wrap">
         <div id="console"></div>
-        <div class="console-autoscroll" onclick="toggleAutoscroll()" id="autoscroll-btn">↓ Auto-scroll ON</div>
+        <div class="console-autoscroll" onclick="toggleAutoscroll()" id="autoscroll-btn">v Auto-scroll ON</div>
       </div>
     </div>
 
@@ -839,37 +840,37 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
           <input type="text" id="cmp-modern-url" placeholder="https://modern.example.com" oninput="updateCmpPreview()" />
         </div>
         <div style="display:flex;gap:8px;flex-shrink:0;">
-          <button class="btn btn-run" id="btn-compare" onclick="startComparison()" style="flex:none;padding:9px 18px;">▶ Run Comparison</button>
-          <button class="btn btn-stop" onclick="stopTests()" style="flex:none;padding:9px 14px;">■</button>
+          <button class="btn btn-run" id="btn-compare" onclick="startComparison()" style="flex:none;padding:9px 18px;"> Run Comparison</button>
+          <button class="btn btn-stop" onclick="stopTests()" style="flex:none;padding:9px 14px;"></button>
         </div>
       </div>
 
       <!-- Phase indicator -->
       <div id="cmp-phases" style="background:var(--bg3);border-bottom:1px solid var(--border);padding:8px 20px;display:flex;gap:32px;align-items:center;flex-shrink:0;">
         <div class="cmp-phase" id="cmp-ph-legacy">
-          <span class="cmp-phase-dot" id="cmp-dot-legacy">○</span>
+          <span class="cmp-phase-dot" id="cmp-dot-legacy">o</span>
           <span style="font-size:12px;font-weight:600;">Legacy Run</span>
           <span id="cmp-sum-legacy" style="font-size:11px;color:var(--text-dim);margin-left:6px;"></span>
         </div>
-        <div style="font-size:16px;color:var(--border);">→</div>
+        <div style="font-size:16px;color:var(--border);">-></div>
         <div class="cmp-phase" id="cmp-ph-modern">
-          <span class="cmp-phase-dot" id="cmp-dot-modern">○</span>
+          <span class="cmp-phase-dot" id="cmp-dot-modern">o</span>
           <span style="font-size:12px;font-weight:600;">Modern Run</span>
           <span id="cmp-sum-modern" style="font-size:11px;color:var(--text-dim);margin-left:6px;"></span>
         </div>
-        <div style="font-size:16px;color:var(--border);">→</div>
+        <div style="font-size:16px;color:var(--border);">-></div>
         <div class="cmp-phase" id="cmp-ph-diff">
-          <span class="cmp-phase-dot" id="cmp-dot-diff">○</span>
+          <span class="cmp-phase-dot" id="cmp-dot-diff">o</span>
           <span style="font-size:12px;font-weight:600;">Compare Results</span>
         </div>
       </div>
 
       <!-- Compare stats bar -->
       <div id="cmp-stats-bar" style="display:flex;gap:1px;background:var(--border);border-bottom:1px solid var(--border);flex-shrink:0;">
-        <div class="stat-card" style="flex:1;"><div class="stat-value" id="cs-match" style="color:var(--green);">—</div><div class="stat-label">Both Pass</div></div>
-        <div class="stat-card" style="flex:1;"><div class="stat-value" id="cs-regression" style="color:var(--red);">—</div><div class="stat-label">Regressions 🚨</div></div>
-        <div class="stat-card" style="flex:1;"><div class="stat-value" id="cs-fixed" style="color:var(--cyan);">—</div><div class="stat-label">Fixed in Modern 🔧</div></div>
-        <div class="stat-card" style="flex:1;"><div class="stat-value" id="cs-bothfail" style="color:var(--yellow);">—</div><div class="stat-label">Both Fail</div></div>
+        <div class="stat-card" style="flex:1;"><div class="stat-value" id="cs-match" style="color:var(--green);">-</div><div class="stat-label">Both Pass</div></div>
+        <div class="stat-card" style="flex:1;"><div class="stat-value" id="cs-regression" style="color:var(--red);">-</div><div class="stat-label">Regressions [!]</div></div>
+        <div class="stat-card" style="flex:1;"><div class="stat-value" id="cs-fixed" style="color:var(--cyan);">-</div><div class="stat-label">Fixed in Modern </div></div>
+        <div class="stat-card" style="flex:1;"><div class="stat-value" id="cs-bothfail" style="color:var(--yellow);">-</div><div class="stat-label">Both Fail</div></div>
       </div>
 
       <!-- Comparison results table -->
@@ -893,25 +894,25 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
       </div>
     </div>
 
-    <!-- Test Result Analytics — removed from tab system, now a bottom panel -->
+    <!-- Test Result Analytics - removed from tab system, now a bottom panel -->
 
     <!-- [orphan open div below is closed at the original closing tag] -->
   </div><!-- /panel-right -->
 
 </div><!-- /main -->
 
-<!-- ── Test Result Analytics — standalone bottom panel ──────────────────── -->
+<!-- -- Test Result Analytics - standalone bottom panel -------------------- -->
 <div id="analytics-panel" class="analytics-panel analytics-collapsed">
 
   <!-- Collapsible header bar -->
   <div class="analytics-header" onclick="toggleAnalytics()">
     <span class="analytics-title">
-      📊 Test Result Analytics
+       Test Result Analytics
       <span id="rpt-badge" style="font-size:11px;margin-left:6px;"></span>
     </span>
     <div style="display:flex;align-items:center;gap:14px;">
       <span id="analytics-summary" style="font-size:11px;color:var(--text-dim);"></span>
-      <span id="analytics-chevron" style="font-size:14px;transition:transform .25s;">▲</span>
+      <span id="analytics-chevron" style="font-size:14px;transition:transform .25s;">^</span>
     </div>
   </div>
 
@@ -921,11 +922,11 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
     <!-- Row 1: metric cards -->
     <div class="rpt-hero">
       <div class="rpt-metric pass">
-        <div class="rpt-metric-value" id="rpt-passrate">—</div>
+        <div class="rpt-metric-value" id="rpt-passrate">-</div>
         <div class="rpt-metric-label">Pass Rate</div>
       </div>
       <div class="rpt-metric total">
-        <div class="rpt-metric-value" id="rpt-total">—</div>
+        <div class="rpt-metric-value" id="rpt-total">-</div>
         <div class="rpt-metric-label">Total Tests</div>
       </div>
       <div class="rpt-metric">
@@ -941,7 +942,7 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
         <div class="rpt-metric-label">Skipped</div>
       </div>
       <div class="rpt-metric">
-        <div class="rpt-metric-value" id="rpt-dur-card" style="color:var(--blue);font-size:22px">—</div>
+        <div class="rpt-metric-value" id="rpt-dur-card" style="color:var(--blue);font-size:22px">-</div>
         <div class="rpt-metric-label">Duration</div>
       </div>
     </div>
@@ -965,7 +966,7 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
               stroke="var(--text-dim)" stroke-width="14" opacity=".6" stroke-dasharray="0 226.2"
               transform="rotate(-90 50 50)" style="transition:stroke-dasharray .5s"/>
             <text id="donut-center" x="50" y="54" text-anchor="middle"
-              font-size="14" font-weight="700" fill="var(--text)">—</text>
+              font-size="14" font-weight="700" fill="var(--text)">-</text>
           </svg>
           <div class="rpt-legend">
             <div class="rpt-legend-item"><span class="rpt-legend-dot pass"></span>Passed</div>
@@ -980,7 +981,7 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
         <div class="rpt-section-title">
           Pass Rate Trend &amp; Failed Count
           <span style="float:right;font-size:9px;color:var(--text-dim);font-weight:400;">
-            ■ Failed &nbsp; <span style="color:var(--green)">● Pass rate</span>
+             Failed &nbsp; <span style="color:var(--green)">* Pass rate</span>
           </span>
         </div>
         <svg id="rpt-trend-svg" class="rpt-trend-chart" viewBox="0 0 500 90" preserveAspectRatio="none">
@@ -1010,25 +1011,25 @@ tr.status-skip + tr.detail-row .detail-content { border-left-color: var(--yellow
 </div><!-- /analytics-panel -->
 
 <script>
-// ── State ──────────────────────────────────────────────────────────────────
+// -- State ------------------------------------------------------------------
 let running   = false;
 let autoscroll = true;
 let evtSource  = null;
-let stats = { total: 0, pass: 0, fail: 0, skip: 0, dur: "—" };
+let stats = { total: 0, pass: 0, fail: 0, skip: 0, dur: "-" };
 let results = [];
-// Analytics state: name → { failed, total, totalDurMs }
+// Analytics state: name -> { failed, total, totalDurMs }
 let failureMap = {};
-// Suite state: suiteName → { pass, fail, skip }
+// Suite state: suiteName -> { pass, fail, skip }
 let suiteMap = {};
 
-// ── SSE Connection ─────────────────────────────────────────────────────────
+// -- SSE Connection ---------------------------------------------------------
 function connectSSE() {
   if (evtSource) evtSource.close();
   evtSource = new EventSource("/api/events");
 
   evtSource.onopen = () => {
     setStatus("idle");
-    logLine("✓ Connected to dashboard server", "log-pass");
+    logLine(" Connected to dashboard server", "log-pass");
   };
 
   evtSource.onmessage = (e) => {
@@ -1040,12 +1041,12 @@ function connectSSE() {
 
   evtSource.onerror = () => {
     setStatus("disconnected");
-    logLine("⚠ Connection lost — reconnecting in 3s…", "log-err");
+    logLine("[!] Connection lost - reconnecting in 3s...", "log-err");
     setTimeout(connectSSE, 3000);
   };
 }
 
-// ── Message handler ────────────────────────────────────────────────────────
+// -- Message handler --------------------------------------------------------
 function handleMessage(msg) {
   switch (msg.type) {
     case "state":
@@ -1059,14 +1060,14 @@ function handleMessage(msg) {
       results = [];
       failureMap = {};
       suiteMap   = {};
-      stats   = { total: 0, pass: 0, fail: 0, skip: 0, dur: "—" };
+      stats   = { total: 0, pass: 0, fail: 0, skip: 0, dur: "-" };
       updateStats();
       clearResults();
       resetAnalytics();
       syncRunningUI();
       setStatus("running");
       switchTab("console");
-      logLine(`▶ ${msg.args}`, "log-start");
+      logLine(` ${msg.args}`, "log-start");
       const envMeta = ENV_META[msg.config.env] || ENV_META.production;
       const userLabel = msg.config.username ? msg.config.username : "Dealer01 (saved session)";
       logLine(`  Env: ${envMeta.label} (${envMeta.url})  |  User: ${userLabel}`, "log-info");
@@ -1077,12 +1078,12 @@ function handleMessage(msg) {
         keys.forEach(k => {
           const c = catalogManifest[k];
           if (c) logLine(
-            `  📋 ${c.feature}  ${c.version}  |  Generated: ${c.generated}  |  Coverage: ${c.tests.implemented}/${c.tests.total} tests (${Math.round(c.tests.implemented/c.tests.total*100)}%)`,
+            `  " ${c.feature}  ${c.version}  |  Generated: ${c.generated}  |  Coverage: ${c.tests.implemented}/${c.tests.total} tests (${Math.round(c.tests.implemented/c.tests.total*100)}%)`,
             "log-info"
           );
         });
       }
-      logLine("─".repeat(60), "log-dim");
+      logLine("-".repeat(60), "log-dim");
       break;
     }
 
@@ -1114,7 +1115,7 @@ function handleMessage(msg) {
       if (msg.passed  !== undefined) stats.pass = msg.passed;
       if (msg.failed  !== undefined) stats.fail = msg.failed;
       if (msg.skipped !== undefined) stats.skip = msg.skipped;
-      // Recalculate total from authoritative summary values so pass rate stays ≤ 100%
+      // Recalculate total from authoritative summary values so pass rate stays  100%
       stats.total = stats.pass + stats.fail + stats.skip;
       if (msg.duration) stats.dur = msg.duration;
       updateStats();
@@ -1122,7 +1123,7 @@ function handleMessage(msg) {
     }
 
     case "line": {
-      // Raw output line → goes to Console tab only
+      // Raw output line -> goes to Console tab only
       if (msg.text !== undefined) logLine(msg.text, "log-info");
       break;
     }
@@ -1145,17 +1146,17 @@ function handleMessage(msg) {
     case "end": {
       running = false;
       syncRunningUI();
-      // If stopped by user, UI was already reset — just log and switch tab
+      // If stopped by user, UI was already reset - just log and switch tab
       if (msg.stopped) {
         setTimeout(() => switchTab("results"), 800);
         break;
       }
       const ok = msg.exitCode === 0;
       setStatus(ok ? "pass" : "fail");
-      logLine("─".repeat(60), "log-dim");
+      logLine("-".repeat(60), "log-dim");
       // Summary line with individually coloured pass/fail/skip counts
       logSummaryLine(ok, msg.exitCode, stats);
-      // Clear "Running tests…" placeholder if no result rows were appended
+      // Clear "Running tests..." placeholder if no result rows were appended
       const tbody = document.getElementById("results-body");
       if (tbody.rows[0]?.cells[0]?.getAttribute("colspan")) {
         if (stats.total === 0) {
@@ -1174,7 +1175,7 @@ function handleMessage(msg) {
     }
 
     case "error": {
-      logLine(`❌ Server error: ${msg.message}`, "log-err");
+      logLine(` Server error: ${msg.message}`, "log-err");
       running = false;
       syncRunningUI();
       setStatus("fail");
@@ -1183,12 +1184,12 @@ function handleMessage(msg) {
   }
 }
 
-// ── UI helpers ─────────────────────────────────────────────────────────────
+// -- UI helpers -------------------------------------------------------------
 function setStatus(state) {
   const dot  = document.getElementById("status-dot");
   const text = document.getElementById("status-text");
   dot.className = "status-dot " + state;
-  text.textContent = state === "running" ? "Running…"
+  text.textContent = state === "running" ? "Running..."
                    : state === "pass"    ? "Passed"
                    : state === "fail"    ? "Failed"
                    : state === "disconnected" ? "Disconnected"
@@ -1213,7 +1214,7 @@ function updateStats() {
   document.getElementById("st-dur").textContent   = stats.dur;
   // Update browser tab title so counts are visible at a glance
   if (running || stats.total > 0) {
-    document.title = `[${stats.pass}✓ ${stats.fail}✗ ${stats.skip}–] QA Dashboard`;
+    document.title = `[${stats.pass} ${stats.fail}- ${stats.skip}-] QA Dashboard`;
   } else {
     document.title = "DealerPlatform QA Dashboard";
   }
@@ -1221,7 +1222,7 @@ function updateStats() {
 
 function clearResults() {
   document.getElementById("results-body").innerHTML =
-    '<tr><td colspan="4" style="text-align:center;color:var(--text-dim);padding:20px;">Running tests…</td></tr>';
+    '<tr><td colspan="4" style="text-align:center;color:var(--text-dim);padding:20px;">Running tests...</td></tr>';
 }
 
 function appendResultRow(msg) {
@@ -1230,15 +1231,15 @@ function appendResultRow(msg) {
   if (tbody.rows[0]?.cells[0]?.getAttribute("colspan")) tbody.deleteRow(0);
 
   const statusHtml = msg.status === "pass"
-    ? '<span class="badge badge-pass">✓ Pass</span>'
+    ? '<span class="badge badge-pass"> Pass</span>'
     : msg.status === "fail"
-    ? '<span class="badge badge-fail">✗ Fail</span>'
-    : '<span class="badge badge-skip">– Skip</span>';
+    ? '<span class="badge badge-fail">- Fail</span>'
+    : '<span class="badge badge-skip">- Skip</span>';
 
   // Extract test ID (e.g. "CD-001") from name for display
-  const nameParts = msg.name.split(" — ");
+  const nameParts = msg.name.split(" - ");
   const testId   = nameParts[0]?.trim();
-  const testDesc = nameParts.slice(1).join(" — ").trim();
+  const testDesc = nameParts.slice(1).join(" - ").trim();
 
   const tr = document.createElement("tr");
   tr.className = `result-row status-${msg.status}`;
@@ -1249,14 +1250,14 @@ function appendResultRow(msg) {
     <td class="td-name">
       <strong>${escHtml(testId)}</strong>
       ${testDesc ? `<span class="test-name-suite">${escHtml(testDesc)}</span>` : ""}
-      <span class="expand-chevron">▶</span>
+      <span class="expand-chevron"></span>
     </td>
-    <td class="td-dur">${msg.duration || "—"}</td>
+    <td class="td-dur">${msg.duration || "-"}</td>
   `;
   tr.addEventListener("click", () => toggleDetail(msg.idx));
   tbody.appendChild(tr);
 
-  // Detail row — content depends on status
+  // Detail row - content depends on status
   const detailTr = document.createElement("tr");
   detailTr.className = "detail-row";
   detailTr.id        = `detail-${msg.idx}`;
@@ -1266,10 +1267,10 @@ function appendResultRow(msg) {
   // Pass and skip: populate detail immediately from the result data (no server follow-up needed)
   // Fail: detail content is filled in later when the 'detail' SSE event arrives
   if (msg.status !== "fail") {
-    const icon    = msg.status === "pass" ? "✓" : "–";
+    const icon    = msg.status === "pass" ? "" : "-";
     const label   = msg.status === "pass" ? "Test passed" : "Test skipped";
     const durLine = msg.duration ? `Duration : ${msg.duration}` : "";
-    const detail  = `${icon}  ${label}${msg.duration ? `  ·  ${msg.duration}` : ""}\n\n`
+    const detail  = `${icon}  ${label}${msg.duration ? `  .  ${msg.duration}` : ""}\n\n`
       + `Test     : ${msg.name}`;
     detailTr.querySelector(".detail-content").textContent = detail;
   }
@@ -1285,7 +1286,7 @@ function toggleDetail(idx) {
   if (opening) detailRow.querySelector(".detail-content").scrollTop = 0;
 }
 
-// ── Console ────────────────────────────────────────────────────────────────
+// -- Console ----------------------------------------------------------------
 function logLine(text, cls = "log-info") {
   const console_ = document.getElementById("console");
   const span = document.createElement("span");
@@ -1304,7 +1305,7 @@ function logSummaryLine(ok, exitCode, s) {
   const icon = document.createElement("span");
   icon.style.color = ok ? "var(--green)" : "var(--red)";
   icon.style.fontWeight = "700";
-  icon.textContent = ok ? "✅ All tests passed" : "❌ Run finished with failures";
+  icon.textContent = ok ? "... All tests passed" : " Run finished with failures";
   line.appendChild(icon);
 
   const exit = document.createElement("span");
@@ -1319,11 +1320,11 @@ function logSummaryLine(ok, exitCode, s) {
     sp.textContent = `${val}${symbol}`;
     return sp;
   };
-  line.appendChild(mkCount(s.pass, "✓", "var(--green)"));
-  line.appendChild(mkCount(s.fail, "✗", "var(--red)"));
-  line.appendChild(mkCount(s.skip, "–", "var(--yellow)"));
+  line.appendChild(mkCount(s.pass, "", "var(--green)"));
+  line.appendChild(mkCount(s.fail, "-", "var(--red)"));
+  line.appendChild(mkCount(s.skip, "-", "var(--yellow)"));
 
-  if (s.dur && s.dur !== "—") {
+  if (s.dur && s.dur !== "-") {
     const dur = document.createElement("span");
     dur.style.color = "var(--blue)";
     dur.textContent = s.dur;
@@ -1338,7 +1339,7 @@ function clearConsole() {
   document.getElementById("console").innerHTML = "";
   document.getElementById("results-body").innerHTML =
     '<tr><td colspan="4" style="text-align:center;color:var(--text-dim);padding:40px;">Configure options and click <strong>Run Tests</strong> to begin.</td></tr>';
-  stats = { total: 0, pass: 0, fail: 0, skip: 0, dur: "—" };
+  stats = { total: 0, pass: 0, fail: 0, skip: 0, dur: "-" };
   updateStats();
   results = [];
   failureMap = {};
@@ -1350,10 +1351,10 @@ function clearConsole() {
 function toggleAutoscroll() {
   autoscroll = !autoscroll;
   document.getElementById("autoscroll-btn").textContent =
-    autoscroll ? "↓ Auto-scroll ON" : "↓ Auto-scroll OFF";
+    autoscroll ? "v Auto-scroll ON" : "v Auto-scroll OFF";
 }
 
-// ── Tabs ───────────────────────────────────────────────────────────────────
+// -- Tabs -------------------------------------------------------------------
 function switchTab(name) {
   document.querySelectorAll(".tab").forEach((t, i) => {
     const names = ["results", "console", "history"];
@@ -1380,7 +1381,7 @@ function expandAnalytics() {
   chevron.style.transform = "rotate(0deg)";
 }
 
-// ── History ────────────────────────────────────────────────────────────────
+// -- History ----------------------------------------------------------------
 function renderHistory(history) {
   const wrap = document.getElementById("history-list");
   const badge = document.getElementById("hist-badge");
@@ -1400,9 +1401,9 @@ function renderHistory(history) {
       <div class="hi-time">${dateStr} ${timeStr}</div>
       <div class="hi-config">${escHtml((ENV_META[h.config?.testEnv||"production"]||ENV_META.production).label)} | ${escHtml(h.config?.username || "saved session")} | ${escHtml((h.config?.tiers||["all"]).join(","))} | ${escHtml((h.config?.features||["all"]).join(","))}</div>
       <div class="hi-stats">
-        <span class="hi-pass">✓ ${passed || 0}</span>
-        <span class="hi-fail">✗ ${failed || 0}</span>
-        <span class="hi-skip">– ${skipped || 0}</span>
+        <span class="hi-pass"> ${passed || 0}</span>
+        <span class="hi-fail">- ${failed || 0}</span>
+        <span class="hi-skip">- ${skipped || 0}</span>
         ${duration ? `<span style="color:var(--blue)">${duration}</span>` : ""}
       </div>
       <span class="badge ${ok ? "badge-pass" : "badge-fail"}">${ok ? "Pass" : "Fail"}</span>
@@ -1410,7 +1411,7 @@ function renderHistory(history) {
   }).join("");
 }
 
-// ── Catalog manifest ────────────────────────────────────────────────────────
+// -- Catalog manifest --------------------------------------------------------
 let catalogManifest = {};
 
 async function loadCatalogManifest() {
@@ -1428,7 +1429,7 @@ async function loadCatalogManifest() {
 
 function populateCatalogDropdown() {
   const sel = document.getElementById("catalog-select");
-  sel.innerHTML = '<option value="">— select feature —</option>';
+  sel.innerHTML = '<option value="">- select feature -</option>';
   Object.entries(catalogManifest).forEach(([key, entry]) => {
     const opt = document.createElement("option");
     opt.value = key;
@@ -1460,20 +1461,20 @@ function renderCatalogPanel(key) {
   panel.className = "visible";
   panel.innerHTML = `
     <div class="cat-row">
-      <span class="cat-title">📋 ${escHtml(c.feature)}</span>
+      <span class="cat-title">" ${escHtml(c.feature)}</span>
       <span class="cat-version">${escHtml(c.version)}</span>
-      ${catalogHref ? `<a class="cat-link" href="${catalogHref}" target="_blank">View Catalog ↗</a>` : ''}
+      ${catalogHref ? `<a class="cat-link" href="${catalogHref}" target="_blank">View Catalog -</a>` : ''}
     </div>
     <div class="cat-meta">
-      <span>📅 ${escHtml(c.generated)}</span>
-      <span>👤 ${escHtml(c.auditedAs)}</span>
-      <span>📂 ${c.sections} sections</span>
-      ${c.lastUpdated ? `<span>🔄 Updated: ${new Date(c.lastUpdated).toLocaleDateString()}</span>` : ''}
+      <span>"... ${escHtml(c.generated)}</span>
+      <span>' ${escHtml(c.auditedAs)}</span>
+      <span>" ${c.sections} sections</span>
+      ${c.lastUpdated ? `<span>" Updated: ${new Date(c.lastUpdated).toLocaleDateString()}</span>` : ''}
     </div>
     <div class="cat-progress">
       <div class="cat-stats">
-        <span class="cat-stat-impl">✓ ${c.tests.implemented} done</span>
-        <span class="cat-stat-fixme">⏳ ${c.tests.fixme} pending</span>
+        <span class="cat-stat-impl"> ${c.tests.implemented} done</span>
+        <span class="cat-stat-fixme"> ${c.tests.fixme} pending</span>
         <span class="cat-stat-total">/ ${c.tests.total} total</span>
         <span style="color:${barColor};font-weight:700;margin-left:auto">${pct}%</span>
       </div>
@@ -1485,7 +1486,7 @@ function renderCatalogPanel(key) {
       <strong style="color:var(--text);font-size:11px;">Test Suite Implementation:</strong>
       <div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap;">
         ${Object.entries(c.implementationStatus).map(([tier, status]) => {
-          const icon = status.implemented ? '✅' : '⏸️';
+          const icon = status.implemented ? '...' : '';
           const color = status.implemented ? 'var(--green)' : 'var(--text-dim)';
           const lastUpd = status.lastUpdated ? new Date(status.lastUpdated).toLocaleDateString() : 'N/A';
           return `<span style="padding:3px 8px;border:1px solid ${color};border-radius:4px;background:rgba(0,0,0,.02)">
@@ -1498,7 +1499,7 @@ function renderCatalogPanel(key) {
       <strong style="color:var(--text);">Spec files:</strong>
       ${Object.entries(c.specFiles).map(([tier, file]) =>
         `<span style="margin-right:10px">
-          <span style="color:var(--accent)">${tier}</span> → <code style="font-size:10px;color:var(--text-dim)">${escHtml(file.split('/').pop())}</code>
+          <span style="color:var(--accent)">${tier}</span> -> <code style="font-size:10px;color:var(--text-dim)">${escHtml(file.split('/').pop())}</code>
         </span>`
       ).join("")}
     </div>
@@ -1510,14 +1511,14 @@ function renderCatalogPanel(key) {
         const failColor = td.fail > 0 ? 'color:var(--red)' : '';
         return `<span class="cat-tier-pill cat-tier-${t}">
           <span class="cat-tier-label">${t}</span>
-          <span class="cat-tier-pass">✓${td.pass}</span>
+          <span class="cat-tier-pass">${td.pass}</span>
           ${td.skip > 0 ? `<span class="cat-tier-skip">-${td.skip}</span>` : ''}
-          ${td.fail > 0 ? `<span class="cat-tier-fail">✗${td.fail}</span>` : ''}
+          ${td.fail > 0 ? `<span class="cat-tier-fail">-${td.fail}</span>` : ''}
         </span>`;
       }).join('');
       return `<div style="margin-top:6px">
         <div style="font-size:10px;color:var(--text-dim);margin-bottom:3px;font-weight:600;">
-          📊 Last Run <span style="font-weight:400">(${escHtml(lr.env||'prod')} · ${escHtml(lr.date||'')})</span>
+           Last Run <span style="font-weight:400">(${escHtml(lr.env||'prod')} . ${escHtml(lr.date||'')})</span>
         </div>
         <div class="cat-tiers">${tierHtml}</div>
       </div>`;
@@ -1532,14 +1533,14 @@ function updateCatalogPanel() {
     sel.value = features[0];
     renderCatalogPanel(features[0]);
   }
-  // If "all" or multiple — leave dropdown unchanged, don't force a selection
+  // If "all" or multiple - leave dropdown unchanged, don't force a selection
 }
 
-// ── Checkbox mutual exclusion (All vs individual) ──────────────────────────
-// ── Client feature flags (updated on every client change) ────────────────
+// -- Checkbox mutual exclusion (All vs individual) --------------------------
+// -- Client feature flags (updated on every client change) ----------------
 let currentClientFlags = { engageAds: true, coop: true, popshop: true, rebate: true };
 
-// Central visibility function — combines module filter + client featureFlags.
+// Central visibility function - combines module filter + client featureFlags.
 // Always call this instead of manipulating display directly in onModuleChange / onClientChange.
 function applyFeatureVisibility() {
   const selectedModule = document.getElementById("sel-module").value;
@@ -1574,18 +1575,18 @@ function setupCheckboxGroup(groupId) {
 
     if (cb.value === "all") {
       if (cb.checked) {
-        // Checking "All" → check every visible individual item too
+        // Checking "All" -> check every visible individual item too
         visibleIndividuals().forEach(c => {
           c.checked = true;
           c.closest(".checkbox-item").classList.add("checked");
         });
       } else {
-        // Unchecking "All" → uncheck all individuals so user can pick specific ones
+        // Unchecking "All" -> uncheck all individuals so user can pick specific ones
         visibleIndividuals().forEach(c => {
           c.checked = false;
           c.closest(".checkbox-item").classList.remove("checked");
         });
-        // Do NOT restore All here — let the user select individual items
+        // Do NOT restore All here - let the user select individual items
       }
       cb.closest(".checkbox-item").classList.toggle("checked", cb.checked);
     } else {
@@ -1596,13 +1597,13 @@ function setupCheckboxGroup(groupId) {
       const checkedCount = individuals.filter(c => c.checked).length;
 
       if (!cb.checked) {
-        // Unchecked one individual → uncheck "All"
+        // Unchecked one individual -> uncheck "All"
         allCb.checked = false;
         allCb.closest(".checkbox-item").classList.remove("checked");
       }
 
       if (checkedCount === individuals.length && checkedCount > 0) {
-        // Every individual is now checked → mirror that on "All"
+        // Every individual is now checked -> mirror that on "All"
         allCb.checked = true;
         allCb.closest(".checkbox-item").classList.add("checked");
       }
@@ -1615,7 +1616,7 @@ function setupCheckboxGroup(groupId) {
   });
 }
 
-// ── Command preview ────────────────────────────────────────────────────────
+// -- Command preview --------------------------------------------------------
 function getSelectedValues(groupId) {
   const group = document.getElementById(groupId);
   const allCb = group.querySelector("input[value=all]");
@@ -1703,7 +1704,7 @@ function getRole() {
   return document.getElementById("sel-role")?.value || "dealer";
 }
 
-// ── Client / Environment / Role chained dropdowns ─────────────────────────
+// -- Client / Environment / Role chained dropdowns -------------------------
 
 async function loadClients() {
   try {
@@ -1752,14 +1753,14 @@ async function onClientChange() {
       const options = [];
       for (const role of cfg.roles) {
         const label = roleLabels[role] || (role.charAt(0).toUpperCase() + role.slice(1));
-        options.push(`<option value="${escHtml(role)}">${escHtml(label)} — Saved Session</option>`);
-        options.push(`<option value="${escHtml(role + '-custom')}">${escHtml(label)} — Custom Credentials</option>`);
+        options.push(`<option value="${escHtml(role)}">${escHtml(label)} - Saved Session</option>`);
+        options.push(`<option value="${escHtml(role + '-custom')}">${escHtml(label)} - Custom Credentials</option>`);
       }
       roleSel.innerHTML = options.join("");
       if ([...roleSel.options].some(o => o.value === currentRole)) roleSel.value = currentRole;
     }
 
-    // Derive enabled modules — prefer explicit modules array, fall back to featureFlags
+    // Derive enabled modules - prefer explicit modules array, fall back to featureFlags
     const flags = cfg.featureFlags || {};
     const clientModules = Array.isArray(cfg.modules) && cfg.modules.length > 0 ? cfg.modules : null;
     if (clientModules) {
@@ -1811,7 +1812,7 @@ function syncCampaignOrderSeqVisibility() {
   if (!show && input) input.value = "";
 }
 
-// ── Dynamic module + feature builders (called on every client change) ────────
+// -- Dynamic module + feature builders (called on every client change) --------
 
 // Human-readable module labels
 const MODULE_LABELS = {
@@ -1821,6 +1822,7 @@ const MODULE_LABELS = {
   'rebate':      'Rebate',
   'admin':       'Admin',
   'ad-builder':  'Ad Builder',
+  'incentive':  'Incentive',
 };
 
 // Role tag colour map
@@ -1880,7 +1882,7 @@ async function populateFeatureCheckboxes(clientId) {
         const roleStyle = ROLE_STYLES[role] || '';
         const tagStyle  = roleStyle ? ` style="${roleStyle}"` : '';
         const featureId = e.featureId || e.feature;
-        // Derive a short label from the feature name (strip "Module — " prefix)
+        // Derive a short label from the feature name (strip "Module - " prefix)
         const rawLabel  = e.feature || featureId;
         const label     = rawLabel.includes(' \u2014 ')
           ? rawLabel.split(' \u2014 ').slice(1).join(' \u2014 ')
@@ -1908,7 +1910,7 @@ function onModuleChange() {
   const group = document.getElementById('feature-group');
   const loaded = group.querySelectorAll('.checkbox-item:not([data-value="all"])').length > 0;
   if (!loaded) {
-    // Features haven't been fetched yet — load them now for the current client
+    // Features haven't been fetched yet - load them now for the current client
     const clientId = document.getElementById('sel-client')?.value || 'demoportal';
     populateFeatureCheckboxes(clientId);
   } else {
@@ -1917,10 +1919,10 @@ function onModuleChange() {
   updateCommandPreview();
 }
 
-// ── Run / Stop ─────────────────────────────────────────────────────────────
+// -- Run / Stop -------------------------------------------------------------
 async function runTests() {
   if (running) {
-    logLine("⚠ Test run already in progress", "log-err");
+    logLine("[!] Test run already in progress", "log-err");
     return;
   }
 
@@ -1945,23 +1947,23 @@ async function runTests() {
       .map(el => el.getAttribute("data-value"))
       .filter(Boolean);
     if (features.length === 0) {
-      logLine("⚠ No enabled features found for the selected client and module", "log-err");
+      logLine("[!] No enabled features found for the selected client and module", "log-err");
       return;
     }
   }
 
   // Validation
   if (features.length === 0) {
-    logLine("⚠ Please select at least one feature to run", "log-err");
+    logLine("[!] Please select at least one feature to run", "log-err");
     return;
   }
   if (tiers.length === 0) {
-    logLine("⚠ Please select at least one test tier to run", "log-err");
+    logLine("[!] Please select at least one test tier to run", "log-err");
     return;
   }
 
   switchTab("console");
-  logLine(`→ Starting test run...`, "log-info");
+  logLine(`-> Starting test run...`, "log-info");
   logLine(`  Features: ${features.join(", ")}`, "log-dim");
   logLine(`  Tiers: ${tiers.join(", ")}`, "log-dim");
 
@@ -1980,18 +1982,18 @@ async function runTests() {
     });
     
     if (!res.ok) {
-      logLine(`⚠ Server returned error ${res.status}: ${res.statusText}`, "log-err");
+      logLine(`[!] Server returned error ${res.status}: ${res.statusText}`, "log-err");
       return;
     }
     
     const data = await res.json();
     if (!data.ok) {
-      logLine(`⚠ ${data.error}`, "log-err");
+      logLine(`[!] ${data.error}`, "log-err");
     } else {
-      logLine(`✓ Test execution started (PID: ${data.pid || 'unknown'})`, "log-pass");
+      logLine(` Test execution started (PID: ${data.pid || 'unknown'})`, "log-pass");
     }
   } catch (err) {
-    logLine(`⚠ Failed to start tests: ${err.message}`, "log-err");
+    logLine(`[!] Failed to start tests: ${err.message}`, "log-err");
     console.error("Dashboard error:", err);
   }
 }
@@ -2000,11 +2002,11 @@ async function stopTests() {
   const res  = await fetch("/api/stop", { method: "POST" });
   const data = await res.json();
   if (data.ok) {
-    // Immediately re-enable UI — the SSE "end" event will also arrive but may be slow on Windows
+    // Immediately re-enable UI - the SSE "end" event will also arrive but may be slow on Windows
     running = false;
     syncRunningUI();
     setStatus("idle");
-    logLine("⏹ Stopped by user.", "log-dim");
+    logLine(" Stopped by user.", "log-dim");
   }
 }
 
@@ -2014,16 +2016,16 @@ function escHtml(str) {
 
 /**
  * Render detail error content with color-coded lines:
- *   Error / AssertionError  → red
- *   Expected / Received     → yellow
- *   stack frames (at …)     → dim grey
- *   everything else         → default console color
+ *   Error / AssertionError  -> red
+ *   Expected / Received     -> yellow
+ *   stack frames (at ...)     -> dim grey
+ *   everything else         -> default console color
  */
 function renderDetailContent(container, text) {
   container.innerHTML = "";
   const lines = text.split("\n");
 
-  // ── 1. Extract structured info ──────────────────────────────────────────
+  // -- 1. Extract structured info ------------------------------------------
   let errorType    = "";
   let errorMessage = "";
   let firstUserFrame = "";  // first stack frame NOT inside node_modules
@@ -2045,7 +2047,7 @@ function renderDetailContent(container, text) {
     }
   }
 
-  // ── 2. Header block ────────────────────────────────────────────────────
+  // -- 2. Header block ----------------------------------------------------
   if (errorType) {
     const header = document.createElement("div");
     header.style.cssText = "margin-bottom:8px;padding:8px 10px;background:rgba(239,68,68,0.12);" +
@@ -2053,11 +2055,11 @@ function renderDetailContent(container, text) {
     header.innerHTML =
       `<div style="color:#ff6b6b;font-weight:700;font-size:12px;margin-bottom:2px;">${escHtml(errorType)}</div>` +
       (errorMessage ? `<div style="color:#fca5a5;font-size:11px;word-break:break-word;">${escHtml(errorMessage)}</div>` : "") +
-      (firstUserFrame ? `<div style="margin-top:5px;font-size:10px;color:#94a3b8;">📍 ${escHtml(firstUserFrame)}</div>` : "");
+      (firstUserFrame ? `<div style="margin-top:5px;font-size:10px;color:#94a3b8;">" ${escHtml(firstUserFrame)}</div>` : "");
     container.appendChild(header);
   }
 
-  // ── 3. Render lines ────────────────────────────────────────────────────
+  // -- 3. Render lines ----------------------------------------------------
   let inDiff    = false;
   let nodeBlock = null;  // collapsed node_modules section
   let nodeCount = 0;
@@ -2068,7 +2070,7 @@ function renderDetailContent(container, text) {
     // Skip lines already shown in header
     if (errorType && stripped.startsWith(errorType)) continue;
 
-    // ── Assertion diff block ──
+    // -- Assertion diff block --
     if (/^\s+(Expected|Received|Error|Value|-\s|[+]\s)/.test(line) &&
         !/^\s+at /.test(line)) {
       inDiff = true;
@@ -2085,7 +2087,7 @@ function renderDetailContent(container, text) {
       continue;
     }
 
-    // ── Stack frames ──
+    // -- Stack frames --
     if (/^\s+at /.test(line)) {
       inDiff = false;
       const isNodeInternal = /node_modules[\\/]|<anonymous>|internal\//.test(line);
@@ -2100,11 +2102,11 @@ function renderDetailContent(container, text) {
             this.style.whiteSpace = this.style.whiteSpace === "normal" ? "nowrap" : "normal";
           });
         }
-        nodeBlock.textContent = `  [${nodeCount} internal playwright/node frame${nodeCount > 1 ? "s" : ""} hidden — click to reveal]`;
+        nodeBlock.textContent = `  [${nodeCount} internal playwright/node frame${nodeCount > 1 ? "s" : ""} hidden - click to reveal]`;
         nodeBlock.dataset.full = (nodeBlock.dataset.full || "") + line + "\n";
         continue;
       } else {
-        // User code frame — flush node block first, then show prominently
+        // User code frame - flush node block first, then show prominently
         if (nodeBlock) { container.appendChild(nodeBlock); nodeBlock = null; nodeCount = 0; }
         const span = document.createElement("span");
         span.style.cssText = "display:block;color:#93c5fd;font-size:11px;font-weight:600;";
@@ -2114,7 +2116,7 @@ function renderDetailContent(container, text) {
       }
     }
 
-    // ── Plain line ──
+    // -- Plain line --
     if (nodeBlock) { container.appendChild(nodeBlock); nodeBlock = null; nodeCount = 0; }
     inDiff = false;
     if (!stripped) {
@@ -2125,7 +2127,7 @@ function renderDetailContent(container, text) {
       continue;
     }
 
-    // ── Screenshot / attachment path → clickable image link ──
+    // -- Screenshot / attachment path -> clickable image link --
     // Normalise Windows backslashes first so regex always works
     const normStripped = stripped.replace(/\\/g, "/");
     const screenshotMatch = normStripped.match(/test-results\/[^\s]+\.(?:png|jpe?g|gif|webp)/i)
@@ -2139,7 +2141,7 @@ function renderDetailContent(container, text) {
         wrap.innerHTML =
           `<a href="${servePath}" target="_blank" rel="noopener"
              style="color:var(--accent);font-size:11px;text-decoration:underline;display:inline-flex;align-items:center;gap:5px;">
-            📸 View screenshot ↗
+            " View screenshot -
            </a>
            <br>
            <a href="${servePath}" target="_blank" rel="noopener">
@@ -2149,7 +2151,7 @@ function renderDetailContent(container, text) {
                onerror="this.style.display='none';this.previousElementSibling.textContent+=' (image unavailable)'">
            </a>`;
       } else {
-        wrap.innerHTML = `<span style="color:#94a3b8;font-size:11px;">📸 ${escHtml(stripped)}</span>`;
+        wrap.innerHTML = `<span style="color:#94a3b8;font-size:11px;">" ${escHtml(stripped)}</span>`;
       }
       container.appendChild(wrap);
       continue;
@@ -2166,15 +2168,15 @@ function renderDetailContent(container, text) {
   if (nodeBlock) container.appendChild(nodeBlock);
 }
 
-// ── Test Result Analytics ──────────────────────────────────────────────────
+// -- Test Result Analytics --------------------------------------------------
 
 /**
  * Extract a suite label from a test name.
- * "CDA-PG-001 @smoke — ..." → "CDA"
- * "COR-PA-001 @smoke — ..." → "COR-PA"
+ * "CDA-PG-001 @smoke - ..." -> "CDA"
+ * "COR-PA-001 @smoke - ..." -> "COR-PA"
  */
 const SUITE_LABELS = {
-  // Coop — dealer
+  // Coop - dealer
   "COOP-SMOKE":      "Coop Smoke",
   "COOP-TC":         "Coop Submit Claim",
   "COOP-SC":         "Submit Claim",
@@ -2189,8 +2191,8 @@ const SUITE_LABELS = {
   "COOP-DD-RP":      "Reports Tab",
   "COOP-ADMIN":      "Admin Reports",
   // EngageAds
-  "ENGAGEADS-TC":    "EngageAds — View Package",
-  "ENGAGEADS-CS":    "EngageAds — Campaign Setup",
+  "ENGAGEADS-TC":    "EngageAds - View Package",
+  "ENGAGEADS-CS":    "EngageAds - Campaign Setup",
   "ENGAGEADS":       "EngageAds",
 };
 
@@ -2209,7 +2211,7 @@ function extractSuite(name) {
   return "Other";
 }
 
-/** Parse "12.5s" / "1.2m" → milliseconds (0 if unparseable) */
+/** Parse "12.5s" / "1.2m" -> milliseconds (0 if unparseable) */
 function parseDurMs(dur) {
   if (!dur) return 0;
   const s = dur.trim();
@@ -2220,9 +2222,9 @@ function parseDurMs(dur) {
   return 0;
 }
 
-/** Format ms → "X.Xs" or "Xm Xs" */
+/** Format ms -> "X.Xs" or "Xm Xs" */
 function fmtDur(ms) {
-  if (ms <= 0) return "—";
+  if (ms <= 0) return "-";
   if (ms < 60000) return (ms / 1000).toFixed(1) + "s";
   const m = Math.floor(ms / 60000);
   const s = ((ms % 60000) / 1000).toFixed(0);
@@ -2236,19 +2238,19 @@ function resetAnalytics() {
   if (panel) panel.classList.add("analytics-collapsed");
   const chevron = document.getElementById("analytics-chevron");
   if (chevron) chevron.style.transform = "rotate(180deg)";
-  document.getElementById("rpt-passrate").textContent  = "—";
-  document.getElementById("rpt-total").textContent     = "—";
+  document.getElementById("rpt-passrate").textContent  = "-";
+  document.getElementById("rpt-total").textContent     = "-";
   document.getElementById("rpt-leg-pass").textContent  = "0";
   document.getElementById("rpt-leg-fail").textContent  = "0";
   document.getElementById("rpt-leg-skip").textContent  = "0";
-  document.getElementById("rpt-dur-card").textContent  = "—";
+  document.getElementById("rpt-dur-card").textContent  = "-";
   document.getElementById("rpt-fail-count").textContent = "0";
   document.getElementById("rpt-fail-sub").textContent  = "";
-  document.getElementById("rpt-fail-body").innerHTML   = '<div class="rpt-empty">Running…</div>';
-  document.getElementById("rpt-suite-body").innerHTML  = '<div class="rpt-empty">Running…</div>';
+  document.getElementById("rpt-fail-body").innerHTML   = '<div class="rpt-empty">Running...</div>';
+  document.getElementById("rpt-suite-body").innerHTML  = '<div class="rpt-empty">Running...</div>';
   document.getElementById("rpt-badge").textContent     = "";
   const center = document.getElementById("donut-center");
-  if (center) center.textContent = "—";
+  if (center) center.textContent = "-";
   setDonutArc("donut-pass", 0, 226.2, 0);
   setDonutArc("donut-fail", 0, 226.2, 0);
   setDonutArc("donut-skip", 0, 226.2, 0);
@@ -2270,27 +2272,27 @@ function buildAnalytics() {
   const total = stats.total;
   const rate  = total > 0 ? Math.round((pass / total) * 100) : 0;
 
-  // ── Hero metrics ──────────────────────────────────────────────────────────
-  document.getElementById("rpt-passrate").textContent = total > 0 ? rate + "%" : "—";
-  document.getElementById("rpt-total").textContent    = total || "—";
+  // -- Hero metrics ----------------------------------------------------------
+  document.getElementById("rpt-passrate").textContent = total > 0 ? rate + "%" : "-";
+  document.getElementById("rpt-total").textContent    = total || "-";
   document.getElementById("rpt-leg-pass").textContent = pass;
   document.getElementById("rpt-leg-fail").textContent = fail;
   document.getElementById("rpt-leg-skip").textContent = skip;
-  document.getElementById("rpt-dur-card").textContent = stats.dur || "—";
+  document.getElementById("rpt-dur-card").textContent = stats.dur || "-";
 
   // Badge in analytics header
   const badge   = document.getElementById("rpt-badge");
   const summary = document.getElementById("analytics-summary");
   if (total > 0) {
-    if (fail > 0) { badge.textContent = `${fail} ✗`; badge.style.color = "var(--red)"; }
-    else          { badge.textContent = "✓ All";      badge.style.color = "var(--green)"; }
-    if (summary) summary.textContent = `${pass} passed · ${fail} failed · ${skip} skipped`;
+    if (fail > 0) { badge.textContent = `${fail} -`; badge.style.color = "var(--red)"; }
+    else          { badge.textContent = " All";      badge.style.color = "var(--green)"; }
+    if (summary) summary.textContent = `${pass} passed . ${fail} failed . ${skip} skipped`;
   } else {
     badge.textContent = ""; if (badge) badge.style.color = "";
     if (summary) summary.textContent = "";
   }
 
-  // ── Donut chart with center pass-rate text ────────────────────────────────
+  // -- Donut chart with center pass-rate text --------------------------------
   const C = 226.2;
   if (total > 0) {
     const passLen = C * pass / total;
@@ -2303,13 +2305,13 @@ function buildAnalytics() {
     if (center) center.textContent = rate + "%";
   }
 
-  // ── Trend chart ───────────────────────────────────────────────────────────
+  // -- Trend chart -----------------------------------------------------------
   buildTrendChart();
 
-  // ── Suite breakdown ───────────────────────────────────────────────────────
+  // -- Suite breakdown -------------------------------------------------------
   buildSuiteBreakdown();
 
-  // ── Failing tests table ───────────────────────────────────────────────────
+  // -- Failing tests table ---------------------------------------------------
   const failing = Object.entries(failureMap)
     .filter(([, v]) => v.failed > 0)
     .sort((a, b) => b[1].failed - a[1].failed);
@@ -2321,17 +2323,17 @@ function buildAnalytics() {
 
   const body = document.getElementById("rpt-fail-body");
   if (failing.length === 0) {
-    body.innerHTML = '<div class="rpt-empty">✅ All tests passed!</div>';
+    body.innerHTML = '<div class="rpt-empty">... All tests passed!</div>';
     return;
   }
 
   const rows = failing.map(([name, v]) => {
     const passRate = v.total > 0 ? Math.round(((v.total - v.failed) / v.total) * 100) : 0;
-    const avgDur   = v.total > 0 ? fmtDur(v.totalDurMs / v.total) : "—";
-    // Split name: "TCID @tags — description" into id + desc
-    const parts  = name.split(" — ");
+    const avgDur   = v.total > 0 ? fmtDur(v.totalDurMs / v.total) : "-";
+    // Split name: "TCID @tags - description" into id + desc
+    const parts  = name.split(" - ");
     const tcId   = parts[0]?.trim();
-    const tcDesc = parts.slice(1).join(" — ").trim();
+    const tcDesc = parts.slice(1).join(" - ").trim();
     return `<tr>
       <td class="rpt-fail-name">
         <strong>${escHtml(tcId)}</strong>
@@ -2369,7 +2371,7 @@ function buildSuiteBreakdown() {
   if (!body) return;
   const entries = Object.entries(suiteMap);
   if (entries.length === 0) {
-    body.innerHTML = '<div class="rpt-empty">No suite data — run tests first</div>';
+    body.innerHTML = '<div class="rpt-empty">No suite data - run tests first</div>';
     return;
   }
 
@@ -2385,15 +2387,15 @@ function buildSuiteBreakdown() {
     const allPass  = v.fail === 0 && total > 0;
     return `<div class="rpt-suite-row">
       <div class="rpt-suite-name" title="${escHtml(label)}">${escHtml(label)}</div>
-      <div class="rpt-suite-bar-wrap" title="${v.pass} pass · ${v.fail} fail · ${v.skip} skip">
+      <div class="rpt-suite-bar-wrap" title="${v.pass} pass . ${v.fail} fail . ${v.skip} skip">
         <div class="rpt-suite-bar-pass" style="width:${passW}%"></div>
         <div class="rpt-suite-bar-fail" style="width:${failW}%"></div>
         <div class="rpt-suite-bar-skip" style="width:${skipW}%"></div>
       </div>
       <div class="rpt-suite-counts">
-        <span class="sc-pass">✓${v.pass}</span>
-        ${v.fail > 0 ? `<span class="sc-fail"> ✗${v.fail}</span>` : ""}
-        ${v.skip > 0 ? ` <span>–${v.skip}</span>` : ""}
+        <span class="sc-pass">${v.pass}</span>
+        ${v.fail > 0 ? `<span class="sc-fail"> -${v.fail}</span>` : ""}
+        ${v.skip > 0 ? ` <span>-${v.skip}</span>` : ""}
         <span style="color:var(--text-dim);margin-left:3px">(${total})</span>
       </div>
     </div>`;
@@ -2478,7 +2480,7 @@ function buildTrendChart() {
     const dotX = PAD + i * slotW + slotW / 2;
     const dotY = Math.round(chartH - (r.rate / 100) * (chartH - 8));
     return `<circle cx="${dotX.toFixed(1)}" cy="${dotY.toFixed(1)}" r="3" fill="${lineColor}"/>
-            <title>${r.label}: ${r.passed}✓ ${r.failed}✗ (${r.rate}%)</title>`;
+            <title>${r.label}: ${r.passed} ${r.failed}- (${r.rate}%)</title>`;
   }).join("");
 
   // Y-axis labels
@@ -2497,12 +2499,12 @@ function buildTrendChart() {
   ).join("");
 }
 
-// ── Theme (v2.1.0) ────────────────────────────────────────────────────────
+// -- Theme (v2.1.0) --------------------------------------------------------
 function initTheme() {
   const saved = localStorage.getItem("dp-dashboard-theme") || "dark";
   document.documentElement.setAttribute("data-theme", saved);
   const btn = document.getElementById("theme-toggle");
-  if (btn) btn.textContent = saved === "light" ? "🌙" : "☀️";
+  if (btn) btn.textContent = saved === "light" ? "Dark" : "Light";
 }
 
 function toggleTheme() {
@@ -2511,10 +2513,10 @@ function toggleTheme() {
   document.documentElement.setAttribute("data-theme", next);
   localStorage.setItem("dp-dashboard-theme", next);
   const btn = document.getElementById("theme-toggle");
-  if (btn) btn.textContent = next === "light" ? "🌙" : "☀️";
+  if (btn) btn.textContent = next === "light" ? "Dark" : "Light";
 }
 
-// ── Compare Mode ──────────────────────────────────────────────────────────
+// -- Compare Mode ----------------------------------------------------------
 
 function updateCmpPreview() { /* placeholder for future command preview */ }
 
@@ -2523,7 +2525,7 @@ function startComparison() {
   const legacyUrl = document.getElementById("cmp-legacy-url").value.trim();
   const modernUrl = document.getElementById("cmp-modern-url").value.trim();
   if (!legacyUrl || !modernUrl) {
-    logLine("⚠ Enter both Legacy URL and Modern URL before running comparison.", "log-err");
+    logLine("[!] Enter both Legacy URL and Modern URL before running comparison.", "log-err");
     switchTab("console");
     return;
   }
@@ -2546,14 +2548,14 @@ function startComparison() {
 
 function resetCompareUI() {
   document.getElementById("cmp-results-body").innerHTML =
-    '<tr><td colspan="5" style="text-align:center;color:var(--text-dim);padding:20px;">Running comparison…</td></tr>';
+    '<tr><td colspan="5" style="text-align:center;color:var(--text-dim);padding:20px;">Running comparison...</td></tr>';
   ["cs-match","cs-regression","cs-fixed","cs-bothfail"].forEach(id => {
-    document.getElementById(id).textContent = "—";
+    document.getElementById(id).textContent = "-";
   });
   ["legacy","modern","diff"].forEach(p => {
     const dot = document.getElementById(`cmp-dot-${p}`);
     const sum = document.getElementById(`cmp-sum-${p}`);
-    if (dot) dot.textContent = "○";
+    if (dot) dot.textContent = "o";
     if (sum) sum.textContent = "";
     document.getElementById(`cmp-ph-${p}`)?.style?.setProperty("opacity", "0.4");
   });
@@ -2567,7 +2569,7 @@ function setPhaseActive(phase) {
     const dot = document.getElementById(`cmp-dot-${p}`);
     if (p === phase) {
       if (el)  el.style.opacity  = "1";
-      if (dot) dot.textContent   = "●";
+      if (dot) dot.textContent   = "*";
       if (dot) dot.style.color   = "var(--accent)";
     } else if (el) {
       // leave done phases at full opacity
@@ -2579,12 +2581,12 @@ function setPhaseComplete(phase, summaryText) {
   const dot = document.getElementById(`cmp-dot-${phase}`);
   const sum = document.getElementById(`cmp-sum-${phase}`);
   const el  = document.getElementById(`cmp-ph-${phase}`);
-  if (dot) { dot.textContent = "✓"; dot.style.color = "var(--green)"; }
+  if (dot) { dot.textContent = ""; dot.style.color = "var(--green)"; }
   if (sum) sum.textContent = summaryText;
   if (el)  el.style.opacity = "1";
 }
 
-// ── Compare SSE events ──────────────────────────────────────────────────────
+// -- Compare SSE events ------------------------------------------------------
 function handleCompareMessage(msg) {
   switch (msg.type) {
 
@@ -2593,21 +2595,21 @@ function handleCompareMessage(msg) {
       syncRunningUI();
       setStatus("running");
       setPhaseActive("legacy");
-      logLine(`▶ Compare: ${msg.legacyUrl} vs ${msg.modernUrl}`, "log-start");
+      logLine(` Compare: ${msg.legacyUrl} vs ${msg.modernUrl}`, "log-start");
       logLine(`  Command: ${msg.args}`, "log-info");
-      logLine("─".repeat(60), "log-dim");
+      logLine("-".repeat(60), "log-dim");
       break;
 
     case "compare-phase":
       if (msg.phase === "modern") {
         setPhaseActive("modern");
-        logLine("─".repeat(40) + " MODERN RUN " + "─".repeat(40), "log-start");
+        logLine("-".repeat(40) + " MODERN RUN " + "-".repeat(40), "log-start");
       }
       break;
 
     case "compare-phase-done": {
       const s = msg.summary || {};
-      const label = `✓${s.passed||0} ✗${s.failed||0} –${s.skipped||0}`;
+      const label = `${s.passed||0} -${s.failed||0} -${s.skipped||0}`;
       setPhaseComplete(msg.phase, label);
       break;
     }
@@ -2628,12 +2630,12 @@ function handleCompareMessage(msg) {
       const diff = msg.diff || { rows: [], summary: {} };
       renderCompareDiff(diff);
 
-      logLine("─".repeat(60), "log-dim");
+      logLine("-".repeat(60), "log-dim");
       const s = diff.summary;
       const ok = (s.regression || 0) === 0;
       logLine(
-        `${ok ? "✅" : "❌"} Compare done — ` +
-        `${s.bothPass||0} both-pass  🚨${s.regression||0} regression  🔧${s.fixed||0} fixed  ${s.bothFail||0} both-fail`,
+        `${ok ? "..." : ""} Compare done - ` +
+        `${s.bothPass||0} both-pass  [!]${s.regression||0} regression  ${s.fixed||0} fixed  ${s.bothFail||0} both-fail`,
         ok ? "log-pass" : "log-fail"
       );
       break;
@@ -2652,7 +2654,7 @@ function renderCompareDiff(diff) {
   const badge = document.getElementById("cmp-regression-badge");
   if (badge) {
     if ((s.regression || 0) > 0) {
-      badge.textContent  = `${s.regression} 🚨`;
+      badge.textContent  = `${s.regression} [!]`;
       badge.style.display = "inline";
     } else {
       badge.style.display = "none";
@@ -2660,13 +2662,13 @@ function renderCompareDiff(diff) {
   }
 
   const CATEGORY_META = {
-    "both-pass":   { icon: "✅", label: "Both Pass",         cls: "log-pass",    bg: "rgba(34,197,94,.06)"  },
-    "regression":  { icon: "🚨", label: "Regression",        cls: "log-fail",    bg: "rgba(239,68,68,.10)"  },
-    "fixed":       { icon: "🔧", label: "Fixed in Modern",   cls: "",            bg: "rgba(6,182,212,.06)"  },
-    "both-fail":   { icon: "⚠️", label: "Both Fail",         cls: "log-skip",    bg: "rgba(245,158,11,.06)" },
-    "legacy-only": { icon: "◧",  label: "Legacy Only",       cls: "",            bg: "rgba(100,116,139,.06)"},
-    "modern-only": { icon: "◨",  label: "Modern Only",       cls: "",            bg: "rgba(100,116,139,.06)"},
-    "skip":        { icon: "–",  label: "Skipped",           cls: "",            bg: ""                     },
+    "both-pass":   { icon: "...", label: "Both Pass",         cls: "log-pass",    bg: "rgba(34,197,94,.06)"  },
+    "regression":  { icon: "[!]", label: "Regression",        cls: "log-fail",    bg: "rgba(239,68,68,.10)"  },
+    "fixed":       { icon: "", label: "Fixed in Modern",   cls: "",            bg: "rgba(6,182,212,.06)"  },
+    "both-fail":   { icon: "[!]", label: "Both Fail",         cls: "log-skip",    bg: "rgba(245,158,11,.06)" },
+    "legacy-only": { icon: "-",  label: "Legacy Only",       cls: "",            bg: "rgba(100,116,139,.06)"},
+    "modern-only": { icon: "-",  label: "Modern Only",       cls: "",            bg: "rgba(100,116,139,.06)"},
+    "skip":        { icon: "-",  label: "Skipped",           cls: "",            bg: ""                     },
   };
 
   const ORDER = ["regression", "both-fail", "fixed", "legacy-only", "modern-only", "both-pass", "skip"];
@@ -2675,11 +2677,11 @@ function renderCompareDiff(diff) {
   );
 
   const statusBadge = (r) => {
-    if (!r) return '<span style="color:var(--text-dim);font-size:11px;">—</span>';
-    const map = { pass: '<span class="badge badge-pass">✓ Pass</span>',
-                  fail: '<span class="badge badge-fail">✗ Fail</span>',
-                  skip: '<span class="badge badge-skip">– Skip</span>' };
-    return map[r.status] || "—";
+    if (!r) return '<span style="color:var(--text-dim);font-size:11px;">-</span>';
+    const map = { pass: '<span class="badge badge-pass"> Pass</span>',
+                  fail: '<span class="badge badge-fail">- Fail</span>',
+                  skip: '<span class="badge badge-skip">- Skip</span>' };
+    return map[r.status] || "-";
   };
 
   const tbody = document.getElementById("cmp-results-body");
@@ -2690,9 +2692,9 @@ function renderCompareDiff(diff) {
 
   tbody.innerHTML = sorted.map((row, i) => {
     const meta = CATEGORY_META[row.category] || CATEGORY_META["both-pass"];
-    const parts  = row.name.split(" — ");
+    const parts  = row.name.split(" - ");
     const testId = parts[0]?.trim();
-    const desc   = parts.slice(1).join(" — ").trim();
+    const desc   = parts.slice(1).join(" - ").trim();
     return `<tr style="border-bottom:1px solid var(--border);background:${meta.bg}">
       <td style="padding:7px 12px;color:var(--text-dim);width:40px;font-size:12px;">${i + 1}</td>
       <td style="padding:7px 12px;">
@@ -2708,7 +2710,7 @@ function renderCompareDiff(diff) {
   }).join("");
 }
 
-// ── Patch the SSE message handler to also dispatch compare events ─────────────
+// -- Patch the SSE message handler to also dispatch compare events -------------
 // Use IIFE to properly capture the original function before reassignment
 handleMessage = (function(_origHandleMessage) {
   return function handleMessage(msg) {
@@ -2722,7 +2724,7 @@ handleMessage = (function(_origHandleMessage) {
   };
 })(handleMessage);
 
-// ── Patch switchTab to handle compare ────────────────────────────────────────
+// -- Patch switchTab to handle compare ----------------------------------------
 const _origSwitchTab = switchTab;
 function switchTab(name) {
   document.querySelectorAll(".tab").forEach((t, i) => {
@@ -2734,14 +2736,14 @@ function switchTab(name) {
   });
 }
 
-// ── Init ───────────────────────────────────────────────────────────────────
+// -- Init -------------------------------------------------------------------
 document.addEventListener("DOMContentLoaded", () => {
   initTheme();              // restore saved theme before any rendering
   setupCheckboxGroup("feature-group");
   setupCheckboxGroup("tier-group");
   document.getElementById("inp-user").addEventListener("input", updateCommandPreview);
   document.getElementById("inp-base-url").addEventListener("input", updateEnvBadge);
-  loadClients();           // fetch client list → populates client, env, role dropdowns
+  loadClients();           // fetch client list -> populates client, env, role dropdowns
   updateEnvBadge();        // set initial badge state
   loadCatalogManifest();   // fetch catalog manifest + render panel
   connectSSE();

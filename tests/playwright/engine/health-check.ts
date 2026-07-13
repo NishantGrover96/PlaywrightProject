@@ -1,5 +1,5 @@
 /**
- * Phase 5.5 — Pre-flight Validation & Health Checks
+ * Phase 5.5 - Pre-flight Validation & Health Checks
  *
  * Verifies every client configuration, repository path, catalog manifest,
  * spec file reference, auth setup file, environment URL, required folder,
@@ -14,8 +14,8 @@
  *   npx ts-node tests/playwright/engine/health-check.ts --config=config/health-check.local.json
  *
  * Exit codes:
- *   0 — no CRITICAL or HIGH failures
- *   1 — one or more CRITICAL or HIGH checks failed
+ *   0 - no CRITICAL or HIGH failures
+ *   1 - one or more CRITICAL or HIGH checks failed
  */
 
 import * as fs    from 'fs';
@@ -23,10 +23,10 @@ import * as path  from 'path';
 import * as http  from 'http';
 import * as https from 'https';
 
-// Workspace root: engine/ → playwright/ → tests/ → repo root
+// Workspace root: engine/ -> playwright/ -> tests/ -> repo root
 const WORKSPACE_ROOT = path.join(__dirname, '..', '..', '..');
 
-// ── CLI flags ─────────────────────────────────────────────────────────────────
+// -- CLI flags -----------------------------------------------------------------
 
 const _argv      = process.argv.slice(2);
 const _flag      = (name: string): boolean => _argv.some(a => a === `--${name}` || a.startsWith(`--${name}=`));
@@ -41,7 +41,7 @@ const JSON_OUTPUT  = _flag('json');
 const ONLY_ENV     = _opt('env');
 const CONFIG_PATH  = _opt('config') ?? 'config/health-check.config.json';
 
-// ── Types ─────────────────────────────────────────────────────────────────────
+// -- Types ---------------------------------------------------------------------
 
 export type Severity    = 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
 export type CheckStatus = 'PASS' | 'FAIL' | 'WARN' | 'SKIP';
@@ -92,7 +92,7 @@ interface HealthConfig {
   };
 }
 
-// ── Config ────────────────────────────────────────────────────────────────────
+// -- Config --------------------------------------------------------------------
 
 function loadConfig(): HealthConfig {
   const base  = path.isAbsolute(CONFIG_PATH)
@@ -111,7 +111,7 @@ function loadConfig(): HealthConfig {
     try {
       const override = JSON.parse(fs.readFileSync(local, 'utf8')) as Record<string, unknown>;
       cfg = _deepMerge(cfg as unknown as Record<string, unknown>, override) as unknown as HealthConfig;
-    } catch { /* bad local override — ignore */ }
+    } catch { /* bad local override - ignore */ }
   }
 
   return cfg;
@@ -138,7 +138,7 @@ function _deepMerge(
   return result;
 }
 
-// ── Result constructors ───────────────────────────────────────────────────────
+// -- Result constructors -------------------------------------------------------
 
 function _pass(name: string, cat: string, sev: Severity, msg: string, clientId?: string): CheckResult {
   return { name, category: cat, severity: sev, status: 'PASS', message: msg, clientId };
@@ -157,7 +157,7 @@ function _abs(rel: string): string {
   return path.isAbsolute(rel) ? rel : path.join(WORKSPACE_ROOT, rel);
 }
 
-// ── Client discovery ──────────────────────────────────────────────────────────
+// -- Client discovery ----------------------------------------------------------
 
 function getClients(cfg: HealthConfig): string[] {
   const dir = path.join(WORKSPACE_ROOT, 'config', 'clients');
@@ -172,7 +172,7 @@ function getClients(cfg: HealthConfig): string[] {
   return all;
 }
 
-// ── Check 1: Required folders ─────────────────────────────────────────────────
+// -- Check 1: Required folders -------------------------------------------------
 
 function checkRequiredFolders(cfg: HealthConfig): CheckResult[] {
   const c = cfg.checks['requiredFolders'];
@@ -187,7 +187,7 @@ function checkRequiredFolders(cfg: HealthConfig): CheckResult[] {
   });
 }
 
-// ── Check 2: Client configuration validity ────────────────────────────────────
+// -- Check 2: Client configuration validity ------------------------------------
 
 function checkClientConfigs(cfg: HealthConfig, clients: string[]): CheckResult[] {
   const c = cfg.checks['clientConfig'];
@@ -251,7 +251,7 @@ function checkClientConfigs(cfg: HealthConfig, clients: string[]): CheckResult[]
 
     results.push(_pass(
       `client-config:${clientId}`, 'client-config', c.severity,
-      `Valid — ${clientId}: ${Object.keys(envs ?? {}).length} env(s), roles: ${(roles as string[]).join(', ')}`,
+      `Valid - ${clientId}: ${Object.keys(envs ?? {}).length} env(s), roles: ${(roles as string[]).join(', ')}`,
       clientId,
     ));
   }
@@ -259,7 +259,7 @@ function checkClientConfigs(cfg: HealthConfig, clients: string[]): CheckResult[]
   return results;
 }
 
-// ── Check 3: Repository reachability ─────────────────────────────────────────
+// -- Check 3: Repository reachability -----------------------------------------
 
 function checkRepositories(cfg: HealthConfig): CheckResult[] {
   const c = cfg.checks['repositories'];
@@ -270,8 +270,8 @@ function checkRepositories(cfg: HealthConfig): CheckResult[] {
   if (!fs.existsSync(reposLocalPath)) {
     return [_warn(
       'repositories', 'repositories', c.severity,
-      'config/repos.local.json not found — repository paths not configured',
-      'Copy config/repos.json → config/repos.local.json and fill in local paths',
+      'config/repos.local.json not found - repository paths not configured',
+      'Copy config/repos.json -> config/repos.local.json and fill in local paths',
     )];
   }
 
@@ -292,7 +292,7 @@ function checkRepositories(cfg: HealthConfig): CheckResult[] {
     if (!root || root.startsWith('{{')) {
       results.push(_warn(
         `repository:${key}`, 'repositories', c.severity,
-        `"${key}" root path still has placeholder — not configured`,
+        `"${key}" root path still has placeholder - not configured`,
         `Set ${key}.root in config/repos.local.json`,
       ));
       continue;
@@ -328,7 +328,7 @@ function checkRepositories(cfg: HealthConfig): CheckResult[] {
   return results;
 }
 
-// ── Check 4: Catalog manifest integrity ──────────────────────────────────────
+// -- Check 4: Catalog manifest integrity --------------------------------------
 
 function checkCatalogManifest(cfg: HealthConfig): CheckResult[] {
   const c = cfg.checks['catalogManifest'];
@@ -371,7 +371,7 @@ function checkCatalogManifest(cfg: HealthConfig): CheckResult[] {
   return results;
 }
 
-// ── Check 5: Spec files ───────────────────────────────────────────────────────
+// -- Check 5: Spec files -------------------------------------------------------
 
 function checkSpecFiles(cfg: HealthConfig): CheckResult[] {
   const c = cfg.checks['specFiles'];
@@ -399,7 +399,7 @@ function checkSpecFiles(cfg: HealthConfig): CheckResult[] {
       if (!fs.existsSync(_abs(specPath))) {
         results.push(_fail(
           `spec-file:${featureId}:${tier}`, 'spec-files', c.severity,
-          `Missing spec file — ${featureId} [${tier}]: ${specPath}`,
+          `Missing spec file - ${featureId} [${tier}]: ${specPath}`,
         ));
       }
     }
@@ -415,7 +415,7 @@ function checkSpecFiles(cfg: HealthConfig): CheckResult[] {
   return results;
 }
 
-// ── Check 6: Auth setup files ─────────────────────────────────────────────────
+// -- Check 6: Auth setup files -------------------------------------------------
 
 const LEGACY_SHARED_CLIENTS = new Set(['demoportal', 'certainteed', 'samsung']);
 
@@ -451,7 +451,7 @@ function checkAuthSetupFiles(cfg: HealthConfig, clients: string[]): CheckResult[
       if (!fs.existsSync(authFile)) {
         results.push(_warn(
           `auth:${clientId}:${role}`, 'auth-setup-files', c.severity,
-          `Auth file not found — ${clientId}/${role}: ${rel}`,
+          `Auth file not found - ${clientId}/${role}: ${rel}`,
           'Run: npx playwright test --project=setup (or setup-admin) to generate it',
           clientId,
         ));
@@ -471,21 +471,21 @@ function checkAuthSetupFiles(cfg: HealthConfig, clients: string[]): CheckResult[
         if (!hasContent) {
           results.push(_warn(
             `auth:${clientId}:${role}`, 'auth-setup-files', c.severity,
-            `Auth file has empty cookies and origins — ${clientId}/${role}: ${rel}`,
+            `Auth file has empty cookies and origins - ${clientId}/${role}: ${rel}`,
             'File may be stale. Re-run auth setup to refresh the session.',
             clientId,
           ));
         } else {
           results.push(_pass(
             `auth:${clientId}:${role}`, 'auth-setup-files', c.severity,
-            `Auth file valid — ${clientId}/${role}`,
+            `Auth file valid - ${clientId}/${role}`,
             clientId,
           ));
         }
       } catch {
         results.push(_warn(
           `auth:${clientId}:${role}`, 'auth-setup-files', c.severity,
-          `Auth file is not valid JSON — ${clientId}/${role}: ${rel}`,
+          `Auth file is not valid JSON - ${clientId}/${role}: ${rel}`,
           undefined, clientId,
         ));
       }
@@ -495,7 +495,7 @@ function checkAuthSetupFiles(cfg: HealthConfig, clients: string[]): CheckResult[
   return results;
 }
 
-// ── Check 7: Environment URL reachability ─────────────────────────────────────
+// -- Check 7: Environment URL reachability -------------------------------------
 
 async function checkEnvironmentUrls(cfg: HealthConfig, clients: string[]): Promise<CheckResult[]> {
   const c = cfg.checks['environmentUrls'];
@@ -543,7 +543,7 @@ async function checkEnvironmentUrls(cfg: HealthConfig, clients: string[]): Promi
           category:  'environment-urls',
           severity:  c.severity,
           status:    ok ? 'PASS' : 'WARN',
-          message:   `${clientId}/${envName} — HTTP ${statusCode} (${durationMs}ms): ${envEntry.baseUrl}`,
+          message:   `${clientId}/${envName} - HTTP ${statusCode} (${durationMs}ms): ${envEntry.baseUrl}`,
           clientId,
           durationMs,
         });
@@ -577,7 +577,7 @@ function _httpGet(url: string, timeoutMs: number): Promise<number> {
   });
 }
 
-// ── Check 8: Dashboard services ───────────────────────────────────────────────
+// -- Check 8: Dashboard services -----------------------------------------------
 
 function checkDashboardServices(cfg: HealthConfig): CheckResult[] {
   const c = cfg.checks['dashboardServices'];
@@ -598,7 +598,7 @@ function checkDashboardServices(cfg: HealthConfig): CheckResult[] {
   });
 }
 
-// ── Report builder ────────────────────────────────────────────────────────────
+// -- Report builder ------------------------------------------------------------
 
 function buildReport(checks: CheckResult[], startMs: number): HealthReport {
   const summary = {
@@ -620,7 +620,7 @@ function buildReport(checks: CheckResult[], startMs: number): HealthReport {
   };
 }
 
-// ── Console renderer ──────────────────────────────────────────────────────────
+// -- Console renderer ----------------------------------------------------------
 
 const C = {
   reset:  '\x1b[0m',
@@ -639,10 +639,10 @@ function col(code: string, text: string): string {
 
 function statusBadge(s: CheckStatus): string {
   switch (s) {
-    case 'PASS': return col(C.green,          '✓');
+    case 'PASS': return col(C.green,          '');
     case 'FAIL': return col(C.red,            '✗');
-    case 'WARN': return col(C.yellow,         '⚠');
-    case 'SKIP': return col(C.dim,            '–');
+    case 'WARN': return col(C.yellow,         '[!]');
+    case 'SKIP': return col(C.dim,            '-');
   }
 }
 
@@ -661,9 +661,9 @@ function printReport(report: HealthReport): void {
     return;
   }
 
-  const LINE = col(C.bold, '━'.repeat(60));
+  const LINE = col(C.bold, '-'.repeat(60));
   console.log(`\n${LINE}`);
-  console.log(col(C.bold, ' Phase 5.5 — Pre-flight Validation Report'));
+  console.log(col(C.bold, ' Phase 5.5 - Pre-flight Validation Report'));
   console.log(LINE);
   console.log(`  ${col(C.dim, report.timestamp)}  |  ${report.durationMs}ms\n`);
 
@@ -690,13 +690,13 @@ function printReport(report: HealthReport): void {
   );
   console.log(`  ${
     report.ok
-      ? col(C.green + C.bold, '✓ All critical/high checks passed — platform is ready')
-      : col(C.red   + C.bold, `✗ ${s.criticalFailed + s.highFailed} critical/high failure(s) — review above before proceeding`)
+      ? col(C.green + C.bold, ' All critical/high checks passed - platform is ready')
+      : col(C.red   + C.bold, `✗ ${s.criticalFailed + s.highFailed} critical/high failure(s) - review above before proceeding`)
   }`);
   console.log(`${LINE}\n`);
 }
 
-// ── Report writer ─────────────────────────────────────────────────────────────
+// -- Report writer -------------------------------------------------------------
 
 function writeReport(report: HealthReport, cfg: HealthConfig): void {
   if (!cfg.report.formats.includes('json')) return;
@@ -727,7 +727,7 @@ function writeReport(report: HealthReport, cfg: HealthConfig): void {
   }
 }
 
-// ── Entry point ───────────────────────────────────────────────────────────────
+// -- Entry point ---------------------------------------------------------------
 
 async function main(): Promise<void> {
   const startMs = Date.now();
