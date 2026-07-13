@@ -110,9 +110,9 @@ expect(viewPackage.coopFundsCheckbox).toBeEnabled()
 
 ---
 
-## Hypotheses — Ranked by Likelihood
+## Hypotheses - Ranked by Likelihood
 
-### H1 — Auth State Missing or Stale (affects CS-SMOKE-001, CS-SMOKE-006)
+### H1 - Auth State Missing or Stale (affects CS-SMOKE-001, CS-SMOKE-006)
 The dealer session file `tests/playwright/fixtures/.auth/user.json` may be missing, expired, or authenticated to the wrong environment.
 
 **Check:**
@@ -122,20 +122,20 @@ The dealer session file `tests/playwright/fixtures/.auth/user.json` may be missi
 
 ---
 
-### H2 — Dealer Has an In-Progress EngageAds Order (affects TC-001, TC-003, TC-005, TC-006)
+### H2 - Dealer Has an In-Progress EngageAds Order (affects TC-001, TC-003, TC-005, TC-006)
 All four View Package tests include skip guards that check whether the current URL is `/EngageAds/BundledAdPackages`. If the UAT dealer account has an active/draft order, the app redirects to `/EngageAds/CampaignSetup` instead.
 
-However — if the tests are **failing** rather than **skipping**, the URL check itself may be throwing an error (e.g. `page.url()` called before navigation completes, or `goToViewPackage` throws before the guard can run).
+However - if the tests are **failing** rather than **skipping**, the URL check itself may be throwing an error (e.g. `page.url()` called before navigation completes, or `goToViewPackage` throws before the guard can run).
 
 **Check:**
 - Log into the UAT dealer account manually. Do you land on BundledAdPackages or CampaignSetup?
 - If redirected: cancel or complete the draft order, then re-run.
-- If on the package page: the guards aren't firing — the real failure is in `expectWizardVisible()`, `expectPackagesVisible()`, or the locator assertions.
+- If on the package page: the guards aren't firing - the real failure is in `expectWizardVisible()`, `expectPackagesVisible()`, or the locator assertions.
 
 ---
 
-### H3 — CSS Selector Drift (affects TC-001, TC-003, TC-005, TC-006)
-The app's HTML may have been updated — class names like `.commonWizard`, `.card`, `.selectPackage`, `.noPackage`, `.btnPayment` could have changed.
+### H3 - CSS Selector Drift (affects TC-001, TC-003, TC-005, TC-006)
+The app's HTML may have been updated - class names like `.commonWizard`, `.card`, `.selectPackage`, `.noPackage`, `.btnPayment` could have changed.
 
 **Check:**
 - Open browser DevTools on `/EngageAds/BundledAdPackages` and inspect:
@@ -146,9 +146,9 @@ The app's HTML may have been updated — class names like `.commonWizard`, `.car
 
 ---
 
-### H4 — `CAMPAIGN_ORDER_SEQ` env var is Invalid or Expired (affects CS-SMOKE-001, CS-SMOKE-006)
+### H4 - `CAMPAIGN_ORDER_SEQ` env var is Invalid or Expired (affects CS-SMOKE-001, CS-SMOKE-006)
 CS-SMOKE-001 calls `goToCampaignSetup(page)` (no orderSeq), so it expects a redirect to BundledAdPackages.
-CS-SMOKE-006 calls `completeCampaignSetupFlow(page)` which uses the fallback `lUvurFjFSQUEqual` — this is likely an encrypted sequence that has expired or belongs to a different environment.
+CS-SMOKE-006 calls `completeCampaignSetupFlow(page)` which uses the fallback `lUvurFjFSQUEqual` - this is likely an encrypted sequence that has expired or belongs to a different environment.
 
 **Check:**
 - Is the orderSeq `lUvurFjFSQUEqual` still valid in the current environment?
@@ -157,7 +157,7 @@ CS-SMOKE-006 calls `completeCampaignSetupFlow(page)` which uses the fallback `lU
 
 ---
 
-### H5 — Budget Value Mismatch (affects TC-003)
+### H5 - Budget Value Mismatch (affects TC-003)
 `test-data.json` has `budget.availableUAT = 0.0`. The test asserts:
 ```js
 expect(parsedBudget).toBeCloseTo(0.0, 2)
@@ -166,47 +166,47 @@ If the UAT dealer's actual Coop budget has changed (e.g. now `1500.00`), this as
 
 **Check:**
 - What does `#hdnTotalBudget`'s value attribute show in UAT?
-- Update `test-data.json` → `budget.availableUAT` to match the actual UAT balance.
+- Update `test-data.json` -> `budget.availableUAT` to match the actual UAT balance.
 
 ---
 
-### H6 — Package Name Changed (affects TC-005, TC-006)
+### H6 - Package Name Changed (affects TC-005, TC-006)
 `selectPackageAndGoToStep2(page, "Local Lead Starter")` looks for a `.selectPackage` button inside a `.card` whose text contains "Local Lead Starter".
 
 **Check:**
 - Does a package named exactly "Local Lead Starter" appear in UAT?
-- Update `test-data.json` → `packages.knownStandard.name` if the name has changed.
+- Update `test-data.json` -> `packages.knownStandard.name` if the name has changed.
 
 ---
 
 ## Recommended Investigation Steps
 
 ```
-Step 1 — Confirm auth state exists and is fresh
+Step 1 - Confirm auth state exists and is fresh
   ls tests/playwright/fixtures/.auth/
   npx playwright test --project=setup
 
-Step 2 — Manually open UAT dealer account
+Step 2 - Manually open UAT dealer account
   Navigate to /EngageAds/BundledAdPackages
   Question: Does it load the package catalog or redirect to CampaignSetup?
 
-Step 3 — If redirected: clear the in-progress order
+Step 3 - If redirected: clear the in-progress order
   Cancel the draft order from the app, then re-run.
 
-Step 4 — Inspect HTML selectors on the live page
-  DevTools → .commonWizard, .card, .selectPackage, .btnPayment, .noPackage
+Step 4 - Inspect HTML selectors on the live page
+  DevTools -> .commonWizard, .card, .selectPackage, .btnPayment, .noPackage
 
-Step 5 — Verify orderSeq validity for Campaign Setup tests
+Step 5 - Verify orderSeq validity for Campaign Setup tests
   Open /EngageAds/CampaignSetup?orderSeq=lUvurFjFSQUEqual
   Does it load a wizard or redirect?
 
-Step 6 — Check actual #hdnTotalBudget value vs test-data.json
-  budget.availableUAT = 0.0  — is this still correct in UAT?
+Step 6 - Check actual #hdnTotalBudget value vs test-data.json
+  budget.availableUAT = 0.0  - is this still correct in UAT?
 
-Step 7 — Check package name "Local Lead Starter"
+Step 7 - Check package name "Local Lead Starter"
   Is this package visible and selectable in UAT?
 
-Step 8 — Run with --debug to pause on failure
+Step 8 - Run with --debug to pause on failure
   npx playwright test engage-ads --project=chromium --debug
 ```
 

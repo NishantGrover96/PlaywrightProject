@@ -2,11 +2,11 @@
  * Page load performance measurement utility for EngageAds tests.
  *
  * Tier thresholds (per EngageAds QA guidelines):
- *   < 2s   → excellent   ✅
- *   2–3s   → good        ✅
- *   3–5s   → fair        ⚠️  warn
- *   5–8s   → poor        ⚠️  warn
- *   > 8s   → critical    🔴  fail (throws)
+ *   < 2s   -> excellent   ✅
+ *   2-3s   -> good        ✅
+ *   3-5s   -> fair        [!]️  warn
+ *   5-8s   -> poor        [!]️  warn
+ *   > 8s   -> critical    🔴  fail (throws)
  */
 export type PerfTier = 'excellent' | 'good' | 'fair' | 'poor' | 'critical';
 
@@ -46,7 +46,7 @@ export async function measurePageLoad(
 
     case 'fair':
       console.warn(
-        `⚠️  Warning: ${label} load took ${seconds}s [FAIR].\n` +
+        `[!]️  Warning: ${label} load took ${seconds}s [FAIR].\n` +
         `Expected ≤ 3s. Should be investigated if it occurs consistently.\n` +
         `Possible causes: slow server response, large JS bundles, blocking API requests.`,
       );
@@ -54,7 +54,7 @@ export async function measurePageLoad(
 
     case 'poor':
       console.warn(
-        `⚠️  Warning: ${label} load took ${seconds}s [POOR].\n` +
+        `[!]️  Warning: ${label} load took ${seconds}s [POOR].\n` +
         `Expected ≤ 5s. Likely to impact user experience; optimization recommended.\n` +
         `Investigate: slow server response, large JS bundles, blocking API requests,\n` +
         `database query latency, missing indexes, excessive DOM rendering.`,
@@ -63,16 +63,16 @@ export async function measurePageLoad(
 
     case 'critical':
       throw new Error(
-        `🔴 Critical: ${label} load took ${seconds}s [CRITICAL] — exceeds 8s threshold.\n` +
+        `🔴 Critical: ${label} load took ${seconds}s [CRITICAL] - exceeds 8s threshold.\n` +
         `This must be investigated and resolved before release.\n\n` +
         `Possible causes:\n` +
-        `  • Slow server response\n` +
-        `  • Large JavaScript bundles\n` +
-        `  • Blocking API requests\n` +
-        `  • Database query latency\n` +
-        `  • Missing indexes\n` +
-        `  • Excessive DOM rendering\n` +
-        `  • Unoptimized network requests\n\n` +
+        `  - Slow server response\n` +
+        `  - Large JavaScript bundles\n` +
+        `  - Blocking API requests\n` +
+        `  - Database query latency\n` +
+        `  - Missing indexes\n` +
+        `  - Excessive DOM rendering\n` +
+        `  - Unoptimized network requests\n\n` +
         `Would you like to analyze and optimize page loading performance?`,
       );
   }

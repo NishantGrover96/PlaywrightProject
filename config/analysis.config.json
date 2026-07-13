@@ -1,0 +1,114 @@
+{
+  "_readme": "Configuration for the Repository Analysis Pipeline. Edit to add project-type patterns.",
+
+  "scanner": {
+    "ignoredFolders": [
+      "bin", "obj", "node_modules", "dist", "packages", "TestResults",
+      "coverage", ".git", "artifacts", "logs", ".vs", ".vscode",
+      "wwwroot/lib", "wwwroot/bundles", "Properties", "migrations",
+      "Migrations", "publish", "release", "debug", "_output"
+    ],
+    "ignoredFilePatterns": [
+      "\\.min\\.js$", "\\.min\\.css$", "\\.map$", "\\.lock$",
+      "AssemblyInfo\\.cs$", "\\.Designer\\.cs$", "\\.g\\.cs$",
+      "\\.generated\\.", "Reference\\.cs$", "Scaffolded"
+    ],
+    "maxFileSizeBytes": 524288,
+    "concurrency": 20,
+    "cacheEnabled": true
+  },
+
+  "projectTypes": {
+    "dotnet-razor": {
+      "indicators": ["\\.cshtml$", "\\.cshtml\\.cs$", "\\.csproj$"],
+      "weight": 10
+    },
+    "dotnet-mvc": {
+      "indicators": ["Controller\\.cs$", "\\[ApiController\\]"],
+      "weight": 8
+    },
+    "dotnet-webapi": {
+      "indicators": ["\\.csproj$", "WebApplication\\.Create"],
+      "weight": 6
+    },
+    "node-express": {
+      "indicators": ["express", "router\\.get", "app\\.get"],
+      "weight": 8
+    },
+    "react": {
+      "indicators": ["\\.tsx$", "\\.jsx$", "from 'react'"],
+      "weight": 8
+    },
+    "angular": {
+      "indicators": ["@Component", "@NgModule", "\\.component\\.ts$"],
+      "weight": 8
+    }
+  },
+
+  "modules": {
+    "detection": {
+      "strategy": "folder-depth",
+      "depth": 2,
+      "rootFolders": ["Pages", "Controllers", "Views", "src", "Features", "Modules"],
+      "excludeFromModules": [
+        "Shared", "Common", "Base", "Core", "Extensions",
+        "Helpers", "Interfaces", "Models", "DTOs", "Utilities",
+        "Infrastructure", "Configuration", "Middleware"
+      ]
+    }
+  },
+
+  "featureDetection": {
+    "dotnet": {
+      "controllerPattern": "([A-Za-z0-9]+)Controller\\.cs$",
+      "razorPagePattern": "([A-Za-z0-9]+)\\.cshtml$",
+      "razorCodeBehindPattern": "([A-Za-z0-9]+)\\.cshtml\\.cs$",
+      "servicePattern": "([A-Za-z0-9]+)Service\\.cs$",
+      "modelPattern": "(Model|Dto|ViewModel|Request|Response)\\.cs$",
+      "validatorPattern": "([A-Za-z0-9]+)Validator\\.cs$",
+      "routeAttributes": ["\\[Route\\(\"([^\"]+)\"\\)", "\\[HttpGet\\(\"([^\"]+)\"\\)", "\\[HttpPost\\(\"([^\"]+)\"\\)"],
+      "httpMethods": ["HttpGet", "HttpPost", "HttpPut", "HttpDelete", "HttpPatch"],
+      "validationAttributes": ["\\[Required\\]", "\\[MaxLength\\(([^)]+)\\)\\]", "\\[StringLength\\(([^)]+)\\)\\]", "\\[Range\\(([^)]+)\\)\\]", "\\[EmailAddress\\]", "\\[RegularExpression\\(([^)]+)\\)\\]"],
+      "roleAttributes": ["\\[Authorize\\(Roles\\s*=\\s*\"([^\"]+)\"\\)", "\\[Authorize\\]"],
+      "formTags": ["<form[^>]*>", "asp-action=\"([^\"]+)\"", "asp-controller=\"([^\"]+)\""]
+    },
+    "node": {
+      "routerPattern": "router\\.(get|post|put|delete|patch)\\s*\\(\\s*['\"]([^'\"]+)['\"]",
+      "expressPattern": "app\\.(get|post|put|delete|patch)\\s*\\(\\s*['\"]([^'\"]+)['\"]",
+      "componentPattern": "export\\s+(default\\s+)?function\\s+([A-Z][A-Za-z0-9]+)",
+      "validationPattern": "required|minLength|maxLength|pattern|email"
+    }
+  },
+
+  "pageTypes": {
+    "Grid": {
+      "signals": ["DataTable", "grid", "table", "@foreach", "IEnumerable", "List<", "GridView", "pagination", "datatable"]
+    },
+    "Wizard": {
+      "signals": ["step", "wizard", "multi-step", "StepNumber", "CurrentStep", "NextStep"]
+    },
+    "Form": {
+      "signals": ["<form", "asp-action", "FormGroup", "handleSubmit", "[Required]"]
+    },
+    "Dashboard": {
+      "signals": ["dashboard", "summary", "overview", "chart", "widget", "metric"]
+    },
+    "Detail": {
+      "signals": ["Detail", "View", "readonly", "display-only", "read-only"]
+    },
+    "Dialog": {
+      "signals": ["modal", "dialog", "popup", "overlay", "Modal"]
+    }
+  },
+
+  "confidenceWeights": {
+    "hasController": 20,
+    "hasView": 20,
+    "hasModel": 10,
+    "hasService": 10,
+    "hasEndpoints": 15,
+    "hasValidation": 10,
+    "hasRoles": 10,
+    "hasNavigationPath": 5
+  }
+}

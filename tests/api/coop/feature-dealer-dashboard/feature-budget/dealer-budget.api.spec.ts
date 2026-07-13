@@ -1,14 +1,14 @@
 import { test, expect } from '@playwright/test';
-import testData from '../../../../data/coop/feature-dealer-dashboard/feature-budget/test-data.json';
+import testData from '../../../../playwright/data/coop/feature-dealer-dashboard/feature-budget/test-data.json';
 
 /**
- * API Tests — Dealer Budget Tab (Backend Gateway)
+ * API Tests - Dealer Budget Tab (Backend Gateway)
  *
  * All DealerBudgetApiService calls are HTTP POST with JSON bodies.
- * ProgramSeq resolved from JWT claims on backend — not sent in request body.
+ * ProgramSeq resolved from JWT claims on backend - not sent in request body.
  * Gateway base URL: {BaseGatewayUrl}coop/
  *
- * FUs: COOP-FU-BDG-011–018
+ * FUs: COOP-FU-BDG-011-018
  * Gaps covered: GAP-BDG-001 (media_spent shared), GAP-BDG-002 (fiscal year no-fallback),
  *               GAP-BDG-003 (zero-value category filter)
  */
@@ -19,7 +19,7 @@ const DEALER_SEQ = testData.dealers.valid.dealerSeq;
 const DEALER_SEQ_ENC = testData.dealers.valid.encryptedDealerSeq;
 const FISCAL_YEAR = parseInt(testData.fiscalYears.current);
 
-// ── Auth helper ────────────────────────────────────────────────────────────────
+// -- Auth helper ----------------------------------------------------------------
 async function getAuthToken(request: import('@playwright/test').APIRequestContext): Promise<string> {
     const resp = await request.post(`${GATEWAY_URL}/Account/Login`, {
         form: {
@@ -34,9 +34,9 @@ async function getAuthToken(request: import('@playwright/test').APIRequestContex
 // ═══════════════════════════════════════════════════════════════════════════════
 //  BACKEND GATEWAY API TESTS
 // ═══════════════════════════════════════════════════════════════════════════════
-test.describe('Dealer Budget — Backend API (Gateway) Tests', () => {
+test.describe('Dealer Budget - Backend API (Gateway) Tests', () => {
 
-    // ── POST coop/api/Budget/budget-recap-by-program-saas ─────────────────────
+    // -- POST coop/api/Budget/budget-recap-by-program-saas ---------------------
     // Used by: OnGetProgramType, OnGetBudgetData, OnGetBudgetUtilization
 
     test('@api COOP-BDG-T-003-API: budget-recap-by-program-saas returns program budget types', async ({ request }) => {
@@ -50,7 +50,7 @@ test.describe('Dealer Budget — Backend API (Gateway) Tests', () => {
         });
         expect(resp.status()).toBe(200);
         const body = await resp.json();
-        // Response is ApiResponse<JArray> — data array of budget recap items
+        // Response is ApiResponse<JArray> - data array of budget recap items
         const data = body?.data ?? body;
         expect(Array.isArray(data)).toBe(true);
         if (data.length > 0) {
@@ -105,10 +105,10 @@ test.describe('Dealer Budget — Backend API (Gateway) Tests', () => {
         const body = await resp.json();
         const data = body?.data ?? body;
         expect(Array.isArray(data)).toBe(true);
-        // Prior year data used for utilization chart — may be empty but must return valid response
+        // Prior year data used for utilization chart - may be empty but must return valid response
     });
 
-    // ── POST coop/api/Budget/dealer-utilization-by-media — GAP-BDG-001 ─────────
+    // -- POST coop/api/Budget/dealer-utilization-by-media - GAP-BDG-001 ---------
 
     test('@api COOP-BDG-T-014-API: dealer-utilization-by-media returns TotalMediaSpent + Items[]', async ({ request }) => {
         const resp = await request.post(`${COOP_API}/Budget/dealer-utilization-by-media`, {
@@ -151,15 +151,15 @@ test.describe('Dealer Budget — Backend API (Gateway) Tests', () => {
         const body = await resp.json();
         const data = body?.data ?? body;
         // The gap: when page handler projects items, ALL get the same media_spent = data.totalMediaSpent
-        // This test documents this gap — percentage for each item will use shared denominator
+        // This test documents this gap - percentage for each item will use shared denominator
         if (data.items?.length > 1) {
             const sharedDenominator = data.totalMediaSpent;
-            // All chart bars will divide by sharedDenominator — not per-item media spend
+            // All chart bars will divide by sharedDenominator - not per-item media spend
             expect(typeof sharedDenominator).toBe('number');
         }
     });
 
-    // ── POST coop/api/Budget/dealer-spending-by-category — GAP-BDG-003 ─────────
+    // -- POST coop/api/Budget/dealer-spending-by-category - GAP-BDG-003 ---------
 
     test('@api COOP-BDG-T-015-API: dealer-spending-by-category returns name-value items', async ({ request }) => {
         const resp = await request.post(`${COOP_API}/Budget/dealer-spending-by-category`, {
@@ -181,7 +181,7 @@ test.describe('Dealer Budget — Backend API (Gateway) Tests', () => {
         }
     });
 
-    test('@api COOP-BDG-T-015-API-GAP: GAP-BDG-003 — modern sends "0" values, legacy filtered server-side', async ({ request }) => {
+    test('@api COOP-BDG-T-015-API-GAP: GAP-BDG-003 - modern sends "0" values, legacy filtered server-side', async ({ request }) => {
         const resp = await request.post(`${COOP_API}/Budget/dealer-spending-by-category`, {
             data: {
                 FiscalYear: FISCAL_YEAR,
@@ -193,7 +193,7 @@ test.describe('Dealer Budget — Backend API (Gateway) Tests', () => {
         const body = await resp.json();
         const data = body?.data ?? body;
         const items = data?.items ?? data;
-        // Modern handler only strips IsNullOrWhiteSpace — "0" values reach client
+        // Modern handler only strips IsNullOrWhiteSpace - "0" values reach client
         // Legacy stripped "0" and "0.00" server-side
         // JS renders: value > 0 condition protects chart but server shape differs
         const zeroValueItems = items.filter((i: { value: string }) => i.value === '0' || i.value === '0.00');
@@ -201,13 +201,13 @@ test.describe('Dealer Budget — Backend API (Gateway) Tests', () => {
         expect(Array.isArray(zeroValueItems)).toBe(true);
     });
 
-    // ── POST coop/api/FiscalYear/GetFiscalYearsByProgramSeq — GAP-BDG-002 ─────
+    // -- POST coop/api/FiscalYear/GetFiscalYearsByProgramSeq - GAP-BDG-002 -----
 
     test('@api COOP-BDG-T-017-API: GetFiscalYearsByProgramSeq with divisionSeq=0 returns all years', async ({ request }) => {
         const resp = await request.post(`${COOP_API}/FiscalYear/GetFiscalYearsByProgramSeq`, {
             data: {
                 ProgramSeq: 1,
-                DivisionSeq: 0,  // Modern always passes 0 — GAP-BDG-002
+                DivisionSeq: 0,  // Modern always passes 0 - GAP-BDG-002
             },
         });
         expect(resp.status()).toBe(200);
@@ -215,14 +215,14 @@ test.describe('Dealer Budget — Backend API (Gateway) Tests', () => {
         const data = body?.data ?? body;
         expect(Array.isArray(data)).toBe(true);
         // GAP-BDG-002: All fiscal years returned; LINQ then filters by activeDivisionSeq
-        // If activeDivisionSeq doesn't match any division_seq → FiscalYearList is empty (no fallback)
+        // If activeDivisionSeq doesn't match any division_seq -> FiscalYearList is empty (no fallback)
         if (data.length > 0) {
             expect(data[0]).toHaveProperty('fiscalYear');
             expect(data[0]).toHaveProperty('divisionSeq');
         }
     });
 
-    // ── POST coop/api/Dealer/GetDealerByDealerNumberSeq ──────────────────────
+    // -- POST coop/api/Dealer/GetDealerByDealerNumberSeq ----------------------
 
     test('@api COOP-BDG-T-018-API: GetDealerByDealerNumberSeq returns dealer number string', async ({ request }) => {
         const resp = await request.post(`${COOP_API}/Dealer/GetDealerByDealerNumberSeq`, {
@@ -231,7 +231,7 @@ test.describe('Dealer Budget — Backend API (Gateway) Tests', () => {
         expect(resp.status()).toBe(200);
         const body = await resp.json();
         const data = body?.data ?? body;
-        // Returns JArray — first item's dealerNumber is extracted as string
+        // Returns JArray - first item's dealerNumber is extracted as string
         const dealerNumber = Array.isArray(data)
             ? data[0]?.dealerNumber ?? data[0]?.DealerNumber
             : null;
@@ -243,7 +243,7 @@ test.describe('Dealer Budget — Backend API (Gateway) Tests', () => {
         const resp = await request.post(`${COOP_API}/Dealer/GetDealerByDealerNumberSeq`, {
             data: { DealerNumberSeq: 999999999 },
         });
-        // Modern: Convert.ToString(dealerData?["dealerNumber"] ?? "") — returns "" not null
+        // Modern: Convert.ToString(dealerData?["dealerNumber"] ?? "") - returns "" not null
         expect([200, 404]).toContain(resp.status());
         if (resp.status() === 200) {
             const body = await resp.json();
@@ -254,7 +254,7 @@ test.describe('Dealer Budget — Backend API (Gateway) Tests', () => {
         }
     });
 
-    // ── POST coop/api/Budget/dealer-utilization-by-product-group ─────────────
+    // -- POST coop/api/Budget/dealer-utilization-by-product-group -------------
 
     test('@api COOP-BDG-T-014b-API: dealer-utilization-by-product-group returns product items', async ({ request }) => {
         const resp = await request.post(`${COOP_API}/Budget/dealer-utilization-by-product-group`, {
@@ -276,7 +276,7 @@ test.describe('Dealer Budget — Backend API (Gateway) Tests', () => {
 // ═══════════════════════════════════════════════════════════════════════════════
 //  PAGE HANDLER RESPONSE SHAPE TESTS (via Razor page AJAX endpoints)
 // ═══════════════════════════════════════════════════════════════════════════════
-test.describe('Dealer Budget — Page Handler Response Shape Tests', () => {
+test.describe('Dealer Budget - Page Handler Response Shape Tests', () => {
 
     test.beforeEach(async ({ page }) => {
         await page.goto('/Account/Login');
@@ -301,7 +301,7 @@ test.describe('Dealer Budget — Page Handler Response Shape Tests', () => {
         expect(body.availableBudget).toBeGreaterThanOrEqual(0);
     });
 
-    test('@api COOP-BDG-T-014-HANDLER: OnGetBudgetUtilizationByMedia shape — media_spent is TotalMediaSpent (GAP-BDG-001)', async ({ page }) => {
+    test('@api COOP-BDG-T-014-HANDLER: OnGetBudgetUtilizationByMedia shape - media_spent is TotalMediaSpent (GAP-BDG-001)', async ({ page }) => {
         const [response] = await Promise.all([
             page.waitForResponse(r => r.url().includes('/BudgetUtilizationByMedia') && r.status() === 200),
             page.goto(`/CoopManagement/Dealer/Budget/List?dealer_number_seq=${encodeURIComponent(DEALER_SEQ_ENC)}`),

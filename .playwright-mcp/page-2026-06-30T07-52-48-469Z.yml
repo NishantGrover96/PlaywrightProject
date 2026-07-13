@@ -1,0 +1,25 @@
+- generic [ref=e4]:
+  - heading "Sign Into Your Account" [level=3] [ref=e5]
+  - generic [ref=e6]:
+    - generic [ref=e7]:
+      - textbox "Username" [ref=e9]
+      - textbox "Password" [ref=e11]
+    - generic [ref=e12]:
+      - link "Need Help?" [ref=e13] [cursor=pointer]:
+        - /url: mailto:CertainTeedSupport@channel-fusion.com?SUBJECT=Need Help
+        - text: Need Help?
+      - link "FAQ?" [ref=e14] [cursor=pointer]:
+        - /url: https://digital-h-1-uat.certainteed.com/customerhub/faq
+        - text: FAQ?
+      - link "Forgot Password?" [ref=e15] [cursor=pointer]:
+        - /url: /Account/ForgotPassword
+    - button "Sign In" [ref=e17] [cursor=pointer]
+    - link "Corporate Login Using SSO" [ref=e19] [cursor=pointer]:
+      - /url: https://certainteedportaluat.channel-fusion.com/SSO/CertainTeed/SAMLEmp
+    - generic [ref=e20]:
+      - text: Have a question or need help? Our support team is ready to assist! Please contact us at
+      - link "CertainTeedSupport@channel-fusion.com" [ref=e21] [cursor=pointer]:
+        - /url: mailto:CertainTeedSupport@channel-fusion.com
+      - text: or
+      - link "(833) 385-6670" [ref=e22] [cursor=pointer]:
+        - /url: tel:(833) 385-6670

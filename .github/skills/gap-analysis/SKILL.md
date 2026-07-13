@@ -1,9 +1,9 @@
----
+﻿---
 name: gap-analysis
 description: Compare legacy vs modern functional units and produce a coverage matrix classifying gaps as Critical, High, Medium, or Low.
 ---
 
-# Gap Analysis — Step 2.5: Legacy vs Modern
+# Gap Analysis - Step 2.5: Legacy vs Modern
 
 ## Purpose
 
@@ -19,21 +19,21 @@ This is the mandatory gate before any Playwright test generation.
 
 ## Inputs
 
-- **Functional Unit Catalog**: `docs/functional-catalogs/{module}/feature-{feature}/functional-units.md`
+- **Functional Unit Catalog**: `docs/functional-catalogs/{client}/{module}/feature-{feature}/functional-units.md`
 - **Migration Mapping**: `docs/migration-reports/{module}/feature-{feature}/mapping.md`
 
-### Resolving Repo Paths — Auto-Discovery
+### Resolving Repo Paths - Auto-Discovery
 
 Read workspace roots from `config/repos.local.json`.
-All dependency paths are auto-derived from the workspace root — same algorithm
+All dependency paths are auto-derived from the workspace root - same algorithm
 as `/functional-unit-discovery`. Do NOT ask the user for individual paths.
 
 For each gap dimension, read only the files relevant to that dimension:
-- UI / Validation → feature `.cshtml` + `.resx` resources
-- Business Rules → `Libraries\BusinessLogic\Services\`
-- Database → `Libraries\**\*Accessor*.cs` + SP names
-- Security → auth attributes in `.cshtml.cs` + JS encryption patterns
-- Modern equivalent → same pattern applied to `modern.root`
+- UI / Validation -> feature `.cshtml` + `.resx` resources
+- Business Rules -> `Libraries\BusinessLogic\Services\`
+- Database -> `Libraries\**\*Accessor*.cs` + SP names
+- Security -> auth attributes in `.cshtml.cs` + JS encryption patterns
+- Modern equivalent -> same pattern applied to `modern.root`
 
 ---
 
@@ -43,7 +43,7 @@ For each gap dimension, read only the files relevant to that dimension:
 For every FU in the catalog:
 - Does the Modern implementation cover this behavior?
 - Is coverage: `Full` | `Partial` | `Missing` | `Different`
-- If Different — document the exact behavioral difference
+- If Different - document the exact behavioral difference
 
 ### 2. UI Elements
 Compare legacy `.cshtml` form fields against modern UI:
@@ -105,10 +105,10 @@ For each SP called in legacy:
 
 | Level | Definition |
 |---|---|
-| **Critical** | Feature cannot function without this — blocks go-live |
-| **High** | Core user workflow affected — must fix before automation |
-| **Medium** | Edge case or secondary behavior — should fix, warn in tests |
-| **Low** | Cosmetic, message wording, minor UI difference — document only |
+| **Critical** | Feature cannot function without this - blocks go-live |
+| **High** | Core user workflow affected - must fix before automation |
+| **Medium** | Edge case or secondary behavior - should fix, warn in tests |
+| **Low** | Cosmetic, message wording, minor UI difference - document only |
 
 ---
 
@@ -121,7 +121,7 @@ For each SP called in legacy:
 
 | FU ID | Title | Category | Legacy | Modern | Status | Gap Level |
 |---|---|---|---|---|---|---|
-| COOP-FU-001 | Page load | UI | SubmitClaim.cshtml | GET /api/coop/submit | Full | — |
+| COOP-FU-001 | Page load | UI | SubmitClaim.cshtml | GET /api/coop/submit | Full | - |
 | COOP-FU-012 | Fund balance check | BusinessLogic | BudgetService | BudgetService.cs | Partial | High |
 
 ## Coverage Summary
@@ -169,8 +169,8 @@ For each SP called in legacy:
 ## Outputs
 
 ```
-docs/functional-catalogs/{module}/feature-{feature}/gap-analysis.md
-docs/functional-catalogs/{module}/feature-{feature}/coverage-matrix.md
+docs/functional-catalogs/{client}/{module}/feature-{feature}/gap-analysis.md
+docs/functional-catalogs/{client}/{module}/feature-{feature}/coverage-matrix.md
 ```
 
 ## Passing Criteria (consumed by Step 2.6)

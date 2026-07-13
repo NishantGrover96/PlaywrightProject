@@ -1,0 +1,14 @@
+{
+    "dealer":  {
+                   "role":  "dealer",
+                   "displayName":  "Dealer",
+                   "email":  "X1S0804",
+                   "password":  "REPLACE_WITH_ENCRYPTED_PASSWORD"
+               },
+    "admin":  {
+                  "role":  "admin",
+                  "displayName":  "Admin",
+                  "email":  "$Admin2022",
+                  "password":  "REPLACE_WITH_ENCRYPTED_PASSWORD"
+              }
+}

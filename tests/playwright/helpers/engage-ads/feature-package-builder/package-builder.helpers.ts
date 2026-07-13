@@ -1,5 +1,5 @@
 import type { Page } from '@playwright/test';
-import { PackageBuilderPage } from '../../pages/engage-ads/feature-package-builder/PackageBuilderPage';
+import { PackageBuilderPage } from '../../../pages/engage-ads/feature-package-builder/PackageBuilderPage';
 
 export interface OverviewData {
   name: string;
@@ -83,7 +83,7 @@ export async function selectChannels(
   const n = Math.min(count, total);
   for (let i = 0; i < n; i++) {
     const item = pb.channelCheckItems.nth(i);
-    const isChecked = await item.evaluate(el => el.classList.contains('checked'));
+    const isChecked = await item.evaluate((el: Element) => el.classList.contains('checked'));
     if (!isChecked) await item.click();
   }
 }

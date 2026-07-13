@@ -16,7 +16,7 @@ export async function globalSetup(baseURL: string, email: string, password: stri
   }
 }
 
-// Auth setup test — saved as tests/playwright/specs/auth.setup.ts
+// Auth setup test - saved as tests/playwright/specs/auth.setup.ts
 // Use this pattern in your playwright.config.ts projects[setup]
 export async function performLogin(page: Page, email: string, password: string): Promise<void> {
   await page.goto('/Account/Login');

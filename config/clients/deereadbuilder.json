@@ -1,0 +1,55 @@
+{
+    "clientId":  "deereadbuilder",
+    "displayName":  "Deere Adbuilder",
+    "platform":  "independent",
+    "defaultEnvironment":  "production",
+    "authentication":  {
+                           "loginPath":  "",
+                           "authType":  "username-only",
+                           "roles":  [
+                                         "dealer",
+                                         "admin"
+                                     ]
+                       },
+    "environments":  {
+                         "dev":  {
+                                     "label":  "Dev",
+                                     "baseUrl":  "https://adbuilderdev.channel-fusion.com/",
+                                     "apiUrl":  "https://adbuilderdev.channel-fusion.com/",
+                                     "envFile":  "dev"
+                                 },
+                         "testing":  {
+                                         "label":  "Testing",
+                                         "baseUrl":  "https://adbuildertest.channel-fusion.com/",
+                                         "apiUrl":  "https://adbuildertest.channel-fusion.com/",
+                                         "envFile":  "testing"
+                                     },
+                         "uat":  {
+                                     "label":  "UAT",
+                                     "baseUrl":  "https://adzonetest.channel-fusion.com/",
+                                     "apiUrl":  "https://adzonetest.channel-fusion.com/",
+                                     "envFile":  "uat"
+                                 },
+                         "production":  {
+                                            "label":  "Production",
+                                            "baseUrl":  "https://adzoneadminloads.channel-fusion.com/",
+                                            "apiUrl":  "https://adzoneadminloads.channel-fusion.com/",
+                                            "envFile":  "production"
+                                        }
+                     },
+    "featureFlags":  {
+
+                     },
+    "modules":  [
+                    "ad-builder"
+                ],
+    "repo":  {
+                 "url":  "",
+                 "branch":  "main",
+                 "localPath":  "D:\\GIT\\Adbuilder_Prod",
+                 "lastSync":  "",
+                 "lastCommit":  ""
+             },
+    "_generated":  "2026-07-08T12:51:54Z",
+    "_note":  "Modules were selected during onboarding. Run repo-analysis skill to populate featureFlags and generate test catalogs."
+}

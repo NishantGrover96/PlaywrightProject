@@ -1,6 +1,27 @@
 {
-  "clientId": "certainteed",
-  "clientName": "CertainTeed",
+  "clientId":    "certainteed",
+  "clientName":  "CertainTeed",
+  "clientType":  "legacy-shared",
+  "platform":    "demoportal",
+  "stub":        true,
+
+  "authentication": {
+    "type":      "forms",
+    "loginPath": "/Account/Login?Internal",
+    "usernameSelector": "#UserLogin_Username",
+    "passwordSelector": "#UserLogin_Password",
+    "submitSelector":   "#btnLogin"
+  },
+
+  "modules": ["coop", "engage-ads", "popshop", "rebate"],
+
+  "repository": {
+    "_comment": "Populate localPath in config/repos.local.json",
+    "type":        "git",
+    "branch":      "main",
+    "localPathKey": "certainteed"
+  },
+
   "environments": {
     "production": {
       "label": "Production",
@@ -21,6 +42,7 @@
   "featureFlags": {
     "engageAds": true,
     "coop": true,
-    "popshop": true
+    "popshop": true,
+    "rebate": true
   }
 }

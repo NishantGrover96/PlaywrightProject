@@ -1,0 +1,33 @@
+{
+  "_readme": "CertainTeed per-client catalog manifest - Phase 6 scaffold. Populate features as test coverage is built.",
+  "_createdAt": "2026-07-07T00:00:00Z",
+  "_schema": "v2",
+  "_stub": true,
+
+  "clientId": "certainteed",
+  "clientName": "CertainTeed",
+  "platform": "demoportal",
+
+  "_inheritanceNote": "CertainTeed inherits DemoPortal feature catalog via platform field. Add client-specific overrides in the features map below.",
+
+  "features": {
+
+    "_example": {
+      "_comment": "Remove this comment block when adding real features. Copy the schema from demoportal-manifest.json.",
+      "featureId":   "certainteed-example",
+      "clientId":    "certainteed",
+      "module":      "coop",
+      "feature":     "Example Feature",
+      "status":      "Pending",
+      "catalogFile": "",
+      "version":     "v1",
+      "generated":   "",
+      "sections":    0,
+      "specFiles":   {},
+      "tests":       { "total": 0, "implemented": 0, "fixme": 0 },
+      "coverage":    { "functional": 0, "validation": 0, "workflow": 0, "database": 0, "security": 0 },
+      "lastRun":     null
+    }
+
+  }
+}

@@ -1,12 +1,12 @@
 import { Page, APIRequestContext, expect } from '@playwright/test';
 
 /**
- * Helpers — Dealer Budget Tab
+ * Helpers - Dealer Budget Tab
  * Feature: COOP Dealer Dashboard / Budget
  * FUs: COOP-FU-BDG-001 to COOP-FU-BDG-029
  */
 
-// ── Authentication ─────────────────────────────────────────────────────────────
+// -- Authentication -------------------------------------------------------------
 
 export async function loginAsDealer(page: Page, credentials: { username: string; password: string }): Promise<void> {
     await page.goto('/Account/Login');
@@ -20,7 +20,7 @@ export async function loginAsAdmin(page: Page, credentials: { username: string; 
     await loginAsDealer(page, credentials); // same form
 }
 
-// ── Navigation ─────────────────────────────────────────────────────────────────
+// -- Navigation -----------------------------------------------------------------
 
 export async function navigateToBudgetTab(page: Page, encryptedDealerSeq: string): Promise<void> {
     await page.goto(
@@ -34,7 +34,7 @@ export async function navigateToBudgetTabWithoutSeq(page: Page): Promise<void> {
     await page.waitForLoadState('networkidle');
 }
 
-// ── Page State Assertions ──────────────────────────────────────────────────────
+// -- Page State Assertions ------------------------------------------------------
 
 /** Assert page was redirected to AdminIndex (missing dealer_number_seq guard) */
 export async function isOnAdminIndex(page: Page): Promise<boolean> {
@@ -65,7 +65,7 @@ export async function assertKpiHasData(page: Page, selector: string): Promise<vo
     expect(text?.trim()).not.toBe('');
 }
 
-// ── AJAX Intercept Helpers ────────────────────────────────────────────────────
+// -- AJAX Intercept Helpers ----------------------------------------------------
 
 /** Wait for the BudgetData AJAX call to complete */
 export async function waitForBudgetDataResponse(page: Page): Promise<void> {
@@ -99,7 +99,7 @@ export async function waitForMediaResponse(page: Page): Promise<void> {
     );
 }
 
-// ── Validation Helpers ─────────────────────────────────────────────────────────
+// -- Validation Helpers ---------------------------------------------------------
 
 /** Parse currency string like "$1,234.56" to number */
 export function parseCurrency(value: string): number {
@@ -123,7 +123,7 @@ export async function assertHiddenFieldEncrypted(page: Page, selector: string): 
     expect(/^\d+$/.test(val ?? '')).toBe(false);
 }
 
-// ── Security Helpers ───────────────────────────────────────────────────────────
+// -- Security Helpers -----------------------------------------------------------
 
 /** Attempt to access budget tab with a different dealer's seq (cross-dealer test) */
 export async function attemptCrossDealerAccess(
@@ -131,7 +131,7 @@ export async function attemptCrossDealerAccess(
     ownEncryptedSeq: string,
     otherEncryptedSeq: string
 ): Promise<{ url: string; data: string | null }> {
-    // As a dealer, navigate with another dealer's seq — should be overridden
+    // As a dealer, navigate with another dealer's seq - should be overridden
     await page.goto(
         `/CoopManagement/Dealer/Budget/List?dealer_number_seq=${encodeURIComponent(otherEncryptedSeq)}`
     );

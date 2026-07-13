@@ -1,0 +1,55 @@
+﻿{
+  "users": {
+    "bmdm":    { "email": "", "password": "", "userType": "BMDM",    "description": "Brand Manager District Manager; TM auto-set from session" },
+    "bmrm":    { "email": "", "password": "", "userType": "BMRM",    "description": "Brand Manager Regional Manager; sm param passed to SP" },
+    "bmmgt":   { "email": "", "password": "", "userType": "BMMGT",   "description": "Brand Manager Territory Manager group; territory->distributor->dealer cascade" },
+    "bmnm":    { "email": "", "password": "", "userType": "BMNM",    "description": "Brand Manager National Manager; org-scoped dealer list" },
+    "dist":    { "email": "", "password": "", "userType": "DIST",    "description": "Distributor; distributor auto pre-populated" },
+    "rdist":   { "email": "", "password": "", "userType": "RDIST",   "description": "Regional Distributor; distributor pre-populated" },
+    "fast":    { "email": "", "password": "", "userType": "FAST",    "description": "Falken district user; dealer list from falken_district_seq" },
+    "oam":     { "email": "", "password": "", "userType": "OAM",     "description": "Organization Account Manager; distributor pre-populated" },
+    "bmadmin": { "email": "", "password": "", "userType": "BMADMIN", "description": "Brand Manager Admin; all TMs visible; SalesManager seq=0" },
+    "dealer":  { "email": "", "password": "", "userType": "DEALER",  "dealerNumber": "", "dealerNumberSeq": "", "description": "Dealer user for LandingDashboard and DealerDashboard" }
+  },
+  "filters": {
+    "currentFiscalYear":  "",
+    "priorFiscalYear":    "",
+    "currentQuarter":     "2",
+    "alternateQuarter":   "1",
+    "allQuarterValues":   ["1", "2", "3", "4"]
+  },
+  "security": {
+    "encryptedDealerNumber": "",
+    "base64DealerNumber":    "",
+    "description": "encryptedDealerNumber: AES-encrypted dealer_number for DealerDashboard URL param. base64DealerNumber: Base64-encoded dealer number for LandingDashboard dn param."
+  },
+  "dealers": {
+    "primaryDealer":       { "dealerNumberSeq": "", "primary_flag": "Y" },
+    "zeroPurchasesDealer": { "dealerNumberSeq": "", "group_period_unit_purchase": 0 },
+    "overAchieverDealer":  { "dealerNumberSeq": "" }
+  },
+  "programs": {
+    "rewardsMode":          { "convertToRewards": true,  "description": "Brand tab hidden; TBM/Distributor controls; Branding Points tile" },
+    "nonRewardsMode":       { "convertToRewards": false, "description": "Brand Promotion tab; SalesPerson/Dealer controls" },
+    "showPurchaseFalse":    { "isShowPurchase": false,   "description": "Purchase tiles visible" },
+    "showPurchaseTrue":     { "isShowPurchase": true,    "description": "Purchase tiles hidden" },
+    "openEndedTier":        { "program_tier_max": 9999999, "description": "unitPercentage=100" },
+    "redeemableProgram":    { "alreadyRedeemed": false,  "description": "Available cash rewards; Redeem button enabled" }
+  },
+  "expectedEndpoints": {
+    "corporateDashboardDataByType": "CorporateDashboardDataByType",
+    "distributorByTerritory":       "DistributorByTerritory",
+    "dealerByDistributor":          "DealerByDistributor",
+    "salesPersonByDistributor":     "SalesPersonByDistributor",
+    "brand":                        "/Brand",
+    "salesManager":                 "SalesManager",
+    "tabInformation":               "TabInformation",
+    "redeemCashRewards":            "RedeemCashRewards",
+    "salesRepRewardData":           "SalesRepRewardData"
+  },
+  "expectedText": {
+    "primaryUnitsNote":            "Single-phase ODU count are considered qualified units",
+    "loginUrlPattern":             "Account/Login",
+    "selectTerritoryPlaceholder":  "-- Select Territory --"
+  }
+}

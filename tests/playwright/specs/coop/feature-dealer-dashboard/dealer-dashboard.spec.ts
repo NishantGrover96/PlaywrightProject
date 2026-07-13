@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { DealerIndexPage } from '../../pages/coop/feature-dealer-dashboard/DealerIndexPage';
-import { DealerAdminIndexPage } from '../../pages/coop/feature-dealer-dashboard/DealerAdminIndexPage';
+import { DealerIndexPage } from '../../../pages/coop/feature-dealer-dashboard/DealerIndexPage';
+import { DealerAdminIndexPage } from '../../../pages/coop/feature-dealer-dashboard/DealerAdminIndexPage';
 import {
     searchAsDealer,
     searchAsAdmin,
@@ -12,8 +12,8 @@ import {
     isOnAdminIndexPage,
     clearSessionStorage,
     waitForDataTableInit
-} from '../../helpers/coop/feature-dealer-dashboard/dealer-dashboard.helpers';
-import testData from '../../data/coop/feature-dealer-dashboard/test-data.json';
+} from '../../../helpers/coop/feature-dealer-dashboard/dealer-dashboard.helpers';
+import testData from '../../../data/coop/feature-dealer-dashboard/test-data.json';
 
 test.describe('Dealer Dashboard - Smoke Tests', () => {
     

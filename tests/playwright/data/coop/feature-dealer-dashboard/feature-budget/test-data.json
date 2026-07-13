@@ -91,7 +91,7 @@
     },
     "notes": {
       "httpMethod": "POST (all endpoints)",
-      "programSeqResolution": "Resolved from JWT claims on backend — not sent in request body",
+      "programSeqResolution": "Resolved from JWT claims on backend - not sent in request body",
       "divisionSeqForFiscalYears": "Always 0 in modern; LINQ filters by activeDivisionSeq with no fallback (GAP-BDG-002)",
       "mediaSpentShape": "TotalMediaSpent is shared across all items in response (GAP-BDG-001)"
     }

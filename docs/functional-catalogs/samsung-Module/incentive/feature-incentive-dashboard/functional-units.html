@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Incentive Dashboard - Functional Unit Catalog</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous" defer></script>
+  <style>
+    .tier-smoke      { background:#dbeafe; color:#1d4ed8; }
+    .tier-regression { background:#ede9fe; color:#6d28d9; }
+    .tier-e2e        { background:#d1fae5; color:#065f46; }
+    .test-id         { font-family: monospace; font-weight: 700; white-space: nowrap; }
+  </style>
+</head>
+<body class="bg-light">
+
+<div class="bg-secondary text-white px-4 py-3">
+  <h1 class="h4 mb-1">Incentive Dashboard - Functional Unit Catalog</h1>
+  <p class="mb-0 small opacity-75">samsung-Module | incentive module | feature-incentive-dashboard</p>
+</div>
+
+<div class="container-fluid px-4 py-4">
+
+  <div class="alert alert-warning d-flex gap-3 align-items-start" role="alert">
+    <span class="fs-4">[!]</span>
+    <div>
+      <strong>Catalog Not Yet Generated</strong>
+      <p class="mb-1 mt-1">Run the <strong>functional-test-catalog</strong> skill in GitHub Copilot Chat to populate this file:</p>
+      <code class="d-block bg-white border rounded px-2 py-1 small mt-2">
+        @workspace /functional-test-catalog client=samsung-Module module=incentive feature=incentive-dashboard
+      </code>
+      <p class="mt-2 mb-0 small text-muted">
+        Module: <strong>incentive</strong> &nbsp;&bull;&nbsp;
+        Feature: <strong>incentive-dashboard</strong> &nbsp;&bull;&nbsp;
+        Client: <strong>samsung-Module</strong>
+      </p>
+    </div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-header bg-light fw-semibold">Test Coverage - Placeholder</div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover table-sm align-middle mb-0">
+          <thead class="table-dark">
+            <tr>
+              <th scope="col">Test ID</th>
+              <th scope="col">Title</th>
+              <th scope="col">Tier</th>
+              <th scope="col">Priority</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="test-id text-muted">-</td>
+              <td class="text-muted fst-italic">No tests generated yet. Run the functional-test-catalog skill.</td>
+              <td></td>
+              <td></td>
+              <td><span class="badge bg-secondary">Pending</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,14 +1,23 @@
-{
-  "admin": {
-    "role": "admin",
-    "displayName": "Admin",
-    "email": "admin@channel-fusion.com",
-    "password": "enc:f6360fb8df0aee0c32d817136e7a906e:92978d5f9494fe7dd060ac6d:0be6671ed536bbae472584:b4744777f9502a877fb673b223a200ee"
-  },
-  "dealer": {
-    "role": "dealer",
-    "displayName": "Dealer",
-    "email": "Dealer01",
-    "password": "enc:f6360fb8df0aee0c32d817136e7a906e:92978d5f9494fe7dd060ac6d:0be6671ed536bbae472584:b4744777f9502a877fb673b223a200ee"
-  }
+﻿{
+    "dealer":  {
+                   "role":  "dealer",
+                   "displayName":  "Dealer",
+                   "email":  "REPLACE_WITH_DEALER_EMAIL",
+                   "password":  "REPLACE_WITH_ENCRYPTED_PASSWORD",
+                   "_note":  "Run: node utils/encrypt-credential.js  to generate an encrypted password value (enc:...)."
+               },
+    "admin":  {
+                  "role":  "admin",
+                  "displayName":  "Admin",
+                  "email":  "REPLACE_WITH_ADMIN_EMAIL",
+                  "password":  "REPLACE_WITH_ENCRYPTED_PASSWORD",
+                  "_note":  "Run: node utils/encrypt-credential.js  to generate an encrypted password value (enc:...)."
+              },
+    "distributor":  {
+                        "role":  "distributor",
+                        "displayName":  "Distributor",
+                        "email":  "REPLACE_WITH_DISTRIBUTOR_EMAIL",
+                        "password":  "REPLACE_WITH_ENCRYPTED_PASSWORD",
+                        "_note":  "Run: node utils/encrypt-credential.js  to generate an encrypted password value (enc:...)."
+                    }
 }

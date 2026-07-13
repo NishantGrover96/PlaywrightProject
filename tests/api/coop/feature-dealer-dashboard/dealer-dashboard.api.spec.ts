@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import testData from '../../data/coop/feature-dealer-dashboard/test-data.json';
+import testData from '../../../playwright/data/coop/feature-dealer-dashboard/test-data.json';
 
 /**
  * API Tests for Dealer Dashboard
@@ -66,7 +66,7 @@ test.describe('Dealer Dashboard - API Tests', () => {
     });
 
     test('@api State list API endpoint returns states for USA', async () => {
-        const usaCountrySeq = testData.countries.find(c => c.code === 'US')?.value;
+        const usaCountrySeq = testData.countries.find((c: { code: string; value: unknown }) => c.code === 'US')?.value;
         
         const response = await apiContext.get(`/states?country_seq=${usaCountrySeq}`, {
             headers: {
@@ -96,7 +96,7 @@ test.describe('Dealer Dashboard - API Tests', () => {
     });
 
     test('@api State list API endpoint returns provinces for Canada', async () => {
-        const canadaCountrySeq = testData.countries.find(c => c.code === 'CA')?.value;
+        const canadaCountrySeq = testData.countries.find((c: { code: string; value: unknown }) => c.code === 'CA')?.value;
         
         const response = await apiContext.get(`/states?country_seq=${canadaCountrySeq}`, {
             headers: {

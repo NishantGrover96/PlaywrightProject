@@ -16,7 +16,7 @@ import { Page, Locator } from '@playwright/test';
 export class DealerBudgetPage {
     readonly page: Page;
 
-    // ── Hidden fields ─────────────────────────────────────────────────────────
+    // -- Hidden fields ---------------------------------------------------------
     readonly hdDealerNumberSeq: Locator;
     readonly hdDealerNumber: Locator;
     readonly hdSpentBreakdownLink: Locator;
@@ -24,23 +24,23 @@ export class DealerBudgetPage {
     readonly hdMediaTypeLink: Locator;
     readonly hdProductGroupLink: Locator;
 
-    // ── Filters ───────────────────────────────────────────────────────────────
+    // -- Filters ---------------------------------------------------------------
     readonly fiscalYearDropdown: Locator;
     readonly fiscalRangeSpan: Locator;
     readonly programTypeDropdown: Locator;
 
-    // ── KPI tiles ─────────────────────────────────────────────────────────────
+    // -- KPI tiles -------------------------------------------------------------
     readonly totalBudgetValue: Locator;
     readonly adjustmentsValue: Locator;
     readonly spentCommittedValue: Locator;
     readonly availableValue: Locator;
 
-    // ── Chart containers ──────────────────────────────────────────────────────
+    // -- Chart containers ------------------------------------------------------
     readonly spendBreakdownChart: Locator;
     readonly budgetUtilizationChart: Locator;
     readonly spendByMediaChart: Locator;
 
-    // ── Report links ──────────────────────────────────────────────────────────
+    // -- Report links ----------------------------------------------------------
     readonly mediaTypeMoreDetailBtn: Locator;
 
     constructor(page: Page) {

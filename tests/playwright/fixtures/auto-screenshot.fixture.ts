@@ -6,14 +6,14 @@
  *
  *   <spec-file-dir>/Test_Case_Screenshot/<sanitized-title>_<status>.png
  *
- * Usage — import `test` and `expect` from this file instead of
+ * Usage - import `test` and `expect` from this file instead of
  * `@playwright/test`:
  *
  *   import { test, expect } from '../../../fixtures/auto-screenshot.fixture';
  *
  * Works for:
- *  • `{ page }` tests  — screenshots the main page automatically
- *  • `{ browser }` tests — screenshots ALL open pages in the context
+ *  - `{ page }` tests  - screenshots the main page automatically
+ *  - `{ browser }` tests - screenshots ALL open pages in the context
  */
 
 import {
@@ -28,7 +28,7 @@ import * as path from 'path';
 
 export { expect };
 
-// ── helpers ───────────────────────────────────────────────────────────────────
+// -- helpers -------------------------------------------------------------------
 
 function sanitize(name: string): string {
   return name
@@ -57,18 +57,18 @@ async function saveScreenshot(
 
     await page.screenshot({ path: destPath, fullPage: true, timeout: 10_000 });
   } catch {
-    // Non-fatal — page may already be closed
+    // Non-fatal - page may already be closed
   }
 }
 
-// ── fixture override: `page` ───────────────────────────────────────────────────
+// -- fixture override: `page` ---------------------------------------------------
 
 export const test = base.extend<{
   autoScreenshotPage: void;
 }>({
   /**
    * Shadow the built-in `page` fixture to take a screenshot after each test.
-   * Re-uses the same page object — no extra browser context created.
+   * Re-uses the same page object - no extra browser context created.
    */
   page: async ({ page }, use, testInfo) => {
     await use(page);
@@ -102,10 +102,10 @@ export const test = base.extend<{
         await saveScreenshot(pg, testInfo, suffix);
       }
     }
-  }, { auto: true }],   // `auto: true` — runs for EVERY test automatically
+  }, { auto: true }],   // `auto: true` - runs for EVERY test automatically
 });
 
-// ── convenience re-export ────────────────────────────────────────────────────
+// -- convenience re-export ----------------------------------------------------
 
 export type { Page, BrowserContext, TestInfo };
 export type { Browser } from '@playwright/test';

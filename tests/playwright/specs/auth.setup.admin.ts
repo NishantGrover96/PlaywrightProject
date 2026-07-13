@@ -37,7 +37,7 @@ setup('authenticate admin user', async ({ page }) => {
 
   const currentURL = page.url();
   if (/\/login/i.test(currentURL) && !/dashboard|coop|index/i.test(currentURL)) {
-    throw new Error(`Admin auth failed — still on login page: ${currentURL}. Check credentials.`);
+    throw new Error(`Admin auth failed - still on login page: ${currentURL}. Check credentials.`);
   }
 
   const skipBtn = page.locator("button:has-text('Skip')");

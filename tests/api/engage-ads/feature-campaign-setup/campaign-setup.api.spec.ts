@@ -1,5 +1,5 @@
 /**
- * EngageAds — Campaign Setup — API Spec
+ * EngageAds - Campaign Setup - API Spec
  * Module: engage-ads | Feature: campaign-setup
  * Generated: 2026-06-19 | Pipeline: Step 3 (Playwright Test Generation)
  *
@@ -30,7 +30,7 @@ const IS_PROD = (process.env.TEST_ENV ?? 'uat') === 'uat';
 const DEALER_AUTH_FILE = path.resolve(__dirname, '../../../playwright/fixtures/.auth/user.json');
 const DEALER_AUTH_MISSING = !existsSync(DEALER_AUTH_FILE);
 
-test.describe('EngageAds — Campaign Setup — API Handlers', () => {
+test.describe('EngageAds - Campaign Setup - API Handlers', () => {
   let dealerRequest: APIRequestContext;
 
   test.beforeAll(async ({ playwright }) => {
@@ -45,11 +45,11 @@ test.describe('EngageAds — Campaign Setup — API Handlers', () => {
     await dealerRequest.dispose();
   });
 
-  // ──────────────────────────────────────────────────────────────────────────
-  // GET — Page Access
-  // ──────────────────────────────────────────────────────────────────────────
+  // --------------------------------------------------------------------------
+  // GET - Page Access
+  // --------------------------------------------------------------------------
 
-  test('ENGAGEADS-CS-API-001 @smoke — GET /EngageAds/CampaignSetup redirects unauthenticated to login', async ({ request }) => {
+  test('ENGAGEADS-CS-API-001 @smoke - GET /EngageAds/CampaignSetup redirects unauthenticated to login', async ({ request }) => {
     const response = await request.get(`${BASE_URL}${testData.featureUrl}`, { maxRedirects: 0 });
     expect([302, 401, 403]).toContain(response.status());
     if (response.status() === 302) {
@@ -57,17 +57,17 @@ test.describe('EngageAds — Campaign Setup — API Handlers', () => {
     }
   });
 
-  test('ENGAGEADS-CS-API-002 @smoke — GET /EngageAds/CampaignSetup without orderSeq redirects authenticated dealer', async () => {
+  test('ENGAGEADS-CS-API-002 @smoke - GET /EngageAds/CampaignSetup without orderSeq redirects authenticated dealer', async () => {
     test.skip(DEALER_AUTH_MISSING, 'Dealer auth state required.');
     const response = await dealerRequest.get(testData.featureUrl, { maxRedirects: 0 });
-    // Without orderSeq → redirect to BundledAdPackages (302)
+    // Without orderSeq -> redirect to BundledAdPackages (302)
     expect([200, 302]).toContain(response.status());
     if (response.status() === 302) {
       expect(response.headers()['location'] ?? '').toContain('EngageAds');
     }
   });
 
-  test('ENGAGEADS-CS-API-003 @regression — GET /EngageAds/CampaignSetup with invalid orderSeq redirects to BundledAdPackages', async () => {
+  test('ENGAGEADS-CS-API-003 @regression - GET /EngageAds/CampaignSetup with invalid orderSeq redirects to BundledAdPackages', async () => {
     test.skip(DEALER_AUTH_MISSING, 'Dealer auth state required.');
     const response = await dealerRequest.get(`${testData.featureUrl}?orderSeq=INVALID`, { maxRedirects: 0 });
     expect([302, 200]).toContain(response.status());
@@ -76,11 +76,11 @@ test.describe('EngageAds — Campaign Setup — API Handlers', () => {
     }
   });
 
-  // ──────────────────────────────────────────────────────────────────────────
-  // POST — UploadLogo
-  // ──────────────────────────────────────────────────────────────────────────
+  // --------------------------------------------------------------------------
+  // POST - UploadLogo
+  // --------------------------------------------------------------------------
 
-  test('ENGAGEADS-CS-API-004 @regression — POST ?handler=UploadLogo with invalid file type returns error', async () => {
+  test('ENGAGEADS-CS-API-004 @regression - POST ?handler=UploadLogo with invalid file type returns error', async () => {
     test.skip(DEALER_AUTH_MISSING, 'Dealer auth state required.');
     const response = await dealerRequest.post(`${testData.featureUrl}?handler=UploadLogo`, {
       multipart: {
@@ -97,7 +97,7 @@ test.describe('EngageAds — Campaign Setup — API Handlers', () => {
     expect(body.message ?? '').toContain(testData.expectedErrors.logoInvalidType);
   });
 
-  test('ENGAGEADS-CS-API-005 @regression — POST ?handler=UploadLogo with oversized file returns error', async () => {
+  test('ENGAGEADS-CS-API-005 @regression - POST ?handler=UploadLogo with oversized file returns error', async () => {
     test.skip(DEALER_AUTH_MISSING, 'Dealer auth state required.');
     const buffer = Buffer.alloc(testData.logo.oversizeBytes, 'x');
     const response = await dealerRequest.post(`${testData.featureUrl}?handler=UploadLogo`, {
@@ -115,7 +115,7 @@ test.describe('EngageAds — Campaign Setup — API Handlers', () => {
     expect(body.message ?? '').toContain(testData.expectedErrors.logoTooLarge);
   });
 
-  test('ENGAGEADS-CS-API-006 @regression — POST ?handler=UploadLogo with no file returns error', async () => {
+  test('ENGAGEADS-CS-API-006 @regression - POST ?handler=UploadLogo with no file returns error', async () => {
     test.skip(DEALER_AUTH_MISSING, 'Dealer auth state required.');
     const response = await dealerRequest.post(`${testData.featureUrl}?handler=UploadLogo`, {
       form: {},
@@ -125,12 +125,12 @@ test.describe('EngageAds — Campaign Setup — API Handlers', () => {
     expect(body.success).toBeFalsy();
   });
 
-  // ──────────────────────────────────────────────────────────────────────────
-  // POST — Submit (OnPostAsync)
-  // ──────────────────────────────────────────────────────────────────────────
+  // --------------------------------------------------------------------------
+  // POST - Submit (OnPostAsync)
+  // --------------------------------------------------------------------------
 
-  test('ENGAGEADS-CS-API-007 @regression @mutation — POST submit with missing OrderSeq returns page with model error', async () => {
-    test.skip(IS_PROD, 'Mutation test — skip on production.');
+  test('ENGAGEADS-CS-API-007 @regression @mutation - POST submit with missing OrderSeq returns page with model error', async () => {
+    test.skip(IS_PROD, 'Mutation test - skip on production.');
     test.skip(DEALER_AUTH_MISSING, 'Dealer auth state required.');
     const response = await dealerRequest.post(testData.featureUrl, {
       form: {
@@ -148,7 +148,7 @@ test.describe('EngageAds — Campaign Setup — API Handlers', () => {
         'CampaignIntake.ServiceArea': testData.step3.valid.serviceArea,
         'CampaignIntake.WebsiteAccuracyConfirmed': 'true',
         'CampaignIntake.TermsAccepted': 'true',
-        // OrderSeq intentionally omitted → "Invalid order reference" error
+        // OrderSeq intentionally omitted -> "Invalid order reference" error
       },
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     });

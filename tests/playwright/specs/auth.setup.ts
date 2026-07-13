@@ -27,7 +27,7 @@ setup('authenticate dealer user', async ({ page }) => {
 
   await page.fill('#UserLogin_Username', username);
   await page.fill('#UserLogin_Password', password);
-  // Wait for navigation and click concurrently — avoids missing the navigation event
+  // Wait for navigation and click concurrently - avoids missing the navigation event
   await Promise.all([
     page.waitForURL((url) => !/\/login/i.test(url.pathname), { timeout: 90_000 }),
     page.click('#btnLogin'),
@@ -38,7 +38,7 @@ setup('authenticate dealer user', async ({ page }) => {
 
   const currentURL = page.url();
   if (/\/login/i.test(new URL(currentURL).pathname)) {
-    throw new Error(`Dealer auth failed — still on login page: ${currentURL}. Check credentials in .env.${process.env.TEST_ENV || 'production'}`);
+    throw new Error(`Dealer auth failed - still on login page: ${currentURL}. Check credentials in .env.${process.env.TEST_ENV || 'production'}`);
   }
 
   // Dismiss welcome modal if present

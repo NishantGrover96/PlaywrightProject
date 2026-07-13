@@ -1,19 +1,19 @@
 import { Page, Locator, expect } from '@playwright/test';
 
 /**
- * SubmitPreapprovalPage — Page Object Model
+ * SubmitPreapprovalPage - Page Object Model
  * URL: /CoopManagement/PreApproval/Submit/SubmitPreapproval
  *
  * Selectors sourced from:
- *   SubmitPreApproval.cshtml (legacy + modern — identical files, 2026-06-19)
+ *   SubmitPreApproval.cshtml (legacy + modern - identical files, 2026-06-19)
  *   _PreApprovalMediaType.cshtml, _PreApprovalFormSubmission.cshtml
  *
  * Wizard steps for dealer role (no dealer-search step shown):
- *   Step 0 — Fiscal year selection (conditional)
- *   Step 1 — Dealer search (conditional, skipped for dealer role)
- *   Step 2 — Media type tile selection
- *   Step 3 — Form submission + email section
- *   Success — Confirmation panel
+ *   Step 0 - Fiscal year selection (conditional)
+ *   Step 1 - Dealer search (conditional, skipped for dealer role)
+ *   Step 2 - Media type tile selection
+ *   Step 3 - Form submission + email section
+ *   Success - Confirmation panel
  *
  * FU-047 note: Modern POST handler calls GetMediaType(SelectedFiscalYear) before processing.
  *   hdnSelectedFiscalYear must be present and non-empty for correct media mapping.
@@ -22,25 +22,25 @@ export class SubmitPreapprovalPage {
   readonly page: Page;
   readonly url = '/CoopManagement/PreApproval/Submit/SubmitPreapproval';
 
-  // ── Wizard container ──────────────────────────────────────────────────────────
+  // -- Wizard container ----------------------------------------------------------
   readonly wizardContainer: Locator;
 
-  // ── Step 0 — Fiscal year (conditional) ───────────────────────────────────────
+  // -- Step 0 - Fiscal year (conditional) ---------------------------------------
   readonly fiscalYearRadios:      Locator;  // input.fiscalYearRadio
   readonly btnContinueAfterZero:  Locator;  // #ContinueAfterZero
   readonly hdnSelectedFiscalYear: Locator;  // #hdnSelectedFiscalYear (bound via SelectedFiscalYear property; required by modern POST handler FU-047)
 
-  // ── Step 2 — Media type ───────────────────────────────────────────────────────
+  // -- Step 2 - Media type -------------------------------------------------------
   readonly mediaTiles:              Locator;  // ul#PreapprovalMediaList li a.clsSelectMediaType
   readonly dealerTypeDropdown:      Locator;  // #programDealerTypeDropdown
   readonly btnMediaContinue:        Locator;  // #btnContinue
   readonly btnMediaBack:            Locator;  // .clsBackClaimWizardMedia
 
-  // ── Step 3 — Form: dealer header ─────────────────────────────────────────────
+  // -- Step 3 - Form: dealer header ---------------------------------------------
   readonly dealerNumberDisplay:     Locator;  // #_DealerNumber
   readonly dealerNameDisplay:       Locator;  // #_DealerName
 
-  // ── Step 3 — Campaign block ───────────────────────────────────────────────────
+  // -- Step 3 - Campaign block ---------------------------------------------------
   readonly campaignTitleInput:         Locator;  // #txtCampaingTitle maxlength=100
   readonly errCampaignTitle:           Locator;  // #spnErrorCampaingTitle
   readonly chkAdOfferCampaign:         Locator;  // #chkAdOfferCampaign
@@ -53,7 +53,7 @@ export class SubmitPreapprovalPage {
   readonly btnAddAdditionalMedia:      Locator;  // #btnAddAdditionalMedia
   readonly tblMediaCampaign:           Locator;  // #tblMediaCampaign
 
-  // ── Step 3 — Screen/mainbranch block ─────────────────────────────────────────
+  // -- Step 3 - Screen/mainbranch block -----------------------------------------
   readonly chkAdOffer:              Locator;  // #chkAdOffer
   readonly adExpirationDateInput:   Locator;  // #hdtxtCalExpirationDate
   readonly adExpirationDisplay:     Locator;  // #hdtxtCalExpirationDate display input
@@ -66,7 +66,7 @@ export class SubmitPreapprovalPage {
   readonly adTitleInput:            Locator;  // #txtAdTitle maxlength=100
   readonly errAdTitle:              Locator;  // #spnErrorAdTitle
 
-  // ── Step 3 — Show block (indvshow/grpshow) ────────────────────────────────────
+  // -- Step 3 - Show block (indvshow/grpshow) ------------------------------------
   readonly showNameInput:        Locator;  // #txtShowsAdTitle maxlength=100
   readonly errShowName:          Locator;  // #spnErrorShowsAdTitle
   readonly showAddressInput:     Locator;  // #txtShowsLocationAddress maxlength=100
@@ -90,7 +90,7 @@ export class SubmitPreapprovalPage {
   readonly btnAddEquipment:      Locator;  // #btnAddEquipmentContact
   readonly equipmentContainer:   Locator;  // #dvEquipmentContainer
 
-  // ── Step 3 — Sponsorship block ────────────────────────────────────────────────
+  // -- Step 3 - Sponsorship block ------------------------------------------------
   readonly sponsorNameInput:      Locator;  // #txtSponsorshipAdTitle maxlength=100
   readonly errSponsorName:        Locator;  // #spnErrorSponsorshipAdTitle
   readonly sponsorStartDateInput: Locator;  // #hdtxtCalSponsorShipStartDate
@@ -98,14 +98,14 @@ export class SubmitPreapprovalPage {
   readonly sponsorEndDateInput:   Locator;  // #hdtxtCalSponsorShipEndDate
   readonly errSponsorEndDate:     Locator;  // #spnSponsorShipEndDate
 
-  // ── Step 3 — Shared fields ────────────────────────────────────────────────────
+  // -- Step 3 - Shared fields ----------------------------------------------------
   readonly dealerIdInput:     Locator;  // #txtDealerIdText maxlength=100
   readonly errDealerId:       Locator;  // #spnDealerIdText
   readonly fileDropzone:      Locator;  // #dropzone_fuBGImage
   readonly errFile:           Locator;  // #spnErrorFile
   readonly commentTextarea:   Locator;  // #txtMainComment maxlength=500
 
-  // ── Step 3 — Email section ────────────────────────────────────────────────────
+  // -- Step 3 - Email section ----------------------------------------------------
   readonly emailMeInput:            Locator;  // #txtEmailMe (readonly)
   readonly errEmailMe:              Locator;  // #spnEmailToMe
   readonly dealerContactCheckboxes: Locator;  // .clsDealerShipContact
@@ -114,12 +114,12 @@ export class SubmitPreapprovalPage {
   readonly errOtherContact:         Locator;  // #spnErrorOtherMediaContact
   readonly otherContactsContainer:  Locator;  // #dvOtherMediaContacts
 
-  // ── Action buttons ────────────────────────────────────────────────────────────
+  // -- Action buttons ------------------------------------------------------------
   readonly btnSubmit:               Locator;  // #btnSubmitPreApproval
   readonly btnReset:                Locator;  // #ResetPreApprovalForm
   readonly btnFormBack:             Locator;  // #FormSubmissionBackBtn
 
-  // ── Success panel ─────────────────────────────────────────────────────────────
+  // -- Success panel -------------------------------------------------------------
   readonly successPanel:            Locator;  // #CompleteConfirmationModel
   readonly confirmationNumber:      Locator;  // #spnPreApprovalConfirmationNumber
   readonly btnSubmitAnother:        Locator;  // #SubmitAnotherPreApproval
@@ -130,12 +130,12 @@ export class SubmitPreapprovalPage {
 
     this.wizardContainer     = page.locator('.commonWizard');
 
-    // Step 0 — Fiscal year
+    // Step 0 - Fiscal year
     this.fiscalYearRadios     = page.locator('input.fiscalYearRadio');
     this.btnContinueAfterZero = page.locator('#ContinueAfterZero');
     this.hdnSelectedFiscalYear = page.locator('#hdnSelectedFiscalYear');
 
-    // Step 2 — Media type
+    // Step 2 - Media type
     this.mediaTiles              = page.locator('#PreapprovalMediaList li a.clsSelectMediaType');
     this.dealerTypeDropdown      = page.locator('#programDealerTypeDropdown');
     this.btnMediaContinue        = page.locator('#btnContinue');
@@ -231,15 +231,15 @@ export class SubmitPreapprovalPage {
     this.btnSubmitNew       = page.locator('a[href*="SubmitPreApproval"]').last();
   }
 
-  // ── Navigation ────────────────────────────────────────────────────────────────
+  // -- Navigation ----------------------------------------------------------------
 
   async navigate(): Promise<void> {
-    // Use domcontentloaded — the preapproval page has background requests that
+    // Use domcontentloaded - the preapproval page has background requests that
     // prevent the 'load' event from firing within the default 60s timeout.
     await this.page.goto(this.url, { waitUntil: 'domcontentloaded' });
   }
 
-  // ── Wizard navigation ─────────────────────────────────────────────────────────
+  // -- Wizard navigation ---------------------------------------------------------
 
   async selectFiscalYear(year: string): Promise<void> {
     await this.fiscalYearRadios.filter({ hasText: year }).click();
@@ -254,13 +254,13 @@ export class SubmitPreapprovalPage {
 
   async advanceFromMediaStep(): Promise<void> {
     await this.btnMediaContinue.click();
-    // The form step is shown by TriggerNextStep(3) — wait for the Ad Title input
+    // The form step is shown by TriggerNextStep(3) - wait for the Ad Title input
     // which is immediately visible. The Submit button only reveals after field
     // validation fires, so it cannot be used here.
     await expect(this.adTitleInput).toBeVisible({ timeout: 15_000 });
   }
 
-  // ── Form filling ──────────────────────────────────────────────────────────────
+  // -- Form filling --------------------------------------------------------------
 
   async fillAdTitle(title: string): Promise<void> {
     await this.adTitleInput.fill(title);
@@ -323,7 +323,7 @@ export class SubmitPreapprovalPage {
     await this.btnSubmit.click();
   }
 
-  // ── Assertions ────────────────────────────────────────────────────────────────
+  // -- Assertions ----------------------------------------------------------------
 
   async expectWizardVisible(): Promise<void> {
     await expect(this.wizardContainer).toBeVisible();
@@ -338,7 +338,7 @@ export class SubmitPreapprovalPage {
   }
 
   async expectFormStepVisible(): Promise<void> {
-    // Check the form step container is active — adTitleInput is always visible in this step.
+    // Check the form step container is active - adTitleInput is always visible in this step.
     await expect(this.adTitleInput).toBeVisible({ timeout: 15_000 });
   }
 

@@ -33,25 +33,25 @@ tests/api/{module}/{feature}.api.spec.ts
 ## Test Categories
 
 ### Authentication
-- Request without token → 401 Unauthorized
-- Request with expired token → 401 Unauthorized
-- Request with invalid token → 401 Unauthorized
+- Request without token -> 401 Unauthorized
+- Request with expired token -> 401 Unauthorized
+- Request with invalid token -> 401 Unauthorized
 
 ### Authorization
-- User with correct role → 200/201
-- User without required role → 403 Forbidden
-- User accessing another dealer's data → 403 Forbidden / 404 Not Found
+- User with correct role -> 200/201
+- User without required role -> 403 Forbidden
+- User accessing another dealer's data -> 403 Forbidden / 404 Not Found
 
 ### Input Validation
-- Missing required fields → 400 Bad Request with field errors
-- Invalid field formats → 400 with specific field errors
-- Boundary values (min/max amounts, dates) → expected behavior
-- Injection attempts → 400 Bad Request (never 500)
+- Missing required fields -> 400 Bad Request with field errors
+- Invalid field formats -> 400 with specific field errors
+- Boundary values (min/max amounts, dates) -> expected behavior
+- Injection attempts -> 400 Bad Request (never 500)
 
 ### Business Logic
-- Valid submission → correct HTTP status + response body
-- Business rule violations → 422 Unprocessable Entity with business error message
-- Eligibility failures → correct error response
+- Valid submission -> correct HTTP status + response body
+- Business rule violations -> 422 Unprocessable Entity with business error message
+- Eligibility failures -> correct error response
 
 ### Response Schema
 - Response shape matches expected schema

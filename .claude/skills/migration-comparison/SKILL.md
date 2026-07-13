@@ -12,7 +12,7 @@ Run the same test suite against both Legacy and Modern platforms and produce a s
 ## When to Use
 
 - After Prompt 3 tests are implemented and both platforms are accessible
-- User says "compare legacy and modern for…", "run migration comparison for…"
+- User says "compare legacy and modern for...", "run migration comparison for..."
 
 ## Inputs
 
@@ -39,7 +39,7 @@ Then compare `reports/legacy/results.json` vs `reports/modern/results.json`.
 |---|---|
 | UI | Same field labels, same page structure, same conditional behavior |
 | Validation | Same required fields, same error messages (exact or documented equivalent) |
-| Workflow | Same status transitions, same temp→final ID pattern |
+| Workflow | Same status transitions, same temp->final ID pattern |
 | Data Persistence | Same DB records created (use database verification SQL scripts) |
 | Business Rules | Same eligibility, calculations, limits enforced |
 | Security | Same auth requirements, same data scoping |
@@ -70,7 +70,7 @@ reports/comparison/{module}/feature-{feature}/comparison.md
 
 | Level | Meaning |
 |---|---|
-| Blocker | Test passes on legacy, fails on modern — functional gap |
+| Blocker | Test passes on legacy, fails on modern - functional gap |
 | High | Different behavior, user-facing impact |
 | Medium | Different message text, same semantics |
 | Low | Cosmetic, no functional impact |

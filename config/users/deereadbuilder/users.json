@@ -1,0 +1,18 @@
+{
+    "dealer":  {
+                   "role":  "dealer",
+                   "displayName":  "Dealer",
+                   "username":  "REPLACE_WITH_DEALER_USERNAME",
+                   "email":  "REPLACE_WITH_DEALER_USERNAME",
+                   "password":  "",
+                   "_note":  "Auth type: username-only. Set 'username' and 'email' to the dealer code (e.g. X1A0449). Password must be empty string."
+               },
+    "admin":  {
+                  "role":  "admin",
+                  "displayName":  "Admin",
+                  "username":  "REPLACE_WITH_ADMIN_USERNAME",
+                  "email":  "REPLACE_WITH_ADMIN_USERNAME",
+                  "password":  "",
+                  "_note":  "Auth type: username-only. Set 'username' and 'email' to the admin username. Password must be empty string."
+              }
+}

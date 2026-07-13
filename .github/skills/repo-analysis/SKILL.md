@@ -1,22 +1,22 @@
----
+﻿---
 name: repo-analysis
 description: Scan and analyze source code to extract business logic, workflows, validations, endpoints, data models, and security rules for a given module or feature.
 ---
 
-# Repository Analysis — Step 1: Codebase Discovery
+# Repository Analysis - Step 1: Codebase Discovery
 
 ## Purpose
 
 Scan and analyze the provided source code for a given module/feature.
 Extract all business logic, workflows, validations, endpoints, data models, and security rules
-implemented in the code — without comparing legacy vs. modern implementations.
+implemented in the code - without comparing legacy vs. modern implementations.
 
 This produces a **Repo Analysis Report** that feeds into `/functional-test-catalog`.
 
 ## When to Use
 
 - Running Step 1 of the Functional QA Test Generation pipeline
-- User says "analyze repo for…", "discover code for…", "read source for…"
+- User says "analyze repo for...", "discover code for...", "read source for..."
 - Always run before `/functional-test-catalog`
 
 ---
@@ -28,7 +28,7 @@ This produces a **Repo Analysis Report** that feeds into `/functional-test-catal
 - **Source Root**: root of the codebase on disk (from `config/repos.local.json` or user-provided)
 - **Feature Folder**: the exact folder containing the feature files
 
-### Resolving Paths — Auto-Discovery
+### Resolving Paths - Auto-Discovery
 
 Read workspace roots from `config/repos.local.json` when available.
 All dependency paths are auto-derived from the workspace and feature folder.
@@ -37,14 +37,14 @@ All dependency paths are auto-derived from the workspace and feature folder.
 #### Auto-Discovery Algorithm
 
 ```
-STEP A — Feature Files (always)
+STEP A - Feature Files (always)
   Read all files in featurePath:
-    *.cshtml          → form fields, UI elements, partial view references, conditional visibility
-    *.cshtml.cs       → injected interfaces, bound properties, handler methods, validation attributes
-    *Controller.cs    → HTTP methods, routes, auth attributes, action return types
-    *Page.cshtml      → same as *.cshtml
+    *.cshtml          -> form fields, UI elements, partial view references, conditional visibility
+    *.cshtml.cs       -> injected interfaces, bound properties, handler methods, validation attributes
+    *Controller.cs    -> HTTP methods, routes, auth attributes, action return types
+    *Page.cshtml      -> same as *.cshtml
 
-STEP B — Services / Business Logic
+STEP B - Services / Business Logic
   From feature files: extract injected interface names (IClaimService, IBudgetService, etc.)
   or method calls (ClaimService.Submit, etc.)
 
@@ -52,29 +52,29 @@ STEP B — Services / Business Logic
     {root}\Libraries\BusinessLogic\Services\**\*.cs   (ASP.NET Razor Pages / DLL pattern)
     {root}\src\Services\{module}\**\*.cs               (modern API pattern)
     {root}\Application\**\*Service.cs                  (clean arch pattern)
-  → Read matching service implementations
-  → Extract method signatures, business rules, calculations, eligibility checks
+  -> Read matching service implementations
+  -> Extract method signatures, business rules, calculations, eligibility checks
 
-STEP C — Validators
+STEP C - Validators
   From service/handler files: extract validator class names or FluentValidation usage
 
   Search paths:
     {root}\src\Validators\{module}\**\*.cs
     {root}\Application\Validators\**\*.cs
-  → Read validation rules (required, length, range, regex, custom)
-  → Extract exact error messages
+  -> Read validation rules (required, length, range, regex, custom)
+  -> Extract exact error messages
 
-STEP D — Data Models / DTOs
+STEP D - Data Models / DTOs
   From service files: extract entity/model/DTO class names
 
   Search paths:
     {root}\Libraries\CommonEntity\**\*.cs
     {root}\src\Models\{module}\**\*.cs
     {root}\src\Domain\**\*.cs
-  → Read property names, data types, required attributes
-  → Document field-level constraints
+  -> Read property names, data types, required attributes
+  -> Document field-level constraints
 
-STEP E — Database Layer
+STEP E - Database Layer
   From service/handler files: extract stored procedure names, repository calls, DbContext usage
 
   Search paths:
@@ -82,23 +82,23 @@ STEP E — Database Layer
     {root}\Libraries\**\*DAL*.cs
     {root}\src\Data\**\*Repository*.cs
     {root}\src\Infrastructure\**\*.cs
-  → Extract SP names, table names, query parameters
-  → Map writes (INSERT/UPDATE) and reads (SELECT)
+  -> Extract SP names, table names, query parameters
+  -> Map writes (INSERT/UPDATE) and reads (SELECT)
 
-STEP F — Validation Messages / Resources
+STEP F - Validation Messages / Resources
   Derive resource path:
     {root}\RAL\Resources\{ModuleTitle}\ViewResource.*.resx    (legacy pattern)
     {root}\Resources\**\*.resx                                 (general pattern)
-  → Extract exact validation message strings for test assertions
+  -> Extract exact validation message strings for test assertions
 
-STEP G — Client-Side Behavior
+STEP G - Client-Side Behavior
   Search:
     {root}\**\wwwroot\WebScripts\{moduleFolder}\js*.js
     {root}\**\wwwroot\js\{module}\*.js
     {root}\**\src\assets\js\{module}\*.js
-  → Extract AJAX calls, client validation rules, UI behaviors, encrypted params
+  -> Extract AJAX calls, client validation rules, UI behaviors, encrypted params
 
-STEP H — Security / Auth
+STEP H - Security / Auth
   From feature files and controllers: extract
     [Authorize] / [Authorize(Roles="...")] attributes
     Policy names, role names
@@ -166,20 +166,20 @@ Only stop and ask the user if a derived path does not exist on disk.
 ### Repo Analysis Report
 
 ```markdown
-# {Module} {Feature} — Repository Analysis Report
+# {Module} {Feature} - Repository Analysis Report
 Generated: {timestamp}
 
 ## Source Files Analyzed
 | File | Layer | Purpose |
 |---|---|---|
-| path/to/SubmitClaim.cshtml | UI | Submit Claim form — fields, layout |
+| path/to/SubmitClaim.cshtml | UI | Submit Claim form - fields, layout |
 | path/to/SubmitClaim.cshtml.cs | Handler | GET (load data), POST (submit claim) |
 | path/to/ClaimService.cs | Business Logic | Eligibility, budget checks, submission |
 
 ## UI / Form Fields
 | Field Name | Type | Required | Label | Conditional | Notes |
 |---|---|---|---|---|---|
-| ProgramId | select | Yes | Program | — | Populated from dealer's enrolled programs |
+| ProgramId | select | Yes | Program | - | Populated from dealer's enrolled programs |
 
 ## API / Handler Endpoints
 | Method | Route / Handler | Auth | Purpose |
@@ -204,7 +204,7 @@ Generated: {timestamp}
 ## Workflow / Status Transitions
 | From Status | To Status | Trigger | Notification |
 |---|---|---|---|
-| — | Draft | Save Draft button | None |
+| - | Draft | Save Draft button | None |
 | Draft | Submitted | Submit button | Email to admin |
 | Submitted | Received | Auto on submission | Email to dealer |
 
@@ -237,7 +237,7 @@ Generated: {timestamp}
 ## Output File
 
 ```
-docs/module-analysis/{module}/feature-{feature}/repo-analysis.md
+docs/module-analysis/{client}/{module}/feature-{feature}/repo-analysis.md
 ```
 
 ---

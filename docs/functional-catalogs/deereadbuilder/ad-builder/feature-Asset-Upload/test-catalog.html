@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Asset Upload - Test Catalog</title>
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous" defer></script>
+  <style>
+    .tier-smoke      { background:#dbeafe; color:#1d4ed8; }
+    .tier-regression { background:#ede9fe; color:#6d28d9; }
+    .tier-e2e        { background:#d1fae5; color:#065f46; }
+    .priority-p1     { background:#fee2e2; color:#991b1b; }
+    .priority-p2     { background:#fef3c7; color:#92400e; }
+    .priority-p3     { background:#e0f2fe; color:#0369a1; }
+    .priority-p4     { background:#f0fdf4; color:#166534; }
+    .test-id         { font-family: monospace; font-weight: 700; white-space: nowrap; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Asset Upload - Test Catalog</h1>
+    <p class="subtitle">DeerAd Builder | ad-builder module | deereadbuilder client</p>
+    
+    <div class="badge-group">
+      <div class="badge badge-status"> Active</div>
+      <div class="badge badge-smoke">Smoke: 5 tests</div>
+      <div class="badge badge-regression">Regression: 52 tests</div>
+      <div class="badge badge-e2e">E2E: 11 tests</div>
+    </div>
+    
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-label">Total Test Cases</div>
+        <div class="stat-value">68</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Business Rules</div>
+        <div class="stat-value">32</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Form Fields</div>
+        <div class="stat-value">21</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Security Tests</div>
+        <div class="stat-value">4</div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2 class="section-title"> Test Distribution</h2>
+      
+      <div class="test-tier">
+        <div class="test-tier-header">
+          🔥 Smoke Tests <span class="test-tier-count">5 tests</span>
+        </div>
+        <p style="color: #6b7280; margin-bottom: 12px;">Critical path, page load, authentication, happy path, database & email verification</p>
+        <ul class="test-list">
+          <li class="test-item">
+            <div class="test-id">ASUP-SMOKE-001</div>
+            <div class="test-description">Page loads for authenticated user</div>
+          </li>
+          <li class="test-item">
+            <div class="test-id">ASUP-SMOKE-002</div>
+            <div class="test-description">Unauthenticated user redirected to login</div>
+          </li>
+          <li class="test-item">
+            <div class="test-id">ASUP-SMOKE-003</div>
+            <div class="test-description">Happy path: Upload image, fill metadata, submit</div>
+          </li>
+          <li class="test-item">
+            <div class="test-id">ASUP-SMOKE-004</div>
+            <div class="test-description">Happy path: Download asset in multiple formats</div>
+          </li>
+          <li class="test-item">
+            <div class="test-id">ASUP-SMOKE-005</div>
+            <div class="test-description">New asset creates DB record and notification email</div>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="test-tier">
+        <div class="test-tier-header">
+           Regression Tests <span class="test-tier-count">52 tests</span>
+        </div>
+        <p style="color: #6b7280; margin-bottom: 12px;">Validation (21), Business Logic (15), Workflow (12), Security (4)</p>
+        <div class="table-responsive"><table class="table table-bordered table-striped table-hover table-sm align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th>Category</th>
+              <th>Count</th>
+              <th>Examples</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Validation</strong></td>
+              <td>21</td>
+              <td>Required fields, format checks, uniqueness, boundaries</td>
+            </tr>
+            <tr>
+              <td><strong>Business Logic</strong></td>
+              <td>15</td>
+              <td>Auto-detection, AI keywords, file conversions, status changes</td>
+            </tr>
+            <tr>
+              <td><strong>Workflow</strong></td>
+              <td>12</td>
+              <td>Edit, duplicate, save-and-new, library sync</td>
+            </tr>
+            <tr>
+              <td><strong>Security</strong></td>
+              <td>4</td>
+              <td>File upload whitelist, path traversal, session validation, scoping</td>
+            </tr>
+          </tbody>
+        </table></div>
+      </div>
+      
+      <div class="test-tier">
+        <div class="test-tier-header">
+          🚀 E2E Tests <span class="test-tier-count">11 tests</span>
+        </div>
+        <p style="color: #6b7280; margin-bottom: 12px;">Full workflows, error recovery, lifecycle management</p>
+        <ul class="test-list">
+          <li class="test-item">
+            <div class="test-id">ASUP-E2E-001</div>
+            <div class="test-description">Full workflow: Upload -> Save -> Verify in library</div>
+          </li>
+          <li class="test-item">
+            <div class="test-id">ASUP-E2E-003</div>
+            <div class="test-description">Edit asset -> Update -> Verify changes</div>
+          </li>
+          <li class="test-item">
+            <div class="test-id">ASUP-E2E-006</div>
+            <div class="test-description">Error recovery: Invalid upload -> Retry -> Success</div>
+          </li>
+          <li class="test-item">
+            <div class="test-id">ASUP-E2E-010</div>
+            <div class="test-description">Complete lifecycle: Create -> Edit -> Duplicate -> Archive</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2 class="section-title"> Business Rules Coverage</h2>
+      <p style="margin-bottom: 16px;">32 business rules identified and tested</p>
+      
+      <div class="table-responsive"><table class="table table-bordered table-striped table-hover table-sm align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>Category</th>
+            <th>Count</th>
+            <th>Examples</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Security</strong></td>
+            <td>4</td>
+            <td>Page access, file extension whitelist, name sanitization, session validation</td>
+          </tr>
+          <tr>
+            <td><strong>Validation</strong></td>
+            <td>14</td>
+            <td>Display name, tracking #, color, setting, image IDs, locale, divisions, dates, email</td>
+          </tr>
+          <tr>
+            <td><strong>Business Logic</strong></td>
+            <td>7</td>
+            <td>Auto-detection, AI features, thumbnail gen, video conversion, TIFF/EPS conversion</td>
+          </tr>
+          <tr>
+            <td><strong>Workflow</strong></td>
+            <td>5</td>
+            <td>New asset, save & new, save & duplicate, edit mode, status transitions</td>
+          </tr>
+          <tr>
+            <td><strong>Data Persistence</strong></td>
+            <td>2</td>
+            <td>Asset INSERT, notification email delivery</td>
+          </tr>
+        </tbody>
+      </table></div>
+    </div>
+    
+    <div class="section">
+      <h2 class="section-title"> Test Assets Generated</h2>
+      <div class="table-responsive"><table class="table table-bordered table-striped table-hover table-sm align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>Asset Type</th>
+            <th>File</th>
+            <th>Lines</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Page Object</td>
+            <td><code>AssetUploadPage.ts</code></td>
+            <td>280+</td>
+            <td>30+ locators, upload/edit/validation methods</td>
+          </tr>
+          <tr>
+            <td>Helpers</td>
+            <td><code>asset-upload.helpers.ts</code></td>
+            <td>200+</td>
+            <td>7 reusable multi-step flows</td>
+          </tr>
+          <tr>
+            <td>Spec File</td>
+            <td><code>asset-upload.spec.ts</code></td>
+            <td>680+</td>
+            <td>35+ tests across smoke/regression/e2e</td>
+          </tr>
+          <tr>
+            <td>Test Data</td>
+            <td><code>test-data.json</code></td>
+            <td>220+</td>
+            <td>Valid/invalid/boundary data + expectations</td>
+          </tr>
+          <tr>
+            <td>Database</td>
+            <td><code>verify-records.sql</code></td>
+            <td>200+</td>
+            <td>12 SQL verification queries</td>
+          </tr>
+          <tr>
+            <td>API Tests</td>
+            <td><code>asset-upload.api.spec.ts</code></td>
+            <td>300+</td>
+            <td>7 handler action tests</td>
+          </tr>
+        </tbody>
+      </table></div>
+    </div>
+    
+    <div class="footer">
+      <p><strong>Generated:</strong> 2026-07-08</p>
+      <p><strong>Framework:</strong> Playwright 1.40+</p>
+      <p><strong>Language:</strong> TypeScript</p>
+      <p><strong>Spec Path:</strong> <code>tests/playwright/specs/deereadbuilder/ad-builder/feature-asset-upload/asset-upload.spec.ts</code></p>
+    </div>
+  </div>
+</body>
+</html>

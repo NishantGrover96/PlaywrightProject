@@ -12,9 +12,9 @@
  * Output:
  *   enc:3a9f...:11b2...:ab45...:00ff...
  *
- * Paste the token into config/users/{client}/{role}.json → "password" field.
+ * Paste the token into config/users/{client}/{role}.json -> "password" field.
  *
- * Each call produces a DIFFERENT token (random salt+IV) — all decrypt to the same plaintext.
+ * Each call produces a DIFFERENT token (random salt+IV) - all decrypt to the same plaintext.
  *
  * To verify: node utils/encrypt-credential.js --decrypt "enc:..."
  */
@@ -37,7 +37,7 @@ async function main() {
   if (args.length === 0 || args[0] === "--help" || args[0] === "-h") {
     console.log(`
 Encrypt Credential CLI
-──────────────────────
+----------------------
 Encrypt:  node utils/encrypt-credential.js "your-password"
 Decrypt:  node utils/encrypt-credential.js --decrypt "enc:..."
 

@@ -1,37 +1,58 @@
 {
-  "clientId": "demoportal",
-  "clientName": "Demo Portal",
-  "environments": {
-    "production": {
-      "label": "Production",
-      "baseUrl": "https://demoportal.channel-fusion.com",
-      "apiUrl": "https://demoportal.channel-fusion.com",
-      "envFile": "production"
-    },
-    "uat": {
-      "label": "UAT",
-      "baseUrl": "https://demoportaluat.channel-fusion.com",
-      "apiUrl": "https://demoportaluat.channel-fusion.com",
-      "envFile": "uat"
-    },
-    "testing": {
-      "label": "Testing",
-      "baseUrl": "https://demoportaltest.channel-fusion.com",
-      "apiUrl": "https://demoportaltest.channel-fusion.com",
-      "envFile": "testing"
-    },
-    "dev": {
-      "label": "Dev",
-      "baseUrl": "https://demoportaldev.channel-fusion.com",
-      "apiUrl": "https://demoportaldev.channel-fusion.com",
-      "envFile": "dev"
-    }
-  },
-  "roles": ["dealer", "admin"],
-  "defaultEnvironment": "production",
-  "featureFlags": {
-    "engageAds": true,
-    "coop": true,
-    "popshop": true
-  }
+    "clientId":  "demoportal",
+    "displayName":  "DemoPortal",
+    "platform":  "platform",
+    "defaultEnvironment":  "production",
+    "authentication":  {
+                           "loginPath":  "/Account/Login?returnUrl=%2F",
+                           "roles":  [
+                                         "dealer",
+                                         "admin",
+                                         "distributor"
+                                     ]
+                       },
+    "environments":  {
+                         "dev":  {
+                                     "label":  "Dev",
+                                     "baseUrl":  "https://demoportaldev.channel-fusion.com/Account/Login?returnUrl=%2F",
+                                     "apiUrl":  "https://demoportaldev.channel-fusion.com/Account/Login?returnUrl=%2F",
+                                     "envFile":  "dev"
+                                 },
+                         "testing":  {
+                                         "label":  "Testing",
+                                         "baseUrl":  "https://demoportaltest.channel-fusion.com/Account/Login?returnUrl=%2F",
+                                         "apiUrl":  "https://demoportaltest.channel-fusion.com/Account/Login?returnUrl=%2F",
+                                         "envFile":  "testing"
+                                     },
+                         "uat":  {
+                                     "label":  "UAT",
+                                     "baseUrl":  "https://demoportaluat.channel-fusion.com/Account/Login?returnUrl=%2F",
+                                     "apiUrl":  "https://demoportaluat.channel-fusion.com/Account/Login?returnUrl=%2F",
+                                     "envFile":  "uat"
+                                 },
+                         "production":  {
+                                            "label":  "Production",
+                                            "baseUrl":  "https://demoportal.channel-fusion.com/Account/Login?returnUrl=%2F",
+                                            "apiUrl":  "https://demoportal.channel-fusion.com/Account/Login?returnUrl=%2F",
+                                            "envFile":  "production"
+                                        }
+                     },
+    "featureFlags":  {
+
+                     },
+    "modules":  [
+                    "coop",
+                    "engage-ads",
+                    "popshop",
+                    "rebate"
+                ],
+    "repo":  {
+                 "url":  "",
+                 "branch":  "development",
+                 "localPath":  "D:\\Leads\\DemoPortalV2",
+                 "lastSync":  "",
+                 "lastCommit":  ""
+             },
+    "_generated":  "2026-07-07T09:03:34Z",
+    "_note":  "Run repo-analysis skill to populate featureFlags and modules after onboarding."
 }

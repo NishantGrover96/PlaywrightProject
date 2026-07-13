@@ -1,15 +1,15 @@
 import { test, expect } from '@playwright/test';
-import { FeaturePage } from '../../pages/{{MODULE}}/feature-{{FEATURE}}/FeaturePage';
-import testData from '../../data/{{MODULE}}/feature-{{FEATURE}}/test-data.json';
+import { FeaturePage } from '../../../../pages/{{CLIENT}}/{{MODULE}}/feature-{{FEATURE}}/FeaturePage';
+import testData from '../../../../data/{{CLIENT}}/{{MODULE}}/feature-{{FEATURE}}/test-data.json';
 import * as path from 'path';
 
-const DATA_DIR = path.resolve(__dirname, '../../data/{{MODULE}}/feature-{{FEATURE}}');
+const DATA_DIR = path.resolve(__dirname, '../../../../data/{{CLIENT}}/{{MODULE}}/feature-{{FEATURE}}');
 
 test.describe('{{MODULE_LABEL}} - {{FEATURE_LABEL}}', () => {
 
-  // ──────────────────────────────────────────────────────────
+  // ----------------------------------------------------------
   // Smoke Suite
-  // ──────────────────────────────────────────────────────────
+  // ----------------------------------------------------------
 
   test.describe('Smoke', () => {
 
@@ -21,9 +21,9 @@ test.describe('{{MODULE_LABEL}} - {{FEATURE_LABEL}}', () => {
 
   });
 
-  // ──────────────────────────────────────────────────────────
+  // ----------------------------------------------------------
   // Happy Path
-  // ──────────────────────────────────────────────────────────
+  // ----------------------------------------------------------
 
   test.describe('Happy Path', () => {
 
@@ -35,9 +35,9 @@ test.describe('{{MODULE_LABEL}} - {{FEATURE_LABEL}}', () => {
 
   });
 
-  // ──────────────────────────────────────────────────────────
+  // ----------------------------------------------------------
   // Validation
-  // ──────────────────────────────────────────────────────────
+  // ----------------------------------------------------------
 
   test.describe('Validation', () => {
 
@@ -49,9 +49,9 @@ test.describe('{{MODULE_LABEL}} - {{FEATURE_LABEL}}', () => {
 
   });
 
-  // ──────────────────────────────────────────────────────────
+  // ----------------------------------------------------------
   // Authorization
-  // ──────────────────────────────────────────────────────────
+  // ----------------------------------------------------------
 
   test.describe('Authorization', () => {
 

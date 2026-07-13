@@ -4,17 +4,17 @@
  * Token format (all hex-encoded, colon-separated):
  *   enc:<saltHex>:<ivHex>:<ciphertextHex>:<authTagHex>
  *
- * Key derivation: scrypt(MASTER_KEY, salt, 32) — memory-hard, no extra deps.
+ * Key derivation: scrypt(MASTER_KEY, salt, 32) - memory-hard, no extra deps.
  *
  * MASTER_KEY source (in priority order):
- *   1. process.env.MASTER_KEY   ← set in .env.* files locally, Azure DevOps secret variable in CI
+ *   1. process.env.MASTER_KEY   <- set in .env.* files locally, Azure DevOps secret variable in CI
  *
  * Usage:
  *   const { encryptPassword, decryptPassword, isEncrypted } = require('./utils/crypto-helper');
  *   const token = await encryptPassword('Cfusion2016');
- *   // → "enc:3a9f...:11b2...:ab45...:00ff..."
+ *   // -> "enc:3a9f...:11b2...:ab45...:00ff..."
  *   const plain = await decryptPassword(token);
- *   // → "Cfusion2016"
+ *   // -> "Cfusion2016"
  *
  * Passthrough: if value does not start with "enc:" it is returned unchanged.
  * This lets plain-text values work without any migration.
@@ -32,7 +32,7 @@ const SCRYPT_N     = 16384;
 const SCRYPT_r     = 8;
 const SCRYPT_p     = 1;
 
-// ── Master passphrase ──────────────────────────────────────────────────────
+// -- Master passphrase ------------------------------------------------------
 
 function getMasterPassphrase() {
   const key = process.env.MASTER_KEY;
@@ -45,7 +45,7 @@ function getMasterPassphrase() {
   return key;
 }
 
-// ── Key derivation ─────────────────────────────────────────────────────────
+// -- Key derivation ---------------------------------------------------------
 
 function deriveKey(passphrase, salt) {
   return new Promise((resolve, reject) => {
@@ -62,7 +62,7 @@ function deriveKey(passphrase, salt) {
   });
 }
 
-// ── Encryption ─────────────────────────────────────────────────────────────
+// -- Encryption -------------------------------------------------------------
 
 /**
  * Encrypt a plaintext string.
@@ -82,7 +82,7 @@ async function encryptPassword(plaintext) {
   return `enc:${salt.toString("hex")}:${iv.toString("hex")}:${enc.toString("hex")}:${tag.toString("hex")}`;
 }
 
-// ── Decryption ─────────────────────────────────────────────────────────────
+// -- Decryption -------------------------------------------------------------
 
 /**
  * Decrypt a token produced by encryptPassword().
@@ -114,11 +114,11 @@ async function decryptPassword(value) {
     const plain = Buffer.concat([decipher.update(ciphertext), decipher.final()]);
     return plain.toString("utf8");
   } catch {
-    throw new Error("[crypto-helper] Decryption failed — wrong MASTER_KEY or corrupted token.");
+    throw new Error("[crypto-helper] Decryption failed - wrong MASTER_KEY or corrupted token.");
   }
 }
 
-// ── Helpers ────────────────────────────────────────────────────────────────
+// -- Helpers ----------------------------------------------------------------
 
 /**
  * Returns true if value is an encrypted token (starts with "enc:").

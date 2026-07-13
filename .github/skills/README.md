@@ -2,7 +2,7 @@
 
 These skills are copied from .claude/skills using directory format for Copilot CLI compatibility.
 
-## Functional QA Test Generation Pipeline (new — no legacy/modern comparison)
+## Functional QA Test Generation Pipeline (new - no legacy/modern comparison)
 
 - functional-qa-test-generation *(orchestrator)*
 - repo-analysis

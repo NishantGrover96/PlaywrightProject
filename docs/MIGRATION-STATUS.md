@@ -1,15 +1,15 @@
-# Migration QA Framework — Status Report
+# Migration QA Framework - Status Report
 
 **Generated**: 2026-06-18  
 **Repository**: DealerPlatform.QA
 
 ## Executive Summary
 
-Both **feature-submit-claim** and **feature-submit-preapproval** have completed all Migration QA Framework pipeline steps (Steps 2 → 2.5 → 2.6 → 3) with full Playwright test suite implementation.
+Both **feature-submit-claim** and **feature-submit-preapproval** have completed all Migration QA Framework pipeline steps (Steps 2 -> 2.5 -> 2.6 -> 3) with full Playwright test suite implementation.
 
 ---
 
-## Feature: Coop — Submit Claim
+## Feature: Coop - Submit Claim
 
 ### Pipeline Steps
 
@@ -45,7 +45,7 @@ Both **feature-submit-claim** and **feature-submit-preapproval** have completed 
 
 ---
 
-## Feature: Coop — Submit Pre-Approval
+## Feature: Coop - Submit Pre-Approval
 
 ### Pipeline Steps
 
@@ -97,16 +97,16 @@ http://localhost:3333
 ### Quick Run Commands
 
 ```bash
-# Submit Claim — Smoke
+# Submit Claim - Smoke
 npx playwright test tests/playwright/specs/coop/feature-submit-claim/submit-claim.spec.ts --grep @smoke
 
-# Submit Claim — Regression
+# Submit Claim - Regression
 npx playwright test tests/playwright/specs/coop/feature-submit-claim/submit-claim.spec.ts --grep @regression
 
-# Submit Pre-Approval — Smoke
+# Submit Pre-Approval - Smoke
 npx playwright test tests/playwright/specs/coop/feature-submit-preapproval/submit-preapproval.spec.ts --grep @smoke
 
-# Submit Pre-Approval — Regression
+# Submit Pre-Approval - Regression
 npx playwright test tests/playwright/specs/coop/feature-submit-preapproval/submit-preapproval.spec.ts --grep @regression
 ```
 
@@ -114,19 +114,19 @@ npx playwright test tests/playwright/specs/coop/feature-submit-preapproval/submi
 
 ## Next Steps (Optional Enhancements)
 
-### Priority 1 — Test Execution
+### Priority 1 - Test Execution
 - [ ] Fix Playwright config dependency issues (currently blocking test runs)
 - [ ] Run full smoke suite on production environment
 - [ ] Run regression suite on testing environment
 - [ ] Address 6 `fixme` tests in submit-claim
 - [ ] Address 1 `fixme` test in submit-preapproval
 
-### Priority 2 — Documentation
+### Priority 2 - Documentation
 - [ ] Convert submit-preapproval catalog to HTML format (matching submit-claim)
 - [ ] Add screenshots to HTML catalogs for key workflows
 - [ ] Update gap analysis with mitigation strategies for medium-priority gaps
 
-### Priority 3 — Coverage
+### Priority 3 - Coverage
 - [ ] Implement remaining 6 submit-claim tests (marked fixme)
 - [ ] Implement remaining 1 submit-preapproval test (marked fixme)
 - [ ] Add E2E flows for full transaction scenarios
@@ -140,7 +140,7 @@ npx playwright test tests/playwright/specs/coop/feature-submit-preapproval/submi
 @('functional-units', 'gap-analysis', 'coverage-matrix', 'signoff', 'smoke-suite', 'regression-suite', 'e2e-suite') | ForEach-Object {
   $sc = Test-Path "docs\functional-catalogs\coop\feature-submit-claim\$_.md"
   $spa = Test-Path "docs\functional-catalogs\coop\feature-submit-preapproval\$_.md"
-  Write-Output "$_ : submit-claim=$(if($sc){'✓'}else{'✗'}), submit-preapproval=$(if($spa){'✓'}else{'✗'})"
+  Write-Output "$_ : submit-claim=$(if($sc){''}else{'✗'}), submit-preapproval=$(if($spa){''}else{'✗'})"
 }
 
 # Verify all test files exist
@@ -155,7 +155,7 @@ node dashboard/server.js
 
 ## Conclusion
 
-**Both features are migration-ready** with complete documentation coverage, gap analysis, sign-off approval, and Playwright test suites. All pipeline steps (2 → 2.5 → 2.6 → 3) are complete. Test execution requires Playwright config fixes but all test code is implemented and ready.
+**Both features are migration-ready** with complete documentation coverage, gap analysis, sign-off approval, and Playwright test suites. All pipeline steps (2 -> 2.5 -> 2.6 -> 3) are complete. Test execution requires Playwright config fixes but all test code is implemented and ready.
 
 **Overall Completion**: ✅ **100%** (documentation + test generation)  
 **Test Execution Status**: ⏸️ Pending config fixes

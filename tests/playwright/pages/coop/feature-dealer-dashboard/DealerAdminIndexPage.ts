@@ -7,7 +7,7 @@ import { Page, Locator } from '@playwright/test';
  * 
  * Responsibilities:
  * - Multi-field dealer search
- * - Cascading dropdowns (Country → State)
+ * - Cascading dropdowns (Country -> State)
  * - Results table with pagination
  * - Admin-only access
  * 
