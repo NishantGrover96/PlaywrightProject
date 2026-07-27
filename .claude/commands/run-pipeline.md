@@ -66,6 +66,11 @@ This creates the spec/page-object/helpers/test-data/api-spec/database-script stu
 placeholder functional-catalog HTML page under client-scoped paths. If it fails, report the
 PowerShell error and stop — Steps 3–4 depend on these files existing.
 
+This step is fully self-contained — do not consult the `/scaffold` command or the `scaffold`
+skill for guidance here, and do not follow any "next step" instruction from elsewhere. This
+pipeline is functional QA only (no legacy/modern comparison); once the scaffold script succeeds,
+continue directly to **Step 3** below.
+
 ---
 
 ## Step 3 — Functional Test Catalog
