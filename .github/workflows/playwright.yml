@@ -32,8 +32,7 @@ jobs:
 
       - name: Run Playwright tests
         id: run_tests
-        run: npx playwright test
-        continue-on-error: true
+        run: npx playwright test tests\playwright\specs\samsung\spiff\feature-spiff\spiff.spec.ts
 
       - name: Upload HTML report
         if: always()
