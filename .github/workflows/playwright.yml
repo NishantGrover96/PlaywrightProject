@@ -11,13 +11,20 @@ jobs:
     timeout-minutes: 60
 
     env:
-      TEST_ENV: UAT
+      # Must stay lowercase - matches .env.uat and the EnvironmentName type
+      # in playwright.config.ts. Uppercase silently fails to load that file
+      # on a case-sensitive Linux runner. UAT (not production) is deliberate:
+      # production is the real, live Samsung HVAC site - never run tests there.
+      TEST_ENV: uat
       CI: true
       # Scopes the run to samsung's own projects only. Without this, Playwright
       # fans out across every discovered client's setup project (browser-kind
       # projects in playwright.config.ts aren't scoped per client/spec folder),
       # so a single-file run still requires every other client's credentials.
       CLIENT_ID: samsung
+      # Explicit, not left to .env.uat - that shared file's BASE_URL points at
+      # DemoPortal, not Samsung (it's not scoped per client).
+      BASE_URL: https://samsungportaluat.channel-fusion.com
       SAMSUNG_DEALER_EMAIL: ${{ secrets.SAMSUNG_DEALER_EMAIL }}
       SAMSUNG_DEALER_PASSWORD: ${{ secrets.SAMSUNG_DEALER_PASSWORD }}
       SAMSUNG_ADMIN_EMAIL: ${{ secrets.SAMSUNG_ADMIN_EMAIL }}
@@ -41,7 +48,16 @@ jobs:
 
       - name: Run Playwright tests
         id: run_tests
-        run: npx playwright test tests/playwright/specs/samsung/spiff/feature-spiff/spiff.spec.ts
+        # --project=chromium: samsung is a "legacy-shared" client, so its
+        # dealer-role project is just named "chromium" (shared across all
+        # legacy clients) - CLIENT_ID above scopes it to samsung specifically.
+        # --no-deps: spiff.spec.ts logs in inline per test (loginAsSpiffUser)
+        # and never uses a saved storageState, so the "setup"/"setup-admin"
+        # dependency (a generic bootstrap script shared with demoportal/
+        # certainteed that navigates to /CoopManagement/Dashboard) is not
+        # needed here and would otherwise gate the whole run on unrelated
+        # credentials/behavior.
+        run: npx playwright test tests/playwright/specs/samsung/spiff/feature-spiff/spiff.spec.ts --project=chromium --no-deps
 
       - name: Upload HTML report
         if: always()
