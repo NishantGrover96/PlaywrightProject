@@ -11,17 +11,17 @@ jobs:
     timeout-minutes: 60
 
     env:
-      TEST_ENV: production
+      TEST_ENV: UAT
       CI: true
       # Scopes the run to samsung's own projects only. Without this, Playwright
       # fans out across every discovered client's setup project (browser-kind
       # projects in playwright.config.ts aren't scoped per client/spec folder),
       # so a single-file run still requires every other client's credentials.
       CLIENT_ID: samsung
-      TEST_USER_EMAIL: ${{ secrets.SAMSUNG_DEALER_EMAIL }}
-      TEST_USER_PASSWORD: ${{ secrets.SAMSUNG_DEALER_PASSWORD }}
-      ADMIN_EMAIL: ${{ secrets.SAMSUNG_ADMIN_EMAIL }}
-      ADMIN_PASSWORD: ${{ secrets.SAMSUNG_ADMIN_PASSWORD }}
+      SAMSUNG_DEALER_EMAIL: ${{ secrets.SAMSUNG_DEALER_EMAIL }}
+      SAMSUNG_DEALER_PASSWORD: ${{ secrets.SAMSUNG_DEALER_PASSWORD }}
+      SAMSUNG_ADMIN_EMAIL: ${{ secrets.SAMSUNG_ADMIN_EMAIL }}
+      SAMSUNG_ADMIN_PASSWORD: ${{ secrets.SAMSUNG_ADMIN_PASSWORD }}
 
     steps:
       - name: Checkout code
