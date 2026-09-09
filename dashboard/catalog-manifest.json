@@ -1203,5 +1203,61 @@
                                                        "low":  0
                                                    },
                                           "lastRun":  null
-                                      }
+                                      },
+    "spiff-feature-spiff":  {
+                                "feature":  "SPIFF - SPIFF (Flip to Samsung)",
+                                "catalogFile":  "functional-catalogs/samsung/spiff/feature-spiff/functional-units.html",
+                                "version":  "v1",
+                                "generated":  "2026-09-09",
+                                "auditedAs":  "Samsung Portal repo discovery only - no live UI analysis (2026-09-09)",
+                                "lastUpdated":  "2026-09-09T00:00:00Z",
+                                "client":  "samsung",
+                                "module":  "spiff",
+                                "role":  "dealer",
+                                "pipeline":  "functional-qa",
+                                "sections":  3,
+                                "implementationStatus":  {
+                                                             "smoke":  {
+                                                                           "implemented":  false,
+                                                                           "lastUpdated":  null
+                                                                       },
+                                                             "regression":  {
+                                                                                "implemented":  false,
+                                                                                "lastUpdated":  null
+                                                                            },
+                                                             "e2e":  {
+                                                                         "implemented":  false,
+                                                                         "lastUpdated":  null
+                                                                     },
+                                                             "functionalUnit":  {
+                                                                                    "implemented":  true,
+                                                                                    "lastUpdated":  "2026-09-09T00:00:00Z"
+                                                                                }
+                                                         },
+                                "specFiles":  {
+                                                  "smoke":  "tests/playwright/specs/samsung/spiff/feature-spiff/spiff.spec.ts",
+                                                  "regression":  "tests/playwright/specs/samsung/spiff/feature-spiff/spiff.spec.ts",
+                                                  "e2e":  "tests/playwright/specs/samsung/spiff/feature-spiff/spiff.spec.ts",
+                                                  "api":  "tests/api/samsung/spiff/feature-spiff/spiff.api.spec.ts"
+                                              },
+                                "tests":  {
+                                              "total":  28,
+                                              "implemented":  0,
+                                              "fixme":  0
+                                          },
+                                "coverage":  {
+                                                 "functional":  0,
+                                                 "validation":  0,
+                                                 "workflow":  0,
+                                                 "database":  0,
+                                                 "security":  0
+                                             },
+                                "gaps":  {
+                                             "critical":  0,
+                                             "high":  0,
+                                             "medium":  0,
+                                             "low":  0
+                                         },
+                                "lastRun":  null
+                            }
 }

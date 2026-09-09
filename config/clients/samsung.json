@@ -13,7 +13,8 @@
                        },
     "modules":  [
                     "coop",
-                    "incentive"
+                    "incentive",
+                    "spiff"
                 ],
     "repository":  {
                        "_comment":  "Populate localPath in config/repos.local.json",

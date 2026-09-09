@@ -120,6 +120,12 @@ DealerPlatform.QA/
 |---|---|---|
 | New Order | `feature-new-order` | Scaffolded |
 
+### Samsung - SPIFF (`spiff`)
+
+| Feature | Folder | Status |
+|---|---|---|
+| SPIFF (Flip to Samsung) | `feature-spiff` | In Progress |
+
 ### Planned Modules
 - Rebate
 - Rewards

@@ -1,0 +1,74 @@
+{
+  "users": {
+    "sa":      { "email": "", "password": "", "userType": "SA",    "description": "Sales Associate; submits claims, views own claim history only" },
+    "bmdlr":   { "email": "", "password": "", "userType": "BMDLR", "description": "Store owner / dealer; approves SA registration, sees store-scoped claims" },
+    "ret":     { "email": "", "password": "", "userType": "RET",   "description": "Retailer-scoped role; same store-owner-style access as BMDLR for SPIFF" },
+    "bmadmin": { "email": "", "password": "", "userType": "BMADMIN", "description": "Admin; processes claims (approve/deny), sees all claims, full search filters" },
+    "scf":     { "email": "", "password": "", "userType": "SCF",   "description": "Corporate/finance admin; same elevated SPIFF access as BMADMIN" },
+    "specRep": { "email": "", "password": "", "userType": "SPR",   "description": "SPEC REP role; existing portal user, should access SPIFF without duplicate registration (SPIFF-03)" },
+    "distributor": { "email": "", "password": "", "userType": "DIST", "description": "Distributor role (BMDIST/DIST/GDIST/RDIST family); should access SPIFF without duplicate registration (SPIFF-03)" },
+    "nonEligible": { "email": "", "password": "", "userType": "", "description": "User with no SPIFF-eligible role, used for SPIFF-11 negative access checks" }
+  },
+  "claim": {
+    "quoteNumber":        "",
+    "dateOfSale":         "",
+    "projectName":        "",
+    "projectCity":        "",
+    "projectState":       "",
+    "originalBOD":        "",
+    "engineeringFirm":    "",
+    "engineeringContact": "",
+    "engineeringPhone":   "",
+    "engineeringEmail":   "",
+    "submissionComments": "",
+    "tonnageR410A":       "",
+    "tonnageOther":       "",
+    "description": "Real values must be supplied per environment before running claim-submission specs. Formats: dateOfSale=MM/DD/YYYY, engineeringPhone auto-formats to XXX-XXX-XXXX client-side."
+  },
+  "invalidClaim": {
+    "invalidEngineeringPhone": "12345",
+    "description": "10-digit format is enforced client-side; a partial/invalid number should show #spnPhoneError and block #btnAddItem from adding a line (SPIFF-07)."
+  },
+  "program": {
+    "activeProgramName": "",
+    "description": "Name of an active SPIFF/Flip program as it appears on CurrentSPIFF - required to open the claim form via openClaimFormForProgram()."
+  },
+  "claimHistory": {
+    "knownClaimId": "",
+    "knownQuoteNumber": "",
+    "nonExistentClaimId": "9999999999",
+    "description": "knownClaimId/knownQuoteNumber should reference a claim that exists for the test SA account; used as a standalone-run fallback when a spec doesn't submit its own claim first."
+  },
+  "documents": {
+    "invoiceFixturePath": "tests/playwright/fixtures/spiff/sample-invoice.pdf",
+    "description": "Repo-relative fixture path for Dropzone upload tests - add a real sample PDF at this path before running upload-dependent specs."
+  },
+  "expectedEndpoints": {
+    "submitClaim":       "OnPostSubmitClaim",
+    "saveClaim":         "OnPostSaveClaim",
+    "uploadDoc":         "OnPostUploadDoc",
+    "processLineItem":   "OnPostProcessLineItem",
+    "adjustmentReasons": "OnPostAdjustmentReasons",
+    "bindReportList":    "BindReportList",
+    "bindProcessReportList": "BindProcessReportList",
+    "deleteClaim":       "OnPostDeleteClaim"
+  },
+  "expectedText": {
+    "claimSubmittedHeading": "Congratulations!",
+    "claimTrackingPrefix":   "Your claim tracking #",
+    "phoneValidationError":  "Please enter a valid phone number in the format 123-123-1234.",
+    "emailValidationError":  "Please enter a valid email address.",
+    "acceptTermsError":      "Please accept checkbox first!",
+    "claimProcessedMessage": "Claim has been processed successfully.",
+    "loginErrorSelector":    "#dvloginMessage"
+  },
+  "statusValues": {
+    "approve": "4",
+    "deny": "5",
+    "approvedRebateStatusSeq": 4,
+    "approveForPaymentRebateStatusSeq": 18,
+    "paidRebateStatusSeq": 12,
+    "physicalPaymentTypeSeq": 6,
+    "description": "Sourced from docs/modules/SPIFF.instructions.md 'Config Values' table and ProcessClaims select.selectStatus option values confirmed in the Samsung spec files."
+  }
+}
