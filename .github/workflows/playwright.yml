@@ -46,6 +46,17 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
+      - name: Create placeholder auth storage state
+        # The "chromium" project's config still points at
+        # tests/playwright/fixtures/.auth/user.json (only ever created by the
+        # "setup" project, which --no-deps below intentionally skips). SPIFF
+        # tests don't use this saved session at all (they log in inline via
+        # loginAsSpiffUser), so an empty state just satisfies Playwright's
+        # requirement that the file exist.
+        run: |
+          mkdir -p tests/playwright/fixtures/.auth
+          echo '{"cookies":[],"origins":[]}' > tests/playwright/fixtures/.auth/user.json
+
       - name: Run Playwright tests
         id: run_tests
         # --project=chromium: samsung is a "legacy-shared" client, so its
