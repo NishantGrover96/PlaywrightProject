@@ -30,7 +30,7 @@
     "description": "10-digit format is enforced client-side; a partial/invalid number should show #spnPhoneError and block #btnAddItem from adding a line (SPIFF-07)."
   },
   "program": {
-    "activeProgramName": "",
+    "activeProgramName": "2026 Flip to Samsung",
     "description": "Name of an active SPIFF/Flip program as it appears on CurrentSPIFF - required to open the claim form via openClaimFormForProgram()."
   },
   "claimHistory": {

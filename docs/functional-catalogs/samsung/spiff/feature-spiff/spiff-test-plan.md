@@ -100,16 +100,21 @@ See `test-catalog.md`'s BR-001..BR-012 table - carried forward unchanged from th
 
 ## 15. Smoke Candidates
 
-Unchanged from `test-catalog.md`'s existing 5 smoke tests (`SPIFF-SMOKE-001..005`).
+`SPIFF-SMOKE-001` through `SPIFF-SMOKE-004`: automated and **passing** against UAT as of 2026-09-09 (see `spiff-coverage-report.md`). `SPIFF-SMOKE-005` (admin): not yet run - needs a confirmed BMADMIN account.
 
 ## 16. Regression Candidates
 
-Unchanged from `test-catalog.md`'s existing 21 regression tests (`SPIFF-TC-001..021`).
+Unchanged from `test-catalog.md`'s existing 21 regression tests (`SPIFF-TC-001..021`) - not yet executed against the live app.
 
 ## 17. Automation Risks / Gaps
 
-1. **Automated `spiff.spec.ts` has not yet been executed against the live app** - only a manual live walkthrough (this session) and the earlier build's static locator verification have occurred. Running the suite requires wiring real credentials into `test-data.json` (currently blank placeholders by design - see [[feedback memory]] on credential handling) or an env-based secret source.
+1. **Only the smoke tier has been executed.** `SPIFF-SMOKE-001..004` pass against UAT (confirmed 2026-09-09). The 21 regression tests, 2 e2e tests, and `SPIFF-SMOKE-005` (admin) have not been run. Run them from a local terminal (the `npx playwright test` Auto-Mode execution block encountered earlier in this session's history was eventually worked around - see `spiff-coverage-report.md`'s "Resolved this session" note - but the exact fix is unconfirmed, so budget for it recurring):
+   ```
+   CLIENT_ID=samsung TEST_ENV=uat BASE_URL=https://samsungportaluat.channel-fusion.com TEST_USER_EMAIL="<user>" TEST_USER_PASSWORD="<pass>" npx playwright test tests/playwright/specs/samsung/spiff/feature-spiff/spiff.spec.ts --project=chromium --reporter=list
+   ```
+   (temporarily fill the relevant `testData.users.*.email`/`.password` fields to match the credentials used for `TEST_USER_EMAIL`/`PASSWORD` above, run, then blank them again before committing - never commit real credentials into `test-data.json`). `SPIFF-SMOKE-005` and any `bmadmin`-role test additionally need a confirmed admin account, which this session did not have.
 2. Registration/tax-gating/program-creation flows remain unautomated (see Scope).
 3. Document-upload-count assertion helper is missing (`uploadedFileNameLink` locator does not reliably reflect the multi-file state - see Discovery Section 4).
 4. Company Representative role is unverified end-to-end - the one live credential set provided failed login.
 5. Role-specific UI differences beyond the 4 tested roles are unconfirmed.
+6. No gitignored env file or secret store is wired up for SPIFF credentials yet - every run this session required a manual fill-and-revert of `test-data.json`/shell env vars, which is error-prone as a recurring workflow.
