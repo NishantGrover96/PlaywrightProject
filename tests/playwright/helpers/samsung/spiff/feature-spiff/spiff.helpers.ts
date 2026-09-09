@@ -27,6 +27,24 @@ export async function loginAsSpiffUser(page: Page, email: string, password: stri
     .toBeVisible({ timeout: 30_000 });
 }
 
+/**
+ * Attempt a login expected to fail (wrong password) and wait for the
+ * login-error element to appear. Shares the same selectors as
+ * loginAsSpiffUser() rather than duplicating them at the spec level.
+ */
+export async function attemptLoginExpectFailure(
+  page: Page,
+  email: string,
+  loginErrorSelector: string
+): Promise<void> {
+  await page.goto('/account/login', { waitUntil: 'load' });
+  await page.locator('#UserLogin_Username').waitFor({ state: 'visible', timeout: 15_000 });
+  await page.locator('#UserLogin_Username').fill(email);
+  await page.locator('#UserLogin_Password').fill('WrongPassword@0000');
+  await page.locator('#btnLogin').click();
+  await expect(page.locator(loginErrorSelector)).toBeVisible({ timeout: 45_000 });
+}
+
 /** Log out via the user icon -> Sign Out, matching flip-program-test-suite.spec.js. */
 export async function logoutSpiffUser(page: Page): Promise<void> {
   const userIconBtn = page
@@ -93,12 +111,37 @@ export async function submitFullClaim(
  * Attempt to add a line item with an invalid engineering phone number and
  * assert the field-level validation blocks it (no claim line is added).
  * Mirrors flip-program-test-suite.spec.js TC-06.
+ *
+ * Fills every other required header field with valid synthetic values first,
+ * so the resulting #spnPhoneError can only be attributed to the phone field
+ * itself - not to unrelated missing-required-field validation on an
+ * otherwise-empty form.
  */
 export async function expectInvalidPhoneBlocksLineItem(
   claimPage: SpiffClaimPage,
   invalidPhone: string
 ): Promise<void> {
-  await claimPage.engineeringPhoneInput.fill(invalidPhone);
+  const today = new Date();
+  const dateOfSale = [
+    String(today.getMonth() + 1).padStart(2, '0'),
+    String(today.getDate()).padStart(2, '0'),
+    today.getFullYear(),
+  ].join('/');
+
+  await claimPage.fillHeaderFields({
+    quoteNumber: 'QA-PHONE-VALIDATION-TEST',
+    dateOfSale,
+    projectName: 'QA Validation Test Project',
+    projectCity: 'Ridgeland',
+    projectState: 'MS',
+    originalBOD: 'Carrier',
+    engineeringFirm: 'QA Engineering LLC',
+    engineeringContact: 'QA Tester',
+    engineeringPhone: invalidPhone,
+    engineeringEmail: 'qa-test@example.com',
+  });
+  await claimPage.fillTonnage('1', '0');
+
   await claimPage.addLineItemButton.click();
   await claimPage.expectPhoneValidationError();
   await claimPage.expectNoClaimLines();

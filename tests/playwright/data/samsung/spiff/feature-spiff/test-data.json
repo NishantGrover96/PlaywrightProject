@@ -40,7 +40,7 @@
     "description": "knownClaimId/knownQuoteNumber should reference a claim that exists for the test SA account; used as a standalone-run fallback when a spec doesn't submit its own claim first."
   },
   "documents": {
-    "invoiceFixturePath": "tests/playwright/fixtures/spiff/sample-invoice.pdf",
+    "invoiceFixturePath": "tests/playwright/fixtures/samsung/spiff/claim-document-sample.pdf",
     "description": "Repo-relative fixture path for Dropzone upload tests - add a real sample PDF at this path before running upload-dependent specs."
   },
   "expectedEndpoints": {

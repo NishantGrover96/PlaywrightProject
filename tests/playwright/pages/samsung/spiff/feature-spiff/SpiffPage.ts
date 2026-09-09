@@ -151,7 +151,11 @@ export class SpiffClaimPage {
     this.tonnageOtherError      = page.locator('#spnQuantityOtherError');
     this.atLeastOneTonnageError = page.locator('#spnAtLeastOneError');
 
-    this.dropzoneUpload       = page.locator('#dropzone_fuBGImage');
+    // Confirmed live: Dropzone's click-to-upload handler is bound to the
+    // outer .uploadBlock wrapper, not #dropzone_fuBGImage itself (despite
+    // the latter carrying the dz-clickable CSS class) - clicking
+    // #dropzone_fuBGImage directly never opens the file chooser.
+    this.dropzoneUpload       = page.locator('.uploadBlock');
     this.dropzoneFileInput    = page.locator('#dropzone_fuBGImage input[type="file"]');
     this.uploadedFileNameLink = page.locator('#lblUploadedFileName');
     this.documentError        = page.locator('#BG_Error');
@@ -178,12 +182,15 @@ export class SpiffClaimPage {
   /**
    * Real-world claim-form entry path (no direct deep link - see class note):
    * CurrentSPIFF -> row containing `programName` -> its "Submit a Claim" action.
-   * Mirrors flip-program-test-suite.spec.js TC-03/TC-04.
+   * Mirrors flip-program-test-suite.spec.js TC-03/TC-04. Scoped to
+   * #tblReport (confirmed id, CurrentSPIFF.cshtml:97) rather than a broad
+   * tag/class union - an earlier, unscoped version of this locator matched
+   * an unrelated page element and caused SPIFF-SMOKE-003 to time out.
    */
   async openClaimFormForProgram(programName: string): Promise<void> {
     await this.navigateToCurrentSpiff();
     const programRow = this.page
-      .locator('tr, .card, li, div[class*="row"]')
+      .locator('#tblReport tbody tr')
       .filter({ hasText: programName });
     const rowCount = await programRow.count();
     if (rowCount === 0) {
@@ -242,39 +249,68 @@ export class SpiffClaimPage {
   }
 
   /**
-   * Sets the invoice file on Dropzone's hidden file input; falls back to the
-   * native file-chooser event if the hidden input isn't directly settable.
+   * Uploads via Dropzone's native flow: click the dropzone to open the file
+   * chooser, then set the file(s) on it. Confirmed live this session that
+   * setting files directly on the hidden input (bypassing the click) does
+   * NOT reliably trigger Dropzone's upload - the click-triggered path is the
+   * only one confirmed to actually fire the upload request.
+   *
+   * Then waits for Dropzone's async upload POST to finish - without this,
+   * "Add line item" can be clicked before the file has actually finished
+   * uploading server-side, silently blocking the line from being added
+   * (confirmed live: the same single-file upload succeeds when there's
+   * natural delay before "Add line item" is clicked, but fails when the two
+   * actions fire back-to-back with no wait). Endpoint confirmed live via
+   * network capture: POST .../Rewards/SPIFF/AddClaim/UploadDoc - note this
+   * does NOT match test-data.json's expectedEndpoints.uploadDoc
+   * ("OnPostUploadDoc"), which appears to be a systematic naming mismatch
+   * across that whole block (real URLs use the bare handler name, not the
+   * "OnPost"-prefixed C# method name) - not fixed here, out of scope for
+   * this change, flagged for a follow-up pass.
    */
-  async uploadInvoiceDocument(filePath: string): Promise<void> {
-    try {
-      await this.dropzoneFileInput.waitFor({ state: 'attached', timeout: 5_000 });
-      await this.dropzoneFileInput.setInputFiles(filePath);
-    } catch {
-      const [fileChooser] = await Promise.all([
-        this.page.waitForEvent('filechooser'),
-        this.dropzoneUpload.click(),
-      ]);
-      await fileChooser.setFiles(filePath);
-    }
+  async uploadInvoiceDocument(filePath: string | string[]): Promise<void> {
+    // AddClaim fires several background AJAX calls on load (RebateCampaign
+    // lookup, UserStore, invoice-file list); clicking the dropzone before
+    // these settle intermittently misses Dropzone's click handler entirely
+    // (confirmed live: repeated runs sometimes never opened a file chooser
+    // at all). Wait for the page to go quiet first.
+    await this.page.waitForLoadState('networkidle');
+    await this.dropzoneUpload.waitFor({ state: 'visible', timeout: 15_000 });
+
+    const uploadResponse = this.page.waitForResponse(
+      (r) => r.url().includes('/UploadDoc') && r.request().method() === 'POST',
+      { timeout: 30_000 }
+    );
+    const [fileChooser] = await Promise.all([
+      this.page.waitForEvent('filechooser'),
+      this.dropzoneUpload.click(),
+    ]);
+    await fileChooser.setFiles(filePath);
+    await uploadResponse;
   }
 
+  /**
+   * Clicking "Add line item" triggers an async validation/save round-trip
+   * (a loading spinner briefly appears) before #tblClaimLines actually
+   * updates - confirmed live: checking the row count immediately after the
+   * click can read a stale (zero-row) state, and this isn't reliably tied
+   * to network idle. Wait directly for the expected outcome: the first
+   * claim-line row actually appearing.
+   */
   async addLineItem(): Promise<void> {
     await this.addLineItemButton.waitFor({ state: 'visible', timeout: 15_000 });
     await this.addLineItemButton.click();
+    await this.claimLinesRows.first().waitFor({ state: 'attached', timeout: 20_000 });
   }
 
   async getClaimLineCount(): Promise<number> {
     return this.claimLinesRows.count();
   }
 
-  /**
-   * Confirmed live: #chkAccept renders as a normal, visible checkbox (class
-   * "require-one") - a plain click/check works without {force: true}. Kept
-   * here for resilience in case a future skin hides it again.
-   */
+  /** Confirmed live: #chkAccept renders as a normal, visible checkbox (class "require-one"). */
   async acceptTerms(): Promise<void> {
-    await this.acceptTermsCheckbox.waitFor({ state: 'attached' });
-    await this.acceptTermsCheckbox.check({ force: true });
+    await this.acceptTermsCheckbox.waitFor({ state: 'visible' });
+    await this.acceptTermsCheckbox.check();
     await expect(this.acceptTermsCheckbox).toBeChecked();
   }
 
@@ -555,10 +591,9 @@ export class SpiffClaimHistoryPage {
    * report) or its tbody shows a single dataTables_empty row.
    */
   async expectNoResults(): Promise<void> {
-    const tableVisible = await this.resultsTable.isVisible().catch(() => false);
+    const tableVisible = await this.resultsTable.isVisible();
     if (!tableVisible) return;
-    const emptyCell = this.resultsTable.locator('td.dataTables_empty');
-    const isEmptyVisible = await emptyCell.isVisible().catch(() => false);
+    const isEmptyVisible = await this.resultsTable.locator('td.dataTables_empty').isVisible();
     if (isEmptyVisible) return;
     await expect(this.resultsRows).toHaveCount(0);
   }

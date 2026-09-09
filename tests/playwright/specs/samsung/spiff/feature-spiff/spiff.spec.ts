@@ -7,6 +7,7 @@ import {
 } from '../../../../pages/samsung/spiff/feature-spiff/SpiffPage';
 import {
   loginAsSpiffUser,
+  attemptLoginExpectFailure,
   logoutSpiffUser,
   openClaimForm,
   submitFullClaim,
@@ -33,12 +34,11 @@ test.describe('Samsung - SPIFF (Flip to Samsung)', () => {
     });
 
     test('SPIFF-SMOKE-002 - invalid credentials show login error @smoke @critical', async ({ page }) => {
-      await page.goto('/account/login', { waitUntil: 'load' });
-      await page.locator('#UserLogin_Username').waitFor({ state: 'visible', timeout: 15_000 });
-      await page.locator('#UserLogin_Username').fill(testData.users.sa.email || 'invalid@example.com');
-      await page.locator('#UserLogin_Password').fill('WrongPassword@0000');
-      await page.locator('#btnLogin').click();
-      await expect(page.locator(testData.expectedText.loginErrorSelector)).toBeVisible({ timeout: 45_000 });
+      await attemptLoginExpectFailure(
+        page,
+        testData.users.sa.email || 'invalid@example.com',
+        testData.expectedText.loginErrorSelector
+      );
     });
 
     test('SPIFF-SMOKE-003 - claim form loads with all required fields @smoke @critical', async ({ page }) => {
@@ -84,12 +84,11 @@ test.describe('Samsung - SPIFF (Flip to Samsung)', () => {
     });
 
     test('SPIFF-TC-003 - admin invalid credentials show login error @regression', async ({ page }) => {
-      await page.goto('/account/login', { waitUntil: 'load' });
-      await page.locator('#UserLogin_Username').waitFor({ state: 'visible', timeout: 15_000 });
-      await page.locator('#UserLogin_Username').fill(testData.users.bmadmin.email || 'admin@example.com');
-      await page.locator('#UserLogin_Password').fill('WrongPassword@0000');
-      await page.locator('#btnLogin').click();
-      await expect(page.locator(testData.expectedText.loginErrorSelector)).toBeVisible({ timeout: 45_000 });
+      await attemptLoginExpectFailure(
+        page,
+        testData.users.bmadmin.email || 'admin@example.com',
+        testData.expectedText.loginErrorSelector
+      );
     });
 
   });

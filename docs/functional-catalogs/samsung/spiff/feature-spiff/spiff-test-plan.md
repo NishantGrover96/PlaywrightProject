@@ -44,7 +44,7 @@ See `spiff-discovery.md` Section 2 for the full route table.
 
 ## 7. Workflows
 
-1. **Claim submission**: CurrentSpiff -> AddClaim -> fill header + tonnage -> upload 3 documents -> Add line item (repeatable for multiple lines) -> accept terms -> Submit your claim -> tracking number.
+1. **Claim submission**: CurrentSpiff -> AddClaim -> fill header + tonnage -> upload at least 1 document (up to 3 recommended by the UI, not enforced - see BR-013) -> Add line item (repeatable for multiple lines) -> accept terms -> Submit your claim -> tracking number.
 2. **Claim history (SA)**: SearchClaim -> filter by Claim ID / Quote Number -> view own claims only.
 3. **Claim search + processing (admin)**: SearchClaim `?action=process` -> locate claim -> ProcessClaims -> select line(s) -> set status (approve/deny + reason/comment) -> Process -> success message.
 
@@ -52,13 +52,13 @@ See `spiff-discovery.md` Section 2 for the full route table.
 
 See `test-catalog.md`'s BR-001..BR-012 table - carried forward unchanged from the prior build, cross-checked against this session's live findings with no contradictions found, plus one addition below.
 
-- **BR-013 (new, unconfirmed)**: Claim submission may require exactly 3 uploaded supporting documents (Project-Specification, Mechanical Schedule w/ Competitor's Product, Stamped Mechanical Schedule w/ Samsung Products) - the UI always displays this as a static instruction; whether it is enforced as a hard gate was not tested (all live submissions used exactly 3 files).
+- **BR-013 (confirmed)**: The "upload all three required documents" panel (Project-Specification, Mechanical Schedule w/ Competitor's Product, Stamped Mechanical Schedule w/ Samsung Products) is advisory only, not enforced - confirmed live via `SPIFF-E2E-001`, which successfully submitted a claim with a single uploaded document.
 
 ## 9. Validation Matrix
 
 | Field | Required | Confirmed live |
 |---|---|---|
-| Upload Documents | Yes (per UI) | Enforcement not confirmed (see BR-013) |
+| Upload Documents | At least 1 (UI suggests 3, not enforced) | Confirmed live via `SPIFF-E2E-001` - single-document submission succeeds (BR-013) |
 | Samsung Quote Number | Yes | Format not probed (free text accepted) |
 | Date of Sale | Yes | Must be set via datepicker widget, not typed |
 | Project Name/City/State | Yes | Free text, no format constraint observed |
@@ -104,17 +104,22 @@ See `test-catalog.md`'s BR-001..BR-012 table - carried forward unchanged from th
 
 ## 16. Regression Candidates
 
-Unchanged from `test-catalog.md`'s existing 21 regression tests (`SPIFF-TC-001..021`) - not yet executed against the live app.
+`test-catalog.md`'s existing 21 regression tests (`SPIFF-TC-001..021`) - not yet executed against the live app, except indirectly via the code-review fixes verified through `SPIFF-E2E-001` (see below).
+
+## 16a. E2E Candidates
+
+`SPIFF-E2E-001` (SA submits a full claim end-to-end): automated and **passing** against UAT as of 2026-09-09, after fixing 3 real synchronization/data bugs found during this run (see `spiff-coverage-report.md`'s "SPIFF-E2E-001 Regression Run" section). `SPIFF-E2E-002` (admin processing): not yet run - needs a confirmed BMADMIN account and an existing processable claim.
 
 ## 17. Automation Risks / Gaps
 
-1. **Only the smoke tier has been executed.** `SPIFF-SMOKE-001..004` pass against UAT (confirmed 2026-09-09). The 21 regression tests, 2 e2e tests, and `SPIFF-SMOKE-005` (admin) have not been run. Run them from a local terminal (the `npx playwright test` Auto-Mode execution block encountered earlier in this session's history was eventually worked around - see `spiff-coverage-report.md`'s "Resolved this session" note - but the exact fix is unconfirmed, so budget for it recurring):
+1. **Most of the suite has been executed.** `SPIFF-SMOKE-001..004` and `SPIFF-E2E-001` pass against UAT (confirmed 2026-09-09). The 21 regression tests, `SPIFF-E2E-002`, and `SPIFF-SMOKE-005` still need a run - all need a confirmed BMADMIN account. Run them from a local terminal (the `npx playwright test` Auto-Mode execution block encountered earlier in this session's history was eventually worked around - see `spiff-coverage-report.md`'s "Resolved this session" note - but the exact fix is unconfirmed, so budget for it recurring):
    ```
    CLIENT_ID=samsung TEST_ENV=uat BASE_URL=https://samsungportaluat.channel-fusion.com TEST_USER_EMAIL="<user>" TEST_USER_PASSWORD="<pass>" npx playwright test tests/playwright/specs/samsung/spiff/feature-spiff/spiff.spec.ts --project=chromium --reporter=list
    ```
    (temporarily fill the relevant `testData.users.*.email`/`.password` fields to match the credentials used for `TEST_USER_EMAIL`/`PASSWORD` above, run, then blank them again before committing - never commit real credentials into `test-data.json`). `SPIFF-SMOKE-005` and any `bmadmin`-role test additionally need a confirmed admin account, which this session did not have.
 2. Registration/tax-gating/program-creation flows remain unautomated (see Scope).
-3. Document-upload-count assertion helper is missing (`uploadedFileNameLink` locator does not reliably reflect the multi-file state - see Discovery Section 4).
+3. Document-upload-count assertion helper is missing (`uploadedFileNameLink` locator does not reliably reflect the multi-file state - see Discovery Section 4). Not currently needed since single-document upload is the confirmed-sufficient path (BR-013), but would matter if multi-document assertions are added later.
 4. Company Representative role is unverified end-to-end - the one live credential set provided failed login.
 5. Role-specific UI differences beyond the 4 tested roles are unconfirmed.
 6. No gitignored env file or secret store is wired up for SPIFF credentials yet - every run this session required a manual fill-and-revert of `test-data.json`/shell env vars, which is error-prone as a recurring workflow.
+7. `test-data.json`'s `expectedEndpoints` block appears to have a systematic naming mismatch - values like `"OnPostUploadDoc"` don't match the real URLs (confirmed live: the actual endpoint is `.../AddClaim/UploadDoc`, no "OnPost" prefix). Not currently used by any test, so not fixed this session - flagged for whoever wires it up next.
