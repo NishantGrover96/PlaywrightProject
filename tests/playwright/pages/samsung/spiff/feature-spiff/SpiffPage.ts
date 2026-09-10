@@ -1,4 +1,4 @@
-import { type Page, type Locator, type Response, expect } from '@playwright/test';
+import { type Page, type Locator, type Response, type FileChooser, expect } from '@playwright/test';
 
 // -----------------------------------------------------------------------------
 // Page routes
@@ -269,23 +269,37 @@ export class SpiffClaimPage {
    * this change, flagged for a follow-up pass.
    */
   async uploadInvoiceDocument(filePath: string | string[]): Promise<void> {
-    // AddClaim fires several background AJAX calls on load (RebateCampaign
-    // lookup, UserStore, invoice-file list); clicking the dropzone before
-    // these settle intermittently misses Dropzone's click handler entirely
-    // (confirmed live: repeated runs sometimes never opened a file chooser
-    // at all). Wait for the page to go quiet first.
-    await this.page.waitForLoadState('networkidle');
     await this.dropzoneUpload.waitFor({ state: 'visible', timeout: 15_000 });
 
     const uploadResponse = this.page.waitForResponse(
       (r) => r.url().includes('/UploadDoc') && r.request().method() === 'POST',
       { timeout: 30_000 }
     );
-    const [fileChooser] = await Promise.all([
-      this.page.waitForEvent('filechooser'),
-      this.dropzoneUpload.click(),
-    ]);
-    await fileChooser.setFiles(filePath);
+
+    // Clicking the dropzone intermittently misses Dropzone's click handler
+    // entirely (confirmed live - no filechooser event fires at all, not a
+    // slow one). A `waitForLoadState('networkidle')` guard before the click
+    // was tried first, but proved unreliable: this page has persistent
+    // background network chatter (e.g. a chat widget) that can prevent
+    // "idle" from ever firing, causing a spurious 60s hang unrelated to
+    // actual readiness. Retrying the click itself is the resilient fix -
+    // it directly targets the actual flaky behavior instead of guessing at
+    // a network-based proxy for it.
+    let fileChooser: FileChooser | undefined;
+    const maxAttempts = 3;
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      try {
+        [fileChooser] = await Promise.all([
+          this.page.waitForEvent('filechooser', { timeout: 5_000 }),
+          this.dropzoneUpload.click(),
+        ]);
+        break;
+      } catch (err) {
+        if (attempt === maxAttempts) throw err;
+      }
+    }
+
+    await fileChooser!.setFiles(filePath);
     await uploadResponse;
   }
 

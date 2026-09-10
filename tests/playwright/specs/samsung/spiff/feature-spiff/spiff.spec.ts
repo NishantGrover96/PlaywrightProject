@@ -14,6 +14,8 @@ import {
   logoutSpiffUser,
   openClaimForm,
   submitFullClaim,
+  addClaimLineItem,
+  todayAsDateOfSale,
   expectInvalidPhoneBlocksLineItem,
   navigateToClaimHistory,
   navigateToProcessSearch,
@@ -299,12 +301,57 @@ test.describe('Samsung - SPIFF (Flip to Samsung)', () => {
       await loginAsSpiffUser(page, saEmail, saPassword);
       const claimPage = await openClaimForm(page, testData.program.activeProgramName);
 
+      // The accept-terms checkbox does not exist in the DOM until a line
+      // item has been added (confirmed live) - add one first.
+      await addClaimLineItem(
+        claimPage,
+        {
+          quoteNumber: testData.claim.quoteNumber || 'QA-TC013-VALIDATION',
+          dateOfSale: testData.claim.dateOfSale || todayAsDateOfSale(),
+          projectName: testData.claim.projectName || 'QA TC-013 Validation',
+          projectCity: testData.claim.projectCity || 'Ridgeland',
+          projectState: testData.claim.projectState || 'MS',
+          originalBOD: testData.claim.originalBOD || 'Carrier',
+          engineeringFirm: testData.claim.engineeringFirm || 'QA Engineering LLC',
+          engineeringContact: testData.claim.engineeringContact || 'QA Tester',
+          engineeringPhone: testData.claim.engineeringPhone || '5551230007',
+          engineeringEmail: testData.claim.engineeringEmail || 'qa-test@example.com',
+        },
+        {
+          r410a: testData.claim.tonnageR410A || '1',
+          other: testData.claim.tonnageOther || '0',
+        },
+        testData.documents.invoiceFixturePath
+      );
+
       await expect(claimPage.acceptTermsCheckbox).not.toBeChecked();
     });
 
     test('SPIFF-TC-014 - Terms and Conditions link is present and opens in a new tab @regression', async ({ page }) => {
       await loginAsSpiffUser(page, saEmail, saPassword);
       const claimPage = await openClaimForm(page, testData.program.activeProgramName);
+
+      // Same as TC-013 - the link does not exist until a line item is added.
+      await addClaimLineItem(
+        claimPage,
+        {
+          quoteNumber: testData.claim.quoteNumber || 'QA-TC014-VALIDATION',
+          dateOfSale: testData.claim.dateOfSale || todayAsDateOfSale(),
+          projectName: testData.claim.projectName || 'QA TC-014 Validation',
+          projectCity: testData.claim.projectCity || 'Ridgeland',
+          projectState: testData.claim.projectState || 'MS',
+          originalBOD: testData.claim.originalBOD || 'Carrier',
+          engineeringFirm: testData.claim.engineeringFirm || 'QA Engineering LLC',
+          engineeringContact: testData.claim.engineeringContact || 'QA Tester',
+          engineeringPhone: testData.claim.engineeringPhone || '5551230008',
+          engineeringEmail: testData.claim.engineeringEmail || 'qa-test@example.com',
+        },
+        {
+          r410a: testData.claim.tonnageR410A || '1',
+          other: testData.claim.tonnageOther || '0',
+        },
+        testData.documents.invoiceFixturePath
+      );
 
       const termsLink = page.getByRole('link', {
         name: /SPIFF Terms and Conditions/i

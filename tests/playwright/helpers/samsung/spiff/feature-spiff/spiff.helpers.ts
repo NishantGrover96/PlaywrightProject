@@ -100,19 +100,30 @@ export async function openClaimForm(page: Page, programName: string): Promise<Sp
   return claimPage;
 }
 
+/** MM/DD/YYYY for today - the format setDateOfSale()/the datepicker expects. */
+export function todayAsDateOfSale(): string {
+  const today = new Date();
+  return [
+    String(today.getMonth() + 1).padStart(2, '0'),
+    String(today.getDate()).padStart(2, '0'),
+    today.getFullYear(),
+  ].join('/');
+}
+
 /**
- * Full end-to-end claim submission: fill header fields, tonnage, upload the
- * invoice, add the line item, accept terms, and submit.
- * Returns the generated claim number - throws a descriptive error if the
- * submission does not produce one (mirrors flip-claim-submission.spec.js /
- * flip-program-test-suite.spec.js TC-05).
+ * Fill header fields, tonnage, and upload the invoice document, then add
+ * the line item. Confirmed live: the claim-lines table, the accept-terms
+ * checkbox, and the "SPIFF Terms and Conditions" link do not exist in the
+ * DOM at all until a line item has been successfully added - any test that
+ * checks those before this step will fail with "element(s) not found",
+ * not a real product defect.
  */
-export async function submitFullClaim(
+export async function addClaimLineItem(
   claimPage: SpiffClaimPage,
   claim: ClaimHeaderInput,
   tonnage: { r410a: string; other: string },
-  invoicePath: string
-): Promise<string> {
+  invoicePath: string | string[]
+): Promise<void> {
   await claimPage.fillHeaderFields(claim);
   await claimPage.fillTonnage(tonnage.r410a, tonnage.other);
   await claimPage.uploadInvoiceDocument(invoicePath);
@@ -124,6 +135,21 @@ export async function submitFullClaim(
       'Expected at least one claim line after "Add line item", but #tblClaimLines has zero rows.'
     );
   }
+}
+
+/**
+ * Full end-to-end claim submission: addClaimLineItem(), then accept terms
+ * and submit. Returns the generated claim number - throws a descriptive
+ * error if the submission does not produce one (mirrors
+ * flip-claim-submission.spec.js / flip-program-test-suite.spec.js TC-05).
+ */
+export async function submitFullClaim(
+  claimPage: SpiffClaimPage,
+  claim: ClaimHeaderInput,
+  tonnage: { r410a: string; other: string },
+  invoicePath: string | string[]
+): Promise<string> {
+  await addClaimLineItem(claimPage, claim, tonnage, invoicePath);
 
   await claimPage.acceptTerms();
   await claimPage.submitClaim();
@@ -147,16 +173,9 @@ export async function expectInvalidPhoneBlocksLineItem(
   claimPage: SpiffClaimPage,
   invalidPhone: string
 ): Promise<void> {
-  const today = new Date();
-  const dateOfSale = [
-    String(today.getMonth() + 1).padStart(2, '0'),
-    String(today.getDate()).padStart(2, '0'),
-    today.getFullYear(),
-  ].join('/');
-
   await claimPage.fillHeaderFields({
     quoteNumber: 'QA-PHONE-VALIDATION-TEST',
-    dateOfSale,
+    dateOfSale: todayAsDateOfSale(),
     projectName: 'QA Validation Test Project',
     projectCity: 'Ridgeland',
     projectState: 'MS',
