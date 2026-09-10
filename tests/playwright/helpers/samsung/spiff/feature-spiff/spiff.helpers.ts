@@ -14,8 +14,14 @@ import {
 // spec-level tests don't need to reach into config for this one flow.
 
 /**
- * Log in as a Sales Associate (or any SPIFF-eligible role) and wait for the
- * dashboard's "SPIFF" nav link to confirm a successful, authenticated landing.
+ * Log in as a Sales Associate (or any SPIFF-eligible role) and wait for a
+ * successful, authenticated landing (redirected away from /account/login).
+ *
+ * Does NOT check for a "SPIFF" nav link here - confirmed live that the
+ * post-login /Index landing page does not reliably show one for every
+ * role (it's a tile-based dashboard, not the top nav bar SPIFF pages use).
+ * Use expectSpiffAccessible()/expectSpiffNotAccessible() to assert SPIFF
+ * access specifically.
  */
 export async function loginAsSpiffUser(page: Page, email: string, password: string): Promise<void> {
   await page.goto('/account/login', { waitUntil: 'load' });
@@ -23,8 +29,28 @@ export async function loginAsSpiffUser(page: Page, email: string, password: stri
   await page.locator('#UserLogin_Username').fill(email);
   await page.locator('#UserLogin_Password').fill(password);
   await page.locator('#btnLogin').click();
-  await expect(page.getByRole('link', { name: 'SPIFF', exact: true }).first())
-    .toBeVisible({ timeout: 30_000 });
+  await page.waitForURL((url) => !/\/account\/login/i.test(url.pathname), { timeout: 30_000 });
+}
+
+/**
+ * Confirm the current session can actually reach SPIFF, by navigating to
+ * CurrentSPIFF and checking for its "Current SPIFF" heading - a reliable,
+ * SPIFF-specific indicator, unlike the top-nav "SPIFF" link which isn't
+ * present on every page/role.
+ */
+export async function expectSpiffAccessible(page: Page): Promise<void> {
+  await page.goto('/Rewards/Spiff/CurrentSpiff', { waitUntil: 'load' });
+  await expect(page.getByRole('heading', { name: 'Current SPIFF', level: 4 })).toBeVisible({
+    timeout: 20_000,
+  });
+}
+
+/** Inverse of expectSpiffAccessible() - for roles that should not have SPIFF access. */
+export async function expectSpiffNotAccessible(page: Page): Promise<void> {
+  await page.goto('/Rewards/Spiff/CurrentSpiff', { waitUntil: 'load' });
+  await expect(page.getByRole('heading', { name: 'Current SPIFF', level: 4 })).toBeHidden({
+    timeout: 10_000,
+  });
 }
 
 /**
