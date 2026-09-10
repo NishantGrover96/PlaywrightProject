@@ -205,6 +205,33 @@ export class SpiffClaimPage {
       .first()
       .click();
     await this.quoteNumberInput.waitFor({ state: 'visible', timeout: 20_000 });
+
+    // The engineering-phone auto-formatter ($('#txtEngineeringPhone').on
+    // ('input', ...)) and the email blur-validator ($('#txtEngineeringEmail')
+    // .on('blur', ...)) are both bound by an inline jQuery script block -
+    // confirmed in AddClaim.cshtml. jQuery itself loading is not enough: this
+    // specific script can still be mid-execution (or not yet reached) even
+    // after the form is visible, and checking only `typeof window.$` did not
+    // reliably catch that in CI - the handlers can still be unbound at that
+    // point. Wait for jQuery's own internal event registry to show both
+    // handlers are actually attached before any test interacts with them.
+    type JQueryEventData = Record<string, unknown[]> | undefined;
+    type JQueryLike = { _data?: (el: Element, key: string) => JQueryEventData };
+
+    await this.page.waitForFunction(
+      () => {
+        const w = window as unknown as { jQuery?: JQueryLike };
+        const $ = w.jQuery;
+        if (!$ || typeof $._data !== 'function') return false;
+        const phoneEl = document.querySelector('#txtEngineeringPhone');
+        const emailEl = document.querySelector('#txtEngineeringEmail');
+        if (!phoneEl || !emailEl) return false;
+        const phoneEvents = $._data(phoneEl, 'events');
+        const emailEvents = $._data(emailEl, 'events');
+        return Boolean(phoneEvents?.input?.length && emailEvents?.blur?.length);
+      },
+      { timeout: 15_000 }
+    );
   }
 
   async waitForReady(): Promise<void> {
