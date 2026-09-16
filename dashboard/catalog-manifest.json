@@ -1235,9 +1235,11 @@
                                                                                 }
                                                          },
                                 "specFiles":  {
-                                                  "smoke":  "tests/playwright/specs/samsung/spiff/feature-spiff/spiff.spec.ts",
-                                                  "regression":  "tests/playwright/specs/samsung/spiff/feature-spiff/spiff.spec.ts",
-                                                  "e2e":  "tests/playwright/specs/samsung/spiff/feature-spiff/spiff.spec.ts",
+                                                  "smoke":  "tests/playwright/specs/samsung/spiff/feature-spiff/spiff-claim-submission.spec.ts",
+                                                  "regression":  "tests/playwright/specs/samsung/spiff/feature-spiff/spiff-claim-submission.spec.ts",
+                                                  "e2e":  "tests/playwright/specs/samsung/spiff/feature-spiff/spiff-claim-submission.spec.ts",
+                                                  "processing":  "tests/playwright/specs/samsung/spiff/feature-spiff/spiff-claim-processing.spec.ts",
+                                                  "manage":  "tests/playwright/specs/samsung/spiff/feature-spiff/spiff-manage.spec.ts",
                                                   "api":  "tests/api/samsung/spiff/feature-spiff/spiff.api.spec.ts"
                                               },
                                 "tests":  {

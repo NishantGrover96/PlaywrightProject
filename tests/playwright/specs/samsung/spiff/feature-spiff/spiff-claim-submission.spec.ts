@@ -1,10 +1,5 @@
 import { test, expect } from '@playwright/test';
-import {
-  SpiffClaimPage,
-  SpiffAdminProcessPage,
-  SpiffClaimHistoryPage,
-  SPIFF_URLS,
-} from '../../../../pages/samsung/spiff/feature-spiff/SpiffPage';
+import { SPIFF_URLS } from '../../../../pages/samsung/spiff/feature-spiff/SpiffPage';
 
 import {
   loginAsSpiffUser,
@@ -18,86 +13,23 @@ import {
   todayAsDateOfSale,
   expectInvalidPhoneBlocksLineItem,
   navigateToClaimHistory,
-  navigateToProcessSearch,
   searchClaimHistoryByClaimId,
-  openProcessClaimFromHistory,
-  processClaimApproveFirstDenyRest,
 } from '../../../../helpers/samsung/spiff/feature-spiff/spiff.helpers';
+
+import { saEmail, saPassword } from '../../../../helpers/samsung/spiff/feature-spiff/spiff.credentials';
 
 import testData from '../../../../data/samsung/spiff/feature-spiff/test-data.json';
 
 /**
- * Credentials
- *
- * Local execution:
- *   Uses credentials from test-data.json unless environment variables
- *   are explicitly provided.
- *
- * GitHub Actions / CI:
- *   Requires credentials to be supplied through GitHub Secrets.
- *
- * GitHub Secrets expected:
- *   SAMSUNG_DEALER_EMAIL
- *   SAMSUNG_DEALER_PASSWORD
- *   SAMSUNG_ADMIN_EMAIL
- *   SAMSUNG_ADMIN_PASSWORD
+ * SA-facing claim submission: login/access, the claim form itself, full
+ * end-to-end submission, and viewing own claim history. Admin-side
+ * processing lives in spiff-claim-processing.spec.ts; SPIFF program /
+ * payment-rule creation lives in spiff-manage.spec.ts.
  */
-
-const isCI = process.env.CI === 'true';
-
-function getCredential(
-  envName: string,
-  fallback: string | undefined
-): string {
-  const value = process.env[envName];
-
-  if (value) {
-    return value;
-  }
-
-  if (isCI) {
-    throw new Error(
-      `Missing required CI environment variable: ${envName}. ` +
-      `Add it as a GitHub Actions repository secret.`
-    );
-  }
-
-  if (!fallback) {
-    throw new Error(
-      `Missing credential: ${envName}. ` +
-      `Set the environment variable or configure the credential in test-data.json.`
-    );
-  }
-
-  return fallback;
-}
-
-// Samsung Dealer / SA credentials
-const saEmail = getCredential(
-  'SAMSUNG_DEALER_EMAIL',
-  testData.users.sa.email
-);
-
-const saPassword = getCredential(
-  'SAMSUNG_DEALER_PASSWORD',
-  testData.users.sa.password
-);
-
-// Samsung Admin / BMADMIN credentials
-const adminEmail = getCredential(
-  'SAMSUNG_ADMIN_EMAIL',
-  testData.users.bmadmin.email
-);
-
-const adminPassword = getCredential(
-  'SAMSUNG_ADMIN_PASSWORD',
-  testData.users.bmadmin.password
-);
-
-test.describe('Samsung - SPIFF (Flip to Samsung)', () => {
+test.describe('Samsung - SPIFF (Flip to Samsung) - Claim Submission', () => {
 
   // ------------------------------------------------------------------------
-  // Smoke Suite (SPIFF-SMOKE-001 - SPIFF-SMOKE-005)
+  // Smoke Suite (SPIFF-SMOKE-001 - SPIFF-SMOKE-004)
   // ------------------------------------------------------------------------
 
   test.describe('Smoke', () => {
@@ -133,16 +65,10 @@ test.describe('Samsung - SPIFF (Flip to Samsung)', () => {
       await expect(historyPage.searchButtonHistory).toBeVisible();
     });
 
-    test('SPIFF-SMOKE-005 - admin logs in and can open Process Claim search @smoke @critical', async ({ page }) => {
-      await loginAsSpiffUser(page, adminEmail, adminPassword);
-      const historyPage = await navigateToProcessSearch(page);
-      await expect(historyPage.claimIdInput).toBeVisible();
-    });
-
   });
 
   // ------------------------------------------------------------------------
-  // Authentication (SPIFF-TC-001 - SPIFF-TC-003)
+  // Authentication (SPIFF-TC-001)
   // ------------------------------------------------------------------------
 
   test.describe('Authentication', () => {
@@ -150,20 +76,6 @@ test.describe('Samsung - SPIFF (Flip to Samsung)', () => {
     test('SPIFF-TC-001 - valid SA credentials load the dashboard @regression', async ({ page }) => {
       await loginAsSpiffUser(page, saEmail, saPassword);
       await expectSpiffAccessible(page);
-    });
-
-    test('SPIFF-TC-002 - valid admin credentials load the admin dashboard @regression', async ({ page }) => {
-      await loginAsSpiffUser(page, adminEmail, adminPassword);
-      const historyPage = await navigateToProcessSearch(page);
-      await expect(historyPage.claimIdInput).toBeVisible();
-    });
-
-    test('SPIFF-TC-003 - admin invalid credentials show login error @regression', async ({ page }) => {
-      await attemptLoginExpectFailure(
-        page,
-        adminEmail,
-        testData.expectedText.loginErrorSelector
-      );
     });
 
   });
@@ -493,143 +405,6 @@ test.describe('Samsung - SPIFF (Flip to Samsung)', () => {
       // (BMADMIN/SCF only) - absence of that control is itself
       // evidence results are pre-scoped server-side.
       await expect(historyPage.storeNameSelect).toHaveCount(0);
-    });
-
-  });
-
-  // ------------------------------------------------------------------------
-  // Admin Claim Processing (SPIFF-TC-019 - SPIFF-TC-021)
-  // ------------------------------------------------------------------------
-
-  test.describe('Admin Claim Processing', () => {
-
-    test('SPIFF-TC-019 - Process Claim page loads with bulk action buttons @regression', async ({ page }) => {
-      test.skip(
-        !testData.claimHistory.knownClaimId,
-        'Requires test-data.json claimHistory.knownClaimId.'
-      );
-
-      await loginAsSpiffUser(page, adminEmail, adminPassword);
-
-      const historyPage = await navigateToProcessSearch(page);
-
-      await historyPage.searchByClaimId(
-        testData.claimHistory.knownClaimId
-      );
-
-      await historyPage.clickSearch('process');
-
-      await expect(historyPage.resultsTable).toBeVisible({
-        timeout: 20_000
-      });
-
-      const processPage = await openProcessClaimFromHistory(
-        historyPage,
-        testData.claimHistory.knownClaimId
-      );
-
-      await expect(processPage.approveAllButton).toBeVisible();
-      await expect(processPage.denyAllButton).toBeVisible();
-      await expect(processPage.holdAllButton).toBeVisible();
-    });
-
-    test('SPIFF-TC-020 - approving first line item and denying the rest processes successfully @regression @critical', async ({ page }) => {
-      test.skip(
-        !testData.claimHistory.knownClaimId,
-        'Requires testData.json claimHistory.knownClaimId in a processable status.'
-      );
-
-      await loginAsSpiffUser(page, adminEmail, adminPassword);
-
-      const historyPage = await navigateToProcessSearch(page);
-
-      await historyPage.searchByClaimId(
-        testData.claimHistory.knownClaimId
-      );
-
-      await historyPage.clickSearch('process');
-
-      await expect(historyPage.resultsTable).toBeVisible({
-        timeout: 20_000
-      });
-
-      const processPage = await openProcessClaimFromHistory(
-        historyPage,
-        testData.claimHistory.knownClaimId
-      );
-
-      await processClaimApproveFirstDenyRest(processPage);
-      await expect(processPage.successMessage).toBeVisible();
-    });
-
-    test('SPIFF-TC-021 - admin claim processing requires at least one selected line item @regression', async ({ page }) => {
-      test.skip(
-        !testData.claimHistory.knownClaimId,
-        'Requires test-data.json claimHistory.knownClaimId.'
-      );
-
-      await loginAsSpiffUser(page, adminEmail, adminPassword);
-
-      const historyPage = await navigateToProcessSearch(page);
-
-      await historyPage.searchByClaimId(
-        testData.claimHistory.knownClaimId
-      );
-
-      await historyPage.clickSearch('process');
-
-      await expect(historyPage.resultsTable).toBeVisible({
-        timeout: 20_000
-      });
-
-      const processPage = await openProcessClaimFromHistory(
-        historyPage,
-        testData.claimHistory.knownClaimId
-      );
-
-      const lineCount = await processPage.getLineItemCount();
-      expect(lineCount).toBeGreaterThan(0);
-    });
-
-  });
-
-  // ------------------------------------------------------------------------
-  // E2E - Admin Processing Workflow (SPIFF-E2E-002)
-  // ------------------------------------------------------------------------
-
-  test.describe('E2E - Admin Processing', () => {
-
-    test.setTimeout(120_000);
-
-    test('SPIFF-E2E-002 - admin finds a submitted claim via search and processes it end-to-end @e2e @critical', async ({ page }) => {
-      test.skip(
-        !testData.claimHistory.knownClaimId,
-        'Requires test-data.json claimHistory.knownClaimId in a processable status.'
-      );
-
-      await loginAsSpiffUser(page, adminEmail, adminPassword);
-
-      const historyPage = await navigateToProcessSearch(page);
-
-      await historyPage.searchByClaimId(
-        testData.claimHistory.knownClaimId
-      );
-
-      await historyPage.clickSearch('process');
-
-      await expect(historyPage.resultsTable).toBeVisible({
-        timeout: 20_000
-      });
-
-      const processPage = await openProcessClaimFromHistory(
-        historyPage,
-        testData.claimHistory.knownClaimId
-      );
-
-      await processClaimApproveFirstDenyRest(processPage);
-      await expect(processPage.successMessage).toBeVisible();
-
-      await logoutSpiffUser(page);
     });
 
   });
