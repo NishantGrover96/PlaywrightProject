@@ -62,13 +62,16 @@ jobs:
         # --project=chromium: samsung is a "legacy-shared" client, so its
         # dealer-role project is just named "chromium" (shared across all
         # legacy clients) - CLIENT_ID above scopes it to samsung specifically.
-        # --no-deps: spiff.spec.ts logs in inline per test (loginAsSpiffUser)
+        # --no-deps: every spec here logs in inline per test (loginAsSpiffUser)
         # and never uses a saved storageState, so the "setup"/"setup-admin"
         # dependency (a generic bootstrap script shared with demoportal/
         # certainteed that navigates to /CoopManagement/Dashboard) is not
         # needed here and would otherwise gate the whole run on unrelated
         # credentials/behavior.
-        run: npx playwright test tests/playwright/specs/samsung/spiff/feature-spiff/spiff.spec.ts --project=chromium --no-deps
+        # The original single spiff.spec.ts was split into three flow-based
+        # files (spiff-claim-submission.spec.ts, spiff-claim-processing.spec.ts,
+        # spiff-manage.spec.ts) - run the whole directory so CI covers all three.
+        run: npx playwright test tests/playwright/specs/samsung/spiff/feature-spiff/ --project=chromium --no-deps
 
       - name: Upload HTML report
         if: always()
