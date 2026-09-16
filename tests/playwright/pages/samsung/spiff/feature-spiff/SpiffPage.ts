@@ -177,8 +177,21 @@ export class SpiffClaimPage {
     this.claimNumberSpan     = page.locator('.spnClaimNumber');
   }
 
-  async navigateToCurrentSpiff(): Promise<void> {
-    await this.page.goto(SPIFF_URLS.currentSpiff);
+  /**
+   * Optional `programName` uses CurrentSPIFF's own "SPIFF Name" search
+   * filter (confirmed live: `?SpiffName=<value>` query param, submitted by
+   * the page's #SpiffName input + .btnSearch button) rather than relying on
+   * the default, unfiltered, paginated (10-per-page) listing - confirmed
+   * live this session that a long-lived program like "2026 Flip to Samsung"
+   * can be pushed off page 1 as more (undeleted, by design) test-created
+   * SPIFFs accumulate over repeated runs. Filtering server-side is robust
+   * regardless of how many other SPIFFs exist.
+   */
+  async navigateToCurrentSpiff(programName?: string): Promise<void> {
+    const url = programName
+      ? `${SPIFF_URLS.currentSpiff}?SpiffName=${encodeURIComponent(programName)}`
+      : SPIFF_URLS.currentSpiff;
+    await this.page.goto(url);
   }
 
   /**
@@ -190,7 +203,7 @@ export class SpiffClaimPage {
    * an unrelated page element and caused SPIFF-SMOKE-003 to time out.
    */
   async openClaimFormForProgram(programName: string): Promise<void> {
-    await this.navigateToCurrentSpiff();
+    await this.navigateToCurrentSpiff(programName);
     const programRow = this.page
       .locator('#tblReport tbody tr')
       .filter({ hasText: programName });
