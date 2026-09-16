@@ -986,23 +986,4 @@ export class SpiffManagePage {
     return amount;
   }
 
-  /**
-   * Test-hygiene cleanup: removes a SPIFF created by a test run, so
-   * repeated runs don't accumulate throwaway records in Manage SPIFF.
-   * Confirmed live 2026-09-16 on a real record (same delete + confirm flow
-   * used to remove this session's own "QA Live DOM Check SPIFF" verification record).
-   */
-  async deleteSpiffByName(spiffName: string): Promise<void> {
-    await this.page.goto(SPIFF_URLS.manageSpiff);
-    const row = this.page.locator('table tbody tr').filter({ hasText: spiffName }).first();
-    await row.waitFor({ state: 'visible', timeout: 15_000 });
-    await row.locator('[title="Delete SPIFF"]').click();
-
-    const dialog = this.page.getByRole('dialog').filter({ hasText: 'Delete SPIFF' });
-    const confirmDeleteButton = dialog.getByText('Delete', { exact: true });
-    await confirmDeleteButton.waitFor({ state: 'visible', timeout: 10_000 });
-    await confirmDeleteButton.click();
-
-    await expect(row).toHaveCount(0, { timeout: 15_000 });
-  }
 }

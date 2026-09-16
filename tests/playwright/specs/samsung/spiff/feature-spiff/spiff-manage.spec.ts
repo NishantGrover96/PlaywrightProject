@@ -94,9 +94,8 @@ test.describe('Samsung - SPIFF (Flip to Samsung) - Manage SPIFF', () => {
       const rule2Row = managePage.getRuleRowByName('QA All Other Products Rule');
       await expect(rule2Row).toContainText('$ 10.00');
 
-      // Cleanup: remove the throwaway SPIFF this run created so repeated
-      // runs don't accumulate records in Manage SPIFF.
-      await managePage.deleteSpiffByName(spiffName);
+      // Deliberately not deleted - the SPIFF (and any resulting claim data)
+      // is left in place after the test completes.
     });
 
   });
