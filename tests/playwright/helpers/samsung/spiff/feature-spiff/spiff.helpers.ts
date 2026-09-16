@@ -71,18 +71,33 @@ export async function attemptLoginExpectFailure(
   await expect(page.locator(loginErrorSelector)).toBeVisible({ timeout: 45_000 });
 }
 
-/** Log out via the user icon -> Sign Out, matching flip-program-test-suite.spec.js. */
+/**
+ * Log out via the user icon -> Sign Out, matching flip-program-test-suite.spec.js.
+ * Confirmed live that the dropdown toggle click can intermittently not open
+ * the menu (the "Sign Out" link stays in the DOM but hidden) - retries the
+ * toggle click rather than failing on the first attempt, matching the retry
+ * pattern already used for other intermittently-flaky clicks in this suite.
+ */
 export async function logoutSpiffUser(page: Page): Promise<void> {
   const userIconBtn = page
     .locator('.userBlock .dropdown-toggle, .head_userInfo .dropdown-toggle, .welcomedropdown')
     .first();
-  await userIconBtn.waitFor({ state: 'visible', timeout: 15_000 });
-  await userIconBtn.click();
-
   const signOutLink = page.locator('a.signout').first();
-  await signOutLink.waitFor({ state: 'visible', timeout: 10_000 });
-  await signOutLink.click();
 
+  await userIconBtn.waitFor({ state: 'visible', timeout: 15_000 });
+
+  const maxAttempts = 3;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    await userIconBtn.click();
+    try {
+      await signOutLink.waitFor({ state: 'visible', timeout: 5_000 });
+      break;
+    } catch (err) {
+      if (attempt === maxAttempts) throw err;
+    }
+  }
+
+  await signOutLink.click();
   await page.locator('#UserLogin_Username').waitFor({ state: 'visible', timeout: 15_000 });
 }
 
@@ -111,12 +126,21 @@ export function todayAsDateOfSale(): string {
 }
 
 /**
- * Fill header fields, tonnage, and upload the invoice document, then add
- * the line item. Confirmed live: the claim-lines table, the accept-terms
- * checkbox, and the "SPIFF Terms and Conditions" link do not exist in the
- * DOM at all until a line item has been successfully added - any test that
- * checks those before this step will fail with "element(s) not found",
- * not a real product defect.
+ * Fill header fields, upload the invoice document, then add a claim line
+ * for the given tonnage. Confirmed live: the claim-lines table, the
+ * accept-terms checkbox, and the "SPIFF Terms and Conditions" link do not
+ * exist in the DOM at all until at least one line item has been
+ * successfully added - any test that checks those before this step will
+ * fail with "element(s) not found", not a real product defect.
+ *
+ * Confirmed live: filling BOTH tonnage fields and clicking "Add line item"
+ * ONCE correctly adds one row per non-zero category in a single save
+ * round-trip - matches addClaim.js's add-mode branch, which builds a
+ * sequential save array from every filled field. (An earlier version of
+ * this helper assumed the second category was silently dropped and worked
+ * around it with a separate edit/update cycle - re-verified live and that
+ * was not accurate; the extra cycle was unnecessary and, being unused by
+ * the real app flow, proved flaky.)
  */
 export async function addClaimLineItem(
   claimPage: SpiffClaimPage,
@@ -125,9 +149,11 @@ export async function addClaimLineItem(
   invoicePath: string | string[]
 ): Promise<void> {
   await claimPage.fillHeaderFields(claim);
-  await claimPage.fillTonnage(tonnage.r410a, tonnage.other);
   await claimPage.uploadInvoiceDocument(invoicePath);
-  await claimPage.addLineItem();
+  await claimPage.fillTonnage(tonnage.r410a, tonnage.other);
+
+  const expectedRowCount = [tonnage.r410a, tonnage.other].filter((v) => Number(v || '0') > 0).length || 1;
+  await claimPage.addLineItem(expectedRowCount);
 
   const lineCount = await claimPage.getClaimLineCount();
   if (lineCount === 0) {
@@ -241,6 +267,36 @@ export async function processClaimApproveFirstDenyRest(
   await processPage.fillComments(0, approvedComment);
   for (let i = 1; i < lineCount; i++) {
     await processPage.fillComments(i, deniedComment);
+  }
+
+  await processPage.clickProcess();
+  await processPage.waitForProcessed();
+}
+
+/**
+ * Approve every claim line (as opposed to processClaimApproveFirstDenyRest,
+ * which approves only the first and denies the rest) - used to verify
+ * Approved Amount against the full submitted tonnage. Confirmed against
+ * ProcessClaim.js: the denial-reason dropdown and comments field always
+ * render regardless of a line's chosen status, so both are still filled
+ * here for every line, matching processClaimApproveFirstDenyRest's existing
+ * pattern.
+ */
+export async function processClaimApproveAllLines(
+  processPage: SpiffAdminProcessPage,
+  comment = 'Approved'
+): Promise<void> {
+  const lineCount = await processPage.getLineItemCount();
+  if (lineCount === 0) {
+    throw new Error('Expected at least one claim line to process, but #tblClaimLines has zero rows.');
+  }
+
+  await processPage.checkAllLineItems();
+
+  for (let i = 0; i < lineCount; i++) {
+    await processPage.setLineStatus(i, 'approve');
+    await processPage.selectDenialReason(i);
+    await processPage.fillComments(i, comment);
   }
 
   await processPage.clickProcess();

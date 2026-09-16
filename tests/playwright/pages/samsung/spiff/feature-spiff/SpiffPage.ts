@@ -16,6 +16,8 @@ export const SPIFF_URLS = {
   activateAccount:'/Rewards/SPIFF/ActivateAccount',
   saveW9Tax:      '/Rewards/SPIFF/SaveW9TaxInformation',
   dashboard:      '/Rewards/SPIFF/Dashboard/SpiffDashboard',
+  manageSpiff:    '/Rewards/Spiff/List',
+  createSpiff:    '/Rewards/Spiff/CreateSpiff',
 } as const;
 
 // Rebate/claim line status sequences confirmed from flip-program-test-suite.spec.js
@@ -334,14 +336,20 @@ export class SpiffClaimPage {
    * Clicking "Add line item" triggers an async validation/save round-trip
    * (a loading spinner briefly appears) before #tblClaimLines actually
    * updates - confirmed live: checking the row count immediately after the
-   * click can read a stale (zero-row) state, and this isn't reliably tied
-   * to network idle. Wait directly for the expected outcome: the first
-   * claim-line row actually appearing.
+   * click can read a stale state, and this isn't reliably tied to network
+   * idle.
+   *
+   * Confirmed live (and via source, addClaim.js's add-mode branch): filling
+   * BOTH tonnage fields before a single click adds one row PER non-zero
+   * category in a single save round-trip (addClaim.js's SaveClaimItems
+   * processes a sequential array) - both rows appear from one click, not
+   * one click per category. Takes the expected total row count explicitly
+   * rather than assuming "+1", since a single click can add more than one row.
    */
-  async addLineItem(): Promise<void> {
+  async addLineItem(expectedRowCount: number): Promise<void> {
     await this.addLineItemButton.waitFor({ state: 'visible', timeout: 15_000 });
     await this.addLineItemButton.click();
-    await this.claimLinesRows.first().waitFor({ state: 'attached', timeout: 20_000 });
+    await expect(this.claimLinesRows).toHaveCount(expectedRowCount, { timeout: 20_000 });
   }
 
   async getClaimLineCount(): Promise<number> {
@@ -450,8 +458,16 @@ export class SpiffAdminProcessPage {
     await this.page.goto(`${this.url}?RebateId=${encodeURIComponent(encryptedRebateId)}`);
   }
 
+  /**
+   * Confirmed live: #btnApprove and the rest of the static chrome render
+   * immediately, well before ProcessClaim.js's AJAX call
+   * (ProcessClaims/RebateDetail) populates #tblClaimLines - waiting only on
+   * the button let getLineItemCount() race ahead and read zero rows on a
+   * real claim. Waits for at least one data row as well.
+   */
   async waitForReady(): Promise<void> {
     await this.approveAllButton.waitFor({ state: 'visible', timeout: 20_000 });
+    await expect(this.claimLineRows.first()).toBeVisible({ timeout: 20_000 });
   }
 
   async getLineItemCount(): Promise<number> {
@@ -612,6 +628,47 @@ export class SpiffClaimHistoryPage {
     return this.resultsRows.filter({ hasText: text }).first();
   }
 
+  /**
+   * Admin-only (confirmed live): the "CLAIM AMOUNT | APPROVE AMOUNT |
+   * COMMENTS" column only renders for admin/SCF roles on this same
+   * #tblReport view - it is absent entirely for SA/dealer roles (same URL,
+   * role-driven column set). Confirmed live end-to-end: a claim submitted
+   * with R410A-DVM=12 tons + All Other Samsung Products=11 tons, against a
+   * SPIFF whose payment rules are $15/ton (R410A-DVM) and $10/ton (All
+   * Other, both read from that SPIFF's own Manage SPIFF > Payment Rule
+   * grid), produced Claim Amount = $290.00 (12*15 + 11*10) - the
+   * calculation is real, rate-driven, and not a static/placeholder value.
+   *
+   * The cell has no per-value sub-elements
+   * (`<td>$330.00 | $0.00<br> | </td>`), so this parses the pipe-delimited
+   * text rather than using a stable per-field locator - none exists in the
+   * real DOM. Column position is looked up by header text ("CLAIM AMOUNT")
+   * rather than a hardcoded index, since the SA view has fewer columns.
+   */
+  async getClaimAndApproveAmount(claimId: string): Promise<{ claimAmount: string; approveAmount: string }> {
+    const headerCells = this.resultsTable.locator('thead th');
+    const headerCount = await headerCells.count();
+    let amountColumnIndex = -1;
+    for (let i = 0; i < headerCount; i++) {
+      const text = (await headerCells.nth(i).textContent()) ?? '';
+      if (text.toUpperCase().includes('CLAIM AMOUNT')) {
+        amountColumnIndex = i;
+        break;
+      }
+    }
+    if (amountColumnIndex === -1) {
+      throw new Error(
+        'No "CLAIM AMOUNT" column found on this Claim History view - it only renders for admin/SCF roles.'
+      );
+    }
+
+    const row = this.getResultRowByText(claimId);
+    const cellText = (await row.locator('td').nth(amountColumnIndex).textContent()) ?? '';
+    const [claimAmount = '', approveAmount = ''] = cellText.split('|').map((part) => part.trim());
+
+    return { claimAmount, approveAmount };
+  }
+
   async clickProcessIconForClaim(claimId: string): Promise<void> {
     const row = this.getResultRowByText(claimId);
     const processIcon = row.locator('a[href*="ProcessClaims"]').first();
@@ -637,5 +694,315 @@ export class SpiffClaimHistoryPage {
     const isEmptyVisible = await this.resultsTable.locator('td.dataTables_empty').isVisible();
     if (isEmptyVisible) return;
     await expect(this.resultsRows).toHaveCount(0);
+  }
+}
+
+export interface SpiffDetailInput {
+  name:            string;
+  startDate:       string; // MM/DD/YYYY
+  endDate:         string; // MM/DD/YYYY
+  gracePeriodDate: string; // MM/DD/YYYY - "Last Submission Date" in this app's own labeling; must be >= endDate (enforced server + client side)
+}
+
+export interface PaymentRuleInput {
+  ruleName:         string;
+  minimumTonnage:   string;
+  dollarAmountPerTon: string;
+  productCategory:  string; // must exactly match an option's visible text in the "Refrigerant & Product Category." multi-select - see SPIFF_PRODUCT_CATEGORY
+}
+
+// Real, exact option text of the "Refrigerant & Product Category." (#lstSKUSearch)
+// multi-select - confirmed live 2026-09-16. Exported (not hardcoded per-test)
+// because "R410A" alone is an ambiguous substring match (it also appears inside
+// the All-Other option's parenthetical), so selectProductCategory() requires an
+// exact match - callers must use these constants rather than approximating the text.
+export const SPIFF_PRODUCT_CATEGORY = {
+  r410aDvm: 'R410A – DVM',
+  allOtherSamsungProducts: 'All Other Samsung Product (excluding R410A DVM)',
+} as const;
+
+// -----------------------------------------------------------------------------
+// SpiffManagePage - Admin "Manage SPIFF" / "Add SPIFF" / Payment Rule
+// (List.cshtml, CreateSpiff.cshtml, _SpiffDetail.cshtml, _SpiffPaymentRule.cshtml)
+// -----------------------------------------------------------------------------
+// Field ids confirmed directly against
+// D:\VS Workspace\Samsung\Portal\Presentation\Web\Pages\Rewards\SPIFF\_SpiffDetail.cshtml
+// and _SpiffPaymentRule.cshtml (read-only source reference, separate repo),
+// cross-checked live via page.evaluate() on both the existing "2026 Flip to
+// Samsung" SPIFF's edit view and a fresh "Add SPIFF" draft. The "Grace
+// Period Date" from the requirements doc maps to this app's own "Last
+// Submission Date" (#CutOffDate) - a plain, manually-set date field
+// (confirmed via jsCreateSpiff.js: validated as >= End Date, never
+// auto-computed client-side), not a distinct separately-labeled field.
+//
+// #lstSKUSearch (the "Refrigerant & Product Category." selector) is a
+// multi-select Select2 widget - confirmed live (2026-09-16) via
+// page.evaluate() DOM inspection and an end-to-end create-SPIFF run. Real
+// option text (not previously known, and NOT what was originally guessed
+// in this class): "R410A – DVM" (en dash, not a hyphen) and "All Other
+// Samsung Product (excluding R410A DVM)" (singular "Product", not
+// "Products"). Note "R410A" alone is an ambiguous substring - it also
+// appears inside the "All Other..." option's parenthetical - so
+// selectProductCategory() must match the full option text exactly, not a
+// partial/contains match.
+//
+// Also confirmed live: the SPIFF Detail tab's "Next" button (#btnFinalSubmission)
+// does not just switch tabs - it saves the SPIFF and navigates away to the
+// Manage SPIFF list. The Payment Rule tab only becomes usable after
+// re-opening the saved SPIFF via its "Edit SPIFF" action (same CreateSpiff
+// page, with ?action=<id>&tab=detail&rebate_campaign_seq=<id> query params).
+// createOrEditSpiff() below drives that full real flow. Additionally, saving
+// a payment rule (#btnSavePaymentRule) opens a confirmation modal ("Payment
+// Rule added successfully.") that blocks further interaction (including
+// #btnnewPaymentRule) until its "Continue" button (class `.ruleRefresh`) is
+// clicked - fillAndSavePaymentRule() now handles this.
+// -----------------------------------------------------------------------------
+export class SpiffManagePage {
+  readonly page: Page;
+
+  // SPIFF Detail tab
+  readonly spiffDetailTab:  Locator;
+  readonly nameInput:       Locator;
+  readonly startDateInput:  Locator;
+  readonly endDateInput:    Locator;
+  readonly gracePeriodDateInput: Locator; // #CutOffDate ("Last Submission Date")
+  readonly documentUpload:  Locator;      // same Dropzone pattern as SpiffClaimPage.dropzoneUpload
+  readonly nextButton:      Locator;      // #btnFinalSubmission
+
+  // Payment Rule tab
+  readonly paymentRuleTab:       Locator;
+  readonly ruleNameInput:        Locator;
+  readonly minimumTonnageInput:  Locator;
+  readonly dollarAmountInput:    Locator;
+  readonly productCategorySelect: Locator; // #lstSKUSearch - see class note on interaction
+  readonly saveRuleButton:       Locator;  // #btnSavePaymentRule
+  readonly addNewRuleButton:     Locator;  // #btnnewPaymentRule (opens a blank rule entry form for an additional rule)
+  readonly rulesTable:           Locator;  // #tblPaymentRules
+  readonly rulesRows:            Locator;
+
+  constructor(page: Page) {
+    this.page = page;
+
+    this.spiffDetailTab = page.locator('a[href="#divdetailsTab"]');
+    this.nameInput            = page.locator('#PromotionName');
+    this.startDateInput       = page.locator('#ActiveDate');
+    this.endDateInput         = page.locator('#InactiveDate');
+    this.gracePeriodDateInput = page.locator('#CutOffDate');
+    this.documentUpload       = page.locator('.uploadBlock').first();
+    this.nextButton           = page.locator('#btnFinalSubmission');
+
+    this.paymentRuleTab        = page.locator('a[href="#divrulesTab"]');
+    this.ruleNameInput         = page.locator('#PaymentRuleName');
+    this.minimumTonnageInput   = page.locator('#MinimumQuantity');
+    this.dollarAmountInput     = page.locator('#PaymentDollarAmount');
+    this.productCategorySelect = page.locator('#lstSKUSearch');
+    this.saveRuleButton        = page.locator('#btnSavePaymentRule');
+    this.addNewRuleButton      = page.locator('#btnnewPaymentRule');
+    this.rulesTable            = page.locator('#tblPaymentRules');
+    this.rulesRows              = page.locator('#tblPaymentRules tbody tr');
+  }
+
+  async navigateToAddSpiff(): Promise<void> {
+    await this.page.goto(SPIFF_URLS.createSpiff);
+    await expect(this.nameInput).toBeVisible({ timeout: 20_000 });
+  }
+
+  async fillSpiffDetail(detail: SpiffDetailInput): Promise<void> {
+    await this.nameInput.fill(detail.name);
+    await this.setDateField(this.startDateInput, detail.startDate);
+    await this.setDateField(this.endDateInput, detail.endDate);
+    await this.setDateField(this.gracePeriodDateInput, detail.gracePeriodDate);
+  }
+
+  /**
+   * These date inputs use the same bootstrap-datepicker widget confirmed on
+   * AddClaim's Date of Sale field - .fill() cannot set a readonly/JS-driven
+   * datepicker input reliably, so this drives it the same way
+   * SpiffClaimPage.setDateOfSale() does.
+   */
+  private async setDateField(field: Locator, dateStr: string): Promise<void> {
+    const id = await field.getAttribute('id');
+    await field.waitFor({ state: 'visible' });
+    await this.page.evaluate(
+      ({ id, dateStr }) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const $ = (window as any).$;
+        $(`#${id}`).datepicker('setDate', dateStr);
+        $(`#${id}`).trigger('change');
+      },
+      { id, dateStr }
+    );
+  }
+
+  /**
+   * Same click+filechooser+retry pattern as SpiffClaimPage.uploadInvoiceDocument
+   * - see that method's comment for why. Also waits for Dropzone's async
+   * upload POST (confirmed live: /Rewards/SPIFF/CreateSpiff/UploadSpiffDocument,
+   * per jsCreateSpiff.js) to finish before returning - confirmed live that
+   * clicking "Next" before this completes fails client-side validation with
+   * "Please upload SPIFF document." even though the thumbnail/filename
+   * already appear to have rendered.
+   */
+  async uploadReferenceDocument(filePath: string | string[]): Promise<void> {
+    await this.documentUpload.waitFor({ state: 'visible', timeout: 15_000 });
+
+    const uploadResponse = this.page.waitForResponse(
+      (r) => r.url().includes('/UploadSpiffDocument') && r.request().method() === 'POST',
+      { timeout: 30_000 }
+    );
+
+    let fileChooser: FileChooser | undefined;
+    const maxAttempts = 3;
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      try {
+        [fileChooser] = await Promise.all([
+          this.page.waitForEvent('filechooser', { timeout: 5_000 }),
+          this.documentUpload.click(),
+        ]);
+        break;
+      } catch (err) {
+        if (attempt === maxAttempts) throw err;
+      }
+    }
+    await fileChooser!.setFiles(filePath);
+    await uploadResponse;
+  }
+
+  /**
+   * Confirmed live: when a SPIFF already has payment rules configured, the
+   * tab shows only the rules grid (#tblPaymentRules) by default - the entry
+   * form (#PaymentRuleName etc.) only appears once a fresh "Add New Payment
+   * Rule" form is opened, either automatically (a brand-new SPIFF with zero
+   * rules) or via addNewRuleButton. So this only waits for the tab panel
+   * itself, not the entry form - callers that need to type into the form
+   * should wait on ruleNameInput themselves once they know it will render.
+   */
+  async goToPaymentRuleTab(): Promise<void> {
+    await expect(this.paymentRuleTab).not.toHaveClass(/disabled/, { timeout: 15_000 });
+    await this.paymentRuleTab.click();
+    await expect(this.page.locator('#divrulesTab')).toBeVisible({ timeout: 15_000 });
+  }
+
+  /**
+   * Clicking "Next" (#btnFinalSubmission) on SPIFF Detail does not switch
+   * tabs in place - confirmed live: it saves the SPIFF and redirects to the
+   * Manage SPIFF list, where it appears with status "Incomplete" (no
+   * payment rule yet). The Payment Rule tab is disabled on a brand-new
+   * "Add SPIFF" draft and only becomes usable after re-opening the saved
+   * SPIFF via its own "Edit SPIFF" action from that list - this drives that
+   * full real round trip (save -> list -> reopen for edit -> Payment Rule
+   * tab) and leaves the page ready for fillAndSavePaymentRule().
+   */
+  async saveSpiffDetailAndOpenPaymentRuleTab(spiffName: string): Promise<void> {
+    await this.nextButton.click();
+    await this.page.waitForURL(/\/Rewards\/Spiff\/List/i, { timeout: 20_000 });
+    await this.openSpiffForEditByName(spiffName);
+    await this.goToPaymentRuleTab();
+  }
+
+  /**
+   * Opens an already-existing SPIFF (e.g. the live "2026 Flip to Samsung"
+   * program) for editing and switches to its Payment Rule tab - for reading
+   * its already-configured rules, as opposed to
+   * saveSpiffDetailAndOpenPaymentRuleTab() which is for a SPIFF this test
+   * run just created.
+   */
+  async openExistingSpiffPaymentRuleTab(spiffName: string): Promise<void> {
+    await this.page.goto(SPIFF_URLS.manageSpiff);
+    await this.openSpiffForEditByName(spiffName);
+    await this.goToPaymentRuleTab();
+    await expect(this.rulesTable).toBeVisible({ timeout: 15_000 });
+  }
+
+  private async openSpiffForEditByName(spiffName: string): Promise<void> {
+    const row = this.page.locator('table tbody tr').filter({ hasText: spiffName }).first();
+    await row.waitFor({ state: 'visible', timeout: 15_000 });
+    await row.locator('.clsEditPromotion').click();
+    await this.page.waitForURL(/\/Rewards\/Spiff\/CreateSpiff\?/i, { timeout: 20_000 });
+  }
+
+  /**
+   * #lstSKUSearch is a multi-select Select2 widget - confirmed live (see
+   * class note). categoryText must be the FULL, exact option text (use
+   * SPIFF_PRODUCT_CATEGORY) - "R410A" alone is an ambiguous substring, since
+   * it also appears inside the "All Other..." option's parenthetical, so an
+   * exact match is required rather than a partial/contains match.
+   */
+  async selectProductCategory(categoryText: string): Promise<void> {
+    const trigger = this.page.locator('#lstSKUSearch + span.select2 .select2-selection--multiple');
+    await trigger.click();
+    const option = this.page.getByRole('treeitem', { name: categoryText, exact: true });
+    await option.waitFor({ state: 'visible', timeout: 10_000 });
+    await option.click();
+  }
+
+  async saveCurrentPaymentRule(): Promise<void> {
+    await this.saveRuleButton.click();
+  }
+
+  /**
+   * Confirmed live: saving a rule opens a "Payment Rule added successfully."
+   * modal that blocks all further interaction on this tab (including
+   * #btnnewPaymentRule) until dismissed via its "Continue" button
+   * (class `.ruleRefresh` - no id was rendered on this button).
+   */
+  private async dismissPaymentRuleSavedModal(): Promise<void> {
+    const continueButton = this.page.locator('button.ruleRefresh');
+    await continueButton.waitFor({ state: 'visible', timeout: 15_000 });
+    await continueButton.click();
+    await continueButton.waitFor({ state: 'hidden', timeout: 10_000 });
+  }
+
+  async fillAndSavePaymentRule(rule: PaymentRuleInput): Promise<void> {
+    await this.ruleNameInput.fill(rule.ruleName);
+    await this.minimumTonnageInput.fill(rule.minimumTonnage);
+    await this.dollarAmountInput.fill(rule.dollarAmountPerTon);
+    await this.selectProductCategory(rule.productCategory);
+    await this.saveCurrentPaymentRule();
+    await this.dismissPaymentRuleSavedModal();
+  }
+
+  async getRuleCount(): Promise<number> {
+    return this.rulesRows.count();
+  }
+
+  getRuleRowByName(ruleName: string): Locator {
+    return this.rulesRows.filter({ hasText: ruleName }).first();
+  }
+
+  /**
+   * Reads the currently-configured "Dollar Amount" for a payment rule by
+   * name - used to compute an expected Claim/Approved Amount at run time
+   * from the SPIFF's real, live-configured rate rather than a hardcoded
+   * number (confirmed live: the grid renders "$ 15.00" style text in the
+   * last <td>).
+   */
+  async getRuleDollarAmount(ruleName: string): Promise<number> {
+    const cellText = (await this.getRuleRowByName(ruleName).locator('td').last().textContent()) ?? '';
+    const amount = Number.parseFloat(cellText.replace(/[^0-9.]/g, ''));
+    if (Number.isNaN(amount)) {
+      throw new Error(`Could not parse a dollar amount from Payment Rule row "${ruleName}": "${cellText}"`);
+    }
+    return amount;
+  }
+
+  /**
+   * Test-hygiene cleanup: removes a SPIFF created by a test run, so
+   * repeated runs don't accumulate throwaway records in Manage SPIFF.
+   * Confirmed live 2026-09-16 on a real record (same delete + confirm flow
+   * used to remove this session's own "QA Live DOM Check SPIFF" verification record).
+   */
+  async deleteSpiffByName(spiffName: string): Promise<void> {
+    await this.page.goto(SPIFF_URLS.manageSpiff);
+    const row = this.page.locator('table tbody tr').filter({ hasText: spiffName }).first();
+    await row.waitFor({ state: 'visible', timeout: 15_000 });
+    await row.locator('[title="Delete SPIFF"]').click();
+
+    const dialog = this.page.getByRole('dialog').filter({ hasText: 'Delete SPIFF' });
+    const confirmDeleteButton = dialog.getByText('Delete', { exact: true });
+    await confirmDeleteButton.waitFor({ state: 'visible', timeout: 10_000 });
+    await confirmDeleteButton.click();
+
+    await expect(row).toHaveCount(0, { timeout: 15_000 });
   }
 }

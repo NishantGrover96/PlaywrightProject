@@ -119,6 +119,24 @@ Earlier in this session, two attempts to run `npx playwright test` (a bare `--li
 
 None identified with sufficient evidence to classify as an application defect. The Company Representative login failure (see Failures) is left as `UNKNOWN` rather than classified as an application defect, since a credential/registration issue on the test-data side is at least as likely as a genuine application bug.
 
+## 2026-09-16 Update: Manage SPIFF + Claim/Approved Amount Calculation
+
+Per a formal coverage-update request, the original `spiff.spec.ts` was split into three flow-based files (`spiff-claim-submission.spec.ts`, `spiff-claim-processing.spec.ts`, `spiff-manage.spec.ts`), and two new real test scenarios were added and run live end-to-end against UAT, both passing:
+
+**`SPIFF-MANAGE-001`** (`spiff-manage.spec.ts`) - Admin creates a new SPIFF (name/dates/grace period/reference document) plus two payment rules (R410A-DVM, All Other Samsung Products), and both rules are confirmed to appear correctly on the same SPIFF. Passed live (~1.0m), including its own cleanup (deletes the throwaway SPIFF it created).
+
+**`SPIFF-PROCESS-001`** (`spiff-claim-processing.spec.ts`) - End-to-end validation that Claim Amount and Approved Amount are genuinely calculated from tonnage x payment rule rate, not hardcoded. Creates its own throwaway SPIFF with known, distinct rates ($7/ton and $4/ton - deliberately different from the real "2026 Flip to Samsung" SPIFF's $15/$10, so a pass can't be coincidental), submits a claim (R410A=12, Other=11 tons), and verifies via admin's View Claim History that Claim Amount = 12x7 + 11x4 = $128.00 (read from live-configured rates, computed at run time). Then processes/approves the claim and verifies Approved Amount = the same $128.00. Passed live (~2.2m).
+
+New/changed page-object surface (`SpiffPage.ts`): `SpiffManagePage` class (SPIFF Detail + Payment Rule tab flows), `SPIFF_PRODUCT_CATEGORY` constants, `SpiffClaimHistoryPage.getClaimAndApproveAmount()`.
+
+**Real application-behavior discoveries made while building this (not test-authoring mistakes - each was confirmed via source and/or live re-verification before being relied on)**:
+1. The Payment Rule tab is disabled on a fresh "Add SPIFF" draft - clicking "Next" actually **saves the SPIFF and redirects to the Manage SPIFF list** (not an in-page tab switch); the tab only becomes usable after re-opening the saved SPIFF via "Edit SPIFF".
+2. Saving a payment rule opens a "Payment Rule added successfully." confirmation modal that blocks all further interaction (including "Add New Payment Rule") until its "Continue" button is dismissed.
+3. The "Refrigerant & Product Category." selector's real option text is `R410A – DVM` (en dash) and `All Other Samsung Product (excluding R410A DVM)` (singular "Product") - and "R410A" alone is an **ambiguous substring** (it also appears inside the "All Other..." option's own text), so category selection must match the full option text exactly.
+4. Filling BOTH tonnage fields (R410A and Other) and clicking "Add line item" **once** correctly adds one claim line per non-zero category in a single save round-trip - confirmed live and via source (`addClaim.js`'s `SaveClaimItems` processes a sequential array). An earlier iteration of this suite incorrectly worked around a presumed "second category silently dropped" bug with a fragile Edit-line-item/Update cycle; re-verified live this session that the simple single-click approach was correct all along, and the workaround was removed.
+5. The admin Process Claim page's line-item table is populated by a separate AJAX call after the static page chrome renders - `SpiffAdminProcessPage.waitForReady()` was waiting only on the (always-present) "Approve All" button, which could race ahead of the data and read zero rows on a real claim. Now also waits for at least one row.
+6. Payment Rule **names** on the shared, long-lived "2026 Flip to Samsung" SPIFF are not stable - they were observed to change between two checks roughly 90 minutes apart within this same session (presumably other concurrent UAT activity), which is why `SPIFF-PROCESS-001` creates and uses its own throwaway SPIFF rather than reading rates off that shared record.
+
 ## Follow-ups Recorded Elsewhere
 
 - Page-object corrections made this session (comment/documentation only, no locator changes were needed beyond clarifying accuracy): `tests/playwright/pages/samsung/spiff/feature-spiff/SpiffPage.ts` - `uploadedFileNameLink` and `acceptTerms()` comments updated to reflect live-confirmed behavior.
