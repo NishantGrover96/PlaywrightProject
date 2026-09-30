@@ -11,7 +11,7 @@ import {
   openClaimForm,
   submitFullClaim,
   todayAsDateOfSale,
-  searchClaimHistoryByClaimId,
+  pollClaimAmount,
 } from '../../../../helpers/samsung/spiff/feature-spiff/spiff.helpers';
 
 import { SpiffManagePage, SPIFF_PRODUCT_CATEGORY } from '../../../../pages/samsung/spiff/feature-spiff/SpiffPage';
@@ -309,11 +309,13 @@ test.describe('Samsung - SPIFF (Flip to Samsung) - Claim Processing', () => {
       await logoutSpiffUser(page);
 
       // 3. Admin: verify Claim Amount on View Claim History matches the
-      // calculated value - not a hardcoded number.
+      // calculated value - not a hardcoded number. Polls rather than a
+      // single read, since the rate-lookup calculation behind this column
+      // can transiently read back $0.00 for a few seconds right after
+      // submission.
       await loginAsSpiffUser(page, adminEmail, adminPassword);
-      const historyPageBeforeProcessing = await searchClaimHistoryByClaimId(page, claimNumber);
-      const beforeAmounts = await historyPageBeforeProcessing.getClaimAndApproveAmount(claimNumber);
-      expect(Number.parseFloat(beforeAmounts.claimAmount.replace(/[^0-9.]/g, ''))).toBeCloseTo(expectedClaimAmount, 2);
+      const claimAmount = await pollClaimAmount(page, claimNumber, 'claimAmount');
+      expect(claimAmount).toBeCloseTo(expectedClaimAmount, 2);
 
       // 4. Admin: process (approve) the claim without adjusting tonnage, so
       // Approved Amount should equal the same calculated value.
@@ -327,10 +329,10 @@ test.describe('Samsung - SPIFF (Flip to Samsung) - Claim Processing', () => {
       await expect(processPage.successMessage).toBeVisible();
 
       // 5. Admin: verify Approved Amount on View Claim History matches the
-      // same calculated value.
-      const historyPageAfterProcessing = await searchClaimHistoryByClaimId(page, claimNumber);
-      const afterAmounts = await historyPageAfterProcessing.getClaimAndApproveAmount(claimNumber);
-      expect(Number.parseFloat(afterAmounts.approveAmount.replace(/[^0-9.]/g, ''))).toBeCloseTo(expectedClaimAmount, 2);
+      // same calculated value - same transient-$0.00 risk as step 3, so
+      // polled the same way.
+      const approveAmount = await pollClaimAmount(page, claimNumber, 'approveAmount');
+      expect(approveAmount).toBeCloseTo(expectedClaimAmount, 2);
 
       await logoutSpiffUser(page);
     });

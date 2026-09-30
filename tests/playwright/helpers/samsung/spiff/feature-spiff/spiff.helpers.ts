@@ -334,3 +334,40 @@ export async function searchClaimHistoryByClaimId(
   await expect(historyPage.resultsTable).toBeVisible({ timeout: 20_000 });
   return historyPage;
 }
+
+/**
+ * Poll View Claim History's Claim Amount / Approve Amount for a claim until
+ * it stops reading as $0.00, instead of a single read right after
+ * submission/processing. The rate lookup behind these columns
+ * (SpiffClaimHistoryPage.getClaimAndApproveAmount()) can transiently read
+ * back $0.00 for a few seconds after the triggering action (claim
+ * submission, or admin approval), so a single-shot read races the
+ * calculation rather than the claim's real, final amount. Re-searches on
+ * every poll (not just re-reading the same page), since the amount is
+ * rendered server-side rather than updated live in the DOM.
+ */
+export async function pollClaimAmount(
+  page: Page,
+  claimId: string,
+  field: 'claimAmount' | 'approveAmount',
+  timeoutMs = 30_000
+): Promise<number> {
+  let lastValue = 0;
+
+  await expect
+    .poll(
+      async () => {
+        const historyPage = await searchClaimHistoryByClaimId(page, claimId);
+        const amounts = await historyPage.getClaimAndApproveAmount(claimId);
+        lastValue = Number.parseFloat(amounts[field].replace(/[^0-9.]/g, ''));
+        return lastValue;
+      },
+      {
+        message: `Expected claim ${claimId}'s ${field} to be calculated (non-zero)`,
+        timeout: timeoutMs,
+      }
+    )
+    .not.toBe(0);
+
+  return lastValue;
+}
