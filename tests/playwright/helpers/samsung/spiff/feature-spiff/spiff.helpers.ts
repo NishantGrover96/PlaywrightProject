@@ -336,38 +336,24 @@ export async function searchClaimHistoryByClaimId(
 }
 
 /**
- * Poll View Claim History's Claim Amount / Approve Amount for a claim until
- * it stops reading as $0.00, instead of a single read right after
- * submission/processing. The rate lookup behind these columns
- * (SpiffClaimHistoryPage.getClaimAndApproveAmount()) can transiently read
- * back $0.00 for a few seconds after the triggering action (claim
- * submission, or admin approval), so a single-shot read races the
- * calculation rather than the claim's real, final amount. Re-searches on
- * every poll (not just re-reading the same page), since the amount is
- * rendered server-side rather than updated live in the DOM.
+ * Read a claim's Claim Amount / Approve Amount from View Claim History.
+ *
+ * Deliberately a single read, not a poll: traced against the Samsung Portal
+ * source (RebateService.saveClaimLines -> RebateAccessor.updateRebateSpiffAmount,
+ * called synchronously from AddClaim's OnPostSaveClaim/OnPostSubmitClaim, and
+ * again from admin claim processing) - the amount is computed once at that
+ * call and persisted; Claim History/Search just reads the stored column back
+ * without recomputing it. So a $0.00 read here is not a race to retry - if
+ * tonnage and rate are both genuinely non-zero, it reflects a real failure to
+ * link the claim line to its payment rule (e.g. a Rebate_Campaign_Seq or
+ * product-code mismatch) that will never resolve by reading again.
  */
-export async function pollClaimAmount(
+export async function getClaimAmount(
   page: Page,
   claimId: string,
-  field: 'claimAmount' | 'approveAmount',
-  timeoutMs = 30_000
+  field: 'claimAmount' | 'approveAmount'
 ): Promise<number> {
-  let lastValue = 0;
-
-  await expect
-    .poll(
-      async () => {
-        const historyPage = await searchClaimHistoryByClaimId(page, claimId);
-        const amounts = await historyPage.getClaimAndApproveAmount(claimId);
-        lastValue = Number.parseFloat(amounts[field].replace(/[^0-9.]/g, ''));
-        return lastValue;
-      },
-      {
-        message: `Expected claim ${claimId}'s ${field} to be calculated (non-zero)`,
-        timeout: timeoutMs,
-      }
-    )
-    .not.toBe(0);
-
-  return lastValue;
+  const historyPage = await searchClaimHistoryByClaimId(page, claimId);
+  const amounts = await historyPage.getClaimAndApproveAmount(claimId);
+  return Number.parseFloat(amounts[field].replace(/[^0-9.]/g, ''));
 }
